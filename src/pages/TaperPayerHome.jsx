@@ -27,14 +27,14 @@ export default function TaperPayerHome() {
       <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <TaperPayerLogo className="w-40 h-auto" />
+            <TaperPayerLogo height="h-16" />
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 font-medium" style={{ '--hover-color': '#2479C2' }} onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 font-medium" onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 font-medium" onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>How It Works</Link>
-              <a href="#contact" className="text-slate-700 font-medium" onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>Contact</a>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
+              <a href="#contact" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
               <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Get Started</Button>
             </div>
 
@@ -50,10 +50,10 @@ export default function TaperPayerHome() {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden py-4 space-y-4">
-              <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium" onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="block text-slate-700 font-medium" onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-slate-700 font-medium" onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>How It Works</Link>
-              <a href="#contact" className="block text-slate-700 font-medium" onMouseEnter={(e) => e.target.style.color = '#2479C2'} onMouseLeave={(e) => e.target.style.color = ''}>Contact</a>
+              <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
+              <a href="#contact" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
               <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Get Started</Button>
             </div>
           )}
@@ -99,10 +99,7 @@ export default function TaperPayerHome() {
                     <select 
                       value={sendFrom}
                       onChange={(e) => setSendFrom(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:border-transparent"
-                      style={{ '--focus-ring-color': '#2479C2' }}
-                      onFocus={(e) => e.target.style.outline = '2px solid #2479C2'}
-                      onBlur={(e) => e.target.style.outline = 'none'}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-[#2479C2] focus:border-transparent"
                     >
                       <option>United States</option>
                     </select>
@@ -116,7 +113,7 @@ export default function TaperPayerHome() {
                     <select 
                       value={sendTo}
                       onChange={(e) => setSendTo(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-[#2479C2] focus:border-transparent"
                     >
                       <option value="">Select Receiving Country</option>
                       {countries.map(country => (

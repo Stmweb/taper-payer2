@@ -273,7 +273,7 @@ export default function TaperPayerHowItWorks() {
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl blur-3xl opacity-20" />
                 <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
                   <div className={`w-full h-64 bg-gradient-to-br ${steps[activeStep].color} rounded-2xl flex items-center justify-center mb-6`}>
-                    <steps[activeStep].icon className="w-32 h-32 text-white opacity-50" />
+                    {React.createElement(steps[activeStep].icon, { className: "w-32 h-32 text-white opacity-50" })}
                   </div>
                   <div className="text-center">
                     <p className="text-gray-500 text-sm mb-2">Current Step</p>

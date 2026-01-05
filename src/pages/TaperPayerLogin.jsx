@@ -155,9 +155,9 @@ export default function TaperPayerLogin() {
 
             <div className="text-center text-sm text-slate-600">
               Don't have an account?{' '}
-              <a href="#" className="text-blue-600 hover:underline font-semibold">
+              <Link to={createPageUrl('TaperPayerSignup')} className="text-blue-600 hover:underline font-semibold">
                 New Sign up
-              </a>
+              </Link>
             </div>
 
             <div className="text-center">

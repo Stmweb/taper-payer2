@@ -3,6 +3,7 @@ import TaperPayerHowItWorks from './pages/TaperPayerHowItWorks';
 import TaperPayerHome from './pages/TaperPayerHome';
 import TaperPayerLogin from './pages/TaperPayerLogin';
 import TaperPayerContact from './pages/TaperPayerContact';
+import TaperPayerSignup from './pages/TaperPayerSignup';
 import __Layout from './Layout.jsx';
 
 
@@ -12,6 +13,7 @@ export const PAGES = {
     "TaperPayerHome": TaperPayerHome,
     "TaperPayerLogin": TaperPayerLogin,
     "TaperPayerContact": TaperPayerContact,
+    "TaperPayerSignup": TaperPayerSignup,
 }
 
 export const pagesConfig = {

@@ -164,9 +164,11 @@ export default function TaperPayerHowItWorks() {
                   Login
                 </Button>
               </Link>
-              <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
-                Sign up
-              </Button>
+              <Link to={createPageUrl('TaperPayerSignup')}>
+                <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
+                  Sign up
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

@@ -42,7 +42,9 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerLogin')}>
                 <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
               </Link>
-              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
+              <Link to={createPageUrl('TaperPayerSignup')}>
+                <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -64,7 +66,9 @@ export default function TaperPayerHome() {
             <Link to={createPageUrl('TaperPayerLogin')}>
               <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50 w-full">Login</Button>
             </Link>
-            <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
+            <Link to={createPageUrl('TaperPayerSignup')}>
+              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
+            </Link>
           </div>
           )}
         </div>

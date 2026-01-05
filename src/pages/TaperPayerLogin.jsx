@@ -203,11 +203,23 @@ export default function TaperPayerLogin() {
           {/* Promo Banner */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0,
+            }}
+            whileHover={{ scale: 1.02, y: -5 }}
             transition={{ delay: 0.3 }}
-            className="mb-8 rounded-2xl overflow-hidden shadow-lg"
+            className="mb-8 rounded-2xl overflow-hidden shadow-lg cursor-pointer"
           >
-            <img 
+            <motion.img 
+              animate={{
+                y: [0, -10, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/adbf945ac_TaperPayerBanner.png"
               alt="World Cup Raffle 2026"
               className="w-full h-auto"
@@ -253,10 +265,19 @@ export default function TaperPayerLogin() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.02, y: -5 }}
             transition={{ delay: 0.2 }}
-            className="mb-8 rounded-2xl overflow-hidden shadow-lg lg:hidden"
+            className="mb-8 rounded-2xl overflow-hidden shadow-lg lg:hidden cursor-pointer"
           >
-            <img 
+            <motion.img 
+              animate={{
+                y: [0, -10, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/adbf945ac_TaperPayerBanner.png"
               alt="World Cup Raffle 2026"
               className="w-full h-auto"

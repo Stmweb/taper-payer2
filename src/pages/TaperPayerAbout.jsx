@@ -60,7 +60,7 @@ export default function TaperPayerAbout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to={createPageUrl('TaperPayerHome')}>
-              <TaperPayerLogo iconSize="w-7 h-7" textSize="text-xl" />
+              <TaperPayerLogo height="h-8" />
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
@@ -320,7 +320,7 @@ export default function TaperPayerAbout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <TaperPayerLogo className="mb-4" iconSize="w-6 h-6" textSize="text-lg" />
+              <TaperPayerLogo className="mb-4" height="h-7" />
               <p className="text-sm">Fast, secure, and affordable global money transfers.</p>
             </div>
             <div>

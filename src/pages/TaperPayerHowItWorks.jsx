@@ -20,7 +20,7 @@ export default function TaperPayerHowItWorks() {
         'No hidden fees or commitments',
         'Available on web and mobile'
       ],
-      color: 'from-indigo-500 to-purple-500'
+      color: 'from-blue-600 to-blue-500'
     },
     {
       icon: CreditCard,
@@ -32,7 +32,7 @@ export default function TaperPayerHowItWorks() {
         'Instant payment verification',
         'Save multiple payment methods'
       ],
-      color: 'from-purple-500 to-pink-500'
+      color: 'from-green-600 to-green-500'
     },
     {
       icon: Send,
@@ -44,7 +44,7 @@ export default function TaperPayerHowItWorks() {
         'Save frequent recipients',
         'Send to 180+ countries'
       ],
-      color: 'from-pink-500 to-rose-500'
+      color: 'from-orange-600 to-orange-500'
     },
     {
       icon: CheckCircle,
@@ -74,24 +74,24 @@ export default function TaperPayerHowItWorks() {
       title: 'Low Fees',
       description: 'Save up to 90% vs traditional banks',
       stat: 'From $0',
-      color: 'text-emerald-500',
-      bg: 'bg-emerald-50'
+      color: 'text-green-600',
+      bg: 'bg-green-50'
     },
     {
       icon: Shield,
       title: 'Bank-Level Security',
       description: 'Your money is always protected',
       stat: '256-bit',
-      color: 'text-indigo-500',
-      bg: 'bg-indigo-50'
+      color: 'text-blue-600',
+      bg: 'bg-blue-50'
     },
     {
       icon: Globe,
       title: 'Global Coverage',
       description: 'Send money to anywhere in the world',
       stat: '180+',
-      color: 'text-purple-500',
-      bg: 'bg-purple-50'
+      color: 'text-orange-500',
+      bg: 'bg-orange-50'
     }
   ];
 
@@ -145,21 +145,21 @@ export default function TaperPayerHowItWorks() {
               <TaperPayerLogo iconSize="w-7 h-7" textSize="text-xl" />
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">
+              <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
                 Home
               </Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-900 hover:text-indigo-600 transition-colors font-medium">
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-900 hover:text-blue-600 transition-colors font-medium">
                 How It Works
               </Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
                 About
               </Link>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" className="text-gray-600 hover:text-indigo-600">
+              <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
                 Sign In
               </Button>
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
+              <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
                 Get Started
               </Button>
             </div>
@@ -168,7 +168,7 @@ export default function TaperPayerHowItWorks() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-20 lg:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-green-50 py-20 lg:py-32">
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -177,13 +177,13 @@ export default function TaperPayerHowItWorks() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-700 text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-6">
               <CheckCircle className="w-4 h-4" />
               Simple & Fast
             </div>
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Send Money in
-              <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                 4 Simple Steps
               </span>
             </h1>
@@ -191,7 +191,7 @@ export default function TaperPayerHowItWorks() {
               Sending money internationally has never been easier. Get started in minutes 
               and experience the future of money transfers.
             </p>
-            <Button size="lg" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-10 h-14 text-lg rounded-xl">
+            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-10 h-14 text-lg rounded-xl">
               Start Your First Transfer
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
@@ -206,7 +206,7 @@ export default function TaperPayerHowItWorks() {
           <div className="relative mb-20">
             <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2 hidden lg:block" />
             <div 
-              className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 -translate-y-1/2 transition-all duration-500 hidden lg:block"
+              className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-blue-600 to-green-600 -translate-y-1/2 transition-all duration-500 hidden lg:block"
               style={{ width: `${(activeStep / (steps.length - 1)) * 100}%` }}
             />
             
@@ -223,7 +223,7 @@ export default function TaperPayerHowItWorks() {
                 >
                   <div className={`text-center ${activeStep === index ? 'scale-105' : 'scale-100'} transition-transform`}>
                     <div className={`w-20 h-20 bg-gradient-to-br ${step.color} rounded-2xl flex items-center justify-center mx-auto mb-4 relative z-10 shadow-lg ${
-                      activeStep === index ? 'ring-4 ring-indigo-100' : ''
+                      activeStep === index ? 'ring-4 ring-blue-100' : ''
                     }`}>
                       <step.icon className="w-10 h-10 text-white" />
                     </div>
@@ -243,7 +243,7 @@ export default function TaperPayerHowItWorks() {
             key={activeStep}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-br from-gray-50 to-indigo-50/30 rounded-3xl p-8 lg:p-12"
+            className="bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-3xl p-8 lg:p-12"
           >
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
@@ -270,7 +270,7 @@ export default function TaperPayerHowItWorks() {
                 </ul>
               </div>
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl blur-3xl opacity-20" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 rounded-3xl blur-3xl opacity-20" />
                 <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
                   <div className={`w-full h-64 bg-gradient-to-br ${steps[activeStep].color} rounded-2xl flex items-center justify-center mb-6`}>
                     {React.createElement(steps[activeStep].icon, { className: "w-32 h-32 text-white opacity-50" })}
@@ -287,7 +287,7 @@ export default function TaperPayerHowItWorks() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-indigo-50/30">
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -342,14 +342,14 @@ export default function TaperPayerHowItWorks() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-gradient-to-br from-gray-50 to-indigo-50/30 rounded-2xl p-8 text-center hover:shadow-lg transition-shadow"
+                className="bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-2xl p-8 text-center hover:shadow-lg transition-shadow"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <method.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">{method.title}</h3>
                 <p className="text-gray-600 mb-4">{method.description}</p>
-                <div className="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+                <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                   {method.countries}
                 </div>
               </motion.div>
@@ -359,7 +359,7 @@ export default function TaperPayerHowItWorks() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-indigo-50/30">
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -390,7 +390,7 @@ export default function TaperPayerHowItWorks() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-green-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -400,10 +400,10 @@ export default function TaperPayerHowItWorks() {
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
               Ready to Get Started?
             </h2>
-            <p className="text-xl text-indigo-100 mb-8">
+            <p className="text-xl text-blue-100 mb-8">
               Join millions who trust Taper Payer for fast, secure transfers
             </p>
-            <Button size="lg" className="bg-white text-indigo-600 hover:bg-gray-50 px-10 h-14 text-lg rounded-xl font-semibold">
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-50 px-10 h-14 text-lg rounded-xl font-semibold">
               Create Free Account
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>

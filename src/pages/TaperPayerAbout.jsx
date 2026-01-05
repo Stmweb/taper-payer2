@@ -12,8 +12,8 @@ export default function TaperPayerAbout() {
       icon: Users,
       title: 'Customer First',
       description: 'We put our customers at the heart of everything we do, ensuring their needs drive our innovation.',
-      color: 'text-indigo-500',
-      bg: 'bg-indigo-50'
+      color: 'text-blue-600',
+      bg: 'bg-blue-50'
     },
     {
       icon: Shield,
@@ -26,8 +26,8 @@ export default function TaperPayerAbout() {
       icon: Zap,
       title: 'Innovation',
       description: 'We constantly innovate to make money transfers faster, easier, and more accessible.',
-      color: 'text-purple-500',
-      bg: 'bg-purple-50'
+      color: 'text-orange-500',
+      bg: 'bg-orange-50'
     },
     {
       icon: Heart,
@@ -47,8 +47,8 @@ export default function TaperPayerAbout() {
   ];
 
   const team = [
-    { name: 'Sarah Martinez', role: 'CEO & Founder', initial: 'S', color: 'bg-indigo-500' },
-    { name: 'David Chen', role: 'CTO', initial: 'D', color: 'bg-purple-500' },
+    { name: 'Sarah Martinez', role: 'CEO & Founder', initial: 'S', color: 'bg-blue-600' },
+    { name: 'David Chen', role: 'CTO', initial: 'D', color: 'bg-green-600' },
     { name: 'Emma Johnson', role: 'CFO', initial: 'E', color: 'bg-emerald-500' },
     { name: 'Michael Brown', role: 'Head of Product', initial: 'M', color: 'bg-rose-500' }
   ];
@@ -63,21 +63,21 @@ export default function TaperPayerAbout() {
               <TaperPayerLogo iconSize="w-7 h-7" textSize="text-xl" />
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">
+              <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
                 Home
               </Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-600 hover:text-indigo-600 transition-colors font-medium">
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
                 How It Works
               </Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-900 hover:text-indigo-600 transition-colors font-medium">
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-900 hover:text-blue-600 transition-colors font-medium">
                 About
               </Link>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" className="text-gray-600 hover:text-indigo-600">
+              <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
                 Sign In
               </Button>
-              <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white">
+              <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
                 Get Started
               </Button>
             </div>
@@ -86,7 +86,7 @@ export default function TaperPayerAbout() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-20 lg:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-green-50 py-20 lg:py-32">
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -95,13 +95,13 @@ export default function TaperPayerAbout() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-700 text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-6">
               <Heart className="w-4 h-4" />
               Our Story
             </div>
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Making Money Transfers
-              <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                 Simple for Everyone
               </span>
             </h1>
@@ -124,7 +124,7 @@ export default function TaperPayerAbout() {
               transition={{ duration: 0.6 }}
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-green-600 rounded-xl flex items-center justify-center">
                   <Target className="w-6 h-6 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
@@ -147,10 +147,10 @@ export default function TaperPayerAbout() {
               className="grid grid-cols-2 gap-6"
             >
               {[
-                { icon: Globe, label: '180+ Countries', color: 'from-blue-500 to-cyan-500' },
-                { icon: Users, label: '10M+ Users', color: 'from-purple-500 to-pink-500' },
-                { icon: TrendingUp, label: '$50B+ Sent', color: 'from-emerald-500 to-teal-500' },
-                { icon: Award, label: '4.9★ Rating', color: 'from-amber-500 to-orange-500' }
+                { icon: Globe, label: '180+ Countries', color: 'from-blue-600 to-blue-500' },
+                { icon: Users, label: '10M+ Users', color: 'from-green-600 to-green-500' },
+                { icon: TrendingUp, label: '$50B+ Sent', color: 'from-orange-500 to-orange-600' },
+                { icon: Award, label: '4.9★ Rating', color: 'from-yellow-500 to-orange-500' }
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -173,7 +173,7 @@ export default function TaperPayerAbout() {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-indigo-50/30">
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -195,7 +195,7 @@ export default function TaperPayerAbout() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-300"
+                className="bg-white rounded-2xl p-6 hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300"
               >
                 <div className={`w-14 h-14 ${value.bg} rounded-xl flex items-center justify-center mb-5`}>
                   <value.icon className={`w-7 h-7 ${value.color}`} />
@@ -223,7 +223,7 @@ export default function TaperPayerAbout() {
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-indigo-200 to-purple-200 hidden md:block" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-200 to-green-200 hidden md:block" />
 
             <div className="space-y-12">
               {milestones.map((milestone, index) => (
@@ -237,15 +237,15 @@ export default function TaperPayerAbout() {
                 >
                   <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
                     <div className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg transition-shadow">
-                      <span className="inline-block px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-bold rounded-full mb-3">
+                      <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-600 to-green-600 text-white text-sm font-bold rounded-full mb-3">
                         {milestone.year}
                       </span>
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">{milestone.title}</h3>
                       <p className="text-gray-600">{milestone.description}</p>
                     </div>
                   </div>
-                  <div className="relative flex-shrink-0 w-4 h-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full hidden md:block">
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full animate-ping opacity-75" />
+                  <div className="relative flex-shrink-0 w-4 h-4 bg-gradient-to-r from-blue-600 to-green-600 rounded-full hidden md:block">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-green-600 rounded-full animate-ping opacity-75" />
                   </div>
                   <div className="flex-1 hidden md:block" />
                 </motion.div>
@@ -256,7 +256,7 @@ export default function TaperPayerAbout() {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-green-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -290,7 +290,7 @@ export default function TaperPayerAbout() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-purple-600">
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-green-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -300,11 +300,11 @@ export default function TaperPayerAbout() {
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
               Join Our Journey
             </h2>
-            <p className="text-xl text-indigo-100 mb-8">
+            <p className="text-xl text-blue-100 mb-8">
               Be part of the revolution in global money transfers
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-indigo-600 hover:bg-gray-50 px-10 h-14 text-lg rounded-xl font-semibold">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-50 px-10 h-14 text-lg rounded-xl font-semibold">
                 Get Started Today
               </Button>
               <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white/10 h-14 px-10 text-lg rounded-xl font-semibold">

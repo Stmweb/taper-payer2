@@ -39,7 +39,8 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
               <a href="#contact" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
-              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Get Started</Button>
+              <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
+              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -58,7 +59,8 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerAbout')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
               <a href="#contact" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
-              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Get Started</Button>
+              <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50 w-full">Login</Button>
+              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
             </div>
           )}
         </div>

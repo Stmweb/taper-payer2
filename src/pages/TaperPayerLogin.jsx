@@ -1,0 +1,192 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Mail, Lock, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
+
+export default function TaperPayerLogin() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Login logic here
+  };
+
+  return (
+    <div className="min-h-screen flex">
+      {/* Left Side - Promotional Content */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 p-12 flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+        
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 max-w-xl"
+        >
+          <h1 className="text-5xl font-bold text-slate-900 mb-6">
+            Get the app
+          </h1>
+          <p className="text-xl text-slate-600 mb-8">
+            Download our app for free to send money online in minutes. Track your payments and view your transfer history from anywhere.
+          </p>
+
+          {/* QR Code Placeholder */}
+          <div className="bg-white p-6 rounded-2xl shadow-lg mb-8 inline-block">
+            <div className="w-48 h-48 bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-4xl mb-2">📱</div>
+                <p className="text-sm text-slate-600">Scan QR Code</p>
+              </div>
+            </div>
+            <p className="text-sm text-slate-600 mt-4 max-w-xs">
+              Scan this QR code with your phone to download our app!
+            </p>
+          </div>
+
+          {/* Promo Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-gradient-to-r from-blue-600 to-green-600 rounded-2xl p-8 text-white mb-8"
+          >
+            <p className="text-sm uppercase tracking-wide mb-2 opacity-90">Current Offer(s)</p>
+            <h2 className="text-4xl font-bold mb-2">GET UP TO</h2>
+            <p className="text-6xl font-black mb-2" style={{ color: '#F88F2B' }}>5% DISCOUNT</p>
+            <p className="text-xl">ON YOUR FIRST TRANSACTION</p>
+          </motion.div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-2xl">👥</span>
+              </div>
+              <div className="text-3xl font-bold text-slate-900">104K+</div>
+              <div className="text-sm text-slate-600">Satisfied Customers</div>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-2xl">✓</span>
+              </div>
+              <div className="text-3xl font-bold text-slate-900">34K+</div>
+              <div className="text-sm text-slate-600">Transactions</div>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-2xl">📍</span>
+              </div>
+              <div className="text-3xl font-bold text-slate-900">6.4K+</div>
+              <div className="text-sm text-slate-600">Locations</div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right Side - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-md"
+        >
+          <div className="text-center mb-8">
+            <Link to={createPageUrl('TaperPayerHome')}>
+              <TaperPayerLogo height="h-16" className="mx-auto mb-6" />
+            </Link>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+              Welcome, please login to your account
+            </h2>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email Address"
+                  className="pl-12 h-12"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="pl-12 h-12"
+                  required
+                />
+              </div>
+              <div className="text-right mt-2">
+                <a href="#" className="text-sm text-slate-500 hover:text-blue-600">
+                  Forgot your password?
+                </a>
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-lg font-semibold"
+              style={{ backgroundColor: '#2479C2' }}
+            >
+              Login
+            </Button>
+
+            <div className="text-center text-sm text-slate-600">
+              Don't have an account?{' '}
+              <a href="#" className="text-blue-600 hover:underline font-semibold">
+                New Sign up
+              </a>
+            </div>
+
+            <div className="text-center">
+              <Link
+                to={createPageUrl('TaperPayerHome')}
+                className="text-sm text-slate-500 hover:text-blue-600"
+              >
+                Back To Home
+              </Link>
+            </div>
+          </form>
+
+          {/* Security Badges */}
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="flex items-center gap-2 text-green-600">
+              <Shield className="w-5 h-5" />
+              <span className="text-xs font-semibold">SECURE</span>
+            </div>
+            <div className="flex gap-2">
+              <div className="w-12 h-8 bg-slate-100 rounded flex items-center justify-center text-xs font-bold text-blue-600">
+                VISA
+              </div>
+              <div className="w-12 h-8 bg-slate-100 rounded flex items-center justify-center text-xs font-bold text-red-600">
+                MC
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

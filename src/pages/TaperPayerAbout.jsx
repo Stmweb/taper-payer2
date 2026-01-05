@@ -65,13 +65,18 @@ export default function TaperPayerAbout() {
               <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-900 hover:text-blue-600 transition-colors font-medium">
                 About
               </Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
+                Contact
+              </Link>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
-                Sign In
-              </Button>
+              <Link to={createPageUrl('TaperPayerLogin')}>
+                <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
+                  Login
+                </Button>
+              </Link>
               <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
-                Get Started
+                Sign up
               </Button>
             </div>
           </div>

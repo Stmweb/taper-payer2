@@ -1,0 +1,228 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
+
+export default function TaperPayerContact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Contact form logic here
+  };
+
+  return (
+    <div className="min-h-screen flex">
+      {/* Left Side - Contact Information */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 p-12 flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+        
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 max-w-xl"
+        >
+          <h1 className="text-5xl font-bold text-slate-900 mb-6">
+            Get in Touch
+          </h1>
+          <p className="text-xl text-slate-600 mb-12">
+            Have questions? We're here to help! Our customer support team is available 24/7 to assist you with any inquiries.
+          </p>
+
+          {/* Contact Details */}
+          <div className="space-y-8 mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-2xl p-6 shadow-lg"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#2479C2' }}>
+                  <Phone className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">Call Us</h3>
+                  <p className="text-slate-600">1-800-TAPER-PAY</p>
+                  <p className="text-sm text-slate-500 mt-1">Mon-Sun, 24/7</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-2xl p-6 shadow-lg"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#61AF39' }}>
+                  <Mail className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">Email Us</h3>
+                  <p className="text-slate-600">info@taperpayer.com</p>
+                  <p className="text-sm text-slate-500 mt-1">Response within 24 hours</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white rounded-2xl p-6 shadow-lg"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F88F2B' }}>
+                  <MapPin className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 mb-1">Visit Us</h3>
+                  <p className="text-slate-600">123 Main Street</p>
+                  <p className="text-slate-600">New York, NY 10001</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 gap-6">
+            <div className="text-center bg-white rounded-xl p-4 shadow-md">
+              <div className="text-3xl font-bold text-slate-900 mb-1">24/7</div>
+              <div className="text-sm text-slate-600">Customer Support</div>
+            </div>
+            <div className="text-center bg-white rounded-xl p-4 shadow-md">
+              <div className="text-3xl font-bold text-slate-900 mb-1">&lt;2hr</div>
+              <div className="text-sm text-slate-600">Avg Response Time</div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right Side - Contact Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-md"
+        >
+          <div className="text-center mb-8">
+            <Link to={createPageUrl('TaperPayerHome')}>
+              <TaperPayerLogo height="h-16" className="mx-auto mb-6" />
+            </Link>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+              Send Us a Message
+            </h2>
+            <p className="text-slate-600">
+              Fill out the form below and we'll get back to you soon
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Full Name
+              </label>
+              <Input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                placeholder="John Doe"
+                className="h-12"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Email Address
+              </label>
+              <Input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                placeholder="john@example.com"
+                className="h-12"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Phone Number
+              </label>
+              <Input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                placeholder="+1 (555) 123-4567"
+                className="h-12"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Message
+              </label>
+              <Textarea
+                value={formData.message}
+                onChange={(e) => setFormData({...formData, message: e.target.value})}
+                placeholder="How can we help you?"
+                className="min-h-32"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-lg font-semibold"
+              style={{ backgroundColor: '#2479C2' }}
+            >
+              <Send className="w-5 h-5 mr-2" />
+              Send Message
+            </Button>
+
+            <div className="text-center">
+              <Link
+                to={createPageUrl('TaperPayerHome')}
+                className="text-sm text-slate-500 hover:text-blue-600"
+              >
+                Back To Home
+              </Link>
+            </div>
+          </form>
+
+          {/* Additional Help */}
+          <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-100">
+            <div className="flex items-start gap-3">
+              <MessageSquare className="w-5 h-5 text-blue-600 mt-0.5" />
+              <div>
+                <p className="text-sm font-semibold text-slate-900 mb-1">
+                  Need Immediate Help?
+                </p>
+                <p className="text-sm text-slate-600">
+                  Check out our{' '}
+                  <a href="#" className="text-blue-600 hover:underline">Help Center</a>
+                  {' '}or chat with us live!
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

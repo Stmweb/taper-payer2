@@ -343,7 +343,7 @@ export default function TaperPayerHome() {
       </section>
 
       {/* Card Issuance Section */}
-      <section className="container mx-auto px-6 py-20 overflow-hidden">
+      <section className="container mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -360,101 +360,19 @@ export default function TaperPayerHome() {
           </p>
         </motion.div>
 
-        {/* Animated Card Display */}
-        <div className="flex justify-center mb-16 relative h-80">
-          {/* Physical Card */}
-          <motion.div
-            initial={{ opacity: 0, x: -100, rotateY: -30 }}
-            whileInView={{ opacity: 1, x: 0, rotateY: 10 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.05, rotateY: 0, z: 50 }}
-            className="absolute left-1/4 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            style={{ perspective: '1000px' }}
-          >
-            <div 
-              className="w-80 h-48 rounded-2xl shadow-2xl p-6 flex flex-col justify-between"
-              style={{ 
-                background: 'linear-gradient(135deg, #2479C2 0%, #1a5a8f 100%)',
-                transformStyle: 'preserve-3d'
-              }}
-            >
-              <div className="flex justify-between items-start">
-                <div className="text-white text-xl font-bold">Taper Payer</div>
-                <div className="w-12 h-8 bg-yellow-400 rounded opacity-80"></div>
-              </div>
-              <div>
-                <div className="text-white text-2xl font-mono mb-2 tracking-widest">•••• •••• •••• 4242</div>
-                <div className="flex justify-between items-end">
-                  <div>
-                    <div className="text-blue-200 text-xs mb-1">CARDHOLDER</div>
-                    <div className="text-white font-semibold">JOHN DOE</div>
-                  </div>
-                  <div className="text-white text-xl font-bold">VISA</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Virtual Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 100, rotateY: 30 }}
-            whileInView={{ opacity: 1, x: 0, rotateY: -10 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.05, rotateY: 0, z: 50 }}
-            className="absolute right-1/4 top-1/2 transform translate-x-1/2 -translate-y-1/2"
-            style={{ perspective: '1000px' }}
-          >
-            <div 
-              className="w-80 h-48 rounded-2xl shadow-2xl p-6 flex flex-col justify-between relative overflow-hidden"
-              style={{ 
-                background: 'linear-gradient(135deg, #61AF39 0%, #4a8c2a 100%)',
-                transformStyle: 'preserve-3d'
-              }}
-            >
-              <motion.div
-                animate={{ 
-                  backgroundPosition: ['0% 0%', '100% 100%'],
-                }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-                className="absolute inset-0 opacity-20"
-                style={{
-                  background: 'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%)',
-                  backgroundSize: '200% 200%'
-                }}
-              />
-              <div className="flex justify-between items-start relative z-10">
-                <div className="text-white text-xl font-bold">Taper Payer</div>
-                <Smartphone className="w-8 h-8 text-white opacity-80" />
-              </div>
-              <div className="relative z-10">
-                <div className="text-white text-2xl font-mono mb-2 tracking-widest">•••• •••• •••• 8888</div>
-                <div className="flex justify-between items-end">
-                  <div>
-                    <div className="text-green-200 text-xs mb-1">VIRTUAL CARD</div>
-                    <div className="text-white font-semibold">DIGITAL</div>
-                  </div>
-                  <div className="text-white text-xl font-bold">MC</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
         <div className="grid md:grid-cols-3 gap-8">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <Card className="p-8 hover:shadow-xl transition-all duration-300 h-full group">
+            <Card className="p-8 hover:shadow-xl transition-shadow h-full">
               <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                animate={{ rotateY: [0, 10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
-                <CreditCard className="w-12 h-12 mb-4 transition-colors" style={{ color: '#2479C2' }} />
+                <CreditCard className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
               </motion.div>
               <h3 className="text-2xl font-bold mb-4 text-slate-900">Physical Cards</h3>
               <p className="text-slate-600 text-lg">
@@ -464,17 +382,17 @@ export default function TaperPayerHome() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            <Card className="p-8 hover:shadow-xl transition-all duration-300 h-full group">
+            <Card className="p-8 hover:shadow-xl transition-shadow h-full">
               <motion.div
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               >
-                <Smartphone className="w-12 h-12 mb-4 transition-colors" style={{ color: '#61AF39' }} />
+                <Smartphone className="w-12 h-12 mb-4" style={{ color: '#61AF39' }} />
               </motion.div>
               <h3 className="text-2xl font-bold mb-4 text-slate-900">Virtual Cards</h3>
               <p className="text-slate-600 text-lg">
@@ -484,17 +402,17 @@ export default function TaperPayerHome() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <Card className="p-8 hover:shadow-xl transition-all duration-300 h-full group">
+            <Card className="p-8 hover:shadow-xl transition-shadow h-full">
               <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
               >
-                <Zap className="w-12 h-12 mb-4 transition-colors" style={{ color: '#F88F2B' }} />
+                <Zap className="w-12 h-12 mb-4" style={{ color: '#F88F2B' }} />
               </motion.div>
               <h3 className="text-2xl font-bold mb-4 text-slate-900">Digital Wallet Support</h3>
               <p className="text-slate-600 text-lg">

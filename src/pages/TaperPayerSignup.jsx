@@ -226,12 +226,13 @@ export default function TaperPayerSignup() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-gradient-to-r from-blue-600 to-green-600 rounded-2xl p-8 text-white mb-8"
+            className="mb-8 rounded-2xl overflow-hidden shadow-lg"
           >
-            <p className="text-sm uppercase tracking-wide mb-2 opacity-90">Current Offer(s)</p>
-            <h2 className="text-4xl font-bold mb-2">GET UP TO</h2>
-            <p className="text-6xl font-black mb-2" style={{ color: '#F88F2B' }}>5% DISCOUNT</p>
-            <p className="text-xl">ON YOUR FIRST TRANSACTION</p>
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/edec7b2f2_ChatGPTImageJan5202606_20_16PM.png"
+              alt="World Cup Raffle 2026"
+              className="w-full h-auto"
+            />
           </motion.div>
 
           {/* Stats */}

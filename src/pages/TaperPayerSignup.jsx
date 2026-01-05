@@ -304,7 +304,11 @@ export default function TaperPayerSignup() {
 
           <div className="text-center mb-8">
             <Link to={createPageUrl('TaperPayerHome')}>
-              <TaperPayerLogo height="h-48" className="mx-auto mb-6" />
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/6af1701ab_GrokTaperpayer.png"
+                alt="Taper Payer"
+                className="h-48 w-auto mx-auto mb-6"
+              />
             </Link>
             <h2 className="text-3xl font-bold text-slate-900 mb-2">
               Register your account, it's free!

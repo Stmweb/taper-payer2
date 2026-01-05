@@ -344,7 +344,13 @@ export default function TaperPayerHome() {
 
       {/* Card Issuance Section */}
       <section className="container mx-auto px-6 py-20">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl font-bold mb-6 text-slate-900">Card Issuance</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
             Brand And Issue Physical And Virtual Cards
@@ -352,32 +358,68 @@ export default function TaperPayerHome() {
           <p className="text-lg text-slate-600 max-w-3xl mx-auto mt-4">
             Design your unique branded cards to create a consistent identity for physical and virtual cards. Our team will handle card production and fulfillment.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          <Card className="p-8 hover:shadow-xl transition-shadow">
-            <CreditCard className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
-            <h3 className="text-2xl font-bold mb-4 text-slate-900">Physical Cards</h3>
-            <p className="text-slate-600 text-lg">
-              Custom Or Ready Made Designs, Metal Or Plastic, With The Option For Cardholder Names To Be Imprinted Or For Nameless Cards That Can Be Assigned A Later Time.
-            </p>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <Card className="p-8 hover:shadow-xl transition-shadow h-full">
+              <motion.div
+                animate={{ rotateY: [0, 10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <CreditCard className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
+              </motion.div>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900">Physical Cards</h3>
+              <p className="text-slate-600 text-lg">
+                Custom Or Ready Made Designs, Metal Or Plastic, With The Option For Cardholder Names To Be Imprinted Or For Nameless Cards That Can Be Assigned A Later Time.
+              </p>
+            </Card>
+          </motion.div>
 
-          <Card className="p-8 hover:shadow-xl transition-shadow">
-            <Smartphone className="w-12 h-12 mb-4" style={{ color: '#61AF39' }} />
-            <h3 className="text-2xl font-bold mb-4 text-slate-900">Virtual Cards</h3>
-            <p className="text-slate-600 text-lg">
-              Fast Issuance Of Digital Only Cards In The App Platform With Your Custom Or Our Ready Made Designs.
-            </p>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <Card className="p-8 hover:shadow-xl transition-shadow h-full">
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Smartphone className="w-12 h-12 mb-4" style={{ color: '#61AF39' }} />
+              </motion.div>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900">Virtual Cards</h3>
+              <p className="text-slate-600 text-lg">
+                Fast Issuance Of Digital Only Cards In The App Platform With Your Custom Or Our Ready Made Designs.
+              </p>
+            </Card>
+          </motion.div>
 
-          <Card className="p-8 hover:shadow-xl transition-shadow">
-            <Zap className="w-12 h-12 mb-4" style={{ color: '#F88F2B' }} />
-            <h3 className="text-2xl font-bold mb-4 text-slate-900">Digital Wallet Support</h3>
-            <p className="text-slate-600 text-lg">
-              Cardholders Can Load Physical And Virtual Cards Into Their Apple Pay Or Android Pay Wallets For Touchless Payments With Tokenized Security.
-            </p>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <Card className="p-8 hover:shadow-xl transition-shadow h-full">
+              <motion.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Zap className="w-12 h-12 mb-4" style={{ color: '#F88F2B' }} />
+              </motion.div>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900">Digital Wallet Support</h3>
+              <p className="text-slate-600 text-lg">
+                Cardholders Can Load Physical And Virtual Cards Into Their Apple Pay Or Android Pay Wallets For Touchless Payments With Tokenized Security.
+              </p>
+            </Card>
+          </motion.div>
         </div>
       </section>
 

@@ -38,8 +38,10 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
               <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
-              <a href="#contact" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
-              <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
+              <Link to={createPageUrl('TaperPayerLogin')}>
+                <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
+              </Link>
               <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
             </div>
 

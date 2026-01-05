@@ -44,16 +44,9 @@ export default function TaperPayerAbout() {
     { year: '2021', title: 'Global Expansion', description: 'Expanded to 180+ countries across 6 continents' },
     { year: '2023', title: '10M Users', description: 'Celebrating 10 million users and $50B+ transferred' },
     { year: '2025', title: 'Industry Leader', description: 'Recognized as the fastest-growing fintech company' }
-  ];
+    ];
 
-  const team = [
-    { name: 'Sarah Martinez', role: 'CEO & Founder', initial: 'S', color: 'bg-blue-600' },
-    { name: 'David Chen', role: 'CTO', initial: 'D', color: 'bg-green-600' },
-    { name: 'Emma Johnson', role: 'CFO', initial: 'E', color: 'bg-emerald-500' },
-    { name: 'Michael Brown', role: 'Head of Product', initial: 'M', color: 'bg-rose-500' }
-  ];
-
-  return (
+    return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
@@ -251,40 +244,6 @@ export default function TaperPayerAbout() {
                 </motion.div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-green-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Leadership</h2>
-            <p className="text-xl text-gray-600">The team driving innovation at Taper Payer</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-shadow"
-              >
-                <div className={`w-24 h-24 ${member.color} rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4`}>
-                  {member.initial}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
-                <p className="text-gray-600">{member.role}</p>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>

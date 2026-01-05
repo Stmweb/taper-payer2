@@ -1,325 +1,215 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Globe, Shield, Zap, Clock, DollarSign, Users, CheckCircle, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ArrowRight, Shield, Zap, DollarSign, Users, Globe, MapPin, ChevronDown, Menu, X, Send } from 'lucide-react';
+import TaperPayerLogo from '../components/taperpayer/TaperPayerLogo';
 import { Link } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
-import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
+import { createPageUrl } from '../utils';
 
 export default function TaperPayerHome() {
-  const features = [
-    {
-      icon: Zap,
-      title: 'Lightning Fast',
-      description: 'Transfer money in minutes, not days. Real-time processing for instant transfers.',
-      color: 'text-yellow-500',
-      bg: 'bg-yellow-50'
-    },
-    {
-      icon: Shield,
-      title: 'Bank-Level Security',
-      description: 'Your money is protected with military-grade encryption and fraud detection.',
-      color: 'text-emerald-500',
-      bg: 'bg-emerald-50'
-    },
-    {
-      icon: DollarSign,
-      title: 'Low Fees',
-      description: 'Save up to 90% on transfer fees compared to traditional banks.',
-      color: 'text-blue-600',
-      bg: 'bg-blue-50'
-    },
-    {
-      icon: Globe,
-      title: 'Global Reach',
-      description: 'Send money to over 180 countries with competitive exchange rates.',
-      color: 'text-green-600',
-      bg: 'bg-green-50'
-    }
-  ];
+  const [sendFrom, setSendFrom] = useState('United States');
+  const [sendTo, setSendTo] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const stats = [
-    { value: '$50B+', label: 'Transferred' },
-    { value: '10M+', label: 'Happy Users' },
-    { value: '180+', label: 'Countries' },
-    { value: '4.9/5', label: 'User Rating' }
-  ];
-
-  const testimonials = [
-    {
-      name: 'Sarah Johnson',
-      role: 'Freelancer',
-      content: 'Best money transfer service I\'ve used. Fast, reliable, and the fees are incredibly low!',
-      rating: 5
-    },
-    {
-      name: 'Michael Chen',
-      role: 'Small Business Owner',
-      content: 'We send international payments weekly. Taper Payer saves us thousands in fees every year.',
-      rating: 5
-    },
-    {
-      name: 'Emma Rodriguez',
-      role: 'Remote Worker',
-      content: 'The app is so easy to use. I can send money home to my family in seconds.',
-      rating: 5
-    }
+  const countries = [
+    { name: 'Angola', flag: '🇦🇴' },
+    { name: 'Ghana', flag: '🇬🇭' },
+    { name: 'Haiti', flag: '🇭🇹' },
+    { name: 'Mexico', flag: '🇲🇽' },
+    { name: 'Nigeria', flag: '🇳🇬' },
+    { name: 'Senegal', flag: '🇸🇳' }
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <TaperPayerLogo height="h-8" />
+    <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
+      {/* Header */}
+      <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <TaperPayerLogo className="w-40 h-auto" />
+            
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-gray-900 hover:text-blue-600 transition-colors font-medium">
-                Home
-              </Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
-                How It Works
-              </Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
-                About
-              </Link>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
+              <a href="#contact" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
+              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Get Started</Button>
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
-                Sign In
-              </Button>
-              <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
-                Get Started
-              </Button>
-            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-slate-700"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden py-4 space-y-4">
+              <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
+              <a href="#contact" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
+              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Get Started</Button>
+            </div>
+          )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-green-50">
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-6">
-                <Zap className="w-4 h-4" />
-                Trusted by 10M+ users worldwide
-              </div>
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Send Money
-                <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                  Anywhere, Instantly
-                </span>
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                The fastest, safest, and most affordable way to send money globally. 
-                Join millions who trust Taper Payer for their international transfers.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-8 h-14 text-lg rounded-xl">
-                  Start Sending Money
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-                <Link to={createPageUrl('TaperPayerHowItWorks')}>
-                  <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-xl border-2">
-                    Learn How It Works
-                  </Button>
-                </Link>
-              </div>
-              <div className="flex items-center gap-6 mt-8">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-green-400 border-2 border-white" />
-                  ))}
-                </div>
-                <div>
-                  <div className="flex items-center gap-1 mb-1">
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-600">4.9/5 from 50K+ reviews</p>
-                </div>
-              </div>
-            </motion.div>
+      <section className="container mx-auto px-6 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+              Send Money To Your <span style={{ color: '#2479C2' }}>Loved Ones</span>
+            </h1>
+            <p className="text-xl text-slate-600 mb-8">
+              Our service allows you to send money internationally at competitive exchange rates with low fees, ensuring better value for your money. We specialize in sending same day remittances and providing excellent customer service.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">
+                Download App
+              </Button>
+              <Button variant="outline" className="text-lg px-8 py-6">
+                Learn More
+              </Button>
+            </div>
+          </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 rounded-3xl blur-3xl opacity-20" />
-              <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
-                <div className="bg-gradient-to-br from-blue-600 to-green-600 rounded-2xl p-6 text-white mb-4">
-                  <p className="text-sm opacity-80 mb-1">Available Balance</p>
-                  <p className="text-4xl font-bold">$24,850.00</p>
-                </div>
-                <div className="space-y-3">
-                  {[
-                    { name: 'Maria Garcia', amount: '$500', flag: '🇲🇽' },
-                    { name: 'John Smith', amount: '$1,200', flag: '🇬🇧' },
-                    { name: 'Yuki Tanaka', amount: '$850', flag: '🇯🇵' }
-                  ].map((transfer, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + i * 0.1 }}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <Card className="p-8 bg-white shadow-2xl">
+              <h3 className="text-2xl font-bold mb-6 text-slate-900">Money Transfer</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Send Money From</label>
+                  <div className="relative">
+                    <select 
+                      value={sendFrom}
+                      onChange={(e) => setSendFrom(e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-[#2479C2] focus:border-transparent"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="text-2xl">{transfer.flag}</div>
-                        <div>
-                          <p className="font-medium text-gray-900">{transfer.name}</p>
-                          <p className="text-sm text-gray-500">Just now</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-gray-900">{transfer.amount}</p>
-                        <p className="text-xs text-emerald-600">Completed</p>
-                      </div>
-                    </motion.div>
-                  ))}
+                      <option>United States</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                  </div>
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Send Money To</label>
+                  <div className="relative">
+                    <select 
+                      value={sendTo}
+                      onChange={(e) => setSendTo(e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-[#2479C2] focus:border-transparent"
+                    >
+                      <option value="">Select Receiving Country</option>
+                      {countries.map(country => (
+                        <option key={country.name} value={country.name}>{country.flag} {country.name}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                  </div>
+                </div>
+
+                <Button style={{ backgroundColor: '#2479C2' }} className="w-full hover:opacity-90 text-lg py-6">
+                  Continue <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
               </div>
-            </motion.div>
-          </div>
+            </Card>
+          </motion.div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-green-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center"
-              >
-                <p className="text-4xl lg:text-5xl font-bold text-white mb-2">{stat.value}</p>
-                <p className="text-blue-100">{stat.label}</p>
-              </motion.div>
-            ))}
+      <section style={{ background: 'linear-gradient(to right, #2479C2, #61AF39)' }} className="py-16">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8 text-center text-white">
+            <div>
+              <div className="text-5xl font-bold mb-2">87,950+</div>
+              <p className="text-xl text-blue-100">Satisfied Customers</p>
+            </div>
+            <div>
+              <div className="text-5xl font-bold mb-2">28,885+</div>
+              <p className="text-xl text-blue-100">Transactions</p>
+            </div>
+            <div>
+              <div className="text-5xl font-bold mb-2">5,416+</div>
+              <p className="text-xl text-blue-100">Locations</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Why Choose Us */}
+      <section className="container mx-auto px-6 py-20">
+        <h2 className="text-4xl font-bold text-center mb-16 text-slate-900">
+          Why Choose Taper Payer?
+        </h2>
+        
+        <div className="grid md:grid-cols-3 gap-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Taper Payer?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experience the future of money transfers with features designed for you
-            </p>
+            <Card className="p-8 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#e3f2fd' }}>
+                <Zap className="w-10 h-10" style={{ color: '#2479C2' }} />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900">We're Fast</h3>
+              <p className="text-slate-600 text-lg">From instant to next day availability.</p>
+            </Card>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className={`w-14 h-14 ${feature.bg} rounded-xl flex items-center justify-center mb-5`}>
-                  <feature.icon className={`w-7 h-7 ${feature.color}`} />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Loved by Millions Worldwide
-            </h2>
-            <p className="text-xl text-gray-600">
-              See what our users have to say
-            </p>
+            <Card className="p-8 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#e8f5e9' }}>
+                <Shield className="w-10 h-10" style={{ color: '#61AF39' }} />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900">We're Safe</h3>
+              <p className="text-slate-600 text-lg">We take every step to safeguard your data.</p>
+            </Card>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-6 leading-relaxed">"{testimonial.content}"</p>
-                <div>
-                  <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                  <p className="text-sm text-gray-500">{testimonial.role}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-green-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Ready to Start Sending?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Join millions of users who trust Taper Payer for fast, secure money transfers
-            </p>
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-50 px-10 h-14 text-lg rounded-xl font-semibold">
-              Create Free Account
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+            <Card className="p-8 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#fff3e0' }}>
+                <DollarSign className="w-10 h-10" style={{ color: '#F88F2B' }} />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-slate-900">We're Low-Cost</h3>
+              <p className="text-slate-600 text-lg">Competitive prices with no hidden fees</p>
+            </Card>
           </motion.div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <TaperPayerLogo className="mb-4" height="h-7" />

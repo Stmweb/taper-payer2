@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Shield, Zap, DollarSign, Users, Globe, MapPin, ChevronDown, Menu, X, Send } from 'lucide-react';
+import { ArrowRight, Shield, Zap, DollarSign, Users, Globe, MapPin, ChevronDown, Menu, X, Send, CreditCard, Smartphone } from 'lucide-react';
 import TaperPayerLogo from '../components/taperpayer/TaperPayerLogo';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../utils';
@@ -337,6 +337,45 @@ export default function TaperPayerHome() {
             <h3 className="text-2xl font-bold mb-4 text-slate-900">Excellent Customer Service</h3>
             <p className="text-slate-600 text-lg">
               Our dedicated team is here to help you with any questions or concerns. We're committed to your satisfaction.
+            </p>
+          </Card>
+        </div>
+      </section>
+
+      {/* Card Issuance Section */}
+      <section className="container mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold mb-6 text-slate-900">Card Issuance</h2>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            Brand And Issue Physical And Virtual Cards
+          </p>
+          <p className="text-lg text-slate-600 max-w-3xl mx-auto mt-4">
+            Design your unique branded cards to create a consistent identity for physical and virtual cards. Our team will handle card production and fulfillment.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <Card className="p-8 hover:shadow-xl transition-shadow">
+            <CreditCard className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
+            <h3 className="text-2xl font-bold mb-4 text-slate-900">Physical Cards</h3>
+            <p className="text-slate-600 text-lg">
+              Custom Or Ready Made Designs, Metal Or Plastic, With The Option For Cardholder Names To Be Imprinted Or For Nameless Cards That Can Be Assigned A Later Time.
+            </p>
+          </Card>
+
+          <Card className="p-8 hover:shadow-xl transition-shadow">
+            <Smartphone className="w-12 h-12 mb-4" style={{ color: '#61AF39' }} />
+            <h3 className="text-2xl font-bold mb-4 text-slate-900">Virtual Cards</h3>
+            <p className="text-slate-600 text-lg">
+              Fast Issuance Of Digital Only Cards In The App Platform With Your Custom Or Our Ready Made Designs.
+            </p>
+          </Card>
+
+          <Card className="p-8 hover:shadow-xl transition-shadow">
+            <Zap className="w-12 h-12 mb-4" style={{ color: '#F88F2B' }} />
+            <h3 className="text-2xl font-bold mb-4 text-slate-900">Digital Wallet Support</h3>
+            <p className="text-slate-600 text-lg">
+              Cardholders Can Load Physical And Virtual Cards Into Their Apple Pay Or Android Pay Wallets For Touchless Payments With Tokenized Security.
             </p>
           </Card>
         </div>

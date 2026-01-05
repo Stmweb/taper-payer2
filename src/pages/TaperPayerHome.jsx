@@ -401,7 +401,7 @@ export default function TaperPayerHome() {
                   <img 
                     src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png"
                     alt="Taper Payer"
-                    className="h-12 brightness-0 invert"
+                    className="h-20 brightness-0 invert"
                   />
                   <CreditCard className="w-10 h-10" />
                 </div>

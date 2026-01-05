@@ -205,13 +205,25 @@ export default function TaperPayerLogin() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="mb-8 rounded-2xl overflow-hidden shadow-lg"
+            className="mb-8 rounded-2xl overflow-hidden shadow-2xl relative"
+            style={{
+              background: 'linear-gradient(135deg, #1a3a52 0%, #2d5a3d 100%)',
+              backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpattern id=\'grid\' width=\'20\' height=\'20\' patternUnits=\'userSpaceOnUse\'%3E%3Crect width=\'20\' height=\'20\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'0.5\' opacity=\'0.1\'/%3E%3C/pattern%3E%3Crect width=\'100\' height=\'100\' fill=\'url(%23grid)\'/%3E%3C/svg%3E")',
+            }}
           >
-            <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/edec7b2f2_ChatGPTImageJan5202606_20_16PM.png"
-              alt="World Cup Raffle 2026"
-              className="w-full h-auto"
-            />
+            <div className="p-8 text-center relative">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <span className="text-5xl">🇺🇸</span>
+                <span className="text-5xl">⚽</span>
+                <span className="text-5xl">🇨🇦</span>
+              </div>
+              <h3 className="text-4xl font-black text-white mb-2">
+                WORLD CUP RAFFLE!
+              </h3>
+              <p className="text-6xl font-black mb-4" style={{ color: '#FFD700' }}>2026</p>
+              <p className="text-xl text-blue-100 mb-2">Use TaperPayer during the World Cup</p>
+              <p className="text-lg text-green-200">for a chance to win!</p>
+            </div>
           </motion.div>
 
           {/* Stats */}

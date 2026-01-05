@@ -324,13 +324,30 @@ export default function TaperPayerHome() {
       </section>
 
       {/* Card Issuance Section */}
-      <section className="container mx-auto px-6 py-20">
+      <section className="container mx-auto px-6 py-20 relative overflow-hidden">
+        {/* Animated Background Cards */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+          <motion.div
+            animate={{ 
+              rotateY: [0, 360],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{ 
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute w-96 h-60 rounded-3xl"
+            style={{ background: 'linear-gradient(135deg, #2479C2, #61AF39)' }}
+          />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-16 relative z-10"
         >
           <h2 className="text-4xl font-bold mb-6 text-slate-900">Card Issuance</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
@@ -339,9 +356,86 @@ export default function TaperPayerHome() {
           <p className="text-lg text-slate-600 max-w-3xl mx-auto mt-4">
             Design your unique branded cards to create a consistent identity for physical and virtual cards. Our team will handle card production and fulfillment.
           </p>
+
+          {/* Animated Card Mockup */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex justify-center mt-12 mb-8"
+          >
+            <motion.div
+              animate={{ 
+                rotateY: [0, 15, 0, -15, 0],
+                y: [0, -10, 0, -10, 0]
+              }}
+              transition={{ 
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="relative w-96 h-60 rounded-3xl shadow-2xl overflow-hidden"
+              style={{ 
+                background: 'linear-gradient(135deg, #2479C2 0%, #61AF39 100%)',
+                transformStyle: 'preserve-3d'
+              }}
+            >
+              {/* Card shine effect */}
+              <motion.div
+                animate={{ 
+                  x: ['-100%', '200%']
+                }}
+                transition={{ 
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 2
+                }}
+                className="absolute inset-0 w-1/3 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+              />
+
+              {/* Card content */}
+              <div className="relative h-full p-8 flex flex-col justify-between text-white">
+                <div className="flex justify-between items-start">
+                  <img 
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png"
+                    alt="Taper Payer"
+                    className="h-12 brightness-0 invert"
+                  />
+                  <CreditCard className="w-10 h-10" />
+                </div>
+
+                <div>
+                  <div className="flex gap-3 mb-6">
+                    <div className="w-12 h-10 rounded bg-white/20 backdrop-blur-sm" />
+                    <div className="w-12 h-10 rounded bg-white/10" />
+                  </div>
+
+                  <div className="font-mono text-2xl mb-4 tracking-wider">
+                    •••• •••• •••• 4242
+                  </div>
+
+                  <div className="flex justify-between items-end">
+                    <div>
+                      <div className="text-xs opacity-70 mb-1">CARDHOLDER</div>
+                      <div className="font-semibold">JOHN DOE</div>
+                    </div>
+                    <div>
+                      <div className="text-xs opacity-70 mb-1">EXPIRES</div>
+                      <div className="font-semibold">12/28</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+            </motion.div>
+          </motion.div>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

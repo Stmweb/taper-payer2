@@ -1,13 +1,13 @@
 import TaperPayerAbout from './pages/TaperPayerAbout';
-import TaperPayerHowItWorks from './pages/TaperPayerHowItWorks';
 import TaperPayerHome from './pages/TaperPayerHome';
+import TaperPayerHowItWorks from './pages/TaperPayerHowItWorks';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "TaperPayerAbout": TaperPayerAbout,
-    "TaperPayerHowItWorks": TaperPayerHowItWorks,
     "TaperPayerHome": TaperPayerHome,
+    "TaperPayerHowItWorks": TaperPayerHowItWorks,
 }
 
 export const pagesConfig = {

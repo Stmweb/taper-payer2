@@ -27,7 +27,7 @@ export default function TaperPayerHome() {
       <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <TaperPayerLogo height="h-16" />
+            <TaperPayerLogo height="h-24" />
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">

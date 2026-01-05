@@ -233,6 +233,7 @@ export default function TaperPayerSignup() {
             }}
           >
             <div className="p-8 text-center relative">
+              <TaperPayerLogo height="h-16" className="mx-auto mb-4 brightness-0 invert" />
               <div className="flex items-center justify-center gap-4 mb-4">
                 <span className="text-5xl">🇺🇸</span>
                 <span className="text-5xl">⚽</span>

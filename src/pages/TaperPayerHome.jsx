@@ -139,25 +139,6 @@ export default function TaperPayerHome() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section style={{ background: 'linear-gradient(to right, #2479C2, #61AF39)' }} className="py-16">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8 text-center text-white">
-            <div>
-              <div className="text-5xl font-bold mb-2">87,950+</div>
-              <p className="text-xl text-blue-100">Satisfied Customers</p>
-            </div>
-            <div>
-              <div className="text-5xl font-bold mb-2">28,885+</div>
-              <p className="text-xl text-blue-100">Transactions</p>
-            </div>
-            <div>
-              <div className="text-5xl font-bold mb-2">5,416+</div>
-              <p className="text-xl text-blue-100">Locations</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Why Choose Us */}
       <section className="container mx-auto px-6 py-20">

@@ -86,7 +86,7 @@ export default function TaperPayerHome() {
               Send Money To Your <span style={{ color: '#2479C2' }}>Loved Ones</span>
             </h1>
             <p className="text-xl text-slate-600 mb-8">
-              Our service allows you to send money internationally at competitive exchange rates with low fees, ensuring better value for your money. We specialize in sending same day remittances and providing excellent customer service.
+              Taper Payer is a modern financial technology platform built for fast, secure, and seamless money transfers. Whether you're sending funds, making payments, or managing transactions, Taper Payer makes moving money simple, reliable, and transparent.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">

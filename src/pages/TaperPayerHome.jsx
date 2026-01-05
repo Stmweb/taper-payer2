@@ -399,9 +399,9 @@ export default function TaperPayerHome() {
               <div className="relative h-full p-8 flex flex-col justify-between text-white">
                 <div className="flex justify-between items-start">
                   <img 
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/855029bb2_ChatGPTImageDec29202502_22_40PM.png"
-                    alt="Money Transfer"
-                    className="h-20 w-20"
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png"
+                    alt="Taper Payer"
+                    className="h-12 brightness-0 invert"
                   />
                   <CreditCard className="w-10 h-10" />
                 </div>

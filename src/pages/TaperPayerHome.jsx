@@ -27,7 +27,7 @@ export default function TaperPayerHome() {
       <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <TaperPayerLogo className="w-40 h-auto" />
+            <TaperPayerLogo height="h-12" />
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
@@ -212,7 +212,7 @@ export default function TaperPayerHome() {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <TaperPayerLogo className="mb-4" height="h-7" />
+              <TaperPayerLogo className="mb-4" height="h-10" />
               <p className="text-sm">Fast, secure, and affordable global money transfers.</p>
             </div>
             <div>

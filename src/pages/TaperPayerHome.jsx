@@ -30,12 +30,7 @@ export default function TaperPayerHome() {
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/4e39d5e13_ChatGPTImageDec29202501_48_52PM.png"
               alt="Taper Payer"
-              className="h-24 w-auto hidden md:block"
-            />
-            <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/19dd44459_TaperPayerBiglogo.png"
-              alt="Taper Payer"
-              className="h-16 w-auto md:hidden"
+              className="h-24 w-auto"
             />
             
             {/* Desktop Navigation */}
@@ -63,14 +58,7 @@ export default function TaperPayerHome() {
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-4 border-t">
-            <div className="flex justify-center pb-4 border-b">
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/19dd44459_TaperPayerBiglogo.png"
-                alt="Taper Payer"
-                className="h-20 w-auto"
-              />
-            </div>
+          <div className="md:hidden py-4 space-y-4">
             <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
             <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</a>
             <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</a>

@@ -36,9 +36,9 @@ export default function TaperPayerHome() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
+              <a href="https://taperpayer.com/TaperPayerLogin" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</a>
+              <a href="https://taperpayer.com/TaperPayerLogin" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</a>
+              <a href="https://taperpayer.com/TaperPayerLogin" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
               <Link to={createPageUrl('TaperPayerLogin')}>
                 <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
               </Link>
@@ -60,9 +60,9 @@ export default function TaperPayerHome() {
           {isMobileMenuOpen && (
           <div className="md:hidden py-4 space-y-4">
             <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-            <Link to={createPageUrl('TaperPayerAbout')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</Link>
-            <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
-            <Link to={createPageUrl('TaperPayerContact')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
+            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</a>
+            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</a>
+            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
             <Link to={createPageUrl('TaperPayerLogin')}>
               <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50 w-full">Login</Button>
             </Link>
@@ -636,8 +636,8 @@ export default function TaperPayerHome() {
               <h4 className="font-bold mb-4 text-xl">Quick Links</h4>
               <ul className="space-y-3 text-slate-300">
                 <li><Link to={createPageUrl('TaperPayerHome')} className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Home</Link></li>
-                <li><Link to={createPageUrl('TaperPayerAbout')} className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> About Us</Link></li>
-                <li><Link to={createPageUrl('TaperPayerHowItWorks')} className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> How It Works</Link></li>
+                <li><a href="https://taperpayer.com/TaperPayerLogin" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> About Us</a></li>
+                <li><a href="https://taperpayer.com/TaperPayerLogin" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> How It Works</a></li>
                 <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Agent Locations</a></li>
               </ul>
             </div>

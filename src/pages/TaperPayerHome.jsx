@@ -24,29 +24,15 @@ export default function TaperPayerHome() {
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
       {/* Header */}
-      <nav className="bg-white md:bg-white bg-slate-900 border-b sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 md:px-6 py-3 md:py-4">
+      <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Mobile Menu Button - Left */}
-            <button
-              className="md:hidden text-white p-2"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-            </button>
-
-            {/* Logo - Centered on mobile, left on desktop */}
-            <div className="flex-1 md:flex-none flex justify-center md:justify-start">
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/33e577655_TaperPayerBiglogo.png"
-                alt="Taper Payer"
-                className="h-16 md:h-24 w-auto"
-              />
-            </div>
-
-            {/* Spacer for mobile to keep logo centered */}
-            <div className="md:hidden w-11" />
-
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/33e577655_TaperPayerBiglogo.png"
+              alt="Taper Payer"
+              className="h-24 w-auto"
+            />
+            
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
@@ -60,23 +46,29 @@ export default function TaperPayerHome() {
                 <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
               </Link>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-slate-700"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-4 bg-slate-900">
-            <Link to={createPageUrl('TaperPayerHome')} className="block text-white font-medium hover:text-[#61AF39] transition-colors px-4 py-2">Home</Link>
-            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-white font-medium hover:text-[#61AF39] transition-colors px-4 py-2">About</a>
-            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-white font-medium hover:text-[#61AF39] transition-colors px-4 py-2">How It Works</a>
-            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-white font-medium hover:text-[#61AF39] transition-colors px-4 py-2">Contact</a>
-            <div className="px-4 space-y-3 pt-2">
-              <Link to={createPageUrl('TaperPayerLogin')}>
-                <Button variant="outline" className="text-white border-white hover:bg-white/10 w-full">Login</Button>
-              </Link>
-              <Link to={createPageUrl('TaperPayerSignup')}>
-                <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
-              </Link>
-            </div>
+          <div className="md:hidden py-4 space-y-4">
+            <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
+            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</a>
+            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</a>
+            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
+            <Link to={createPageUrl('TaperPayerLogin')}>
+              <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50 w-full">Login</Button>
+            </Link>
+            <Link to={createPageUrl('TaperPayerSignup')}>
+              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
+            </Link>
           </div>
           )}
         </div>

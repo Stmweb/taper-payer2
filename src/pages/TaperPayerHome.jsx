@@ -28,7 +28,7 @@ export default function TaperPayerHome() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/4e39d5e13_ChatGPTImageDec29202501_48_52PM.png"
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/33e577655_TaperPayerBiglogo.png"
               alt="Taper Payer"
               className="h-24 w-auto"
             />

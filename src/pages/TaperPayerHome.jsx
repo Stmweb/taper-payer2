@@ -28,10 +28,9 @@ export default function TaperPayerHome() {
         <div className="container mx-auto px-6 py-2">
           <div className="flex items-center justify-between">
             <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ea493ee34_ChatGPTImageJan112026at01_01_45AM.png"
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
               alt="Taper Payer"
               className="h-14 w-auto"
-              style={{ mixBlendMode: 'multiply' }}
             />
             
             {/* Desktop Navigation */}

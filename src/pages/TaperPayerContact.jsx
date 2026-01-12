@@ -121,7 +121,7 @@ export default function TaperPayerContact() {
         >
           <div className="text-center mb-8">
             <Link to={createPageUrl('TaperPayerHome')}>
-              <TaperPayerLogo height="h-16" className="mx-auto mb-6" />
+              <TaperPayerLogo height="h-34" className="mx-auto mb-6" />
             </Link>
             <h2 className="text-3xl font-bold text-slate-900 mb-2">
               Send Us a Message

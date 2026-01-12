@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Target, Heart, Award, Globe, TrendingUp, Shield, Zap } from 'lucide-react';
+import { Users, Target, Heart, Award, Globe, TrendingUp, Shield, Zap, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
 
 export default function TaperPayerAbout() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const values = [
     {
       icon: Users,
@@ -69,7 +70,7 @@ export default function TaperPayerAbout() {
                 Contact
               </Link>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-3">
               <Link to={createPageUrl('TaperPayerLogin')}>
                 <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
                   Login
@@ -81,7 +82,28 @@ export default function TaperPayerAbout() {
                 </Button>
               </Link>
             </div>
+            <button
+              className="md:hidden text-gray-700"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
+
+          {isMobileMenuOpen && (
+            <div className="md:hidden py-4 space-y-4">
+              <Link to={createPageUrl('TaperPayerHome')} className="block text-gray-600 font-medium hover:text-blue-600 transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-gray-600 font-medium hover:text-blue-600 transition-colors">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="block text-gray-900 font-medium hover:text-blue-600 transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="block text-gray-600 font-medium hover:text-blue-600 transition-colors">Contact</Link>
+              <Link to={createPageUrl('TaperPayerLogin')}>
+                <Button variant="outline" className="w-full text-gray-600 border-gray-300 hover:bg-gray-50">Login</Button>
+              </Link>
+              <Link to={createPageUrl('TaperPayerSignup')}>
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">Sign up</Button>
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -99,13 +121,13 @@ export default function TaperPayerAbout() {
               <Heart className="w-4 h-4" />
               Our Story
             </div>
-            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Making Money Transfers
               <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                 Simple for Everyone
               </span>
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-600 leading-relaxed">
               We believe everyone deserves access to fast, affordable, and secure money transfers. 
               That's why we're on a mission to break down barriers and connect the world financially.
             </p>
@@ -181,8 +203,8 @@ export default function TaperPayerAbout() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Core Values</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Our Core Values</h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
               The principles that guide everything we do
             </p>
           </motion.div>
@@ -217,8 +239,8 @@ export default function TaperPayerAbout() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
-            <p className="text-xl text-gray-600">Key milestones in our growth story</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
+            <p className="text-lg sm:text-xl text-gray-600">Key milestones in our growth story</p>
           </motion.div>
 
           <div className="relative">
@@ -263,10 +285,10 @@ export default function TaperPayerAbout() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
               Join Our Journey
             </h2>
-            <p className="text-xl text-blue-100 mb-8">
+            <p className="text-lg sm:text-xl text-blue-100 mb-8">
               Be part of the revolution in global money transfers
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

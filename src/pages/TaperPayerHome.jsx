@@ -25,12 +25,12 @@ export default function TaperPayerHome() {
     <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
       {/* Header */}
       <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-2">
+        <div className="container mx-auto px-6 py-1">
           <div className="flex items-center justify-between">
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
               alt="Taper Payer"
-              className="h-20 w-auto"
+              className="h-24 w-auto"
             />
             
             {/* Desktop Navigation */}

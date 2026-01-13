@@ -1,19 +1,19 @@
-import TaperPayerLogin from './pages/TaperPayerLogin';
-import TaperPayerSignup from './pages/TaperPayerSignup';
-import TaperPayerContact from './pages/TaperPayerContact';
 import TaperPayerAbout from './pages/TaperPayerAbout';
+import TaperPayerContact from './pages/TaperPayerContact';
 import TaperPayerHome from './pages/TaperPayerHome';
 import TaperPayerHowItWorks from './pages/TaperPayerHowItWorks';
+import TaperPayerLogin from './pages/TaperPayerLogin';
+import TaperPayerSignup from './pages/TaperPayerSignup';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "TaperPayerLogin": TaperPayerLogin,
-    "TaperPayerSignup": TaperPayerSignup,
-    "TaperPayerContact": TaperPayerContact,
     "TaperPayerAbout": TaperPayerAbout,
+    "TaperPayerContact": TaperPayerContact,
     "TaperPayerHome": TaperPayerHome,
     "TaperPayerHowItWorks": TaperPayerHowItWorks,
+    "TaperPayerLogin": TaperPayerLogin,
+    "TaperPayerSignup": TaperPayerSignup,
 }
 
 export const pagesConfig = {

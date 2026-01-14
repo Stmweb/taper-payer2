@@ -25,32 +25,36 @@ export default function TaperPayerHome() {
     <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
       {/* Header */}
       <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-0 md:py-1">
-          <div className="flex items-center justify-between">
-            <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
-              alt="Taper Payer"
-              className="h-30 md:h-32 w-auto"
-            />
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Logo */}
+            <Link to={createPageUrl('TaperPayerHome')} className="flex-shrink-0">
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
+                alt="Taper Payer"
+                className="h-12 md:h-16 w-auto"
+              />
+            </Link>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-              <a href="https://taperpayer.com/TaperPayerLogin" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</a>
-              <a href="https://taperpayer.com/TaperPayerLogin" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</a>
-              <a href="https://taperpayer.com/TaperPayerLogin" className="text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
+            <div className="hidden md:flex items-center gap-6 lg:gap-8">
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
               <Link to={createPageUrl('TaperPayerLogin')}>
-                <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
+                <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
               </Link>
               <Link to={createPageUrl('TaperPayerSignup')}>
-                <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
+                <Button size="sm" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
               </Link>
             </div>
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-slate-700"
+              className="md:hidden text-slate-700 p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -58,18 +62,20 @@ export default function TaperPayerHome() {
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-4">
-            <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">About</a>
-            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">How It Works</a>
-            <a href="https://taperpayer.com/TaperPayerLogin" className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors">Contact</a>
-            <Link to={createPageUrl('TaperPayerLogin')}>
-              <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50 w-full">Login</Button>
-            </Link>
-            <Link to={createPageUrl('TaperPayerSignup')}>
-              <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
-            </Link>
-          </div>
+            <div className="md:hidden border-t py-4 space-y-3">
+              <Link to={createPageUrl('TaperPayerHome')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors py-2">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors py-2">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors py-2">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="block text-slate-700 font-medium hover:text-[#2479C2] transition-colors py-2">Contact</Link>
+              <div className="pt-3 space-y-3">
+                <Link to={createPageUrl('TaperPayerLogin')}>
+                  <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50 w-full">Login</Button>
+                </Link>
+                <Link to={createPageUrl('TaperPayerSignup')}>
+                  <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
+                </Link>
+              </div>
+            </div>
           )}
         </div>
       </nav>

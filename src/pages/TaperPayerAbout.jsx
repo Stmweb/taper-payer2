@@ -52,9 +52,9 @@ export default function TaperPayerAbout() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-0 md:py-2">
-            <Link to={createPageUrl('TaperPayerHome')}>
-              <TaperPayerLogo height="h-30 md:h-32" />
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <Link to={createPageUrl('TaperPayerHome')} className="flex-shrink-0">
+              <TaperPayerLogo height="h-14 md:h-16" />
             </Link>
             <div className="hidden md:flex items-center gap-8">
               <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">

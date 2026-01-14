@@ -26,13 +26,22 @@ export default function TaperPayerHome() {
       {/* Header */}
       <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <Link to={createPageUrl('TaperPayerHome')} className="flex-shrink-0">
+          <div className="relative flex items-center justify-between h-16 md:h-20">
+            {/* Mobile Menu Button - Left */}
+            <button
+              className="md:hidden text-slate-700 p-2 z-10"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+
+            {/* Logo - Centered on Mobile, Left on Desktop */}
+            <Link to={createPageUrl('TaperPayerHome')} className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
                 alt="Taper Payer"
-                className="h-14 md:h-16 w-auto"
+                className="h-24 md:h-16 w-auto"
               />
             </Link>
             
@@ -50,14 +59,8 @@ export default function TaperPayerHome() {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden text-slate-700 p-2"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Spacer for Mobile to Balance Layout */}
+            <div className="md:hidden w-10"></div>
           </div>
 
           {/* Mobile Menu */}

@@ -216,9 +216,15 @@ export default function TaperPayerHome() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-6 text-slate-900">Tap to Pay - It's That Easy</h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-6">
               Send money in just a few taps with our simple and secure payment process
             </p>
+            <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-6 max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">SoftPOS</h3>
+              <p className="text-lg text-slate-700 leading-relaxed">
+                SoftPOS (Software Point of Sale), also known as Tap to Pay, Tap on Phone, or Tap to Phone, is a cutting-edge technology that transforms any NFC-enabled smartphone or tablet into a secure, contactless payment terminal—without needing extra hardware like traditional card readers or POS devices.
+              </p>
+            </div>
           </div>
 
           <div className="relative flex items-center justify-center max-w-6xl mx-auto py-8 overflow-x-auto md:overflow-visible px-4">

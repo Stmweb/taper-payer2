@@ -274,7 +274,7 @@ export default function TaperPayerAbout() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">SoftPOS</h3>
               <p className="text-gray-600 leading-relaxed">
-                Transform any smartphone into a secure payment terminal. Accept contactless card payments, mobile wallets, and QR codes without additional hardware.
+                SoftPOS (Software Point of Sale), also known as Tap to Pay, Tap on Phone, or Tap to Phone, is a cutting-edge technology that transforms any NFC-enabled smartphone or tablet into a secure, contactless payment terminal—without needing extra hardware like traditional card readers or POS devices.
               </p>
             </motion.div>
 

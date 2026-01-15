@@ -265,15 +265,11 @@ export default function TaperPayerHome() {
                       <motion.h2 
                         animate={{ scale: [1, 1.08, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
-                        className="text-3xl md:text-7xl font-black text-white mb-2 md:mb-4" 
+                        className="text-3xl md:text-7xl font-black text-white" 
                         style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
                       >
                         Taper
                       </motion.h2>
-                      <div className="inline-flex items-center gap-2 md:gap-3 bg-white/20 backdrop-blur-md rounded-full px-3 md:px-6 py-1.5 md:py-3">
-                        <Send className="w-5 h-5 md:w-8 md:h-8 text-white" />
-                        <span className="text-white text-sm md:text-lg font-semibold">Send Money</span>
-                      </div>
                     </div>
                   </div>
 
@@ -299,15 +295,11 @@ export default function TaperPayerHome() {
                       <motion.h2 
                         animate={{ scale: [1, 1.08, 1] }}
                         transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                        className="text-3xl md:text-7xl font-black text-white mb-2 md:mb-4" 
+                        className="text-3xl md:text-7xl font-black text-white" 
                         style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
                       >
                         Payer
                       </motion.h2>
-                      <div className="inline-flex items-center gap-2 md:gap-3 bg-white/20 backdrop-blur-md rounded-full px-3 md:px-6 py-1.5 md:py-3">
-                        <DollarSign className="w-5 h-5 md:w-8 md:h-8 text-white" />
-                        <span className="text-white text-sm md:text-lg font-semibold">Receive Payment</span>
-                      </div>
                     </div>
                   </div>
 

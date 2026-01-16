@@ -76,7 +76,7 @@ export default function TaperPayerAbout() {
                   Login
                 </Button>
               </a>
-              <a href="https://bluepaycard.wwcnyotm.com/Account/Register" target="_blank" rel="noopener noreferrer">
+              <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
                   Sign up
                 </Button>
@@ -99,7 +99,7 @@ export default function TaperPayerAbout() {
               <a href="https://bluepaycard.wwcnyotm.com/Account/login?returnUrl=%2FHome%2FIndex" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="w-full text-gray-600 border-gray-300 hover:bg-gray-50">Login</Button>
               </a>
-              <a href="https://bluepaycard.wwcnyotm.com/Account/Register" target="_blank" rel="noopener noreferrer">
+              <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">Sign up</Button>
               </a>
             </div>

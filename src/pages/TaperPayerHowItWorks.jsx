@@ -164,11 +164,11 @@ export default function TaperPayerHowItWorks() {
                   Login
                 </Button>
               </Link>
-              <Link to={createPageUrl('TaperPayerSignup')}>
+              <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white">
                   Sign up
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>

@@ -54,9 +54,9 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerLogin')}>
                 <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
               </Link>
-              <Link to={createPageUrl('TaperPayerSignup')}>
+              <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
                 <Button size="sm" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
-              </Link>
+              </a>
             </div>
 
             {/* Spacer for Mobile to Balance Layout */}
@@ -74,9 +74,9 @@ export default function TaperPayerHome() {
                 <Link to={createPageUrl('TaperPayerLogin')}>
                   <Button variant="outline" className="text-slate-700 border-slate-300 hover:bg-slate-50 w-full">Login</Button>
                 </Link>
-                <Link to={createPageUrl('TaperPayerSignup')}>
+                <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
                   <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 w-full">Sign up</Button>
-                </Link>
+                </a>
               </div>
             </div>
           )}

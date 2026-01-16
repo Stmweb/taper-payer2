@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { UserPlus, CreditCard, Send, CheckCircle, Shield, Clock, DollarSign, Globe, ArrowRight, Smartphone, Laptop, Building2 } from 'lucide-react';
+import { UserPlus, CreditCard, Send, CheckCircle, Shield, Clock, DollarSign, Globe, ArrowRight, Smartphone, Laptop, Building2, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -8,6 +8,7 @@ import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
 
 export default function TaperPayerHowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const steps = [
     {
@@ -158,7 +159,13 @@ export default function TaperPayerHowItWorks() {
                 Contact
               </Link>
             </div>
-            <div className="flex items-center gap-3">
+            <button
+              className="md:hidden text-gray-700"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+            <div className="hidden md:flex items-center gap-3">
               <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" className="text-gray-600 hover:text-blue-600">
                   Login
@@ -170,9 +177,26 @@ export default function TaperPayerHowItWorks() {
                 </Button>
               </a>
             </div>
-          </div>
-        </div>
-      </nav>
+
+            {isMobileMenuOpen && (
+              <div className="md:hidden bg-gradient-to-br from-blue-600 to-green-600 -mx-4 px-4 py-6 space-y-3 rounded-b-2xl">
+                <Link to={createPageUrl('TaperPayerHome')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Home</Link>
+                <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-white font-semibold hover:text-white transition-colors py-2">How It Works</Link>
+                <Link to={createPageUrl('TaperPayerAbout')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">About</Link>
+                <Link to={createPageUrl('TaperPayerContact')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</Link>
+                <div className="pt-3 space-y-3">
+                  <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20">Login</Button>
+                  </a>
+                  <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full bg-white text-blue-600 hover:bg-gray-100">Sign up</Button>
+                  </a>
+                </div>
+              </div>
+            )}
+            </div>
+            </div>
+            </nav>
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-green-50 py-20 lg:py-32">

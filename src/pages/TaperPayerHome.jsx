@@ -300,7 +300,7 @@ export default function TaperPayerHome() {
                 transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
                 className="relative -ml-6 md:-ml-12"
               >
-                <div className="relative w-[240px] h-[140px] md:w-[500px] md:h-[280px] bg-slate-900 rounded-[2rem] md:rounded-[3rem] p-2 md:p-4 shadow-2xl">
+                <div className="relative w-[280px] h-[160px] md:w-[500px] md:h-[280px] bg-slate-900 rounded-[2rem] md:rounded-[3rem] p-2 md:p-4 shadow-2xl">
                   {/* Notch on side */}
                   <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 md:w-5 h-16 md:h-32 bg-slate-900 rounded-l-2xl z-10"></div>
 

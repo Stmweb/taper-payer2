@@ -227,88 +227,19 @@ export default function TaperPayerHome() {
             </div>
           </div>
 
-          <div className="relative flex items-center justify-center max-w-6xl mx-auto py-8 overflow-x-auto md:overflow-visible px-4">
-            <div className="flex items-center justify-center min-w-[700px] md:min-w-0">
-              {/* Connection Animation - Center */}
-              <motion.div
-                animate={{ 
-                  scale: [1, 1.3, 1],
-                  opacity: [0.5, 1, 0.5]
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="absolute z-20 w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center"
-                style={{ background: 'radial-gradient(circle, rgba(97, 175, 57, 0.8), transparent)' }}
-              >
-                <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white flex items-center justify-center">
-                  <Zap className="w-4 h-4 md:w-5 md:h-5" style={{ color: '#61AF39' }} />
-                </div>
-              </motion.div>
-
-              {/* Left Phone - Taper (Landscape) */}
-              <motion.div
-                initial={{ opacity: 0, x: -150 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="relative"
-              >
-                <div className="relative w-[280px] h-[160px] md:w-[500px] md:h-[280px] bg-slate-900 rounded-[2rem] md:rounded-[3rem] p-2 md:p-4 shadow-2xl">
-                  {/* Notch on side */}
-                  <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-4 md:w-5 h-16 md:h-32 bg-slate-900 rounded-r-2xl z-10"></div>
-
-                  <div className="w-full h-full rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2479C2, #1a5a8f)' }}>
-                    <div className="text-center px-3 md:px-6">
-                      <motion.h2 
-                        animate={{ scale: [1, 1.08, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="text-3xl md:text-7xl font-black text-white" 
-                        style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
-                      >
-                        Taper
-                      </motion.h2>
-                    </div>
-                  </div>
-
-                  {/* Home indicator */}
-                  <div className="absolute right-1.5 md:right-2 top-1/2 transform -translate-y-1/2 w-0.5 md:w-1 h-16 md:h-32 bg-white rounded-full"></div>
-                </div>
-              </motion.div>
-
-              {/* Right Phone - Payer (Landscape) */}
-              <motion.div
-                initial={{ opacity: 0, x: 150 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-                className="relative -ml-6 md:-ml-12"
-              >
-                <div className="relative w-[280px] h-[160px] md:w-[500px] md:h-[280px] bg-slate-900 rounded-[2rem] md:rounded-[3rem] p-2 md:p-4 shadow-2xl">
-                  {/* Notch on side */}
-                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 md:w-5 h-16 md:h-32 bg-slate-900 rounded-l-2xl z-10"></div>
-
-                  <div className="w-full h-full rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #61AF39, #4a8c2a)' }}>
-                    <div className="text-center px-3 md:px-6">
-                      <motion.h2 
-                        animate={{ scale: [1, 1.08, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                        className="text-3xl md:text-7xl font-black text-white" 
-                        style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
-                      >
-                        Payer
-                      </motion.h2>
-                    </div>
-                  </div>
-
-                  {/* Home indicator */}
-                  <div className="absolute left-1.5 md:left-2 top-1/2 transform -translate-y-1/2 w-0.5 md:w-1 h-16 md:h-32 bg-white rounded-full"></div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="flex justify-center"
+          >
+            <img 
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/b27e6372d_E8D7929C-E4A8-4138-97F5-F98758F7E75E.jpg"
+              alt="Tap to Pay in action"
+              className="w-full max-w-2xl rounded-3xl shadow-2xl"
+            />
+          </motion.div>
         </div>
       </section>
 

@@ -4,6 +4,7 @@ import TaperPayerHome from './pages/TaperPayerHome';
 import TaperPayerHowItWorks from './pages/TaperPayerHowItWorks';
 import TaperPayerLogin from './pages/TaperPayerLogin';
 import TaperPayerSignup from './pages/TaperPayerSignup';
+import TaperPayerRates from './pages/TaperPayerRates';
 import __Layout from './Layout.jsx';
 
 
@@ -14,6 +15,7 @@ export const PAGES = {
     "TaperPayerHowItWorks": TaperPayerHowItWorks,
     "TaperPayerLogin": TaperPayerLogin,
     "TaperPayerSignup": TaperPayerSignup,
+    "TaperPayerRates": TaperPayerRates,
 }
 
 export const pagesConfig = {

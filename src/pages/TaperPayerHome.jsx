@@ -1,25 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Shield, Zap, DollarSign, Users, Globe, MapPin, ChevronDown, Menu, X, Send, CreditCard, Smartphone } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Shield, Zap, DollarSign, Users, Globe, MapPin, ChevronDown, Menu, X, Send, CreditCard, Smartphone, TrendingUp, RefreshCw } from 'lucide-react';
 import TaperPayerLogo from '../components/taperpayer/TaperPayerLogo';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../utils';
+import { base44 } from '@/api/base44Client';
 
 export default function TaperPayerHome() {
   const [sendFrom, setSendFrom] = useState('United States');
   const [sendTo, setSendTo] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState(null);
+  const [amount, setAmount] = useState('100');
+  const [loading, setLoading] = useState(false);
 
   const countries = [
-    { name: 'Angola', flag: '🇦🇴' },
-    { name: 'Ghana', flag: '🇬🇭' },
-    { name: 'Haiti', flag: '🇭🇹' },
-    { name: 'Mexico', flag: '🇲🇽' },
-    { name: 'Nigeria', flag: '🇳🇬' },
-    { name: 'Senegal', flag: '🇸🇳' }
+    { name: 'Angola', flag: '🇦🇴', currency: 'AOA' },
+    { name: 'Ghana', flag: '🇬🇭', currency: 'GHS' },
+    { name: 'Haiti', flag: '🇭🇹', currency: 'HTG' },
+    { name: 'Mexico', flag: '🇲🇽', currency: 'MXN' },
+    { name: 'Nigeria', flag: '🇳🇬', currency: 'NGN' },
+    { name: 'Senegal', flag: '🇸🇳', currency: 'XOF' }
   ];
+
+  const fetchExchangeRate = async () => {
+    if (!sendTo) return;
+    
+    setLoading(true);
+    try {
+      const selectedCountry = countries.find(c => c.name === sendTo);
+      if (!selectedCountry) return;
+
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `What is the current exchange rate from USD to ${selectedCountry.currency} (${selectedCountry.name})? Return only the numeric rate value.`,
+        add_context_from_internet: true,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            rate: { type: "number" },
+            currency_code: { type: "string" },
+            last_updated: { type: "string" }
+          }
+        }
+      });
+
+      setExchangeRate(result);
+    } catch (error) {
+      console.error('Failed to fetch exchange rate:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (sendTo) {
+      fetchExchangeRate();
+    } else {
+      setExchangeRate(null);
+    }
+  }, [sendTo]);
 
   return (
     <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
@@ -50,6 +92,7 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Home</Link>
               <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">About</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Exchange Rates</Link>
               <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
               <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
@@ -69,6 +112,7 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerHome')} className="block text-white font-semibold hover:text-white transition-colors py-2">Home</Link>
               <Link to={createPageUrl('TaperPayerAbout')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">About</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Exchange Rates</Link>
               <Link to={createPageUrl('TaperPayerContact')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</Link>
               <div className="pt-3 space-y-3">
                 <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
@@ -117,16 +161,16 @@ export default function TaperPayerHome() {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Send Money From</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">You Send</label>
                   <div className="relative">
-                    <select 
-                      value={sendFrom}
-                      onChange={(e) => setSendFrom(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-[#2479C2] focus:border-transparent"
-                    >
-                      <option>United States</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg text-lg font-semibold"
+                      placeholder="100"
+                    />
+                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 font-medium">USD</span>
                   </div>
                 </div>
 
@@ -147,9 +191,53 @@ export default function TaperPayerHome() {
                   </div>
                 </div>
 
+                {exchangeRate && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-blue-50 to-green-50 rounded-lg p-4 border border-blue-100"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-green-600" />
+                        <span className="text-sm font-medium text-slate-700">Exchange Rate</span>
+                      </div>
+                      <button
+                        onClick={fetchExchangeRate}
+                        disabled={loading}
+                        className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
+                      >
+                        <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                      </button>
+                    </div>
+                    <div className="text-2xl font-bold text-slate-900">
+                      1 USD = {exchangeRate.rate?.toFixed(2)} {exchangeRate.currency_code}
+                    </div>
+                    <div className="text-sm text-slate-600 mt-1">
+                      {amount && `You send: $${amount} USD → Recipient gets: ${(parseFloat(amount) * exchangeRate.rate).toFixed(2)} ${exchangeRate.currency_code}`}
+                    </div>
+                    <div className="text-xs text-slate-500 mt-2">
+                      {exchangeRate.last_updated && `Updated: ${exchangeRate.last_updated}`}
+                    </div>
+                  </motion.div>
+                )}
+
+                {loading && (
+                  <div className="flex items-center justify-center py-4">
+                    <RefreshCw className="w-5 h-5 animate-spin text-blue-600" />
+                    <span className="ml-2 text-sm text-slate-600">Fetching live rates...</span>
+                  </div>
+                )}
+
                 <Button style={{ backgroundColor: '#2479C2' }} className="w-full hover:opacity-90 text-lg py-6">
                   Continue <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
+
+                <div className="text-center">
+                  <Link to={createPageUrl('TaperPayerRates')} className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    View All Exchange Rates →
+                  </Link>
+                </div>
               </div>
             </Card>
           </motion.div>

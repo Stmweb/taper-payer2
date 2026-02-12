@@ -72,7 +72,7 @@ export default function TaperPayerContact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 mb-1">Email Us</h3>
-                  <p className="text-slate-600">info@taperpayer.com</p>
+                  <p className="text-slate-600">Support@taperpayer.com</p>
                   <p className="text-sm text-slate-500 mt-1">Response within 24 hours</p>
                 </div>
               </div>
@@ -90,8 +90,8 @@ export default function TaperPayerContact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 mb-1">Visit Us</h3>
-                  <p className="text-slate-600">123 Main Street</p>
-                  <p className="text-slate-600">New York, NY 10001</p>
+                  <p className="text-slate-600">254 Chapman Rd, Ste 208 #26415</p>
+                  <p className="text-slate-600">Newark, Delaware 19702</p>
                 </div>
               </div>
             </motion.div>

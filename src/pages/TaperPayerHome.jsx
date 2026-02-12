@@ -756,11 +756,11 @@ export default function TaperPayerHome() {
               <ul className="space-y-3 text-slate-300">
                 <li className="flex items-start gap-2">
                   <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#2479C2' }} />
-                  <span>123 Main Street<br />New York, NY 10001</span>
+                  <span>254 Chapman Rd, Ste 208 #26415<br />Newark, Delaware 19702</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Globe className="w-5 h-5 flex-shrink-0" style={{ color: '#61AF39' }} />
-                  <a href="mailto:info@taperpayer.com" className="hover:text-white transition-colors">info@taperpayer.com</a>
+                  <a href="mailto:Support@taperpayer.com" className="hover:text-white transition-colors">Support@taperpayer.com</a>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-lg" style={{ color: '#F88F2B' }}>☎</span>

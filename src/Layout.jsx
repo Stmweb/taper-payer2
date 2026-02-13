@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import BottomTabBar from '@/components/mobile/BottomTabBar';
 
 export default function Layout({ children, currentPageName }) {
   useEffect(() => {
@@ -9,7 +10,44 @@ export default function Layout({ children, currentPageName }) {
     document.head.appendChild(link);
 
     document.title = 'Taper Payer - Global Money Transfer';
+
+    // Dark mode support based on system preferences
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleDarkModeChange = (e) => {
+      if (e.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    darkModeMediaQuery.addEventListener('change', handleDarkModeChange);
+
+    return () => {
+      darkModeMediaQuery.removeEventListener('change', handleDarkModeChange);
+    };
   }, []);
 
-  return <>{children}</>;
+  const showBottomTabBar = ![
+    'TaperPayerLogin',
+    'TaperPayerSignup',
+    'TaperPayerContact',
+    'AccountSettings'
+  ].includes(currentPageName);
+
+  return (
+    <div 
+      style={{
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}
+    >
+      {children}
+      {showBottomTabBar && <BottomTabBar />}
+    </div>
+  );
 }

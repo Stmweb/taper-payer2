@@ -615,6 +615,106 @@ export default function TaperPayerHome() {
         </div>
       </section>
 
+      {/* Membership Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+                Join Our <span style={{ color: '#2479C2' }}>Membership</span> Program
+              </h2>
+              <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                Become a Taper Payer member and enjoy exclusive benefits, lower fees, and priority support
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+              >
+                <Card className="p-8 text-center h-full hover:shadow-xl transition-shadow">
+                  <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: '#e3f2fd' }}>
+                    <DollarSign className="w-8 h-8" style={{ color: '#2479C2' }} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-slate-900">Lower Fees</h3>
+                  <p className="text-slate-600">
+                    Save up to 50% on transfer fees with our membership program
+                  </p>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                <Card className="p-8 text-center h-full hover:shadow-xl transition-shadow">
+                  <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: '#e8f5e9' }}>
+                    <Users className="w-8 h-8" style={{ color: '#61AF39' }} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-slate-900">Priority Support</h3>
+                  <p className="text-slate-600">
+                    Get dedicated support and faster response times
+                  </p>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+              >
+                <Card className="p-8 text-center h-full hover:shadow-xl transition-shadow">
+                  <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: '#fff3e0' }}>
+                    <Zap className="w-8 h-8" style={{ color: '#F88F2B' }} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-slate-900">Exclusive Perks</h3>
+                  <p className="text-slate-600">
+                    Access special promotions, better rates, and rewards
+                  </p>
+                </Card>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl p-8 md:p-12"
+            >
+              <div className="max-w-2xl mx-auto text-center">
+                <h3 className="text-3xl font-bold text-slate-900 mb-4">
+                  Ready to Join?
+                </h3>
+                <p className="text-lg text-slate-600 mb-8">
+                  Sign up today and start enjoying member-only benefits
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 px-8 py-6 text-lg w-full sm:w-auto">
+                      Become a Member
+                    </Button>
+                  </a>
+                  <Button size="lg" variant="outline" className="px-8 py-6 text-lg border-2 w-full sm:w-auto">
+                    Learn More
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Download App Section */}
       <section style={{ background: 'linear-gradient(to right, #2479C2, #61AF39)' }} className="py-20">
         <div className="container mx-auto px-6">

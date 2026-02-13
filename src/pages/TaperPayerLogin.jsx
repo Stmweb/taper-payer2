@@ -6,6 +6,7 @@ import { Mail, Lock, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
+import MobileHeader from '@/components/mobile/MobileHeader';
 
 export default function TaperPayerLogin() {
   const [email, setEmail] = useState('');
@@ -17,10 +18,11 @@ export default function TaperPayerLogin() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex dark:bg-slate-900">
+      <MobileHeader title="Login" showBack={true} />
       {/* Left Side - Promotional Content */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 p-12 flex-col justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 p-12 flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
         
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -28,10 +30,10 @@ export default function TaperPayerLogin() {
           transition={{ duration: 0.6 }}
           className="relative z-10 max-w-xl"
         >
-          <h1 className="text-5xl font-bold text-slate-900 mb-6">
+          <h1 className="text-5xl font-bold text-slate-900 dark:text-white mb-6">
             Get the app
           </h1>
-          <p className="text-xl text-slate-600 mb-8">
+          <p className="text-xl text-slate-600 dark:text-gray-300 mb-8">
             Download our app for free to send money online in minutes. Track your payments and view your transfer history from anywhere.
           </p>
 
@@ -254,7 +256,7 @@ export default function TaperPayerLogin() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-slate-900 pt-20 md:pt-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -292,14 +294,14 @@ export default function TaperPayerLogin() {
                 className="h-48 w-auto mx-auto mb-6"
               />
             </Link>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
               Welcome, please login to your account
             </h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -316,7 +318,7 @@ export default function TaperPayerLogin() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -340,14 +342,14 @@ export default function TaperPayerLogin() {
             <Button
               type="submit"
               className="w-full h-12 text-lg font-semibold"
-              style={{ backgroundColor: '#2479C2' }}
+              style={{ backgroundColor: '#2479C2', userSelect: 'none' }}
             >
               Login
             </Button>
 
-            <div className="text-center text-sm text-slate-600">
+            <div className="text-center text-sm text-slate-600 dark:text-gray-400">
               Don't have an account?{' '}
-              <Link to={createPageUrl('TaperPayerSignup')} className="text-blue-600 hover:underline font-semibold">
+              <Link to={createPageUrl('TaperPayerSignup')} className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">
                 New Sign up
               </Link>
             </div>
@@ -355,7 +357,7 @@ export default function TaperPayerLogin() {
             <div className="text-center">
               <Link
                 to={createPageUrl('TaperPayerHome')}
-                className="text-sm text-slate-500 hover:text-blue-600"
+                className="text-sm text-slate-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 Back To Home
               </Link>

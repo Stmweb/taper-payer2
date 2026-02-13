@@ -3,10 +3,12 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { User, Mail, Lock, Phone, MapPin, Eye, EyeOff } from 'lucide-react';
+import { User, Mail, Lock, Phone, MapPin, Eye, EyeOff, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
+import MobileHeader from '@/components/mobile/MobileHeader';
+import CountryDrawer from '@/components/mobile/CountryDrawer';
 
 export default function TaperPayerSignup() {
   const [formData, setFormData] = useState({
@@ -25,6 +27,7 @@ export default function TaperPayerSignup() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [sendSMS, setSendSMS] = useState(false);
   const [sendPromo, setSendPromo] = useState(false);
+  const [showStateDrawer, setShowStateDrawer] = useState(false);
 
   const states = [
     'Alabama', 'Alaska', 'Arizona', 'California', 'Colorado', 'Connecticut',
@@ -38,10 +41,11 @@ export default function TaperPayerSignup() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex dark:bg-slate-900">
+      <MobileHeader title="Sign Up" showBack={true} />
       {/* Left Side - Promotional Content */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 p-12 flex-col justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 p-12 flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
         
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -272,7 +276,7 @@ export default function TaperPayerSignup() {
       </div>
 
       {/* Right Side - Registration Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white overflow-y-auto">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-slate-900 overflow-y-auto pt-20 md:pt-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -310,7 +314,7 @@ export default function TaperPayerSignup() {
                 className="h-48 w-auto mx-auto mb-6"
               />
             </Link>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
               Register your account, it's free!
             </h2>
           </div>
@@ -374,33 +378,38 @@ export default function TaperPayerSignup() {
             <div>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white z-10" style={{ backgroundColor: '#2479C2' }} />
-                <select
+                <Input
                   value={formData.country}
-                  onChange={(e) => setFormData({...formData, country: e.target.value})}
-                  className="w-full pl-12 pr-4 py-3 h-12 border border-gray-300 rounded-md appearance-none bg-white"
-                  required
-                >
-                  <option>United States</option>
-                </select>
+                  readOnly
+                  placeholder="Country"
+                  className="pl-12 h-12 dark:bg-slate-800 dark:border-gray-600 dark:text-white"
+                />
               </div>
             </div>
 
             <div>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white z-10" style={{ backgroundColor: '#2479C2' }} />
-                <select
-                  value={formData.state}
-                  onChange={(e) => setFormData({...formData, state: e.target.value})}
-                  className="w-full pl-12 pr-4 py-3 h-12 border border-gray-300 rounded-md appearance-none bg-white"
-                  required
+                <button
+                  type="button"
+                  onClick={() => setShowStateDrawer(true)}
+                  className="w-full pl-12 pr-4 py-3 h-12 border border-gray-300 dark:border-gray-600 dark:bg-slate-800 dark:text-white rounded-md text-left flex items-center justify-between"
+                  style={{ userSelect: 'none' }}
                 >
-                  <option value="">Select State</option>
-                  {states.map(state => (
-                    <option key={state} value={state}>{state}</option>
-                  ))}
-                </select>
+                  <span className={formData.state ? '' : 'text-gray-400'}>{formData.state || 'Select State'}</span>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </button>
               </div>
             </div>
+
+            <CountryDrawer
+              open={showStateDrawer}
+              onOpenChange={setShowStateDrawer}
+              countries={states}
+              value={formData.state}
+              onSelect={(state) => setFormData({...formData, state})}
+              title="Select State"
+            />
 
             <div>
               <div className="relative">
@@ -474,7 +483,7 @@ export default function TaperPayerSignup() {
             </div>
 
             {/* Password Requirements */}
-            <div className="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg">
+            <div className="text-xs text-slate-600 dark:text-gray-400 bg-slate-50 dark:bg-slate-800 p-3 rounded-lg">
               <p className="font-semibold mb-1">Password must contain:</p>
               <ul className="space-y-1 ml-4">
                 <li>• One Number</li>
@@ -513,14 +522,14 @@ export default function TaperPayerSignup() {
             <Button
               type="submit"
               className="w-full h-12 text-lg font-semibold"
-              style={{ backgroundColor: '#2479C2' }}
+              style={{ backgroundColor: '#2479C2', userSelect: 'none' }}
             >
               Register
             </Button>
 
-            <div className="text-center text-sm text-slate-600">
+            <div className="text-center text-sm text-slate-600 dark:text-gray-400">
               Already have an account?{' '}
-              <Link to={createPageUrl('TaperPayerLogin')} className="text-blue-600 hover:underline font-semibold">
+              <Link to={createPageUrl('TaperPayerLogin')} className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">
                 Login here
               </Link>
             </div>
@@ -528,7 +537,7 @@ export default function TaperPayerSignup() {
             <div className="text-center">
               <Link
                 to={createPageUrl('TaperPayerHome')}
-                className="text-sm text-slate-500 hover:text-blue-600"
+                className="text-sm text-slate-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 Back To Home
               </Link>

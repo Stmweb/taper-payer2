@@ -7,6 +7,7 @@ import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
+import MobileHeader from '@/components/mobile/MobileHeader';
 
 export default function TaperPayerContact() {
   const [formData, setFormData] = useState({
@@ -22,10 +23,11 @@ export default function TaperPayerContact() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex dark:bg-slate-900">
+      <MobileHeader title="Contact Us" showBack={true} />
       {/* Left Side - Contact Information */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 p-12 flex-col justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 p-12 flex-col justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
         
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -33,10 +35,10 @@ export default function TaperPayerContact() {
           transition={{ duration: 0.6 }}
           className="relative z-10 max-w-xl"
         >
-          <h1 className="text-5xl font-bold text-slate-900 mb-6">
+          <h1 className="text-5xl font-bold text-slate-900 dark:text-white mb-6">
             Get in Touch
           </h1>
-          <p className="text-xl text-slate-600 mb-12">
+          <p className="text-xl text-slate-600 dark:text-gray-300 mb-12">
             Have questions? We're here to help! Our customer support team is available 24/7 to assist you with any inquiries.
           </p>
 
@@ -112,7 +114,7 @@ export default function TaperPayerContact() {
       </div>
 
       {/* Right Side - Contact Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-slate-900 pt-20 md:pt-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -123,17 +125,17 @@ export default function TaperPayerContact() {
             <Link to={createPageUrl('TaperPayerHome')}>
               <TaperPayerLogo height="h-32 md:h-16" className="mx-auto mb-6" />
             </Link>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
               Send Us a Message
             </h2>
-            <p className="text-slate-600">
+            <p className="text-slate-600 dark:text-gray-400">
               Fill out the form below and we'll get back to you soon
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
                 Full Name
               </label>
               <Input
@@ -147,7 +149,7 @@ export default function TaperPayerContact() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
                 Email Address
               </label>
               <Input
@@ -161,7 +163,7 @@ export default function TaperPayerContact() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
                 Phone Number
               </label>
               <Input
@@ -174,7 +176,7 @@ export default function TaperPayerContact() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
                 Message
               </label>
               <Textarea
@@ -189,7 +191,7 @@ export default function TaperPayerContact() {
             <Button
               type="submit"
               className="w-full h-12 text-lg font-semibold"
-              style={{ backgroundColor: '#2479C2' }}
+              style={{ backgroundColor: '#2479C2', userSelect: 'none' }}
             >
               <Send className="w-5 h-5 mr-2" />
               Send Message
@@ -198,7 +200,7 @@ export default function TaperPayerContact() {
             <div className="text-center">
               <Link
                 to={createPageUrl('TaperPayerHome')}
-                className="text-sm text-slate-500 hover:text-blue-600"
+                className="text-sm text-slate-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 Back To Home
               </Link>
@@ -206,16 +208,16 @@ export default function TaperPayerContact() {
           </form>
 
           {/* Additional Help */}
-          <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-100">
+          <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
             <div className="flex items-start gap-3">
-              <MessageSquare className="w-5 h-5 text-blue-600 mt-0.5" />
+              <MessageSquare className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-slate-900 mb-1">
+                <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                   Need Immediate Help?
                 </p>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 dark:text-gray-400">
                   Check out our{' '}
-                  <a href="#" className="text-blue-600 hover:underline">Help Center</a>
+                  <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">Help Center</a>
                   {' '}or chat with us live!
                 </p>
               </div>

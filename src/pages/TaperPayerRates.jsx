@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -13,6 +13,9 @@ export default function TaperPayerRates() {
   const [rates, setRates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState('');
+  const [isPulling, setIsPulling] = useState(false);
+  const [pullDistance, setPullDistance] = useState(0);
+  const touchStartY = useRef(0);
 
   const currencies = [
     { name: 'Angola', flag: '🇦🇴', currency: 'AOA', code: 'AOA' },
@@ -71,8 +74,62 @@ export default function TaperPayerRates() {
     fetchAllRates();
   }, []);
 
+  // Pull-to-refresh handlers
+  const handleTouchStart = (e) => {
+    if (window.scrollY === 0) {
+      touchStartY.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (window.scrollY === 0 && !loading) {
+      const currentY = e.touches[0].clientY;
+      const distance = currentY - touchStartY.current;
+      
+      if (distance > 0 && distance < 150) {
+        e.preventDefault();
+        setIsPulling(true);
+        setPullDistance(distance);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (isPulling && pullDistance > 80) {
+      fetchAllRates();
+    }
+    setIsPulling(false);
+    setPullDistance(0);
+  };
+
+  useEffect(() => {
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isPulling, pullDistance, loading]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen pb-20 md:pb-0 bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
+      {/* Pull-to-refresh indicator */}
+      {isPulling && (
+        <div 
+          className="fixed top-0 left-0 right-0 flex justify-center items-center z-50 transition-all"
+          style={{ 
+            transform: `translateY(${Math.min(pullDistance - 40, 60)}px)`,
+            opacity: Math.min(pullDistance / 80, 1)
+          }}
+        >
+          <div className="bg-white dark:bg-slate-800 rounded-full p-3 shadow-lg">
+            <RefreshCw className={`w-6 h-6 text-blue-600 dark:text-blue-400 ${pullDistance > 80 ? 'animate-spin' : ''}`} />
+          </div>
+        </div>
+      )}
       {/* Navigation */}
       <nav className="bg-white dark:bg-slate-900 dark:border-gray-800 border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
@@ -93,11 +150,11 @@ export default function TaperPayerRates() {
             </Link>
             
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
-              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-900 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Exchange Rates</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-900 dark:text-white text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>Exchange Rates</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>Contact</Link>
               <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="text-slate-700 dark:text-gray-300 dark:border-gray-600 border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800" style={{ userSelect: 'none' }}>Login</Button>
               </a>
@@ -141,29 +198,33 @@ export default function TaperPayerRates() {
             <TrendingUp className="w-4 h-4" />
             Live Exchange Rates
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
             Real-Time <span style={{ color: '#2479C2' }}>Currency</span> Exchange Rates
           </h1>
-          <p className="text-xl text-slate-600 leading-relaxed mb-6">
+          <p className="text-xl text-slate-600 dark:text-gray-400 leading-relaxed mb-6">
             Stay informed with our live exchange rates. We update our rates constantly to ensure you get the best value for your money.
           </p>
-          <div className="flex items-center justify-center gap-3 text-sm text-slate-500">
-            <span>Last Updated: {lastUpdated || 'Loading...'}</span>
-            <button
-              onClick={fetchAllRates}
-              disabled={loading}
-              className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            </button>
+          <div className="flex flex-col items-center justify-center gap-2 text-sm text-slate-500 dark:text-gray-400">
+            <div className="flex items-center gap-3">
+              <span>Last Updated: {lastUpdated || 'Loading...'}</span>
+              <button
+                onClick={fetchAllRates}
+                disabled={loading}
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 disabled:opacity-50"
+                style={{ userSelect: 'none' }}
+              >
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
+            <p className="md:hidden text-xs">Pull down to refresh rates</p>
           </div>
         </motion.div>
 
         {/* Rates Grid */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <RefreshCw className="w-12 h-12 animate-spin text-blue-600 mb-4" />
-            <p className="text-lg text-slate-600">Fetching live exchange rates...</p>
+            <RefreshCw className="w-12 h-12 animate-spin text-blue-600 dark:text-blue-400 mb-4" />
+            <p className="text-lg text-slate-600 dark:text-gray-400">Fetching live exchange rates...</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -174,13 +235,13 @@ export default function TaperPayerRates() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="p-6 hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-200">
+                <Card className="p-6 hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-200 dark:bg-slate-800 dark:border-gray-700 dark:hover:border-blue-600">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <span className="text-4xl">{rate.flag}</span>
                       <div>
-                        <h3 className="text-lg font-bold text-slate-900">{rate.name}</h3>
-                        <p className="text-sm text-slate-500">{rate.currency_code}</p>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{rate.name}</h3>
+                        <p className="text-sm text-slate-500 dark:text-gray-400">{rate.currency_code}</p>
                       </div>
                     </div>
                     {rate.trend && (
@@ -194,14 +255,14 @@ export default function TaperPayerRates() {
                     )}
                   </div>
 
-                  <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-lg p-4 mb-4">
-                    <div className="text-sm text-slate-600 mb-1">1 USD =</div>
-                    <div className="text-3xl font-bold text-slate-900">
-                      {rate.rate?.toFixed(2)} <span className="text-xl text-slate-600">{rate.currency_code}</span>
+                  <div className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-lg p-4 mb-4">
+                    <div className="text-sm text-slate-600 dark:text-gray-400 mb-1">1 USD =</div>
+                    <div className="text-3xl font-bold text-slate-900 dark:text-white">
+                      {rate.rate?.toFixed(2)} <span className="text-xl text-slate-600 dark:text-gray-400">{rate.currency_code}</span>
                     </div>
                   </div>
 
-                  <div className="space-y-2 text-sm text-slate-600">
+                  <div className="space-y-2 text-sm text-slate-600 dark:text-gray-400">
                     <div className="flex justify-between">
                       <span>$100 USD</span>
                       <span className="font-semibold">{(100 * rate.rate).toFixed(2)} {rate.currency_code}</span>
@@ -235,7 +296,7 @@ export default function TaperPayerRates() {
                 Lock in these great rates and send money to your loved ones today
               </p>
               <Link to={createPageUrl('TaperPayerHome')}>
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-6 text-lg">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-6 text-lg" style={{ userSelect: 'none' }}>
                   Start Transfer <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
@@ -245,14 +306,14 @@ export default function TaperPayerRates() {
 
         {/* Disclaimer */}
         <div className="mt-12 text-center max-w-3xl mx-auto">
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-gray-400">
             <strong>Note:</strong> Exchange rates are updated in real-time and may vary. The final rate will be confirmed at the time of your transaction. Additional fees may apply.
           </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
+      <footer className="bg-slate-900 dark:bg-black text-white py-12">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>

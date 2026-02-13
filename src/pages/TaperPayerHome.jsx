@@ -696,6 +696,12 @@ export default function TaperPayerHome() {
                 <h3 className="text-3xl font-bold text-slate-900 mb-4">
                   Ready to Join?
                 </h3>
+                <div className="mb-6">
+                  <div className="text-5xl font-bold text-slate-900 mb-2">
+                    $2,999.00
+                  </div>
+                  <p className="text-lg text-slate-600">per year</p>
+                </div>
                 <p className="text-lg text-slate-600 mb-8">
                   Sign up today and start enjoying member-only benefits
                 </p>

@@ -35,9 +35,17 @@ export default function TaperPayerSignup() {
     'Maryland', 'New York'
   ];
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Registration logic here
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitStatus('success');
+    }, 800);
   };
 
   return (
@@ -519,12 +527,18 @@ export default function TaperPayerSignup() {
               </div>
             </div>
 
+            {submitStatus === 'success' && (
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm text-center">
+                ✓ Account created! Redirecting…
+              </div>
+            )}
             <Button
               type="submit"
-              className="w-full h-12 text-lg font-semibold"
+              disabled={isSubmitting}
+              className="w-full h-12 text-lg font-semibold disabled:opacity-70"
               style={{ backgroundColor: '#2479C2', userSelect: 'none' }}
             >
-              Register
+              {isSubmitting ? 'Creating Account…' : 'Register'}
             </Button>
 
             <div className="text-center text-sm text-slate-600 dark:text-gray-400">

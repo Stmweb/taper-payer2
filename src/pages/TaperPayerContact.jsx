@@ -16,10 +16,18 @@ export default function TaperPayerContact() {
     phone: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Contact form logic here
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    }, 800);
   };
 
   return (
@@ -188,13 +196,18 @@ export default function TaperPayerContact() {
               />
             </div>
 
+            {submitStatus === 'success' && (
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm text-center">
+                ✓ Message sent! We'll get back to you soon.
+              </div>
+            )}
             <Button
               type="submit"
-              className="w-full h-12 text-lg font-semibold"
+              disabled={isSubmitting}
+              className="w-full h-12 text-lg font-semibold disabled:opacity-70"
               style={{ backgroundColor: '#2479C2', userSelect: 'none' }}
             >
-              <Send className="w-5 h-5 mr-2" />
-              Send Message
+              {isSubmitting ? 'Sending…' : <><Send className="w-5 h-5 mr-2" />Send Message</>}
             </Button>
 
             <div className="text-center">

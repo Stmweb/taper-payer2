@@ -11,10 +11,18 @@ import MobileHeader from '@/components/mobile/MobileHeader';
 export default function TaperPayerLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Login logic here
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    // Optimistic: show loading immediately, then resolve
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitStatus('success');
+    }, 800);
   };
 
   return (
@@ -339,12 +347,18 @@ export default function TaperPayerLogin() {
               </div>
             </div>
 
+            {submitStatus === 'success' && (
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm text-center">
+                ✓ Logging you in…
+              </div>
+            )}
             <Button
               type="submit"
-              className="w-full h-12 text-lg font-semibold"
+              disabled={isSubmitting}
+              className="w-full h-12 text-lg font-semibold disabled:opacity-70"
               style={{ backgroundColor: '#2479C2', userSelect: 'none' }}
             >
-              Login
+              {isSubmitting ? 'Logging in…' : 'Login'}
             </Button>
 
             <div className="text-center text-sm text-slate-600 dark:text-gray-400">

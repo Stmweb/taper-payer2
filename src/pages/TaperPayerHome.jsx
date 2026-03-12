@@ -134,35 +134,40 @@ export default function TaperPayerHome() {
         {/* Floating country flag bubbles - outside overflow hidden */}
         <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ position: 'relative', zIndex: 50 }}>
           {[
-            { flag: '🇦🇴', name: 'Angola',            angle: 0,   delay: 0,    dur: 20  },
-            { flag: '🇩🇴', name: 'Dominican Republic', angle: 40,  delay: 0,    dur: 20  },
-            { flag: '🇬🇭', name: 'Ghana',              angle: 80,  delay: 0,    dur: 20  },
-            { flag: '🇭🇹', name: 'Haiti',              angle: 120, delay: 0,    dur: 20 },
-            { flag: '🇰🇪', name: 'Kenya',              angle: 160, delay: 0,    dur: 20},
-            { flag: '🇲🇽', name: 'Mexico',             angle: 200, delay: 0,    dur: 20},
-            { flag: '🇲🇦', name: 'Morocco',            angle: 240, delay: 0,    dur: 20},
-            { flag: '🇳🇬', name: 'Nigeria',            angle: 280, delay: 0,    dur: 20 },
-            { flag: '🇸🇳', name: 'Senegal',            angle: 320, delay: 0,    dur: 20},
+            { flag: '🇦🇴', name: 'Angola',            angle: 0   },
+            { flag: '🇩🇴', name: 'Dominican Republic', angle: 40  },
+            { flag: '🇬🇭', name: 'Ghana',              angle: 80  },
+            { flag: '🇭🇹', name: 'Haiti',              angle: 120 },
+            { flag: '🇰🇪', name: 'Kenya',              angle: 160 },
+            { flag: '🇲🇽', name: 'Mexico',             angle: 200 },
+            { flag: '🇲🇦', name: 'Morocco',            angle: 240 },
+            { flag: '🇳🇬', name: 'Nigeria',            angle: 280 },
+            { flag: '🇸🇳', name: 'Senegal',            angle: 320 },
           ].map((country) => {
-            const radius = 200;
+            const radius = 180;
+            const x = Math.sin((country.angle * Math.PI) / 180) * radius;
+            const y = -Math.cos((country.angle * Math.PI) / 180) * radius;
+            const nextAngle = (country.angle + 360) % 360;
+            const nextX = Math.sin((nextAngle * Math.PI) / 180) * radius;
+            const nextY = -Math.cos((nextAngle * Math.PI) / 180) * radius;
+            
             return (
               <motion.div
                 key={country.name}
                 className="absolute flex flex-col items-center gap-1"
-                style={{ zIndex: 50 }}
+                style={{ zIndex: 50, left: '50%', top: '50%' }}
                 animate={{
-                  x: [Math.sin((country.angle * Math.PI) / 180) * radius, Math.sin(((country.angle + 360) * Math.PI) / 180) * radius],
-                  y: [-Math.cos((country.angle * Math.PI) / 180) * radius, -Math.cos(((country.angle + 360) * Math.PI) / 180) * radius],
+                  x: [x, nextX],
+                  y: [y, nextY],
                 }}
                 transition={{
-                  duration: country.dur,
+                  duration: 20,
                   repeat: Infinity,
                   ease: 'linear',
-                  delay: country.delay,
                 }}
                 initial={{
-                  x: Math.sin((country.angle * Math.PI) / 180) * radius,
-                  y: -Math.cos((country.angle * Math.PI) / 180) * radius,
+                  x,
+                  y,
                 }}
               >
                 <div

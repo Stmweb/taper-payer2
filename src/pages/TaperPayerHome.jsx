@@ -551,6 +551,7 @@ export default function TaperPayerHome() {
                 <li><Link to={createPageUrl('TaperPayerTerms')} className="hover:text-white transition-colors">Terms & Conditions</Link></li>
                 <li><Link to={createPageUrl('TaperPayerPrivacy')} className="hover:text-white transition-colors">Privacy Policy</Link></li>
                 <li><Link to={createPageUrl('TaperPayerCookies')} className="hover:text-white transition-colors">Cookies Policy</Link></li>
+                <li><Link to={createPageUrl('TaperPayerWhiteLabel')} className="hover:text-white transition-colors">White Label</Link></li>
               </ul>
             </div>
           </div>

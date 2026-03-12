@@ -15,6 +15,7 @@ import TaperPayerPrivacy from './pages/TaperPayerPrivacy';
 import TaperPayerCookies from './pages/TaperPayerCookies';
 import TaperPayerMarketing from './pages/TaperPayerMarketing';
 import TaperPayerBusiness from './pages/TaperPayerBusiness';
+import TaperPayerWhiteLabel from './pages/TaperPayerWhiteLabel';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -136,6 +137,7 @@ const AuthenticatedApp = () => {
         <Route path="/TaperPayerCookies" element={<LayoutWrapper currentPageName="TaperPayerCookies"><TaperPayerCookies /></LayoutWrapper>} />
         <Route path="/TaperPayerMarketing" element={<LayoutWrapper currentPageName="TaperPayerMarketing"><TaperPayerMarketing /></LayoutWrapper>} />
         <Route path="/TaperPayerBusiness" element={<LayoutWrapper currentPageName="TaperPayerBusiness"><TaperPayerBusiness /></LayoutWrapper>} />
+        <Route path="/TaperPayerWhiteLabel" element={<LayoutWrapper currentPageName="TaperPayerWhiteLabel"><TaperPayerWhiteLabel /></LayoutWrapper>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

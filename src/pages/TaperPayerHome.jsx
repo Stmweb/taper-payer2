@@ -130,30 +130,9 @@ export default function TaperPayerHome() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-6 py-20">
-        {/* Animated floating country flags background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'relative' }}>
-          {/* Background gradient blobs */}
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -top-32 -left-32 w-96 h-96 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(36,121,194,0.25), transparent 70%)' }}
-          />
-          <motion.div
-            animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(97,175,57,0.25), transparent 70%)' }}
-          />
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.3, 0.15] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(248,143,43,0.1), transparent 70%)' }}
-          />
-
-          {/* Floating country flag bubbles */}
+      <section className="relative overflow-visible px-6 py-20">
+        {/* Floating country flag bubbles - outside overflow hidden */}
+        <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ position: 'relative', zIndex: 50 }}>
           {[
             { flag: '🇦🇴', name: 'Angola',            x: '5%',  y: '10%', delay: 0,    dur: 7  },
             { flag: '🇩🇴', name: 'Dominican Republic', x: '18%', y: '75%', delay: 1,    dur: 9  },
@@ -168,7 +147,7 @@ export default function TaperPayerHome() {
             <motion.div
               key={country.name}
               className="absolute flex flex-col items-center gap-1"
-              style={{ left: country.x, top: country.y, zIndex: 20 }}
+              style={{ left: country.x, top: country.y, zIndex: 50 }}
               initial={{ y: 0, x: 0, opacity: 0.55, scale: 1 }}
               animate={{
                 y: [0, -18, 0, -10, 0],
@@ -200,6 +179,28 @@ export default function TaperPayerHome() {
               </span>
             </motion.div>
           ))}
+        </div>
+
+        {/* Background gradient blobs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'relative' }}>
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-32 -left-32 w-96 h-96 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(36,121,194,0.25), transparent 70%)' }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(97,175,57,0.25), transparent 70%)' }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.3, 0.15] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(248,143,43,0.1), transparent 70%)' }}
+          />
         </div>
 
         <div className="container mx-auto relative z-10">

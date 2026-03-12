@@ -195,128 +195,27 @@ export default function TaperPayerHome() {
         </div>
 
         <div className="container mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center md:gap-4">
+          <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
+              className="mb-12"
             >
-              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
-                Send Money To Your <span style={{ color: '#2479C2' }}>Loved Ones</span>
+              <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+                Send Money To Your <span style={{ color: '#61AF39' }}>Loved Ones</span>
               </h1>
-              <p className="text-xl text-slate-600 dark:text-gray-300 mb-8">
-                Taper Payer is a modern financial technology platform built for fast, secure, and seamless money transfers. Whether you're sending funds, making payments, or managing transactions, Taper Payer makes moving money simple, reliable, and transparent.
+              <p className="text-lg text-gray-300 mb-8">
+                Fast, secure, and seamless money transfers to 50+ countries. Taper Payer makes moving money simple, reliable, and transparent.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">
                   Download App
                 </Button>
-                <Button variant="outline" className="text-lg px-8 py-6">
+                <Button className="text-lg px-8 py-6 border-white text-white hover:bg-white/10" variant="outline">
                   Learn More
                 </Button>
               </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Card className="p-8 shadow-2xl dark:bg-slate-800">
-                <h3 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Money Transfer</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">You Send</label>
-                    <div className="relative">
-                      <Input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg text-lg font-semibold"
-                        placeholder="100"
-                      />
-                      <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 font-medium">USD</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Send Money To</label>
-                    <button
-                      type="button"
-                      onClick={() => setShowCountryDrawer(true)}
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-between focus:ring-2 focus:ring-[#2479C2] focus:outline-none"
-                      style={{ userSelect: 'none' }}
-                    >
-                      <span className={sendTo ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-400'}>
-                        {sendTo
-                          ? `${countries.find(c => c.name === sendTo)?.flag ?? ''} ${sendTo}`
-                          : 'Select Receiving Country'}
-                      </span>
-                      <ChevronRight className="w-5 h-5 text-slate-400 flex-shrink-0" />
-                    </button>
-                    <CountryDrawer
-                      open={showCountryDrawer}
-                      onOpenChange={setShowCountryDrawer}
-                      countries={countries.map(c => `${c.flag} ${c.name}`)}
-                      value={sendTo ? `${countries.find(c => c.name === sendTo)?.flag ?? ''} ${sendTo}` : ''}
-                      onSelect={(val) => {
-                        const name = val.replace(/^\S+\s/, '');
-                        setSendTo(name);
-                      }}
-                      title="Select Receiving Country"
-                    />
-                  </div>
-
-                  {exchangeRate && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-gradient-to-br from-blue-50 to-green-50 rounded-lg p-4 border border-blue-100"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4 text-green-600" />
-                          <span className="text-sm font-medium text-slate-700">Exchange Rate</span>
-                        </div>
-                        <button
-                          onClick={fetchExchangeRate}
-                          disabled={loading}
-                          className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
-                        >
-                          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                        </button>
-                      </div>
-                      <div className="text-2xl font-bold text-slate-900">
-                        1 USD = {exchangeRate.rate?.toFixed(2)} {exchangeRate.currency_code}
-                      </div>
-                      <div className="text-sm text-slate-600 mt-1">
-                        {amount && `You send: $${amount} USD → Recipient gets: ${(parseFloat(amount) * exchangeRate.rate).toFixed(2)} ${exchangeRate.currency_code}`}
-                      </div>
-                      <div className="text-xs text-slate-500 mt-2">
-                        {exchangeRate.last_updated && `Updated: ${exchangeRate.last_updated}`}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {loading && (
-                    <div className="flex items-center justify-center py-4">
-                      <RefreshCw className="w-5 h-5 animate-spin text-blue-600" />
-                      <span className="ml-2 text-sm text-slate-600">Fetching live rates...</span>
-                    </div>
-                  )}
-
-                  <Button style={{ backgroundColor: '#2479C2' }} className="w-full hover:opacity-90 text-lg py-6">
-                    Continue <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-
-                  <div className="text-center">
-                    <Link to={createPageUrl('TaperPayerRates')} className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                      View All Exchange Rates →
-                    </Link>
-                  </div>
-                </div>
-              </Card>
             </motion.div>
           </div>
         </div>

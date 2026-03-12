@@ -135,6 +135,7 @@ const AuthenticatedApp = () => {
         <Route path="/TaperPayerPrivacy" element={<LayoutWrapper currentPageName="TaperPayerPrivacy"><TaperPayerPrivacy /></LayoutWrapper>} />
         <Route path="/TaperPayerCookies" element={<LayoutWrapper currentPageName="TaperPayerCookies"><TaperPayerCookies /></LayoutWrapper>} />
         <Route path="/TaperPayerMarketing" element={<LayoutWrapper currentPageName="TaperPayerMarketing"><TaperPayerMarketing /></LayoutWrapper>} />
+        <Route path="/TaperPayerBusiness" element={<LayoutWrapper currentPageName="TaperPayerBusiness"><TaperPayerBusiness /></LayoutWrapper>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

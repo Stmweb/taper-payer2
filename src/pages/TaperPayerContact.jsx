@@ -97,7 +97,6 @@ export default function TaperPayerContact() {
 
       {/* Content */}
       <div className="flex flex-1 dark:bg-slate-900">
-      <MobileHeader title="Contact Us" showBack={true} />
       {/* Left Side - Contact Information */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 p-12 flex-col justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />

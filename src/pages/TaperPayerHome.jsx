@@ -896,8 +896,10 @@ export default function TaperPayerHome() {
               <ul className="space-y-3 text-slate-300">
                 <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Track Transfer</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><Link to={createPageUrl('TaperPayerFAQ')} className="hover:text-white transition-colors">FAQs</Link></li>
+                <li><Link to={createPageUrl('TaperPayerTerms')} className="hover:text-white transition-colors">Terms & Conditions</Link></li>
+                <li><Link to={createPageUrl('TaperPayerPrivacy')} className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to={createPageUrl('TaperPayerCookies')} className="hover:text-white transition-colors">Cookies Policy</Link></li>
               </ul>
             </div>
           </div>

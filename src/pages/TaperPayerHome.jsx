@@ -282,9 +282,12 @@ export default function TaperPayerHome() {
 
       {/* Why Choose Us */}
       <section className="container mx-auto px-6 py-20">
-        <h2 className="text-4xl font-bold text-center mb-16 text-slate-900 dark:text-white">
+        <h2 className="text-4xl font-bold text-center mb-6 text-slate-900 dark:text-white">
           Why Choose Taper Payer?
         </h2>
+        <p className="text-xl text-slate-600 dark:text-gray-300 text-center mb-16 max-w-3xl mx-auto">
+          Taper Payer is a modern financial technology platform built for fast, secure, and seamless money transfers. Whether you're sending funds, making payments, or managing transactions, Taper Payer makes moving money simple, reliable, and transparent.
+        </p>
         
         <div className="grid md:grid-cols-3 gap-8">
           <motion.div

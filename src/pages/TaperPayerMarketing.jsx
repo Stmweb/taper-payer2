@@ -32,7 +32,7 @@ const socialPlatforms = [
     color: '#1877F2',
     formats: [
       { label: 'Feed Post', size: '1200 × 630 px', ratio: '1.91:1', use: 'Feed' },
-      { label: 'Cover Photo', size: '851 × 315 px', ratio: '2.7:1', use: 'Cover' },
+      { label: 'Cover Photo', size: '820 × 312 px', ratio: '2.63:1', use: 'Cover' },
       { label: 'Profile Picture', size: '170 × 170 px', ratio: '1:1', use: 'Profile' },
       { label: 'Story', size: '1080 × 1920 px', ratio: '9:16', use: 'Story' },
       { label: 'Event Banner', size: '1920 × 1080 px', ratio: '16:9', use: 'Event' },
@@ -158,7 +158,7 @@ const allSizes = [
   { platform: 'Instagram', label: 'Feed Post (Portrait)', size: '1080 × 1350 px', ratio: '4:5' },
   { platform: 'Instagram', label: 'Story / Reel', size: '1080 × 1920 px', ratio: '9:16' },
   { platform: 'Facebook', label: 'Feed Post', size: '1200 × 630 px', ratio: '1.91:1' },
-  { platform: 'Facebook', label: 'Cover Photo', size: '851 × 315 px', ratio: '2.7:1' },
+  { platform: 'Facebook', label: 'Cover Photo', size: '820 × 312 px', ratio: '2.63:1' },
   { platform: 'Facebook', label: 'Story', size: '1080 × 1920 px', ratio: '9:16' },
   { platform: 'X (Twitter)', label: 'Post Image', size: '1600 × 900 px', ratio: '16:9' },
   { platform: 'X (Twitter)', label: 'Header / Banner', size: '1500 × 500 px', ratio: '3:1' },
@@ -274,11 +274,18 @@ Style: clean, modern, professional fintech aesthetic. No low-quality or cluttere
               <h3 className="font-bold text-slate-900 dark:text-white">Generated Flyer</h3>
               <p className="text-slate-500 text-sm">{platform} · {sizeLabel} · {selectedSize?.size}</p>
             </div>
-            <a href={imageUrl} download="taper-payer-flyer.png" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Download className="w-4 h-4" /> Download
-              </Button>
-            </a>
+            <Button variant="outline" size="sm" className="gap-2" onClick={async () => {
+              const res = await fetch(imageUrl);
+              const blob = await res.blob();
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'taper-payer-flyer.png';
+              a.click();
+              URL.revokeObjectURL(url);
+            }}>
+              <Download className="w-4 h-4" /> Download
+            </Button>
           </div>
           <img src={imageUrl} alt="Generated Flyer" className="w-full rounded-xl shadow-lg" />
         </Card>

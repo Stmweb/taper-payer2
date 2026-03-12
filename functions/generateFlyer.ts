@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing prompt' }, { status: 400 });
     }
 
-    const result = await base44.integrations.Core.GenerateImage({ prompt });
+    const result = await base44.asServiceRole.integrations.Core.GenerateImage({ prompt });
 
     return Response.json({ url: result.url });
   } catch (error) {

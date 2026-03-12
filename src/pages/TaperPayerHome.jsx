@@ -144,7 +144,7 @@ export default function TaperPayerHome() {
             { flag: '🇳🇬', name: 'Nigeria',            angle: 280 },
             { flag: '🇸🇳', name: 'Senegal',            angle: 320 },
           ].map((country) => {
-            const radius = 320;
+            const radius = 180;
             const x = Math.sin((country.angle * Math.PI) / 180) * radius;
             const y = -Math.cos((country.angle * Math.PI) / 180) * radius;
             const nextAngle = (country.angle + 360) % 360;
@@ -155,13 +155,13 @@ export default function TaperPayerHome() {
               <motion.div
                 key={country.name}
                 className="absolute flex flex-col items-center gap-1"
-                style={{ zIndex: 30, left: '50%', top: '45%', marginLeft: -26, marginTop: -26 }}
+                style={{ zIndex: 50, left: '50%', top: '50%' }}
                 animate={{
                   x: [x, nextX],
                   y: [y, nextY],
                 }}
                 transition={{
-                  duration: 25,
+                  duration: 20,
                   repeat: Infinity,
                   ease: 'linear',
                 }}

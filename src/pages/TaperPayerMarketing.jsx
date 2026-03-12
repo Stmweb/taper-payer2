@@ -300,6 +300,21 @@ Generate a catchy, professional caption that's 1-2 sentences, followed by releva
             </Button>
           </div>
           <img src={imageUrl} alt="Generated Flyer" className="w-full rounded-xl shadow-lg" />
+          
+          {captionLoading ? (
+            <div className="flex items-center justify-center py-4 text-slate-500">
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              Generating caption with hashtags...
+            </div>
+          ) : caption ? (
+            <div className="bg-slate-50 dark:bg-slate-700 rounded-lg p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <h4 className="font-semibold text-slate-900 dark:text-white">Social Media Caption</h4>
+                <CopyButton text={caption} />
+              </div>
+              <p className="text-slate-700 dark:text-slate-300 whitespace-pre-line text-sm leading-relaxed">{caption}</p>
+            </div>
+          ) : null}
         </Card>
       )}
     </div>

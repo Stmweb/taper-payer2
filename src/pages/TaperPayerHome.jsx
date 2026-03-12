@@ -145,47 +145,42 @@ export default function TaperPayerHome() {
             { flag: '🇸🇳', name: 'Senegal',            angle: 320, delay: 0,    dur: 20},
           ].map((country) => {
             const radius = 200;
-            const centerX = typeof window !== 'undefined' ? window.innerWidth * 0.5 : 500;
-            const centerY = 300;
             return (
-            <motion.div
-              key={country.name}
-              className="absolute flex flex-col items-center gap-1"
-              style={{ zIndex: 50 }}
-              animate={(control) => {
-                const angles = [country.angle, country.angle + 360];
-                return {
-                  x: angles.map(a => Math.sin((a * Math.PI) / 180) * radius),
-                  y: angles.map(a => -Math.cos((a * Math.PI) / 180) * radius),
-                };
-              }}
-              transition={{
-                duration: country.dur,
-                repeat: Infinity,
-                ease: 'linear',
-                delay: country.delay,
-              }}
-              initial={{
-                x: Math.sin((country.angle * Math.PI) / 180) * radius,
-                y: -Math.cos((country.angle * Math.PI) / 180) * radius,
-              }}
-            >
-              <div
-                className="rounded-2xl shadow-lg backdrop-blur-sm flex items-center justify-center"
-                style={{
-                  background: 'rgba(255,255,255,0.75)',
-                  width: 52,
-                  height: 52,
-                  boxShadow: '0 4px 24px rgba(36,121,194,0.15), 0 1px 4px rgba(0,0,0,0.08)',
-                  border: '1px solid rgba(255,255,255,0.8)',
+              <motion.div
+                key={country.name}
+                className="absolute flex flex-col items-center gap-1"
+                style={{ zIndex: 50 }}
+                animate={{
+                  x: [Math.sin((country.angle * Math.PI) / 180) * radius, Math.sin(((country.angle + 360) * Math.PI) / 180) * radius],
+                  y: [-Math.cos((country.angle * Math.PI) / 180) * radius, -Math.cos(((country.angle + 360) * Math.PI) / 180) * radius],
+                }}
+                transition={{
+                  duration: country.dur,
+                  repeat: Infinity,
+                  ease: 'linear',
+                  delay: country.delay,
+                }}
+                initial={{
+                  x: Math.sin((country.angle * Math.PI) / 180) * radius,
+                  y: -Math.cos((country.angle * Math.PI) / 180) * radius,
                 }}
               >
-                <span className="text-2xl select-none">{country.flag}</span>
-              </div>
-              <span className="text-xs font-semibold text-slate-500 bg-white/70 backdrop-blur-sm rounded-full px-2 py-0.5 whitespace-nowrap shadow-sm">
-                {country.name}
-              </span>
-            </motion.div>
+                <div
+                  className="rounded-2xl shadow-lg backdrop-blur-sm flex items-center justify-center"
+                  style={{
+                    background: 'rgba(255,255,255,0.75)',
+                    width: 52,
+                    height: 52,
+                    boxShadow: '0 4px 24px rgba(36,121,194,0.15), 0 1px 4px rgba(0,0,0,0.08)',
+                    border: '1px solid rgba(255,255,255,0.8)',
+                  }}
+                >
+                  <span className="text-2xl select-none">{country.flag}</span>
+                </div>
+                <span className="text-xs font-semibold text-slate-500 bg-white/70 backdrop-blur-sm rounded-full px-2 py-0.5 whitespace-nowrap shadow-sm">
+                  {country.name}
+                </span>
+              </motion.div>
             );
           })}
         </div>

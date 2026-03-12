@@ -134,15 +134,15 @@ export default function TaperPayerHome() {
         {/* Floating country flag bubbles - outside overflow hidden */}
         <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ position: 'relative', zIndex: 50 }}>
           {[
-            { flag: '🇦🇴', name: 'Angola',            x: '5%',  y: '10%', delay: 0,    dur: 7  },
-            { flag: '🇩🇴', name: 'Dominican Republic', x: '18%', y: '75%', delay: 1,    dur: 9  },
-            { flag: '🇬🇭', name: 'Ghana',              x: '30%', y: '20%', delay: 2,    dur: 8  },
-            { flag: '🇭🇹', name: 'Haiti',              x: '72%', y: '8%',  delay: 0.5,  dur: 11 },
-            { flag: '🇰🇪', name: 'Kenya',              x: '85%', y: '30%', delay: 1.5,  dur: 7.5},
-            { flag: '🇲🇽', name: 'Mexico',             x: '90%', y: '70%', delay: 3,    dur: 9.5},
-            { flag: '🇲🇦', name: 'Morocco',            x: '60%', y: '82%', delay: 2.5,  dur: 8.5},
-            { flag: '🇳🇬', name: 'Nigeria',            x: '10%', y: '55%', delay: 0.8,  dur: 10 },
-            { flag: '🇸🇳', name: 'Senegal',            x: '45%', y: '88%', delay: 1.2,  dur: 6.5},
+            { flag: '🇦🇴', name: 'Angola',            x: '50%',  y: '15%', delay: 0,    dur: 7  },
+            { flag: '🇩🇴', name: 'Dominican Republic', x: '72%', y: '24%', delay: 1,    dur: 9  },
+            { flag: '🇬🇭', name: 'Ghana',              x: '81%', y: '45%', delay: 2,    dur: 8  },
+            { flag: '🇭🇹', name: 'Haiti',              x: '72%', y: '66%',  delay: 0.5,  dur: 11 },
+            { flag: '🇰🇪', name: 'Kenya',              x: '50%', y: '75%', delay: 1.5,  dur: 7.5},
+            { flag: '🇲🇽', name: 'Mexico',             x: '28%', y: '66%', delay: 3,    dur: 9.5},
+            { flag: '🇲🇦', name: 'Morocco',            x: '19%', y: '45%', delay: 2.5,  dur: 8.5},
+            { flag: '🇳🇬', name: 'Nigeria',            x: '28%', y: '24%', delay: 0.8,  dur: 10 },
+            { flag: '🇸🇳', name: 'Senegal',            x: '50%', y: '20%', delay: 1.2,  dur: 6.5},
           ].map((country) => (
             <motion.div
               key={country.name}

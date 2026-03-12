@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import BottomTabBar from '@/components/mobile/BottomTabBar';
 
 export default function Layout({ children, currentPageName }) {

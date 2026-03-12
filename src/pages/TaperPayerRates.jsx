@@ -19,6 +19,7 @@ export default function TaperPayerRates() {
 
   const currencies = [
     { name: 'Angola', flag: '🇦🇴', currency: 'AOA', code: 'AOA' },
+    { name: 'Dominican Republic', flag: '🇩🇴', currency: 'DOP', code: 'DOP' },
     { name: 'Ghana', flag: '🇬🇭', currency: 'GHS', code: 'GHS' },
     { name: 'Haiti', flag: '🇭🇹', currency: 'HTG', code: 'HTG' },
     { name: 'Mexico', flag: '🇲🇽', currency: 'MXN', code: 'MXN' },

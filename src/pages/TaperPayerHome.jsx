@@ -21,6 +21,7 @@ export default function TaperPayerHome() {
 
   const countries = [
     { name: 'Angola', flag: '🇦🇴', currency: 'AOA' },
+    { name: 'Dominican Republic', flag: '🇩🇴', currency: 'DOP' },
     { name: 'Ghana', flag: '🇬🇭', currency: 'GHS' },
     { name: 'Haiti', flag: '🇭🇹', currency: 'HTG' },
     { name: 'Mexico', flag: '🇲🇽', currency: 'MXN' },

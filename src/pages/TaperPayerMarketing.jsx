@@ -194,8 +194,8 @@ Design brief: ${prompt.trim()}.
 Style: clean, modern, professional fintech aesthetic. No low-quality or cluttered design.`;
 
     try {
-      const result = await base44.integrations.Core.GenerateImage({ prompt: fullPrompt });
-      setImageUrl(result.url);
+      const response = await base44.functions.invoke('generateFlyer', { prompt: fullPrompt });
+      setImageUrl(response.data.url);
     } catch (e) {
       setError('Failed to generate image. Please try again.');
     } finally {

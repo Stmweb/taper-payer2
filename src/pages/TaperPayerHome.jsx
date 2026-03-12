@@ -130,85 +130,68 @@ export default function TaperPayerHome() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-6 py-20">
-        {/* Floating country flag bubbles - centered */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 5 }}>
-          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-            {[
-              { flag: '🇦🇴', name: 'Angola',            angle: 0   },
-              { flag: '🇩🇴', name: 'Dominican Republic', angle: 40  },
-              { flag: '🇬🇭', name: 'Ghana',              angle: 80  },
-              { flag: '🇭🇹', name: 'Haiti',              angle: 120 },
-              { flag: '🇰🇪', name: 'Kenya',              angle: 160 },
-              { flag: '🇲🇽', name: 'Mexico',             angle: 200 },
-              { flag: '🇲🇦', name: 'Morocco',            angle: 240 },
-              { flag: '🇳🇬', name: 'Nigeria',            angle: 280 },
-              { flag: '🇸🇳', name: 'Senegal',            angle: 320 },
-            ].map((country) => {
-              const baseRadius = 80;
-              const x = Math.sin((country.angle * Math.PI) / 180) * baseRadius;
-              const y = -Math.cos((country.angle * Math.PI) / 180) * baseRadius;
-              const nextAngle = (country.angle + 360) % 360;
-              const nextX = Math.sin((nextAngle * Math.PI) / 180) * baseRadius;
-              const nextY = -Math.cos((nextAngle * Math.PI) / 180) * baseRadius;
-              
-              return (
-                <motion.div
-                  key={country.name}
-                  className="absolute flex items-center justify-center"
-                  style={{ zIndex: 5 }}
-                  animate={{
-                    x: [x, nextX],
-                    y: [y, nextY],
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                  initial={{
-                    x,
-                    y,
-                  }}
-                >
-                  <div
-                    className="rounded-xl shadow-md backdrop-blur-sm flex items-center justify-center"
-                    style={{
-                      background: 'rgba(255,255,255,0.85)',
-                      width: 40,
-                      height: 40,
-                      boxShadow: '0 4px 12px rgba(36,121,194,0.1)',
-                      border: '1px solid rgba(255,255,255,0.9)',
-                    }}
-                  >
-                    <span className="text-lg select-none">{country.flag}</span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
+      <section className="relative overflow-hidden px-6 py-20 min-h-screen flex items-center" style={{ background: 'linear-gradient(135deg, #0a1929 0%, #132f4c 100%)' }}>
+        {/* Floating service cards - right side like STM */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 5 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="absolute top-32 right-8 md:right-16 lg:right-32 w-56 md:w-64"
+            style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              padding: '24px',
+              borderRadius: '16px',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-3xl">💸</span>
+            </div>
+            <h3 className="text-white font-bold text-lg mb-2">Fast Transfers</h3>
+            <p className="text-gray-300 text-sm">Send money instantly to 50+ countries</p>
+          </motion.div>
 
-        {/* Background gradient blobs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'relative' }}>
           <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -top-32 -left-32 w-96 h-96 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(36,121,194,0.25), transparent 70%)' }}
-          />
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="absolute top-80 right-12 md:right-24 lg:right-40 w-56 md:w-64"
+            style={{
+              background: 'rgba(36, 121, 194, 0.15)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(36, 121, 194, 0.4)',
+              padding: '24px',
+              borderRadius: '16px',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-3xl">🛡️</span>
+            </div>
+            <h3 className="text-white font-bold text-lg mb-2">Bank Grade Security</h3>
+            <p className="text-gray-300 text-sm">Your money and data are fully protected</p>
+          </motion.div>
+
           <motion.div
-            animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(97,175,57,0.25), transparent 70%)' }}
-          />
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.3, 0.15] }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(248,143,43,0.1), transparent 70%)' }}
-          />
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="absolute top-[600px] md:top-96 right-4 md:right-8 lg:right-20 w-56 md:w-64"
+            style={{
+              background: 'rgba(97, 175, 57, 0.15)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(97, 175, 57, 0.4)',
+              padding: '24px',
+              borderRadius: '16px',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-3xl">💰</span>
+            </div>
+            <h3 className="text-white font-bold text-lg mb-2">Low Fees</h3>
+            <p className="text-gray-300 text-sm">Competitive rates with no hidden charges</p>
+          </motion.div>
         </div>
 
         <div className="container mx-auto relative z-10">

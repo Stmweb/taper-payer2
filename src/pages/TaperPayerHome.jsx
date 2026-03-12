@@ -131,66 +131,6 @@ export default function TaperPayerHome() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 py-20">
-        {/* Floating country flag bubbles - centered */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 5 }}>
-          <div className="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[28rem] md:h-[28rem] lg:w-[32rem] lg:h-[32rem]">
-            {[
-              { flag: '🇦🇴', name: 'Angola',            angle: 0   },
-              { flag: '🇩🇴', name: 'Dominican Republic', angle: 40  },
-              { flag: '🇬🇭', name: 'Ghana',              angle: 80  },
-              { flag: '🇭🇹', name: 'Haiti',              angle: 120 },
-              { flag: '🇰🇪', name: 'Kenya',              angle: 160 },
-              { flag: '🇲🇽', name: 'Mexico',             angle: 200 },
-              { flag: '🇲🇦', name: 'Morocco',            angle: 240 },
-              { flag: '🇳🇬', name: 'Nigeria',            angle: 280 },
-              { flag: '🇸🇳', name: 'Senegal',            angle: 320 },
-            ].map((country) => {
-              const baseRadius = 110;
-              const x = Math.sin((country.angle * Math.PI) / 180) * baseRadius;
-              const y = -Math.cos((country.angle * Math.PI) / 180) * baseRadius;
-              const nextAngle = (country.angle + 360) % 360;
-              const nextX = Math.sin((nextAngle * Math.PI) / 180) * baseRadius;
-              const nextY = -Math.cos((nextAngle * Math.PI) / 180) * baseRadius;
-              
-              return (
-                <motion.div
-                  key={country.name}
-                  className="absolute flex items-center justify-center"
-                  style={{ zIndex: 5 }}
-                  animate={{
-                    x: [x, nextX],
-                    y: [y, nextY],
-                    scale: [0.8, 1.1, 0.8],
-                    rotate: [0, 360],
-                    opacity: [0.6, 1, 0.6],
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                  initial={{
-                    x,
-                    y,
-                  }}
-                >
-                  <div
-                    className="rounded-xl shadow-md backdrop-blur-sm flex items-center justify-center"
-                    style={{
-                      background: 'rgba(255,255,255,0.85)',
-                      width: 40,
-                      height: 40,
-                      boxShadow: '0 4px 12px rgba(36,121,194,0.1)',
-                      border: '1px solid rgba(255,255,255,0.9)',
-                    }}
-                  >
-                    <span className="text-lg select-none">{country.flag}</span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
 
         {/* Background gradient blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'relative' }}>

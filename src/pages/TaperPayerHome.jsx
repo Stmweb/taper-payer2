@@ -133,7 +133,7 @@ export default function TaperPayerHome() {
       <section className="relative overflow-hidden px-6 py-20" style={{ backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ccf3ce18e_generated_image.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
 
         {/* Background gradient blobs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'relative', background: 'rgba(248, 250, 252, 0.85)' }}>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'relative', background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(248, 250, 252, 0.3))' }}>
           <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}

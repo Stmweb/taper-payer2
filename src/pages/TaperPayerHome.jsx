@@ -160,6 +160,9 @@ export default function TaperPayerHome() {
                   animate={{
                     x: [x, nextX],
                     y: [y, nextY],
+                    scale: [0.8, 1.1, 0.8],
+                    rotate: [0, 360],
+                    opacity: [0.6, 1, 0.6],
                   }}
                   transition={{
                     duration: 20,

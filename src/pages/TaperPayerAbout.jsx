@@ -48,27 +48,19 @@ export default function TaperPayerAbout() {
     ];
 
     return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+      <nav className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-gray-100 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative flex items-center justify-between h-16 md:h-20">
             <Link to={createPageUrl('TaperPayerHome')} className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
               <TaperPayerLogo height="h-40 md:h-24" />
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
-                Home
-              </Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
-                How It Works
-              </Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-900 hover:text-blue-600 transition-colors font-medium">
-                About
-              </Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="text-gray-600 hover:text-blue-600 transition-colors font-medium">
-                Contact
-              </Link>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors font-medium">Home</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors font-medium">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-900 dark:text-white hover:text-blue-600 transition-colors font-medium">About</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors font-medium">Contact</Link>
             </div>
             <div className="hidden md:flex items-center gap-3">
               <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
@@ -110,7 +102,7 @@ export default function TaperPayerAbout() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-green-50 py-20 lg:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 py-20 lg:py-32">
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -123,13 +115,13 @@ export default function TaperPayerAbout() {
               <Heart className="w-4 h-4" />
               Our Story
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
               Making Money Transfers
               <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                 Simple for Everyone
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
               We believe everyone deserves access to fast, affordable, and secure money transfers. 
               That's why we're on a mission to break down barriers and connect the world financially.
             </p>
@@ -138,7 +130,7 @@ export default function TaperPayerAbout() {
       </section>
 
       {/* Mission Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div
@@ -182,13 +174,13 @@ export default function TaperPayerAbout() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white border border-gray-100 rounded-2xl p-6 text-center hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-6 text-center hover:shadow-xl transition-shadow"
                 >
                   <div className={`w-16 h-16 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
                     <stat.icon className="w-8 h-8 text-white" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900 mb-1">{stat.label.split(' ')[0]}</p>
-                  <p className="text-gray-600 text-sm">{stat.label.split(' ').slice(1).join(' ')}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{stat.label.split(' ')[0]}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">{stat.label.split(' ').slice(1).join(' ')}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -197,7 +189,7 @@ export default function TaperPayerAbout() {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -205,8 +197,8 @@ export default function TaperPayerAbout() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Our Core Values</h2>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Core Values</h2>
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               The principles that guide everything we do
             </p>
           </motion.div>
@@ -219,13 +211,13 @@ export default function TaperPayerAbout() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300"
+                className="bg-white dark:bg-slate-800 rounded-2xl p-6 hover:shadow-xl hover:shadow-blue-100/50 dark:hover:shadow-none transition-all duration-300"
               >
                 <div className={`w-14 h-14 ${value.bg} rounded-xl flex items-center justify-center mb-5`}>
                   <value.icon className={`w-7 h-7 ${value.color}`} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{value.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{value.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -233,7 +225,7 @@ export default function TaperPayerAbout() {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -241,7 +233,7 @@ export default function TaperPayerAbout() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Our Services</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Services</h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
               Comprehensive solutions for modern payment needs
             </p>
@@ -253,13 +245,13 @@ export default function TaperPayerAbout() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="bg-white border border-gray-100 rounded-2xl p-8 hover:shadow-xl transition-all duration-300"
+              className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-8 hover:shadow-xl transition-all duration-300"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-500 rounded-2xl flex items-center justify-center mb-6">
                 <Users className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Same Day Remittances</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Same Day Remittances</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 Send money and have it delivered the same day to your loved ones. Fast, reliable, and secure transfers across borders.
               </p>
             </motion.div>
@@ -269,13 +261,13 @@ export default function TaperPayerAbout() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white border border-gray-100 rounded-2xl p-8 hover:shadow-xl transition-all duration-300"
+              className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-8 hover:shadow-xl transition-all duration-300"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-green-500 rounded-2xl flex items-center justify-center mb-6">
                 <Smartphone className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">SoftPOS</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">SoftPOS</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 SoftPOS (Software Point of Sale), also known as Tap to Pay, Tap on Phone, or Tap to Phone, is a cutting-edge technology that transforms any NFC-enabled smartphone or tablet into a secure, contactless payment terminal—without needing extra hardware like traditional card readers or POS devices.
               </p>
             </motion.div>
@@ -285,13 +277,13 @@ export default function TaperPayerAbout() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white border border-gray-100 rounded-2xl p-8 hover:shadow-xl transition-all duration-300"
+              className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-8 hover:shadow-xl transition-all duration-300"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6">
                 <Shield className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Excellent Customer Service</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Excellent Customer Service</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 Our dedicated team is here to help you 24/7 with any questions or concerns. We're committed to your satisfaction and success.
               </p>
             </motion.div>
@@ -300,7 +292,7 @@ export default function TaperPayerAbout() {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-slate-900">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -308,8 +300,8 @@ export default function TaperPayerAbout() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
-            <p className="text-lg sm:text-xl text-gray-600">Key milestones in our growth story</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Journey</h2>
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400">Key milestones in our growth story</p>
           </motion.div>
 
           <div className="relative">
@@ -327,12 +319,12 @@ export default function TaperPayerAbout() {
                   className={`flex items-center gap-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
                   <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                    <div className="bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                    <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                       <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-600 to-green-600 text-white text-sm font-bold rounded-full mb-3">
                         {milestone.year}
                       </span>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">{milestone.title}</h3>
-                      <p className="text-gray-600">{milestone.description}</p>
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{milestone.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-400">{milestone.description}</p>
                     </div>
                   </div>
                   <div className="relative flex-shrink-0 w-4 h-4 bg-gradient-to-r from-blue-600 to-green-600 rounded-full hidden md:block">

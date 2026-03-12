@@ -17,6 +17,15 @@ const LayoutWrapper = ({ children, currentPageName }) => Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
+const TAB_PATHS = [
+  '/TaperPayerHome',
+  '/TaperPayerRates',
+  '/TaperPayerHowItWorks',
+  '/TaperPayerAbout',
+];
+
+const scrollPositions = {};
+
 const pageVariants = {
   initial: { x: '100%', opacity: 0 },
   in:      { x: 0,      opacity: 1 },
@@ -31,6 +40,28 @@ const pageTransition = {
 
 const AnimatedRoutes = ({ children }) => {
   const location = useLocation();
+  const prevPath = React.useRef(location.pathname);
+
+  React.useEffect(() => {
+    const from = prevPath.current;
+    const to = location.pathname;
+
+    // Save scroll for the page we're leaving (only tab pages)
+    if (TAB_PATHS.includes(from)) {
+      scrollPositions[from] = window.scrollY;
+    }
+
+    // Restore scroll for tab pages, reset for others
+    if (TAB_PATHS.includes(to)) {
+      const saved = scrollPositions[to] ?? 0;
+      requestAnimationFrame(() => window.scrollTo(0, saved));
+    } else {
+      requestAnimationFrame(() => window.scrollTo(0, 0));
+    }
+
+    prevPath.current = to;
+  }, [location.pathname]);
+
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div

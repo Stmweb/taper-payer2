@@ -66,9 +66,9 @@ export default function TaperPayerHome() {
   }, [sendTo]);
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
+    <div className="min-h-screen bg-white dark:bg-slate-900" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
       {/* Header */}
-      <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
+      <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
           <div className="relative flex items-center justify-between h-16 md:h-20">
             {/* Mobile Menu Button - Left */}
@@ -91,11 +91,11 @@ export default function TaperPayerHome() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
-              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Exchange Rates</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Exchange Rates</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
               <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
               </a>
@@ -137,10 +137,10 @@ export default function TaperPayerHome() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
               Send Money To Your <span style={{ color: '#2479C2' }}>Loved Ones</span>
             </h1>
-            <p className="text-xl text-slate-600 mb-8">
+            <p className="text-xl text-slate-600 dark:text-gray-300 mb-8">
               Taper Payer is a modern financial technology platform built for fast, secure, and seamless money transfers. Whether you're sending funds, making payments, or managing transactions, Taper Payer makes moving money simple, reliable, and transparent.
             </p>
             <div className="flex flex-wrap gap-4">
@@ -158,12 +158,12 @@ export default function TaperPayerHome() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="p-8 bg-white shadow-2xl">
-              <h3 className="text-2xl font-bold mb-6 text-slate-900">Money Transfer</h3>
+            <Card className="p-8 shadow-2xl dark:bg-slate-800">
+              <h3 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Money Transfer</h3>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">You Send</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">You Send</label>
                   <div className="relative">
                     <Input
                       type="number"
@@ -177,14 +177,14 @@ export default function TaperPayerHome() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Send Money To</label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Send Money To</label>
                   <button
                     type="button"
                     onClick={() => setShowCountryDrawer(true)}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg bg-white flex items-center justify-between focus:ring-2 focus:ring-[#2479C2] focus:outline-none"
+                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-between focus:ring-2 focus:ring-[#2479C2] focus:outline-none"
                     style={{ userSelect: 'none' }}
                   >
-                    <span className={sendTo ? 'text-slate-900' : 'text-slate-400'}>
+                    <span className={sendTo ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-400'}>
                       {sendTo
                         ? `${countries.find(c => c.name === sendTo)?.flag ?? ''} ${sendTo}`
                         : 'Select Receiving Country'}
@@ -260,7 +260,7 @@ export default function TaperPayerHome() {
 
       {/* Why Choose Us */}
       <section className="container mx-auto px-6 py-20">
-        <h2 className="text-4xl font-bold text-center mb-16 text-slate-900">
+        <h2 className="text-4xl font-bold text-center mb-16 text-slate-900 dark:text-white">
           Why Choose Taper Payer?
         </h2>
         
@@ -313,16 +313,16 @@ export default function TaperPayerHome() {
       </section>
 
       {/* Tap to Pay Section */}
-      <section className="bg-white py-20">
+      <section className="bg-white dark:bg-slate-800 py-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-6 text-slate-900">Tap to Pay - It's That Easy</h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-6">
+            <h2 className="text-4xl font-bold mb-6 text-slate-900 dark:text-white">Tap to Pay - It's That Easy</h2>
+            <p className="text-xl text-slate-600 dark:text-gray-300 max-w-3xl mx-auto mb-6">
               Send money in just a few taps with our simple and secure payment process
             </p>
-            <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-6 max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">SoftPOS</h3>
-              <p className="text-lg text-slate-700 leading-relaxed">
+            <div className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-700 dark:to-slate-600 rounded-2xl p-6 max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">SoftPOS</h3>
+              <p className="text-lg text-slate-700 dark:text-gray-300 leading-relaxed">
                 SoftPOS (Software Point of Sale), also known as Tap to Pay, Tap on Phone, or Tap to Phone, is a cutting-edge technology that transforms any NFC-enabled smartphone or tablet into a secure, contactless payment terminal—without needing extra hardware like traditional card readers or POS devices.
               </p>
             </div>
@@ -429,8 +429,8 @@ export default function TaperPayerHome() {
 
       {/* Services Section */}
       <section className="container mx-auto px-6 py-20">
-        <h2 className="text-4xl font-bold text-center mb-6 text-slate-900">Our Services</h2>
-        <p className="text-xl text-slate-600 text-center mb-16 max-w-3xl mx-auto">
+        <h2 className="text-4xl font-bold text-center mb-6 text-slate-900 dark:text-white">Our Services</h2>
+        <p className="text-xl text-slate-600 dark:text-gray-300 text-center mb-16 max-w-3xl mx-auto">
           They are designed to meet all your needs. Our service allows you to send money at a competitive exchange rate with fair commissions, ensuring better value for your money.
         </p>
 
@@ -479,11 +479,11 @@ export default function TaperPayerHome() {
           viewport={{ once: true }}
           className="text-center mb-16 relative z-10"
         >
-          <h2 className="text-4xl font-bold mb-6 text-slate-900">Card Issuance</h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <h2 className="text-4xl font-bold mb-6 text-slate-900 dark:text-white">Card Issuance</h2>
+          <p className="text-xl text-slate-600 dark:text-gray-300 max-w-3xl mx-auto">
             Brand And Issue Physical And Virtual Cards
           </p>
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto mt-4">
+          <p className="text-lg text-slate-600 dark:text-gray-300 max-w-3xl mx-auto mt-4">
             Design your unique branded cards to create a consistent identity for physical and virtual cards. Our team will handle card production and fulfillment.
           </p>
 
@@ -629,7 +629,7 @@ export default function TaperPayerHome() {
       </section>
 
       {/* Membership Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-slate-800">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div
@@ -638,10 +638,10 @@ export default function TaperPayerHome() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
                 Join Our <span style={{ color: '#2479C2' }}>Membership</span> Program
               </h2>
-              <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              <p className="text-xl text-slate-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Become a Taper Payer member and enjoy exclusive benefits, lower fees, and priority support
               </p>
             </motion.div>
@@ -703,19 +703,19 @@ export default function TaperPayerHome() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl p-8 md:p-12"
+              className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-700 dark:to-slate-600 rounded-3xl p-8 md:p-12"
             >
               <div className="max-w-2xl mx-auto text-center">
-                <h3 className="text-3xl font-bold text-slate-900 mb-4">
+                <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
                   Ready to Join?
                 </h3>
                 <div className="mb-6">
-                  <div className="text-5xl font-bold text-slate-900 mb-2">
+                  <div className="text-5xl font-bold text-slate-900 dark:text-white mb-2">
                     $2,999.00
                   </div>
-                  <p className="text-lg text-slate-600">per year</p>
+                  <p className="text-lg text-slate-600 dark:text-gray-300">per year</p>
                 </div>
-                <p className="text-lg text-slate-600 mb-8">
+                <p className="text-lg text-slate-600 dark:text-gray-300 mb-8">
                   Sign up today and start enjoying member-only benefits
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -186,7 +186,8 @@ export default function TaperPayerHome() {
                 {country.name}
               </span>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Background gradient blobs */}

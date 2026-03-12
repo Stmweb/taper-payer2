@@ -150,8 +150,7 @@ export default function TaperPayerHome() {
               style={{ left: country.x, top: country.y, zIndex: 50 }}
               initial={{ y: 0, x: 0, opacity: 0.55, scale: 1 }}
               animate={{
-                y: [0, -18, 0, -10, 0],
-                x: [0, 6, 0, -6, 0],
+                rotate: [0, 360],
                 opacity: [0.55, 0.85, 0.55],
                 scale: [1, 1.12, 1],
               }}

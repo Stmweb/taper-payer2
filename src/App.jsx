@@ -124,6 +124,10 @@ const AuthenticatedApp = () => {
             }
           />
         ))}
+        <Route path="/TaperPayerFAQ" element={<LayoutWrapper currentPageName="TaperPayerFAQ"><TaperPayerFAQ /></LayoutWrapper>} />
+        <Route path="/TaperPayerTerms" element={<LayoutWrapper currentPageName="TaperPayerTerms"><TaperPayerTerms /></LayoutWrapper>} />
+        <Route path="/TaperPayerPrivacy" element={<LayoutWrapper currentPageName="TaperPayerPrivacy"><TaperPayerPrivacy /></LayoutWrapper>} />
+        <Route path="/TaperPayerCookies" element={<LayoutWrapper currentPageName="TaperPayerCookies"><TaperPayerCookies /></LayoutWrapper>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

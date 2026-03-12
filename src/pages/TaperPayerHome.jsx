@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Shield, Zap, DollarSign, Users, Globe, MapPin, ChevronDown, Menu, X, Send, CreditCard, Smartphone, TrendingUp, RefreshCw } from 'lucide-react';
+import { ArrowRight, Shield, Zap, DollarSign, Users, Globe, MapPin, ChevronDown, Menu, X, Send, CreditCard, Smartphone, TrendingUp, RefreshCw, ChevronRight } from 'lucide-react';
+import CountryDrawer from '@/components/mobile/CountryDrawer';
 import TaperPayerLogo from '../components/taperpayer/TaperPayerLogo';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../utils';
@@ -16,6 +17,7 @@ export default function TaperPayerHome() {
   const [exchangeRate, setExchangeRate] = useState(null);
   const [amount, setAmount] = useState('100');
   const [loading, setLoading] = useState(false);
+  const [showCountryDrawer, setShowCountryDrawer] = useState(false);
 
   const countries = [
     { name: 'Angola', flag: '🇦🇴', currency: 'AOA' },
@@ -176,19 +178,30 @@ export default function TaperPayerHome() {
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Send Money To</label>
-                  <div className="relative">
-                    <select 
-                      value={sendTo}
-                      onChange={(e) => setSendTo(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg appearance-none bg-white focus:ring-2 focus:ring-[#2479C2] focus:border-transparent"
-                    >
-                      <option value="">Select Receiving Country</option>
-                      {countries.map(country => (
-                        <option key={country.name} value={country.name}>{country.flag} {country.name}</option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowCountryDrawer(true)}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg bg-white flex items-center justify-between focus:ring-2 focus:ring-[#2479C2] focus:outline-none"
+                    style={{ userSelect: 'none' }}
+                  >
+                    <span className={sendTo ? 'text-slate-900' : 'text-slate-400'}>
+                      {sendTo
+                        ? `${countries.find(c => c.name === sendTo)?.flag ?? ''} ${sendTo}`
+                        : 'Select Receiving Country'}
+                    </span>
+                    <ChevronRight className="w-5 h-5 text-slate-400 flex-shrink-0" />
+                  </button>
+                  <CountryDrawer
+                    open={showCountryDrawer}
+                    onOpenChange={setShowCountryDrawer}
+                    countries={countries.map(c => `${c.flag} ${c.name}`)}
+                    value={sendTo ? `${countries.find(c => c.name === sendTo)?.flag ?? ''} ${sendTo}` : ''}
+                    onSelect={(val) => {
+                      const name = val.replace(/^\S+\s/, '');
+                      setSendTo(name);
+                    }}
+                    title="Select Receiving Country"
+                  />
                 </div>
 
                 {exchangeRate && (

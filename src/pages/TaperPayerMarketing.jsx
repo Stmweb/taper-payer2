@@ -337,6 +337,9 @@ export default function TaperPayerMarketing() {
 
       <div className="container mx-auto px-6 py-10">
 
+        {/* AI Flyer Generator */}
+        {activeTab === 'flyer' && <FlyerGenerator />}
+
         {/* Social Media Sizes */}
         {activeTab === 'social' && (
           <div className="space-y-10">

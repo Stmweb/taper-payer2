@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { TrendingUp, RefreshCw, ArrowRight, Menu, X } from 'lucide-react';
+import { TrendingUp, RefreshCw, ArrowRight, Menu, X, MapPin, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';

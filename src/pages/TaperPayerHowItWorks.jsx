@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { UserPlus, CreditCard, Send, CheckCircle, Shield, Clock, DollarSign, Globe, ArrowRight, Smartphone, Laptop, Building2, Menu, X } from 'lucide-react';
+import { UserPlus, CreditCard, Send, CheckCircle, Shield, Clock, DollarSign, Globe, ArrowRight, Smartphone, Laptop, Building2, Menu, X, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';

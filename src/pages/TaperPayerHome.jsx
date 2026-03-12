@@ -24,6 +24,7 @@ export default function TaperPayerHome() {
     { name: 'Dominican Republic', flag: '🇩🇴', currency: 'DOP' },
     { name: 'Ghana', flag: '🇬🇭', currency: 'GHS' },
     { name: 'Haiti', flag: '🇭🇹', currency: 'HTG' },
+    { name: 'Kenya', flag: '🇰🇪', currency: 'KES' },
     { name: 'Mexico', flag: '🇲🇽', currency: 'MXN' },
     { name: 'Morocco', flag: '🇲🇦', currency: 'MAD' },
     { name: 'Nigeria', flag: '🇳🇬', currency: 'NGN' },

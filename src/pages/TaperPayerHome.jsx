@@ -179,7 +179,7 @@ export default function TaperPayerHome() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Card className="p-8 shadow-2xl dark:bg-slate-800">
+              <Card className="p-8 shadow-2xl dark:bg-slate-800" style={{ backgroundColor: 'rgba(255, 255, 255, 0.85)' }}>
                 <h3 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Money Transfer</h3>
                 
                 <div className="space-y-4">

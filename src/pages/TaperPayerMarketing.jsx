@@ -153,10 +153,145 @@ function CopyButton({ text }) {
   );
 }
 
+const allSizes = [
+  { platform: 'Instagram', label: 'Feed Post (Square)', size: '1080 × 1080 px', ratio: '1:1' },
+  { platform: 'Instagram', label: 'Feed Post (Portrait)', size: '1080 × 1350 px', ratio: '4:5' },
+  { platform: 'Instagram', label: 'Story / Reel', size: '1080 × 1920 px', ratio: '9:16' },
+  { platform: 'Facebook', label: 'Feed Post', size: '1200 × 630 px', ratio: '1.91:1' },
+  { platform: 'Facebook', label: 'Cover Photo', size: '851 × 315 px', ratio: '2.7:1' },
+  { platform: 'Facebook', label: 'Story', size: '1080 × 1920 px', ratio: '9:16' },
+  { platform: 'X (Twitter)', label: 'Post Image', size: '1600 × 900 px', ratio: '16:9' },
+  { platform: 'X (Twitter)', label: 'Header / Banner', size: '1500 × 500 px', ratio: '3:1' },
+  { platform: 'LinkedIn', label: 'Feed Post', size: '1200 × 627 px', ratio: '1.91:1' },
+  { platform: 'LinkedIn', label: 'Company Cover', size: '1128 × 191 px', ratio: '5.9:1' },
+  { platform: 'YouTube', label: 'Thumbnail', size: '1280 × 720 px', ratio: '16:9' },
+  { platform: 'YouTube', label: 'Channel Banner', size: '2560 × 1440 px', ratio: '16:9' },
+];
+
+function FlyerGenerator() {
+  const [platform, setPlatform] = useState('');
+  const [sizeLabel, setSizeLabel] = useState('');
+  const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [error, setError] = useState(null);
+
+  const platforms = [...new Set(allSizes.map(s => s.platform))];
+  const sizesForPlatform = allSizes.filter(s => s.platform === platform);
+  const selectedSize = allSizes.find(s => s.platform === platform && s.label === sizeLabel);
+
+  const handleGenerate = async () => {
+    if (!platform || !sizeLabel || !prompt.trim()) return;
+    setLoading(true);
+    setError(null);
+    setImageUrl(null);
+
+    const fullPrompt = `Create a professional marketing flyer for "Taper Payer", a modern fintech money transfer brand. 
+Format: ${platform} ${sizeLabel} (${selectedSize?.ratio} aspect ratio).
+Brand colors: primary blue #2479C2, green #61AF39, orange #F88F2B, white background or dark navy.
+Include the Taper Payer logo prominently (wordmark: "Taper" in blue and "Payer" in green, bold modern font).
+Design brief: ${prompt.trim()}.
+Style: clean, modern, professional fintech aesthetic. No low-quality or cluttered design.`;
+
+    try {
+      const result = await base44.integrations.Core.GenerateImage({ prompt: fullPrompt });
+      setImageUrl(result.url);
+    } catch (e) {
+      setError('Failed to generate image. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-6">
+      <Card className="p-6 space-y-5">
+        <div>
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">1. Select Platform</label>
+          <div className="flex flex-wrap gap-2">
+            {platforms.map(p => (
+              <button
+                key={p}
+                onClick={() => { setPlatform(p); setSizeLabel(''); }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                  platform === p ? 'text-white border-transparent' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-blue-400'
+                }`}
+                style={platform === p ? { backgroundColor: '#2479C2' } : {}}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {platform && (
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">2. Select Size</label>
+            <div className="flex flex-wrap gap-2">
+              {sizesForPlatform.map(s => (
+                <button
+                  key={s.label}
+                  onClick={() => setSizeLabel(s.label)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                    sizeLabel === s.label ? 'text-white border-transparent' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-green-400'
+                  }`}
+                  style={sizeLabel === s.label ? { backgroundColor: '#61AF39' } : {}}
+                >
+                  {s.label} <span className="opacity-70 text-xs">({s.ratio})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">3. Describe your flyer</label>
+          <textarea
+            value={prompt}
+            onChange={e => setPrompt(e.target.value)}
+            placeholder="E.g. Promote same-day money transfers to Nigeria and Ghana. Highlight zero hidden fees. Include a bold call-to-action: 'Send Now'."
+            rows={4}
+            className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+          />
+        </div>
+
+        <Button
+          onClick={handleGenerate}
+          disabled={!platform || !sizeLabel || !prompt.trim() || loading}
+          className="w-full py-5 text-base font-semibold gap-2"
+          style={{ backgroundColor: '#2479C2' }}
+        >
+          {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Generating Flyer...</> : <><Wand2 className="w-5 h-5" /> Generate Flyer with AI</>}
+        </Button>
+
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+      </Card>
+
+      {imageUrl && (
+        <Card className="p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-bold text-slate-900 dark:text-white">Generated Flyer</h3>
+              <p className="text-slate-500 text-sm">{platform} · {sizeLabel} · {selectedSize?.size}</p>
+            </div>
+            <a href={imageUrl} download="taper-payer-flyer.png" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="sm" className="gap-2">
+                <Download className="w-4 h-4" /> Download
+              </Button>
+            </a>
+          </div>
+          <img src={imageUrl} alt="Generated Flyer" className="w-full rounded-xl shadow-lg" />
+        </Card>
+      )}
+    </div>
+  );
+}
+
 export default function TaperPayerMarketing() {
-  const [activeTab, setActiveTab] = useState('social');
+  const [activeTab, setActiveTab] = useState('flyer');
 
   const tabs = [
+    { id: 'flyer', label: 'AI Flyer Generator', icon: Wand2 },
     { id: 'social', label: 'Social Media Sizes', icon: Smartphone },
     { id: 'digital', label: 'Digital & Ads', icon: Monitor },
     { id: 'print', label: 'Print Formats', icon: FileText },

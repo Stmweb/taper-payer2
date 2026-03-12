@@ -143,13 +143,13 @@ export default function TaperPayerAbout() {
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-green-600 rounded-xl flex items-center justify-center">
                   <Target className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Our Mission</h2>
               </div>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
                 To empower individuals and businesses worldwide with seamless, instant, and affordable 
                 money transfer solutions that transcend borders and break down financial barriers.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 We're building a world where sending money is as easy as sending a message, where 
                 families stay connected, businesses thrive globally, and financial inclusion is a reality for all.
               </p>

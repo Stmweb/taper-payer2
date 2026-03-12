@@ -23,6 +23,7 @@ export default function TaperPayerRates() {
     { name: 'Ghana', flag: '🇬🇭', currency: 'GHS', code: 'GHS' },
     { name: 'Haiti', flag: '🇭🇹', currency: 'HTG', code: 'HTG' },
     { name: 'Mexico', flag: '🇲🇽', currency: 'MXN', code: 'MXN' },
+    { name: 'Morocco', flag: '🇲🇦', currency: 'MAD', code: 'MAD' },
     { name: 'Nigeria', flag: '🇳🇬', currency: 'NGN', code: 'NGN' },
     { name: 'Senegal', flag: '🇸🇳', currency: 'XOF', code: 'XOF' }
   ];

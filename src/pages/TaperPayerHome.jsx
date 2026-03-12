@@ -168,7 +168,7 @@ export default function TaperPayerHome() {
             <motion.div
               key={country.name}
               className="absolute flex flex-col items-center gap-1"
-              style={{ left: country.x, top: country.y }}
+              style={{ left: country.x, top: country.y, zIndex: 20 }}
               initial={{ y: 0, x: 0, opacity: 0.55, scale: 1 }}
               animate={{
                 y: [0, -18, 0, -10, 0],

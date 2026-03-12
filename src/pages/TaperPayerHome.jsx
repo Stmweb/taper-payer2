@@ -134,31 +134,40 @@ export default function TaperPayerHome() {
         {/* Floating country flag bubbles - outside overflow hidden */}
         <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ position: 'relative', zIndex: 50 }}>
           {[
-            { flag: '🇦🇴', name: 'Angola',            x: '50%',  y: '15%', delay: 0,    dur: 7  },
-            { flag: '🇩🇴', name: 'Dominican Republic', x: '72%', y: '24%', delay: 1,    dur: 9  },
-            { flag: '🇬🇭', name: 'Ghana',              x: '81%', y: '45%', delay: 2,    dur: 8  },
-            { flag: '🇭🇹', name: 'Haiti',              x: '72%', y: '66%',  delay: 0.5,  dur: 11 },
-            { flag: '🇰🇪', name: 'Kenya',              x: '50%', y: '75%', delay: 1.5,  dur: 7.5},
-            { flag: '🇲🇽', name: 'Mexico',             x: '28%', y: '66%', delay: 3,    dur: 9.5},
-            { flag: '🇲🇦', name: 'Morocco',            x: '19%', y: '45%', delay: 2.5,  dur: 8.5},
-            { flag: '🇳🇬', name: 'Nigeria',            x: '28%', y: '24%', delay: 0.8,  dur: 10 },
-            { flag: '🇸🇳', name: 'Senegal',            x: '50%', y: '20%', delay: 1.2,  dur: 6.5},
-          ].map((country) => (
+            { flag: '🇦🇴', name: 'Angola',            angle: 0,   delay: 0,    dur: 20  },
+            { flag: '🇩🇴', name: 'Dominican Republic', angle: 40,  delay: 0,    dur: 20  },
+            { flag: '🇬🇭', name: 'Ghana',              angle: 80,  delay: 0,    dur: 20  },
+            { flag: '🇭🇹', name: 'Haiti',              angle: 120, delay: 0,    dur: 20 },
+            { flag: '🇰🇪', name: 'Kenya',              angle: 160, delay: 0,    dur: 20},
+            { flag: '🇲🇽', name: 'Mexico',             angle: 200, delay: 0,    dur: 20},
+            { flag: '🇲🇦', name: 'Morocco',            angle: 240, delay: 0,    dur: 20},
+            { flag: '🇳🇬', name: 'Nigeria',            angle: 280, delay: 0,    dur: 20 },
+            { flag: '🇸🇳', name: 'Senegal',            angle: 320, delay: 0,    dur: 20},
+          ].map((country) => {
+            const radius = 200;
+            const centerX = typeof window !== 'undefined' ? window.innerWidth * 0.5 : 500;
+            const centerY = 300;
+            return (
             <motion.div
               key={country.name}
               className="absolute flex flex-col items-center gap-1"
-              style={{ left: country.x, top: country.y, zIndex: 50 }}
-              initial={{ y: 0, x: 0, opacity: 0.55, scale: 1 }}
-              animate={{
-                rotate: [0, 360],
-                opacity: [0.55, 0.85, 0.55],
-                scale: [1, 1.12, 1],
+              style={{ zIndex: 50 }}
+              animate={(control) => {
+                const angles = [country.angle, country.angle + 360];
+                return {
+                  x: angles.map(a => Math.sin((a * Math.PI) / 180) * radius),
+                  y: angles.map(a => -Math.cos((a * Math.PI) / 180) * radius),
+                };
               }}
               transition={{
                 duration: country.dur,
                 repeat: Infinity,
-                ease: 'easeInOut',
+                ease: 'linear',
                 delay: country.delay,
+              }}
+              initial={{
+                x: Math.sin((country.angle * Math.PI) / 180) * radius,
+                y: -Math.cos((country.angle * Math.PI) / 180) * radius,
               }}
             >
               <div

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import BottomTabBar from '@/components/mobile/BottomTabBar';
 
 export default function Layout({ children, currentPageName }) {
@@ -47,6 +46,21 @@ export default function Layout({ children, currentPageName }) {
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
+      <style>{`
+        html, body {
+          overscroll-behavior: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        button, a, nav, [role="button"] {
+          user-select: none;
+          -webkit-user-select: none;
+        }
+        svg {
+          user-select: none;
+          -webkit-user-select: none;
+          pointer-events: none;
+        }
+      `}</style>
       {children}
       {showBottomTabBar && <BottomTabBar />}
     </div>

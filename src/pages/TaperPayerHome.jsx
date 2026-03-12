@@ -164,9 +164,6 @@ export default function TaperPayerHome() {
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
                 Send Money To Your <span style={{ color: '#00D9FF' }}>Loved Ones</span>
               </h1>
-              <p className="text-xl text-white mb-8" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.2)' }}>
-                Taper Payer is a modern financial technology platform built for fast, secure, and seamless money transfers. Whether you're sending funds, making payments, or managing transactions, Taper Payer makes moving money simple, reliable, and transparent.
-              </p>
               <div className="flex flex-wrap gap-4">
                 <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">
                   Download App

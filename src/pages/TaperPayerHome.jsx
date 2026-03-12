@@ -329,7 +329,6 @@ export default function TaperPayerHome() {
             </Card>
           </motion.div>
         </div>
-        </div>
       </section>
 
 

@@ -187,6 +187,7 @@ function FlyerGenerator() {
     setLoading(true);
     setError(null);
     setImageUrl(null);
+    setCaption(null);
 
     const fullPrompt = `Create a professional marketing flyer for "Taper Payer", a modern fintech money transfer brand. 
 Format: ${platform} ${sizeLabel} (${selectedSize?.ratio} aspect ratio).
@@ -198,10 +199,19 @@ Style: clean, modern, professional fintech aesthetic. No low-quality or cluttere
     try {
       const response = await base44.functions.invoke('generateFlyer', { prompt: fullPrompt });
       setImageUrl(response.data.url);
+      
+      // Generate caption after image is created
+      setCaptionLoading(true);
+      const captionResponse = await base44.integrations.Core.InvokeLLM({
+        prompt: `Create a compelling social media caption for a Taper Payer marketing flyer. The flyer is for ${platform} and has this brief: "${prompt.trim()}". 
+Generate a catchy, professional caption that's 1-2 sentences, followed by relevant hashtags. Format: Caption text first, then hashtags on a new line. Use hashtags like #TaperPayer #MoneyTransfer #Remittance #FinTech #SendMoney etc.`,
+      });
+      setCaption(captionResponse);
     } catch (e) {
       setError('Failed to generate image. Please try again.');
     } finally {
       setLoading(false);
+      setCaptionLoading(false);
     }
   };
 

@@ -132,7 +132,7 @@ export default function TaperPayerHome() {
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 py-20">
         {/* Animated floating country flags background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'relative' }}>
           {/* Background gradient blobs */}
           <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}

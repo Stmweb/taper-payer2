@@ -174,6 +174,8 @@ function FlyerGenerator() {
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
+  const [caption, setCaption] = useState(null);
+  const [captionLoading, setCaptionLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const platforms = [...new Set(allSizes.map(s => s.platform))];

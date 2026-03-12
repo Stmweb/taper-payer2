@@ -131,60 +131,62 @@ export default function TaperPayerHome() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 py-20">
-        {/* Floating country flag bubbles - background at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none" style={{ zIndex: 0, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-          {[
-            { flag: '🇦🇴', name: 'Angola',            angle: 0   },
-            { flag: '🇩🇴', name: 'Dominican Republic', angle: 40  },
-            { flag: '🇬🇭', name: 'Ghana',              angle: 80  },
-            { flag: '🇭🇹', name: 'Haiti',              angle: 120 },
-            { flag: '🇰🇪', name: 'Kenya',              angle: 160 },
-            { flag: '🇲🇽', name: 'Mexico',             angle: 200 },
-            { flag: '🇲🇦', name: 'Morocco',            angle: 240 },
-            { flag: '🇳🇬', name: 'Nigeria',            angle: 280 },
-            { flag: '🇸🇳', name: 'Senegal',            angle: 320 },
-          ].map((country) => {
-            const radius = 150;
-            const x = Math.sin((country.angle * Math.PI) / 180) * radius;
-            const y = -Math.cos((country.angle * Math.PI) / 180) * radius;
-            const nextAngle = (country.angle + 360) % 360;
-            const nextX = Math.sin((nextAngle * Math.PI) / 180) * radius;
-            const nextY = -Math.cos((nextAngle * Math.PI) / 180) * radius;
-            
-            return (
-              <motion.div
-                key={country.name}
-                className="absolute flex flex-col items-center gap-1 opacity-40"
-                style={{ zIndex: 0 }}
-                animate={{
-                  x: [x, nextX],
-                  y: [y, nextY],
-                }}
-                transition={{
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-                initial={{
-                  x,
-                  y,
-                }}
-              >
-                <div
-                  className="rounded-2xl shadow-lg backdrop-blur-sm flex items-center justify-center"
-                  style={{
-                    background: 'rgba(255,255,255,0.3)',
-                    width: 48,
-                    height: 48,
-                    boxShadow: '0 2px 8px rgba(36,121,194,0.05)',
-                    border: '1px solid rgba(255,255,255,0.4)',
+        {/* Floating country flag bubbles - centered */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 5 }}>
+          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
+            {[
+              { flag: '🇦🇴', name: 'Angola',            angle: 0   },
+              { flag: '🇩🇴', name: 'Dominican Republic', angle: 40  },
+              { flag: '🇬🇭', name: 'Ghana',              angle: 80  },
+              { flag: '🇭🇹', name: 'Haiti',              angle: 120 },
+              { flag: '🇰🇪', name: 'Kenya',              angle: 160 },
+              { flag: '🇲🇽', name: 'Mexico',             angle: 200 },
+              { flag: '🇲🇦', name: 'Morocco',            angle: 240 },
+              { flag: '🇳🇬', name: 'Nigeria',            angle: 280 },
+              { flag: '🇸🇳', name: 'Senegal',            angle: 320 },
+            ].map((country) => {
+              const baseRadius = 80;
+              const x = Math.sin((country.angle * Math.PI) / 180) * baseRadius;
+              const y = -Math.cos((country.angle * Math.PI) / 180) * baseRadius;
+              const nextAngle = (country.angle + 360) % 360;
+              const nextX = Math.sin((nextAngle * Math.PI) / 180) * baseRadius;
+              const nextY = -Math.cos((nextAngle * Math.PI) / 180) * baseRadius;
+              
+              return (
+                <motion.div
+                  key={country.name}
+                  className="absolute flex items-center justify-center"
+                  style={{ zIndex: 5 }}
+                  animate={{
+                    x: [x, nextX],
+                    y: [y, nextY],
+                  }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                  initial={{
+                    x,
+                    y,
                   }}
                 >
-                  <span className="text-xl select-none">{country.flag}</span>
-                </div>
-              </motion.div>
-            );
-          })}
+                  <div
+                    className="rounded-xl shadow-md backdrop-blur-sm flex items-center justify-center"
+                    style={{
+                      background: 'rgba(255,255,255,0.85)',
+                      width: 40,
+                      height: 40,
+                      boxShadow: '0 4px 12px rgba(36,121,194,0.1)',
+                      border: '1px solid rgba(255,255,255,0.9)',
+                    }}
+                  >
+                    <span className="text-lg select-none">{country.flag}</span>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Background gradient blobs */}

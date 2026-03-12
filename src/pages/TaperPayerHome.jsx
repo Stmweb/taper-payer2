@@ -130,9 +130,9 @@ export default function TaperPayerHome() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-visible px-6 py-20">
-        {/* Floating country flag bubbles - outside overflow hidden */}
-        <div className="absolute inset-0 pointer-events-none overflow-visible" style={{ position: 'relative', zIndex: 50 }}>
+      <section className="relative overflow-hidden px-6 py-20">
+        {/* Floating country flag bubbles - background at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none" style={{ zIndex: 0, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
           {[
             { flag: '🇦🇴', name: 'Angola',            angle: 0   },
             { flag: '🇩🇴', name: 'Dominican Republic', angle: 40  },
@@ -144,7 +144,7 @@ export default function TaperPayerHome() {
             { flag: '🇳🇬', name: 'Nigeria',            angle: 280 },
             { flag: '🇸🇳', name: 'Senegal',            angle: 320 },
           ].map((country) => {
-            const radius = 180;
+            const radius = 150;
             const x = Math.sin((country.angle * Math.PI) / 180) * radius;
             const y = -Math.cos((country.angle * Math.PI) / 180) * radius;
             const nextAngle = (country.angle + 360) % 360;
@@ -154,8 +154,8 @@ export default function TaperPayerHome() {
             return (
               <motion.div
                 key={country.name}
-                className="absolute flex flex-col items-center gap-1"
-                style={{ zIndex: 50, left: '50%', top: '50%' }}
+                className="absolute flex flex-col items-center gap-1 opacity-40"
+                style={{ zIndex: 0 }}
                 animate={{
                   x: [x, nextX],
                   y: [y, nextY],
@@ -173,18 +173,15 @@ export default function TaperPayerHome() {
                 <div
                   className="rounded-2xl shadow-lg backdrop-blur-sm flex items-center justify-center"
                   style={{
-                    background: 'rgba(255,255,255,0.75)',
-                    width: 52,
-                    height: 52,
-                    boxShadow: '0 4px 24px rgba(36,121,194,0.15), 0 1px 4px rgba(0,0,0,0.08)',
-                    border: '1px solid rgba(255,255,255,0.8)',
+                    background: 'rgba(255,255,255,0.3)',
+                    width: 48,
+                    height: 48,
+                    boxShadow: '0 2px 8px rgba(36,121,194,0.05)',
+                    border: '1px solid rgba(255,255,255,0.4)',
                   }}
                 >
-                  <span className="text-2xl select-none">{country.flag}</span>
+                  <span className="text-xl select-none">{country.flag}</span>
                 </div>
-                <span className="text-xs font-semibold text-slate-500 bg-white/70 backdrop-blur-sm rounded-full px-2 py-0.5 whitespace-nowrap shadow-sm">
-                  {country.name}
-                </span>
               </motion.div>
             );
           })}

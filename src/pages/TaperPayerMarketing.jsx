@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Download, Copy, Check, Image, FileText, Smartphone, Monitor, Instagram, Facebook, Twitter, Youtube, Linkedin } from 'lucide-react';
+import { Download, Copy, Check, Image, FileText, Smartphone, Monitor, Instagram, Facebook, Twitter, Youtube, Linkedin, Wand2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { base44 } from '@/api/base44Client';
 
 const BRAND = {
   blue: '#2479C2',

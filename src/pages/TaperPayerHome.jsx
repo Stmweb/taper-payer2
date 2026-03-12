@@ -133,7 +133,78 @@ export default function TaperPayerHome() {
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 py-20">
+      <section className="relative overflow-hidden px-6 py-20">
+        {/* Animated floating country flags background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Background gradient blobs */}
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-32 -left-32 w-96 h-96 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(36,121,194,0.25), transparent 70%)' }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(97,175,57,0.25), transparent 70%)' }}
+          />
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.3, 0.15] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(248,143,43,0.1), transparent 70%)' }}
+          />
+
+          {/* Floating country flag bubbles */}
+          {[
+            { flag: '🇦🇴', name: 'Angola',            x: '5%',  y: '10%', delay: 0,    dur: 7  },
+            { flag: '🇩🇴', name: 'Dominican Republic', x: '18%', y: '75%', delay: 1,    dur: 9  },
+            { flag: '🇬🇭', name: 'Ghana',              x: '30%', y: '20%', delay: 2,    dur: 8  },
+            { flag: '🇭🇹', name: 'Haiti',              x: '72%', y: '8%',  delay: 0.5,  dur: 11 },
+            { flag: '🇰🇪', name: 'Kenya',              x: '85%', y: '30%', delay: 1.5,  dur: 7.5},
+            { flag: '🇲🇽', name: 'Mexico',             x: '90%', y: '70%', delay: 3,    dur: 9.5},
+            { flag: '🇲🇦', name: 'Morocco',            x: '60%', y: '82%', delay: 2.5,  dur: 8.5},
+            { flag: '🇳🇬', name: 'Nigeria',            x: '10%', y: '55%', delay: 0.8,  dur: 10 },
+            { flag: '🇸🇳', name: 'Senegal',            x: '45%', y: '88%', delay: 1.2,  dur: 6.5},
+          ].map((country, i) => (
+            <motion.div
+              key={country.name}
+              className="absolute flex flex-col items-center gap-1"
+              style={{ left: country.x, top: country.y }}
+              animate={{
+                y: [0, -18, 0, -10, 0],
+                x: [0, 6, 0, -6, 0],
+                opacity: [0.55, 0.85, 0.55],
+                scale: [1, 1.12, 1],
+              }}
+              transition={{
+                duration: country.dur,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: country.delay,
+              }}
+            >
+              <div
+                className="rounded-2xl shadow-lg backdrop-blur-sm flex items-center justify-center"
+                style={{
+                  background: 'rgba(255,255,255,0.75)',
+                  width: 52,
+                  height: 52,
+                  boxShadow: '0 4px 24px rgba(36,121,194,0.15), 0 1px 4px rgba(0,0,0,0.08)',
+                  border: '1px solid rgba(255,255,255,0.8)',
+                }}
+              >
+                <span className="text-2xl select-none">{country.flag}</span>
+              </div>
+              <span className="text-xs font-semibold text-slate-500 bg-white/70 backdrop-blur-sm rounded-full px-2 py-0.5 whitespace-nowrap shadow-sm">
+                {country.name}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="container mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}

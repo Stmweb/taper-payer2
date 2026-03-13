@@ -136,8 +136,8 @@ export default function TaperPayerHome() {
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
           style={{ zIndex: 0 }}
-          animate={{ scale: [1, 1.08, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ scale: [1, 1.1, 1], x: [0, -20, 0], y: [0, -10, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
         />
 
         {/* Background gradient blobs */}

@@ -177,7 +177,7 @@ export default function TaperPayerTopUp() {
               <p>✓ Open the TPAY Top Up section</p>
               <p>✓ Follow the quick steps to recharge your mobile</p>
             </div>
-            <Button className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Top Up Now</Button>
+            <Button className="bg-white text-orange-600 hover:bg-orange-50 px-10 py-3 text-lg font-bold">Top Up Now</Button>
           </motion.div>
         </div>
       </section>

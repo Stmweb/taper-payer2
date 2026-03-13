@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import CountryDrawer from '@/components/mobile/CountryDrawer';
+import SEOHead from '@/components/SEOHead';
 
 function createPageUrl(page) {
   return `/${page}`;

@@ -98,7 +98,7 @@ export default function TaperPayerTopUp() {
         <div className="container mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              TPAY Mobile - <span className="text-cyan-400">Instant Recharges</span>
+              Block instant Mobile recharge <span className="text-cyan-400">Powered By DT shop</span>
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>

@@ -111,7 +111,7 @@ export default function TaperPayerTopUp() {
                   className="bg-gradient-to-br from-orange-50 to-green-50 p-8 rounded-xl border border-orange-200 hover:border-orange-400 transition-all"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="bg-cyan-500 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="bg-orange-500 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     <div>

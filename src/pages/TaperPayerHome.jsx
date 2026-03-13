@@ -131,15 +131,13 @@ export default function TaperPayerHome() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 py-20">
-        <motion.div
-          className="absolute inset-0 -z-10"
-          animate={{ scale: [1, 1.08, 1], backgroundPosition: ['center center', '60% 40%', 'center center'] }}
+        <motion.img
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ccf3ce18e_generated_image.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ zIndex: 0 }}
+          animate={{ scale: [1, 1.08, 1] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          style={{
-            backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ccf3ce18e_generated_image.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
         />
 
         {/* Background gradient blobs */}

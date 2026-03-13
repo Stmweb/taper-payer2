@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import TopUpForm from '@/components/topup/TopUpForm';
 
 export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showTopUpForm, setShowTopUpForm] = useState(false);
 
   const steps = [
     { icon: Smartphone, title: 'Select Your Mobile Number', desc: 'Enter your phone number or select from your contacts.' },
@@ -100,7 +102,7 @@ export default function TaperPayerTopUp() {
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
-              <Button className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
+              <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
             </motion.div>
           </motion.div>
         </div>
@@ -219,10 +221,29 @@ export default function TaperPayerTopUp() {
               <p>✓ Open the TPAY Top Up section</p>
               <p>✓ Follow the quick steps to recharge your mobile</p>
             </div>
-            <Button className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Top Up Now</Button>
+            <Button onClick={() => setShowTopUpForm(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Top Up Now</Button>
           </motion.div>
         </div>
       </section>
+
+      {/* Top Up Modal */}
+      {showTopUpForm && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full max-w-md"
+          >
+            <button
+              onClick={() => setShowTopUpForm(false)}
+              className="absolute -top-10 right-0 text-white hover:text-gray-300"
+            >
+              ✕
+            </button>
+            <TopUpForm />
+          </motion.div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-12">

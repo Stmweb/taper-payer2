@@ -1,5 +1,4 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
-import crypto from 'crypto';
 
 Deno.serve(async (req) => {
   try {
@@ -29,24 +28,42 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Create DTOne API signature
+    // Create DTOne API signature using Web Crypto API
     const timestamp = Math.floor(Date.now() / 1000).toString();
-    const nonce = crypto.randomUUID();
+    const nonce = crypto.getRandomValues(new Uint8Array(16))
+      .reduce((a, b) => a + b.toString(16).padStart(2, '0'), '');
     
-    // Build signature string: GET|/topups|apiKey|timestamp|nonce
+    // Build signature string for HMAC-SHA256
     const signatureString = `POST|/topups|${apiKey}|${timestamp}|${nonce}`;
-    const signature = crypto
-      .createHmac('sha256', apiSecret)
-      .update(signatureString)
-      .digest('hex');
+    
+    const encoder = new TextEncoder();
+    const keyData = encoder.encode(apiSecret);
+    const messageData = encoder.encode(signatureString);
+    
+    const key = await crypto.subtle.importKey(
+      'raw',
+      keyData,
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    
+    const signature = await crypto.subtle.sign('HMAC', key, messageData);
+    const signatureHex = Array.from(new Uint8Array(signature))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
 
     // Prepare topup request payload
+    const clientTransactionId = Array.from(crypto.getRandomValues(new Uint8Array(16)))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
     const payload = {
       phone: phoneNumber,
       amount: parseFloat(amount),
       country_iso: countryCode,
       operator_id: operatorId,
-      client_transaction_id: crypto.randomUUID(),
+      client_transaction_id: clientTransactionId,
     };
 
     // Call DTOne API
@@ -55,7 +72,7 @@ Deno.serve(async (req) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
-        'X-Dtone-Signature': signature,
+        'X-Dtone-Signature': signatureHex,
         'X-Dtone-Timestamp': timestamp,
         'X-Dtone-Nonce': nonce,
       },

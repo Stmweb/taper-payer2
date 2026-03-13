@@ -90,7 +90,7 @@ export default function TaperPayerTopUp() {
 
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden" style={{
-        backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/e04ae8291_ChatGPTImageMar132026at11_10_05AM.png)',
+        backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/709068287_ChatGPTImageMar13202606_38_59PM.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}>
@@ -98,7 +98,7 @@ export default function TaperPayerTopUp() {
         <div className="container mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              TPAY Mobile - <span className="text-cyan-400">Instant Recharges</span>
+              Recharge Your Phone in <span className="text-cyan-400">Seconds</span>
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>

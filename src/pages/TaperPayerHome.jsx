@@ -407,7 +407,7 @@ export default function TaperPayerHome() {
                   Instant mobile top-ups and airtime recharges for any carrier worldwide.
                 </p>
               </div>
-              <Button className="mt-6" style={{ backgroundColor: '#2479C2' }}>Learn More</Button>
+              <Button className="mt-6" style={{ backgroundColor: '#F88F2B' }}>TOP-UP NOW</Button>
             </Card>
           </Link>
         </div>

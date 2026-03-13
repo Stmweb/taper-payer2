@@ -87,11 +87,12 @@ export default function TaperPayerTopUp() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-400 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-20 w-96 h-96 bg-blue-400 rounded-full blur-3xl"></div>
-        </div>
+      <section className="relative py-20 md:py-32 overflow-hidden" style={{
+        backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/e04ae8291_ChatGPTImageMar132026at11_10_05AM.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        <div className="absolute inset-0 bg-black/40"></div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">

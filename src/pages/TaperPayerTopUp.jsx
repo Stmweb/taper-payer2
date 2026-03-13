@@ -46,15 +46,15 @@ export default function TaperPayerTopUp() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 overflow-hidden">
+      <section className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-400 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-20 w-96 h-96 bg-blue-400 rounded-full blur-3xl"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-20 w-96 h-96 bg-green-400 rounded-full blur-3xl"></div>
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              Top Up Your Mobile in <span className="text-cyan-400">Seconds</span>
+              Top Up Your Mobile in <span className="text-orange-400">Seconds</span>
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>

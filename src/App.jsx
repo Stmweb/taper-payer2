@@ -16,6 +16,7 @@ import TaperPayerCookies from './pages/TaperPayerCookies';
 import TaperPayerMarketing from './pages/TaperPayerMarketing';
 import TaperPayerBusiness from './pages/TaperPayerBusiness';
 import TaperPayerWhiteLabel from './pages/TaperPayerWhiteLabel';
+import TaperPayerTopUp from './pages/TaperPayerTopUp';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];

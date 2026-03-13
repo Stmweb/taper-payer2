@@ -157,13 +157,13 @@ export default function TaperPayerHome() {
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ccf3ce18e_generated_image.png"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ zIndex: 0 }}
-          animate={{ scale: [1, 1.1, 1], x: [0, -20, 0], y: [0, -10, 0] }}
+          style={{ zIndex: 0, backgroundPosition: 'center' }}
+          animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
         />
 
         {/* Background gradient blobs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1, background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(248, 250, 252, 0.3))' }}>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1, background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 50%, rgba(248, 250, 252, 0.1) 100%)' }}>
           <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}

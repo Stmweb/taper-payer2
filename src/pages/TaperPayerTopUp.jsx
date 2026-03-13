@@ -157,7 +157,7 @@ export default function TaperPayerTopUp() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-2xl mx-auto bg-white p-12 rounded-2xl shadow-lg border-l-4 border-cyan-500 text-center"
+            className="max-w-2xl mx-auto bg-white p-12 rounded-2xl shadow-lg border-l-4 border-orange-500 text-center"
           >
             <p className="text-xl text-slate-700 mb-6 italic">
               "TPAY Top Up makes topping up my phone easier than ever — it's instant and reliable!"

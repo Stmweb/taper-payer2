@@ -92,7 +92,7 @@ export default function TaperPayerTopUp() {
       <section className="relative py-20 md:py-32 overflow-hidden" style={{
         backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/709068287_ChatGPTImageMar13202606_38_59PM.png)',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: window.innerWidth < 768 ? 'right' : 'center',
       }}>
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="container mx-auto px-4 relative z-10">

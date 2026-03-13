@@ -553,6 +553,7 @@ export default function TaperPayerHome() {
                 <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#2479C2' }}><span className="text-white text-lg">f</span></a>
                 <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#61AF39' }}><span className="text-white text-lg">𝕏</span></a>
                 <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#F88F2B' }}><span className="text-white text-lg">in</span></a>
+                <a href="https://www.instagram.com/taperpayerofficial/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' }}><Instagram className="w-5 h-5 text-white" /></a>
               </div>
             </div>
 

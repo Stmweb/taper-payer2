@@ -76,6 +76,7 @@ export default function TaperPayerHome() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>
+      <StructuredData />
       {/* Header */}
       <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">

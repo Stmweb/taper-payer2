@@ -381,7 +381,7 @@ export default function TaperPayerHome() {
           They are designed to meet all your needs. Our service allows you to send money at a competitive exchange rate with fair commissions, ensuring better value for your money.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           <Card className="p-8 hover:shadow-xl transition-shadow">
             <Users className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
             <h3 className="text-2xl font-bold mb-4 text-slate-900">Same Day Remittances</h3>
@@ -397,6 +397,19 @@ export default function TaperPayerHome() {
               Our dedicated team is here to help you with any questions or concerns. We're committed to your satisfaction.
             </p>
           </Card>
+
+          <Link to={createPageUrl('TaperPayerTopUp')} className="no-underline">
+            <Card className="p-8 hover:shadow-xl transition-shadow cursor-pointer h-full flex flex-col justify-between">
+              <div>
+                <Smartphone className="w-12 h-12 mb-4" style={{ color: '#F88F2B' }} />
+                <h3 className="text-2xl font-bold mb-4 text-slate-900">TPAY Mobile</h3>
+                <p className="text-slate-600 text-lg">
+                  Instant mobile top-ups and airtime recharges for any carrier worldwide.
+                </p>
+              </div>
+              <Button className="mt-6" style={{ backgroundColor: '#2479C2' }}>Learn More</Button>
+            </Card>
+          </Link>
         </div>
       </section>
 

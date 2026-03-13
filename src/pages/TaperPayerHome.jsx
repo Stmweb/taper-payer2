@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   ArrowRight, Shield, Zap, DollarSign, Globe, Users, TrendingUp,
-  RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun
+  RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram
 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import CountryDrawer from '@/components/mobile/CountryDrawer';

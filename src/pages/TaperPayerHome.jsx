@@ -43,6 +43,16 @@ export default function TaperPayerHome() {
    const [loading, setLoading] = useState(false);
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
    const [showCountryDrawer, setShowCountryDrawer] = useState(false);
+   const [isDark, setIsDark] = useState(false);
+
+   const toggleDarkMode = () => {
+     setIsDark(!isDark);
+     if (!isDark) {
+       document.documentElement.classList.add('dark');
+     } else {
+       document.documentElement.classList.remove('dark');
+     }
+   };
 
   const fetchExchangeRate = async () => {
     if (!sendTo) return;

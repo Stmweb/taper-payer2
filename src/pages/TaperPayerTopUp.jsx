@@ -226,21 +226,32 @@ export default function TaperPayerTopUp() {
         </div>
       </section>
 
-      {/* Top Up Modal */}
+      {/* Top Up Sheet */}
       {showTopUpForm && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex flex-col md:flex-col-reverse">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full max-w-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 bg-black/50 md:bg-black/30"
+            onClick={() => setShowTopUpForm(false)}
+          />
+          
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative md:absolute md:top-20 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-md bg-white rounded-t-2xl md:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={() => setShowTopUpForm(false)}
-              className="absolute -top-10 right-0 text-white hover:text-gray-300"
+              className="sticky top-4 right-4 p-2 hover:bg-gray-100 rounded-full float-right md:absolute md:top-4 md:right-4"
             >
               ✕
             </button>
-            <TopUpForm />
+            <div className="p-6 md:p-8 pt-12 md:pt-8">
+              <TopUpForm />
+            </div>
           </motion.div>
         </div>
       )}

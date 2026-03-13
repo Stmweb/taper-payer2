@@ -151,7 +151,7 @@ export default function TaperPayerTopUp() {
       </section>
 
       {/* Testimonial */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-50 to-blue-50">
+      <section className="py-20 md:py-28 bg-gradient-to-r from-orange-50 to-green-50">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

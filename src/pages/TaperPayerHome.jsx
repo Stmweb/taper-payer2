@@ -29,12 +29,19 @@ const countries = [
 ];
 
 export default function TaperPayerHome() {
-  const [amount, setAmount] = useState('100');
-  const [sendTo, setSendTo] = useState('');
-  const [exchangeRate, setExchangeRate] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showCountryDrawer, setShowCountryDrawer] = useState(false);
+   SEOHead({
+     title: 'Taper Payer - Fast Money Transfer & Mobile Top-Up Services',
+     description: 'Send money globally to 150+ countries with competitive rates. Instant mobile top-ups, same-day remittances, and secure payments. Join millions trusting Taper Payer.',
+     keywords: 'money transfer, remittance service, mobile top-up, send money online, international payments, airtime recharge',
+     url: 'https://taperpayer.com/'
+   });
+
+   const [amount, setAmount] = useState('100');
+   const [sendTo, setSendTo] = useState('');
+   const [exchangeRate, setExchangeRate] = useState(null);
+   const [loading, setLoading] = useState(false);
+   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+   const [showCountryDrawer, setShowCountryDrawer] = useState(false);
 
   const fetchExchangeRate = async () => {
     if (!sendTo) return;

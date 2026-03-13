@@ -46,19 +46,19 @@ export default function TaperPayerTopUp() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 overflow-hidden">
+      <section className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-400 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-20 w-96 h-96 bg-green-400 rounded-full blur-3xl"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-20 w-96 h-96 bg-blue-400 rounded-full blur-3xl"></div>
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-              Top Up Your Mobile in <span className="text-orange-400">Seconds</span>
+              Top Up Your Mobile in <span className="text-cyan-400">Seconds</span>
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
+              <Button className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
             </motion.div>
           </motion.div>
         </div>
@@ -81,7 +81,7 @@ export default function TaperPayerTopUp() {
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
                   className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                 >
-                  <div className="bg-gradient-to-br from-orange-400 to-blue-500 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                  <div className="bg-gradient-to-br from-cyan-400 to-blue-500 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                     <Icon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{step.title}</h3>
@@ -108,10 +108,10 @@ export default function TaperPayerTopUp() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="bg-gradient-to-br from-orange-50 to-green-50 p-8 rounded-xl border border-orange-200 hover:border-orange-400 transition-all"
+                  className="bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-xl border border-cyan-200 hover:border-cyan-400 transition-all"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="bg-orange-500 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="bg-cyan-500 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -139,7 +139,7 @@ export default function TaperPayerTopUp() {
                 initial={{ opacity: 0, x: idx === 0 ? -30 : idx === 2 ? 30 : 0 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                className="bg-gradient-to-br from-blue-500 to-green-600 p-8 rounded-xl text-white"
+                className="bg-gradient-to-br from-cyan-500 to-blue-600 p-8 rounded-xl text-white"
               >
                 <Users className="w-10 h-10 mb-4" />
                 <h3 className="text-2xl font-bold mb-3">{useCase.title}</h3>
@@ -151,13 +151,13 @@ export default function TaperPayerTopUp() {
       </section>
 
       {/* Testimonial */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-orange-50 to-green-50">
+      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-50 to-blue-50">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-2xl mx-auto bg-white p-12 rounded-2xl shadow-lg border-l-4 border-orange-500 text-center"
+            className="max-w-2xl mx-auto bg-white p-12 rounded-2xl shadow-lg border-l-4 border-cyan-500 text-center"
           >
             <p className="text-xl text-slate-700 mb-6 italic">
               "TPAY Top Up makes topping up my phone easier than ever — it's instant and reliable!"
@@ -168,7 +168,7 @@ export default function TaperPayerTopUp() {
       </section>
 
       {/* Get Started CTA */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-orange-500 via-blue-500 to-green-600">
+      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-500 via-blue-500 to-slate-900">
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }}>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Get Started with TPAY Today</h2>
@@ -177,7 +177,7 @@ export default function TaperPayerTopUp() {
               <p>✓ Open the TPAY Top Up section</p>
               <p>✓ Follow the quick steps to recharge your mobile</p>
             </div>
-            <Button className="bg-white text-orange-600 hover:bg-orange-50 px-10 py-3 text-lg font-bold">Top Up Now</Button>
+            <Button className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Top Up Now</Button>
           </motion.div>
         </div>
       </section>

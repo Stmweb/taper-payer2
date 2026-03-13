@@ -1,0 +1,223 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+export default function TaperPayerTopUp() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const steps = [
+    { icon: Smartphone, title: 'Select Your Mobile Number', desc: 'Enter your phone number or select from your contacts.' },
+    { icon: DollarSign, title: 'Choose Amount', desc: 'Pick the top-up amount that fits your needs.' },
+    { icon: Lock, title: 'Pay Instantly', desc: 'Fund your top-up securely via TaperPayer wallet, bank transfer, or card.' },
+    { icon: Zap, title: 'Recharge Delivered', desc: 'Your mobile balance is updated instantly — no delays, no hassle.' },
+  ];
+
+  const benefits = [
+    { icon: Zap, title: 'Instant Delivery', desc: 'Your airtime or data is topped up immediately.' },
+    { icon: Lock, title: 'Secure Payments', desc: 'Powered by TaperPayer\'s trusted payment infrastructure.' },
+    { icon: Globe, title: 'Anywhere, Anytime', desc: 'Works for multiple carriers and international mobile numbers.' },
+    { icon: CreditCard, title: 'Flexible Payment Options', desc: 'Fund your top-up with wallet balance, credit/debit cards, or bank transfer.' },
+    { icon: Smartphone, title: 'User-Friendly', desc: 'Simple, fast, and optimized for mobile.' },
+  ];
+
+  const useeCases = [
+    { title: 'Individuals', desc: 'Recharge your own phone or family members\' numbers.' },
+    { title: 'Expats & Travelers', desc: 'Send airtime to friends and family abroad.' },
+    { title: 'Frequent Users', desc: 'Save time with quick, one-click top-ups.' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-white overflow-hidden">
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="font-bold text-2xl text-slate-900">TPAY TopUp</div>
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden">
+            <ChevronDown className={`transition-transform ${mobileMenuOpen ? 'rotate-180' : ''}`} />
+          </button>
+          <div className="hidden lg:flex gap-8 items-center">
+            <a href="/TaperPayerHome" className="text-slate-600 hover:text-slate-900">Home</a>
+            <a href="/TaperPayerRates" className="text-slate-600 hover:text-slate-900">Rates</a>
+            <a href="/TaperPayerAbout" className="text-slate-600 hover:text-slate-900">About</a>
+            <Button className="bg-cyan-500 hover:bg-cyan-600">Log In</Button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-cyan-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-20 w-96 h-96 bg-blue-400 rounded-full blur-3xl"></div>
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Top Up Your Mobile in <span className="text-cyan-400">Seconds</span>
+            </h1>
+            <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
+              <Button className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20 md:py-28 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900">
+            How TPAY Works
+          </motion.h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {steps.map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <div className="bg-gradient-to-br from-cyan-400 to-blue-500 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                    <Icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">{step.title}</h3>
+                  <p className="text-slate-600">{step.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="container mx-auto px-4">
+          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900">
+            Why Choose TPAY Top Up?
+          </motion.h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {benefits.map((benefit, idx) => {
+              const Icon = benefit.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  className="bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-xl border border-cyan-200 hover:border-cyan-400 transition-all"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="bg-cyan-500 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 mb-2">{benefit.title}</h3>
+                      <p className="text-slate-600">{benefit.desc}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Perfect For Everyone */}
+      <section className="py-20 md:py-28 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
+            Perfect for Everyone
+          </motion.h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {useeCases.map((useCase, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: idx === 0 ? -30 : idx === 2 ? 30 : 0 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                className="bg-gradient-to-br from-cyan-500 to-blue-600 p-8 rounded-xl text-white"
+              >
+                <Users className="w-10 h-10 mb-4" />
+                <h3 className="text-2xl font-bold mb-3">{useCase.title}</h3>
+                <p className="text-cyan-50">{useCase.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonial */}
+      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-50 to-blue-50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-2xl mx-auto bg-white p-12 rounded-2xl shadow-lg border-l-4 border-cyan-500 text-center"
+          >
+            <p className="text-xl text-slate-700 mb-6 italic">
+              "TPAY Top Up makes topping up my phone easier than ever — it's instant and reliable!"
+            </p>
+            <p className="text-slate-600 font-semibold">— Happy User</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Get Started CTA */}
+      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-500 via-blue-500 to-slate-900">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }}>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Get Started with TPAY Today</h2>
+            <div className="space-y-4 mb-8 text-white text-lg">
+              <p>✓ Log in to your TaperPayer account</p>
+              <p>✓ Open the TPAY Top Up section</p>
+              <p>✓ Follow the quick steps to recharge your mobile</p>
+            </div>
+            <Button className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Top Up Now</Button>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-400 py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <h4 className="font-bold text-white mb-4">TPAY TopUp</h4>
+              <p className="text-sm">Fast, secure mobile recharges powered by TaperPayer.</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-white mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/TaperPayerHome" className="hover:text-white">Home</a></li>
+                <li><a href="/TaperPayerRates" className="hover:text-white">Rates</a></li>
+                <li><a href="/TaperPayerAbout" className="hover:text-white">About</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-white mb-4">Support</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/TaperPayerFAQ" className="hover:text-white">FAQ</a></li>
+                <li><a href="/TaperPayerContact" className="hover:text-white">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold text-white mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="/TaperPayerPrivacy" className="hover:text-white">Privacy</a></li>
+                <li><a href="/TaperPayerTerms" className="hover:text-white">Terms</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-slate-800 pt-8 text-center text-sm">
+            <p>&copy; 2026 TaperPayer. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

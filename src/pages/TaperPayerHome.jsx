@@ -153,7 +153,7 @@ export default function TaperPayerHome() {
         />
 
         {/* Background gradient blobs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1, background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(248, 250, 252, 0.3))' }}>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1, background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(248, 250, 252, 0.3))' }}>
           <motion.div
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}

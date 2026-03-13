@@ -401,13 +401,13 @@ export default function TaperPayerHome() {
           <Link to={createPageUrl('TaperPayerTopUp')} className="no-underline">
             <Card className="p-8 hover:shadow-xl transition-shadow cursor-pointer h-full flex flex-col justify-between">
               <div>
-                <Smartphone className="w-12 h-12 mb-4" style={{ color: '#F88F2B' }} />
+                <Smartphone className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
                 <h3 className="text-2xl font-bold mb-4 text-slate-900">TPAY Mobile</h3>
                 <p className="text-slate-600 text-lg">
                   Instant mobile top-ups and airtime recharges for any carrier worldwide.
                 </p>
               </div>
-              <Button className="mt-6" style={{ backgroundColor: '#F88F2B' }}>TOP-UP NOW</Button>
+              <Button className="mt-6" style={{ backgroundColor: '#2479C2' }}>TOP-UP NOW</Button>
             </Card>
           </Link>
         </div>

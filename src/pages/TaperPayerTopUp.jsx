@@ -168,7 +168,7 @@ export default function TaperPayerTopUp() {
       </section>
 
       {/* Get Started CTA */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-500 via-blue-500 to-slate-900">
+      <section className="py-20 md:py-28 bg-gradient-to-r from-orange-500 via-blue-500 to-green-600">
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }}>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Get Started with TPAY Today</h2>

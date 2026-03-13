@@ -108,7 +108,7 @@ export default function TaperPayerTopUp() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-xl border border-cyan-200 hover:border-cyan-400 transition-all"
+                  className="bg-gradient-to-br from-orange-50 to-green-50 p-8 rounded-xl border border-orange-200 hover:border-orange-400 transition-all"
                 >
                   <div className="flex items-start gap-4">
                     <div className="bg-cyan-500 w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">

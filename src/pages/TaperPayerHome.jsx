@@ -165,9 +165,9 @@ export default function TaperPayerHome() {
         <div className="container mx-auto relative" style={{ zIndex: 2 }}>
           <div className="grid lg:grid-cols-2 gap-12 items-center md:gap-4">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
             >
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
                 Send Money To Your <span style={{ color: '#00D9FF' }}>Loved Ones</span>

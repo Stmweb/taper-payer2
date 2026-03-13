@@ -169,9 +169,14 @@ export default function TaperPayerHome() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.9, ease: 'easeOut' }}
             >
-              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
+              <motion.h1
+                className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
+                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+              >
                 Send Money To Your <span style={{ color: '#00D9FF' }}>Loved Ones</span>
-              </h1>
+              </motion.h1>
               <div className="flex flex-wrap gap-4">
                 <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">
                   Download App

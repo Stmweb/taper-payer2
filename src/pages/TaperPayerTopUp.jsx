@@ -58,7 +58,7 @@ export default function TaperPayerTopUp() {
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
-              <Button className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
+              <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
             </motion.div>
           </motion.div>
         </div>

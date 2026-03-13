@@ -81,7 +81,7 @@ export default function TaperPayerTopUp() {
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
                   className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                 >
-                  <div className="bg-gradient-to-br from-cyan-400 to-blue-500 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                  <div className="bg-gradient-to-br from-orange-400 to-blue-500 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                     <Icon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">{step.title}</h3>

@@ -122,6 +122,7 @@ export default function TaperPayerTopUp() {
               <div className="flex flex-wrap gap-4">
                 <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
                 <Button onClick={() => setShowTaperConnect(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-8 py-3 text-lg font-bold border-2 border-white">Taper Connect</Button>
+                <Button onClick={() => setShowTpayReload(true)} className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 text-lg font-bold">Tpay Reload</Button>
               </div>
             </motion.div>
           </motion.div>

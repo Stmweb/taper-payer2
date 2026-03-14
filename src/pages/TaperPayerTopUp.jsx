@@ -267,7 +267,8 @@ export default function TaperPayerTopUp() {
               <TaperConnectForm />
             </div>
           </motion.div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Top Up Sheet */}

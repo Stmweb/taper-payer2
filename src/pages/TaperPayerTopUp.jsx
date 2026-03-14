@@ -26,6 +26,11 @@ export default function TaperPayerTopUp() {
   const [showTopUpForm, setShowTopUpForm] = useState(false);
   const [showTaperConnect, setShowTaperConnect] = useState(false);
   const [showTpayReload, setShowTpayReload] = useState(false);
+  const [stripePromise, setStripePromise] = useState(null);
+
+  useEffect(() => {
+    getStripePromise().then(setStripePromise);
+  }, []);
   const bgSettings = {
     posX: 'center',
     posY: 'center',

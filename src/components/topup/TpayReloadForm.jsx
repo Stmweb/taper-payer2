@@ -3,15 +3,13 @@ import { Zap } from 'lucide-react';
 
 export default function TpayReloadForm() {
   useEffect(() => {
-    // Load Reloadly widget script
+    // Load Reloadly widget script if not already loaded
+    if (window.ReloadlyWidget) return;
+
     const script = document.createElement('script');
     script.src = 'https://cdn.reloadly.com/widget/v2/reloadly-widget.js';
     script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
+    document.head.appendChild(script);
   }, []);
 
   return (
@@ -25,7 +23,9 @@ export default function TpayReloadForm() {
         </div>
       </div>
 
-      <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
+      <div className="mt-4">
+        <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U" style={{ display: 'block', minHeight: '400px' }}></reloadly-widget>
+      </div>
     </div>
   );
 }

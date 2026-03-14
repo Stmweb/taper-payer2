@@ -21,15 +21,21 @@ export default function TaperPayerContact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    const response = await base44.functions.invoke('sendEmail', {
+      type: 'contact',
+      ...formData,
+    });
+    setIsSubmitting(false);
+    if (response.data?.success) {
       setSubmitStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });
-    }, 800);
+    } else {
+      setSubmitStatus('error');
+    }
   };
 
   return (

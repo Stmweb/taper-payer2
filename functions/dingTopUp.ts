@@ -1,10 +1,9 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
 const DING_API_KEY = Deno.env.get("DING_API_KEY");
-const DING_API_SECRET = Deno.env.get("DING_API_SECRET");
 
 const BASE_URL = "https://api.dingconnect.com/api/V1";
-const AUTH = "Basic " + btoa(DING_API_KEY + ":" + DING_API_SECRET);
+const AUTH = "Basic " + btoa(DING_API_KEY + ":");
 
 Deno.serve(async (req) => {
   try {

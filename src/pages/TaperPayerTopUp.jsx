@@ -296,7 +296,8 @@ export default function TaperPayerTopUp() {
               <TopUpForm />
             </div>
           </motion.div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Footer */}

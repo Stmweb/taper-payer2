@@ -106,52 +106,6 @@ export default function TaperPayerTopUp() {
       }}>
         <div className="absolute inset-0" style={{ backgroundColor: `rgba(0,0,0,${bgSettings.opacity / 100})` }}></div>
 
-        {/* Image Adjustment Controls */}
-        <div className="absolute top-4 right-4 z-20">
-          <button
-            onClick={() => setShowControls(!showControls)}
-            className="bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition"
-            title="Adjust background"
-          >
-            <Settings className="w-5 h-5" />
-          </button>
-          {showControls && (
-            <div className="mt-2 bg-white rounded-xl shadow-2xl p-4 w-72 text-sm text-slate-800">
-              <p className="font-bold mb-3 text-slate-900">Background Settings</p>
-
-              <label className="block mb-1 font-medium">Height: {bgSettings.height}px</label>
-              <input type="range" min={200} max={900} value={bgSettings.height}
-                onChange={e => setBgSettings(s => ({ ...s, height: Number(e.target.value) }))}
-                className="w-full mb-3" />
-
-              <label className="block mb-1 font-medium">Horizontal Position</label>
-              <select value={bgSettings.posX}
-                onChange={e => setBgSettings(s => ({ ...s, posX: e.target.value }))}
-                className="w-full border rounded px-2 py-1 mb-3">
-                {['left', 'center', 'right'].map(v => <option key={v}>{v}</option>)}
-              </select>
-
-              <label className="block mb-1 font-medium">Vertical Position</label>
-              <select value={bgSettings.posY}
-                onChange={e => setBgSettings(s => ({ ...s, posY: e.target.value }))}
-                className="w-full border rounded px-2 py-1 mb-3">
-                {['top', 'center', 'bottom'].map(v => <option key={v}>{v}</option>)}
-              </select>
-
-              <label className="block mb-1 font-medium">Size</label>
-              <select value={bgSettings.size}
-                onChange={e => setBgSettings(s => ({ ...s, size: e.target.value }))}
-                className="w-full border rounded px-2 py-1 mb-3">
-                {['cover', 'contain', '100% auto', 'auto 100%', '100% 100%'].map(v => <option key={v}>{v}</option>)}
-              </select>
-
-              <label className="block mb-1 font-medium">Overlay Darkness: {bgSettings.opacity}%</label>
-              <input type="range" min={0} max={80} value={bgSettings.opacity}
-                onChange={e => setBgSettings(s => ({ ...s, opacity: Number(e.target.value) }))}
-                className="w-full" />
-            </div>
-          )}
-        </div>
 
         <div className="container mx-auto px-4 relative z-10 py-20 md:py-32">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">

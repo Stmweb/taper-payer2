@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
 
     // Call DTOne API
     console.log('Calling DTone with payload:', JSON.stringify(payload));
-    const response = await fetch('https://api.sandbox.dtone.com/topups', {
+    const response = await fetch('https://api.dtone.io/topups', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

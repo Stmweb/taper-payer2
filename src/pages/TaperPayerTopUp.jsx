@@ -11,6 +11,7 @@ export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showTopUpForm, setShowTopUpForm] = useState(false);
   const [showTaperConnect, setShowTaperConnect] = useState(false);
+  const [showTpayReload, setShowTpayReload] = useState(false);
   const bgSettings = {
     posX: 'center',
     posY: 'center',

@@ -116,7 +116,10 @@ export default function TaperPayerTopUp() {
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
-              <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
+              <div className="flex flex-wrap gap-4">
+                <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
+                <Button onClick={() => setShowTaperConnect(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-8 py-3 text-lg font-bold border-2 border-white">Taper Connect</Button>
+              </div>
             </motion.div>
           </motion.div>
         </div>

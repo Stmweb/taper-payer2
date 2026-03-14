@@ -99,7 +99,7 @@ export default function TaperPayerTopUp() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden" style={{
-        backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/709068287_ChatGPTImageMar13202606_38_59PM.png)',
+        backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/2532aeec6_generated_image.png)',
         backgroundSize: bgSettings.size,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: `${bgSettings.posX} ${bgSettings.posY}`,

@@ -112,7 +112,7 @@ export default function TaperPayerTopUp() {
         <div className="absolute inset-0" style={{ backgroundColor: `rgba(0,0,0,${bgSettings.opacity / 100})` }}></div>
 
 
-        <div className="container mx-auto px-4 relative z-10 py-20 md:py-32">
+        <div className="container mx-auto px-4 relative z-10 py-12 md:py-20">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
               Recharge Your Phone in <span className="text-cyan-400">Seconds</span>

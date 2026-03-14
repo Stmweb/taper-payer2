@@ -25,13 +25,8 @@ async function sendMailgunEmail({ to, subject, html, text, from, replyTo }) {
 
 Deno.serve(async (req) => {
   try {
-    let body;
-    try {
-      body = await req.json();
-    } catch {
-      const text = await req.text();
-      body = JSON.parse(text || '{}');
-    }
+    const rawText = await req.text();
+    const body = rawText ? JSON.parse(rawText) : {};
     const { type, ...data } = body;
 
     // Contact form submission

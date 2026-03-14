@@ -62,31 +62,37 @@ Deno.serve(async (req) => {
     // Process Reloadly topup
     const token = await getReloadlyToken();
     const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/com.reloadly.topups-v1+json'
+     'Authorization': `Bearer ${token}`,
+     'Content-Type': 'application/json',
+     'Accept': 'application/com.reloadly.topups-v1+json'
     };
 
+    // Clean phone number - remove leading +, country code, and formatting
+    const cleanPhone = phoneNumber.replace(/^\+/, '').replace(/^[0-9]{1,3}/, '').replace(/\D/g, '');
+
+    console.log('Reloadly request:', { operatorId, amount, countryCode, cleanPhone, originalPhone: phoneNumber });
+
     const reloadlyRes = await fetch('https://topups.reloadly.com/topups', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        operatorId: operatorId || 173,
-        amount: parseFloat(amount),
-        useLocalAmount: false,
-        customIdentifier: `tpay-${paymentIntent.id}`,
-        recipientPhone: { countryCode, number: phoneNumber.replace(/^\+?1?/, '') },
-        senderPhone: { countryCode: 'US', number: '3051234567' }
-      })
+     method: 'POST',
+     headers,
+     body: JSON.stringify({
+       operatorId: parseInt(operatorId) || 173,
+       amount: parseFloat(amount),
+       useLocalAmount: false,
+       customIdentifier: `tpay-${paymentIntent.id}`,
+       recipientPhone: { countryCode, number: cleanPhone },
+       senderPhone: { countryCode: 'US', number: '3051234567' }
+     })
     });
 
     const reloadlyData = await reloadlyRes.json();
+    console.log('Reloadly response:', { status: reloadlyRes.status, data: reloadlyData });
 
     if (!reloadlyRes.ok) {
-      return Response.json(
-        { error: reloadlyData.message || 'Top-up failed' },
-        { status: reloadlyRes.status }
-      );
+     return Response.json(
+       { error: reloadlyData.message || reloadlyData.error || 'Top-up failed', details: reloadlyData },
+       { status: reloadlyRes.status }
+     );
     }
 
     return Response.json({

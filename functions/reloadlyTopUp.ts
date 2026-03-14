@@ -4,6 +4,10 @@ const CLIENT_ID = Deno.env.get("RELOADLY_CLIENT_ID");
 const CLIENT_SECRET = Deno.env.get("RELOADLY_CLIENT_SECRET");
 
 async function getAccessToken() {
+  if (!CLIENT_ID || !CLIENT_SECRET) {
+    throw new Error("Missing Reloadly credentials");
+  }
+  
   const res = await fetch("https://auth.reloadly.com/oauth/token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -15,7 +19,10 @@ async function getAccessToken() {
     })
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || "Auth failed");
+  if (!res.ok) {
+    console.error("Reloadly auth error:", data);
+    throw new Error(data.error_description || `Auth failed: ${res.status}`);
+  }
   return data.access_token;
 }
 

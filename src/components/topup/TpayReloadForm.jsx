@@ -26,7 +26,7 @@ export default function TpayReloadForm() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '600px', margin: 'auto' }}>
+      <div id="topup-widget">
         <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
       </div>
     </div>

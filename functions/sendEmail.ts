@@ -30,10 +30,13 @@ async function sendMailgunEmail(opts) {
 Deno.serve(async (req) => {
   try {
     const rawText = await req.text();
+    console.log("RAW:", rawText.substring(0, 50));
     // Extract only the JSON object portion of the body
     const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    console.log("MATCH:", jsonMatch ? jsonMatch[0].substring(0, 50) : "none");
     const body = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
     const type = body.type;
+    console.log("TYPE:", type);
 
     if (type === "contact") {
       const { name, email, phone, message } = body;

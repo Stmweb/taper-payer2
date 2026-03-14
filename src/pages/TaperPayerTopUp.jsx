@@ -90,11 +90,14 @@ export default function TaperPayerTopUp() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-screen" style={{
+      <section className="relative overflow-hidden" style={{
         backgroundImage: 'url(https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/709068287_ChatGPTImageMar13202606_38_59PM.png)',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center',
+        height: '50vw',
+        maxHeight: '600px',
+        minHeight: '320px',
       }}>
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="container mx-auto px-4 relative z-10 py-20 md:py-32">

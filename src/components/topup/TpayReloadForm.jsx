@@ -39,7 +39,7 @@ export default function TpayReloadForm() {
     }
 
     if (!stripe || !elements) {
-      setError('Payment system not ready. Please refresh the page.');
+      setError('Payment system is loading. Please wait and try again.');
       return;
     }
 

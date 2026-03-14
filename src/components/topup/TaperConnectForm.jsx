@@ -94,7 +94,7 @@ export default function TaperConnectForm() {
         </div>
         <div>
           <h3 className="text-xl font-bold text-slate-900">Taper Connect</h3>
-          <p className="text-sm text-slate-500">Powered by Ding</p>
+          
         </div>
       </div>
 

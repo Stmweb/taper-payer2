@@ -119,10 +119,10 @@ export default function TaperPayerTopUp() {
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
-              <div className="flex flex-wrap gap-4">
-                <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 text-lg">Top Up Now</Button>
-                <Button onClick={() => setShowTaperConnect(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-8 py-3 text-lg font-bold border-2 border-white">Taper Connect</Button>
-                <Button onClick={() => setShowTpayReload(true)} className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 text-lg font-bold">Tpay Reload</Button>
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
+                <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg flex-1 sm:flex-none">Top Up Now</Button>
+                <Button onClick={() => setShowTaperConnect(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-bold border-2 border-white flex-1 sm:flex-none">Taper Connect</Button>
+                <Button onClick={() => setShowTpayReload(true)} className="bg-teal-500 hover:bg-teal-600 text-white px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-bold flex-1 sm:flex-none">Tpay Reload</Button>
               </div>
             </motion.div>
           </motion.div>

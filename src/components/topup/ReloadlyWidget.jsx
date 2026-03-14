@@ -21,7 +21,7 @@ export default function ReloadlyWidget() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full">
       <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
     </div>
   );

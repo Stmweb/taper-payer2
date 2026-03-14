@@ -294,7 +294,7 @@ export default function TaperPayerTopUp() {
       )}
 
       {/* Tpay Reload Sheet */}
-      {showTpayReload && createPortal(
+      {showTpayReload && stripePromise && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}

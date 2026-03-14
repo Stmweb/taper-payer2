@@ -28,7 +28,9 @@ export default function TpayReloadForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [paymentDetails, setPaymentDetails] = useState({ method: '' });
+  const stripe = useStripe();
+  const elements = useElements();
+  const [cardError, setCardError] = useState('');
 
   const handlePayment = async () => {
     if (!phoneNumber || !amount || !selectedCountry) {
@@ -36,27 +38,43 @@ export default function TpayReloadForm() {
       return;
     }
 
-    if (!paymentDetails.method) {
-      setError('Please select a payment method.');
+    if (!stripe || !elements) {
+      setError('Payment system not ready. Please refresh the page.');
       return;
     }
 
     setLoading(true);
     setError('');
+    setCardError('');
 
     try {
+      const cardElement = elements.getElement(CardElement);
+
+      // Create payment method
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement
+      });
+
+      if (error) {
+        setCardError(error.message);
+        setLoading(false);
+        return;
+      }
+
+      // Process payment and topup
       const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
-      const res = await base44.functions.invoke('reloadlyTopUp', {
+      const res = await base44.functions.invoke('processReloadlyPayment', {
+        paymentMethodId: paymentMethod.id,
         phoneNumber: fullPhone,
         amount: parseFloat(amount),
-        countryCode: selectedCountry.iso,
-        paymentMethod: paymentDetails.method
+        countryCode: selectedCountry.iso
       });
 
       if (res.data?.success) {
         setSuccess(true);
       } else {
-        setError(res.data?.error || res.data?.message || 'Top-up failed. Please try again.');
+        setError(res.data?.error || 'Transaction failed. Please try again.');
       }
     } catch (e) {
       setError('Payment or top-up failed. Please try again.');

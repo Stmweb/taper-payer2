@@ -49,15 +49,16 @@ export default function TpayReloadForm() {
         phoneNumber: fullPhone,
         amount: parseFloat(amount),
         countryCode: selectedCountry.iso,
+        paymentMethod: paymentDetails.method
       });
 
       if (res.data?.success) {
         setSuccess(true);
       } else {
-        setError(res.data?.message || 'Top-up failed. Please try again.');
+        setError(res.data?.error || res.data?.message || 'Top-up failed. Please try again.');
       }
     } catch (e) {
-      setError('Top-up failed. Please try again.');
+      setError('Payment or top-up failed. Please try again.');
     } finally {
       setLoading(false);
     }

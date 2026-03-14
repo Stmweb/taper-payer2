@@ -5,6 +5,13 @@ import { Card } from '@/components/ui/card';
 import { Loader2, Check, AlertCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
+const COUNTRIES = [
+  { name: 'Nigeria', code: 'NG', dial: '+234' },
+  { name: 'Ghana', code: 'GH', dial: '+233' },
+  { name: 'Kenya', code: 'KE', dial: '+254' },
+  { name: 'Senegal', code: 'SN', dial: '+221' },
+];
+
 export default function TopUpForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [amount, setAmount] = useState('');

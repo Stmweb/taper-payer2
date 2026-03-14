@@ -272,6 +272,11 @@ export default function TaperPayerContact() {
                 ✓ Message sent! We'll get back to you soon.
               </div>
             )}
+            {submitStatus === 'error' && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center">
+                ✗ Something went wrong. Please try again or email us directly.
+              </div>
+            )}
             <Button
               type="submit"
               disabled={isSubmitting}

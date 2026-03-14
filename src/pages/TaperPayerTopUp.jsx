@@ -287,14 +287,14 @@ export default function TaperPayerTopUp() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-full sm:max-w-md max-h-[100vh] sm:max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={() => setShowTpayReload(false)}
               className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
             >✕</button>
-            <div className="p-6 pt-12">
-              <h2 className="text-2xl font-bold text-slate-900 mb-6">TPAY Reload</h2>
+            <div className="p-4 sm:p-6 pt-12">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6">TPAY Reload</h2>
               <ReloadlyWidget />
             </div>
           </motion.div>

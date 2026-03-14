@@ -245,7 +245,7 @@ export default function TaperPayerTopUp() {
 
       {/* Taper Connect Sheet */}
       {showTaperConnect && (
-        <div className="fixed inset-0 z-50 flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -253,15 +253,14 @@ export default function TaperPayerTopUp() {
             onClick={() => setShowTaperConnect(false)}
           />
           <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="relative mt-auto bg-white rounded-t-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={() => setShowTaperConnect(false)}
-              className="sticky top-4 right-4 p-2 hover:bg-gray-100 rounded-full float-right"
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
             >✕</button>
             <div className="p-6 pt-12">
               <TaperConnectForm />

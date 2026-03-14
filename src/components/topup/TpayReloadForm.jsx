@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, CheckCircle, AlertCircle, Zap } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, Zap, Lock } from 'lucide-react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 const COUNTRIES = [
   { name: 'India', iso: 'IN', flag: '🇮🇳', dial: '+91' },

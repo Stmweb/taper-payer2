@@ -294,6 +294,7 @@ export default function TaperPayerTopUp() {
               className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
             >✕</button>
             <div className="p-6 pt-12">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6">TPAY Reload</h2>
               <ReloadlyWidget />
             </div>
           </motion.div>

@@ -259,7 +259,7 @@ export default function TaperPayerTopUp() {
               <p>✓ Open the TPAY Mobile section</p>
               <p>✓ Follow the quick steps to recharge your mobile</p>
             </div>
-            <Button onClick={() => setShowTpayReload(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Tpay Reload</Button>
+            <Button className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Get Started</Button>
           </motion.div>
         </div>
       </section>

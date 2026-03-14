@@ -30,8 +30,10 @@ async function sendMailgunEmail(opts) {
 Deno.serve(async (req) => {
   try {
     const rawText = await req.text();
-    console.log("Raw body:", rawText);
-    const body = rawText ? JSON.parse(rawText) : {};
+    // Strip any leading non-JSON characters (e.g. platform wrapper)
+    const jsonStart = rawText.indexOf("{");
+    const jsonText = jsonStart >= 0 ? rawText.slice(jsonStart) : "{}";
+    const body = JSON.parse(jsonText);
     const type = body.type;
 
     if (type === "contact") {

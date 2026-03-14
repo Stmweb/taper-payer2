@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Loader2, CheckCircle, AlertCircle, Zap } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Zap } from 'lucide-react';
 
 const COUNTRIES = [
   { name: 'India', iso: 'IN', flag: '🇮🇳', dial: '+91' },

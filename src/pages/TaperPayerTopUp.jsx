@@ -8,7 +8,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { base44 } from '@/api/base44Client';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
-import TpayReloadForm from '@/components/topup/TpayReloadForm';
+import ReloadlyWidget from '@/components/topup/ReloadlyWidget';
 
 let stripePromise = null;
 
@@ -26,19 +26,6 @@ export default function TaperPayerTopUp() {
   const [showTopUpForm, setShowTopUpForm] = useState(false);
   const [showTaperConnect, setShowTaperConnect] = useState(false);
   const [showTpayReload, setShowTpayReload] = useState(false);
-  const [stripePromise, setStripePromise] = useState(null);
-  const [stripeLoading, setStripeLoading] = useState(false);
-
-  useEffect(() => {
-    getStripePromise().then(setStripePromise);
-  }, []);
-
-  const handleShowTpayReload = async () => {
-    setStripeLoading(true);
-    await getStripePromise();
-    setShowTpayReload(true);
-    setStripeLoading(false);
-  };
   const bgSettings = {
     posX: 'center',
     posY: 'center',
@@ -149,7 +136,7 @@ export default function TaperPayerTopUp() {
               <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
                 <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg flex-1 sm:flex-none">Top Up Now</Button>
                 <Button onClick={() => setShowTaperConnect(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg font-bold border-2 border-white flex-1 sm:flex-none">Taper Connect</Button>
-                <Button onClick={handleShowTpayReload} disabled={stripeLoading} className="bg-teal-500 hover:bg-teal-600 text-white px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg font-bold flex-1 sm:flex-none">{stripeLoading ? 'Loading...' : 'Tpay Reload'}</Button>
+                <Button onClick={() => setShowTpayReload(true)} className="bg-teal-500 hover:bg-teal-600 text-white px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg font-bold flex-1 sm:flex-none">Tpay Reload</Button>
               </div>
             </motion.div>
           </motion.div>
@@ -269,7 +256,7 @@ export default function TaperPayerTopUp() {
               <p>✓ Open the TPAY Mobile section</p>
               <p>✓ Follow the quick steps to recharge your mobile</p>
             </div>
-            <Button onClick={handleShowTpayReload} disabled={stripeLoading} className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">{stripeLoading ? 'Loading...' : 'Tpay Reload'}</Button>
+            <Button onClick={() => setShowTpayReload(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Tpay Reload</Button>
           </motion.div>
         </div>
       </section>
@@ -302,7 +289,7 @@ export default function TaperPayerTopUp() {
       )}
 
       {/* Tpay Reload Sheet */}
-      {showTpayReload && stripePromise && createPortal(
+      {showTpayReload && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -321,9 +308,7 @@ export default function TaperPayerTopUp() {
               className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
             >✕</button>
             <div className="p-6 pt-12">
-              <Elements stripe={stripePromise}>
-                <TpayReloadForm />
-              </Elements>
+              <ReloadlyWidget />
             </div>
           </motion.div>
         </div>,

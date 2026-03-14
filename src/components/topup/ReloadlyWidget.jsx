@@ -21,25 +21,27 @@ export default function ReloadlyWidget() {
   }, []);
 
   return (
-    <style>{`
-      .topup-widget-container {
-        max-width: 420px;
-        margin: 40px auto;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        background: #ffffff;
-      }
-      @media (max-width: 768px) {
+    <>
+      <style>{`
         .topup-widget-container {
-          max-width: 95%;
-          margin: 20px auto;
-          padding: 10px;
+          max-width: 420px;
+          margin: 40px auto;
+          padding: 15px;
+          border-radius: 12px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+          background: #ffffff;
         }
-      }
-    `}</style>
-    + <div className="topup-widget-container">
-      <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
-    </div>
+        @media (max-width: 768px) {
+          .topup-widget-container {
+            max-width: 95%;
+            margin: 20px auto;
+            padding: 10px;
+          }
+        }
+      `}</style>
+      <div className="topup-widget-container">
+        <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
+      </div>
+    </>
   );
 }

@@ -235,17 +235,7 @@ export default function TaperPayerTopUp() {
         </div>
       </section>
 
-      {/* Reloadly Widget */}
-      <section className="py-20 md:py-28 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900">
-            Quick Top-Up
-          </motion.h2>
-          <div className="flex justify-center">
-            <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
-          </div>
-        </div>
-      </section>
+
 
       {/* Get Started CTA */}
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-500 via-blue-500 to-slate-900">
@@ -313,7 +303,7 @@ export default function TaperPayerTopUp() {
               ✕
             </button>
             <div className="p-6 pt-12">
-              <TopUpForm />
+              <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
             </div>
           </motion.div>
         </div>,

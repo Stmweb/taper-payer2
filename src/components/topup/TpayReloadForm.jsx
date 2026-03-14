@@ -1,43 +1,153 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState } from 'react';
+import { base44 } from '@/api/base44Client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Loader2, CheckCircle, AlertCircle, Zap } from 'lucide-react';
+
+const COUNTRIES = [
+  { name: 'United States', iso: 'US', flag: '🇺🇸', dial: '+1' },
+  { name: 'Canada', iso: 'CA', flag: '🇨🇦', dial: '+1' },
+  { name: 'Mexico', iso: 'MX', flag: '🇲🇽', dial: '+52' },
+  { name: 'United Kingdom', iso: 'GB', flag: '🇬🇧', dial: '+44' },
+  { name: 'Germany', iso: 'DE', flag: '🇩🇪', dial: '+49' },
+  { name: 'France', iso: 'FR', flag: '🇫🇷', dial: '+33' },
+  { name: 'India', iso: 'IN', flag: '🇮🇳', dial: '+91' },
+  { name: 'Australia', iso: 'AU', flag: '🇦🇺', dial: '+61' },
+];
 
 export default function TpayReloadForm() {
-  const containerRef = useRef(null);
+  const [step, setStep] = useState(1);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    // Load Reloadly widget script
-    const loadReloadlyScript = () => {
-      if (window.ReloadlyWidget) {
-        // Script already loaded, initialize
-        if (window.ReloadlyWidget.initialize) {
-          window.ReloadlyWidget.initialize();
-        }
-        return;
+  const handleSubmit = async () => {
+    if (!phoneNumber || !amount || !selectedCountry) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
+      const res = await base44.functions.invoke('reloadlyTopUp', {
+        phoneNumber: fullPhone,
+        amount: parseFloat(amount),
+        operatorId: 1,
+        countryCode: selectedCountry.iso,
+      });
+
+      if (res.data?.success || res.data?.transactionId) {
+        setSuccess(true);
+      } else {
+        setError(res.data?.message || 'Top-up failed. Please try again.');
       }
+    } catch (e) {
+      setError('Top-up failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      const script = document.createElement('script');
-      script.src = 'https://cdn.reloadly.com/widget/v2/reloadly-widget.js';
-      script.async = true;
-      script.onload = () => {
-        // Widget script loaded, initialize if method exists
-        if (window.ReloadlyWidget && window.ReloadlyWidget.initialize) {
-          window.ReloadlyWidget.initialize();
-        }
-      };
-      document.body.appendChild(script);
-    };
-
-    loadReloadlyScript();
-  }, []);
+  if (success) {
+    return (
+      <div className="text-center py-8">
+        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+        <h3 className="text-xl font-bold text-slate-900 mb-2">Top-Up Sent!</h3>
+        <p className="text-slate-600 mb-6">Airtime has been sent to {selectedCountry?.dial}{phoneNumber}.</p>
+        <Button onClick={() => { setSuccess(false); setStep(1); setPhoneNumber(''); setAmount(''); }}
+          className="bg-teal-500 hover:bg-teal-600 text-white">
+          Send Another
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <div ref={containerRef}>
+    <div>
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-gradient-to-br from-green-400 to-teal-500 w-10 h-10 rounded-lg flex items-center justify-center">
-          <span className="text-white text-lg font-bold">R</span>
+        <div className="bg-gradient-to-br from-teal-400 to-teal-500 w-10 h-10 rounded-lg flex items-center justify-center">
+          <Zap className="w-5 h-5 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-slate-900">Tpay Reload</h3>
+        <div>
+          <h3 className="text-xl font-bold text-slate-900">Tpay Reload</h3>
+        </div>
       </div>
-      <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
+
+      {error && (
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
+          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          {error}
+        </div>
+      )}
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-3">Select Country</label>
+        <div className="grid grid-cols-3 gap-2 mb-6">
+          {COUNTRIES.map((c) => (
+            <button
+              key={c.iso}
+              onClick={() => { setSelectedCountry(c); setStep(2); }}
+              disabled={loading}
+              className={`flex flex-col items-center gap-1 p-3 rounded-xl border transition-all disabled:opacity-50 ${
+                selectedCountry === c ? 'border-teal-500 bg-teal-50' : 'border-slate-200 hover:border-teal-400 hover:bg-teal-50'
+              }`}
+            >
+              <span className="text-2xl">{c.flag}</span>
+              <span className="text-xs text-slate-700 font-medium leading-tight">{c.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {selectedCountry && step === 2 && (
+          <div className="space-y-4 animate-in fade-in">
+            <button onClick={() => setStep(1)} className="text-sm text-teal-600 hover:underline flex items-center gap-1 mb-4">
+              ← {selectedCountry?.flag} {selectedCountry?.name}
+            </button>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+              <div className="flex gap-2">
+                <span className="flex items-center px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700 text-sm font-medium">
+                  {selectedCountry?.dial}
+                </span>
+                <Input
+                  type="tel"
+                  placeholder="Enter number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="flex-1"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Amount (USD)</label>
+              <Input
+                type="number"
+                placeholder="10"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                min="1"
+                step="1"
+              />
+            </div>
+
+            <Button
+              onClick={handleSubmit}
+              disabled={loading || !phoneNumber || !amount}
+              className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+            >
+              {loading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</> : 'Send Airtime'}
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

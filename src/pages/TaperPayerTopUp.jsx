@@ -39,7 +39,7 @@ export default function TaperPayerTopUp() {
   ];
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">

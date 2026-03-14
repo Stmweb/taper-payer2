@@ -62,6 +62,8 @@ export default function TaperConnectForm() {
       });
       if (res.data?.Errors?.length > 0 || res.data?.errors?.length > 0) {
         setError(res.data.Errors?.[0]?.ErrorMessage || res.data.errors?.[0]?.message || 'Top-up failed.');
+      } else if (res.data?.success === false) {
+        setError(res.data?.error || 'Top-up failed. Please try again.');
       } else {
         setSuccess(true);
       }

@@ -26,6 +26,7 @@ async function sendMailgunEmail({ to, subject, html, text, from, replyTo }) {
 Deno.serve(async (req) => {
   try {
     const rawText = await req.text();
+    console.log('Raw body received:', JSON.stringify(rawText));
     const body = rawText ? JSON.parse(rawText) : {};
     const { type, ...data } = body;
 

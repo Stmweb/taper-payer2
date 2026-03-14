@@ -5,6 +5,7 @@ import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, User
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
+import TpayReloadForm from '@/components/topup/TpayReloadForm';
 
 export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

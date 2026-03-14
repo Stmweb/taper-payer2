@@ -204,7 +204,7 @@ export default function TaperPayerTopUp() {
             className="max-w-2xl mx-auto bg-white p-12 rounded-2xl shadow-lg border-l-4 border-cyan-500 text-center"
           >
             <p className="text-xl text-slate-700 mb-6 italic">
-              "TPAY Top Up makes topping up my phone easier than ever — it's instant and reliable!"
+              "TPAY Mobile makes topping up my phone easier than ever — it's instant and reliable!"
             </p>
             <p className="text-slate-600 font-semibold">— Happy User</p>
           </motion.div>

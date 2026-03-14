@@ -14,7 +14,6 @@ export default function TaperPayerTopUp() {
     script.async = true;
     document.head.appendChild(script);
   }, []);
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showTopUpForm, setShowTopUpForm] = useState(false);
   const [showTaperConnect, setShowTaperConnect] = useState(false);

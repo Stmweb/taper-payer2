@@ -5,14 +5,17 @@ import { Input } from '@/components/ui/input';
 import { Loader2, CheckCircle, AlertCircle, Zap } from 'lucide-react';
 
 const COUNTRIES = [
-  { name: 'United States', iso: 'US', flag: '🇺🇸', dial: '+1' },
-  { name: 'Canada', iso: 'CA', flag: '🇨🇦', dial: '+1' },
-  { name: 'Mexico', iso: 'MX', flag: '🇲🇽', dial: '+52' },
-  { name: 'United Kingdom', iso: 'GB', flag: '🇬🇧', dial: '+44' },
-  { name: 'Germany', iso: 'DE', flag: '🇩🇪', dial: '+49' },
-  { name: 'France', iso: 'FR', flag: '🇫🇷', dial: '+33' },
   { name: 'India', iso: 'IN', flag: '🇮🇳', dial: '+91' },
-  { name: 'Australia', iso: 'AU', flag: '🇦🇺', dial: '+61' },
+  { name: 'Angola', iso: 'AO', flag: '🇦🇴', dial: '+244' },
+  { name: 'Philippines', iso: 'PH', flag: '🇵🇭', dial: '+63' },
+  { name: 'Brazil', iso: 'BR', flag: '🇧🇷', dial: '+55' },
+  { name: 'Chile', iso: 'CL', flag: '🇨🇱', dial: '+56' },
+  { name: 'Mexico', iso: 'MX', flag: '🇲🇽', dial: '+52' },
+  { name: 'Kenya', iso: 'KE', flag: '🇰🇪', dial: '+254' },
+  { name: 'Nigeria', iso: 'NG', flag: '🇳🇬', dial: '+234' },
+  { name: 'Ghana', iso: 'GH', flag: '🇬🇭', dial: '+233' },
+  { name: 'Haiti', iso: 'HT', flag: '🇭🇹', dial: '+509' },
+  { name: 'Dominican Republic', iso: 'DO', flag: '🇩🇴', dial: '+1' },
 ];
 
 export default function TpayReloadForm() {

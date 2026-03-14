@@ -27,7 +27,6 @@ async function sendMailgunEmail({ to, subject, html, text, from, replyTo }) {
 
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
     const text = await req.text();
     const body = JSON.parse(text);
     const { type, ...data } = body;

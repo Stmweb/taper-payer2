@@ -68,8 +68,9 @@ export default function TpayReloadForm() {
       <div className="text-center py-8">
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-slate-900 mb-2">Top-Up Sent!</h3>
-        <p className="text-slate-600 mb-6">Airtime has been sent to {selectedCountry?.dial}{phoneNumber}.</p>
-        <Button onClick={() => { setSuccess(false); setStep(1); setPhoneNumber(''); setAmount(''); }}
+        <p className="text-slate-600 mb-2">Airtime has been sent to {selectedCountry?.dial}{phoneNumber}.</p>
+        <p className="text-sm text-slate-500 mb-6">Amount: ${amount} USD</p>
+        <Button onClick={() => { setSuccess(false); setStep(1); setPhoneNumber(''); setAmount(''); setPaymentDetails({ method: '', cardLast4: '' }); }}
           className="bg-teal-500 hover:bg-teal-600 text-white">
           Send Another
         </Button>

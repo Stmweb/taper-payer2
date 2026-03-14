@@ -1,5 +1,3 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
-
 const MAILGUN_API_KEY = Deno.env.get('MAILGUN_API_KEY');
 const MAILGUN_DOMAIN = Deno.env.get('MAILGUN_DOMAIN');
 

@@ -148,12 +148,26 @@ export default function TpayReloadForm() {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
+              <select
+                value={paymentDetails.method}
+                onChange={(e) => setPaymentDetails({ ...paymentDetails, method: e.target.value })}
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              >
+                <option value="">Select payment method</option>
+                <option value="card">Credit/Debit Card</option>
+                <option value="wallet">Wallet Balance</option>
+                <option value="bank">Bank Transfer</option>
+              </select>
+            </div>
+
             <Button
-              onClick={handleSubmit}
-              disabled={loading || !phoneNumber || !amount}
+              onClick={handlePayment}
+              disabled={loading || !phoneNumber || !amount || !paymentDetails.method}
               className="w-full bg-teal-500 hover:bg-teal-600 text-white"
             >
-              {loading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</> : 'Send Airtime'}
+              {loading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</> : 'Pay & Send Airtime'}
             </Button>
           </div>
         )}

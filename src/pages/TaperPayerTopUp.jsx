@@ -1,25 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import { base44 } from '@/api/base44Client';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
 import ReloadlyWidget from '@/components/topup/ReloadlyWidget';
-
-let stripePromise = null;
-
-async function getStripePromise() {
-  if (stripePromise) return stripePromise;
-  
-  const res = await base44.functions.invoke('getStripeKey', {});
-  const { publicKey } = res.data;
-  stripePromise = loadStripe(publicKey);
-  return stripePromise;
-}
 
 export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -14,6 +14,7 @@ const COUNTRIES = [
   { name: 'Kenya', iso: 'KE', flag: '🇰🇪', dial: '+254' },
   { name: 'Nigeria', iso: 'NG', flag: '🇳🇬', dial: '+234' },
   { name: 'Ghana', iso: 'GH', flag: '🇬🇭', dial: '+233' },
+  { name: 'Senegal', iso: 'SN', flag: '🇸🇳', dial: '+221' },
   { name: 'Haiti', iso: 'HT', flag: '🇭🇹', dial: '+509' },
   { name: 'Dominican Republic', iso: 'DO', flag: '🇩🇴', dial: '+1' },
 ];

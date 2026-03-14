@@ -28,9 +28,9 @@ export default function TpayReloadForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [cardError, setCardError] = useState('');
   const stripe = useStripe();
   const elements = useElements();
-  const [cardError, setCardError] = useState('');
 
   const handlePayment = async () => {
     if (!phoneNumber || !amount || !selectedCountry) {

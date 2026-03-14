@@ -23,6 +23,8 @@ const COUNTRIES = [
 export default function TpayReloadForm() {
   const [step, setStep] = useState(1);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [operators, setOperators] = useState([]);
+  const [selectedOperator, setSelectedOperator] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,8 +34,25 @@ export default function TpayReloadForm() {
   const stripe = useStripe();
   const elements = useElements();
 
+  const loadOperators = async (country) => {
+    setSelectedCountry(country);
+    setLoading(true);
+    setError('');
+    setOperators([]);
+    setSelectedOperator(null);
+    try {
+      const res = await base44.functions.invoke('getReloadlyProducts', { countryIso: country.iso });
+      setOperators(res.data?.data || res.data?.operators || []);
+      setStep(2);
+    } catch (e) {
+      setError('Failed to load operators. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handlePayment = async () => {
-    if (!phoneNumber || !amount || !selectedCountry) {
+    if (!phoneNumber || !amount || !selectedCountry || !selectedOperator) {
       setError('Please fill in all fields.');
       return;
     }
@@ -122,7 +141,7 @@ export default function TpayReloadForm() {
           {COUNTRIES.map((c) => (
             <button
               key={c.iso}
-              onClick={() => { setSelectedCountry(c); setStep(2); }}
+              onClick={() => loadOperators(c)}
               disabled={loading}
               className={`flex flex-col items-center gap-1 p-3 rounded-xl border transition-all disabled:opacity-50 ${
                 selectedCountry === c ? 'border-teal-500 bg-teal-50' : 'border-slate-200 hover:border-teal-400 hover:bg-teal-50'
@@ -139,6 +158,29 @@ export default function TpayReloadForm() {
             <button onClick={() => setStep(1)} className="text-sm text-teal-600 hover:underline flex items-center gap-1 mb-4">
               ← {selectedCountry?.flag} {selectedCountry?.name}
             </button>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Select Operator</label>
+              {operators.length === 0 ? (
+                <p className="text-sm text-slate-500">No operators available for this country.</p>
+              ) : (
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {operators.map((op, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedOperator(op)}
+                      className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
+                        selectedOperator === op
+                          ? 'border-teal-500 bg-teal-50'
+                          : 'border-slate-200 hover:border-teal-300'
+                      }`}
+                    >
+                      <span className="text-sm font-medium text-slate-800">{op.name || op.operatorName}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
@@ -195,7 +237,7 @@ export default function TpayReloadForm() {
 
             <Button
               onClick={handlePayment}
-              disabled={loading || !phoneNumber || !amount || !stripe}
+              disabled={loading || !phoneNumber || !amount || !selectedOperator || !stripe}
               className="w-full bg-teal-500 hover:bg-teal-600 text-white"
             >
               {loading ? (

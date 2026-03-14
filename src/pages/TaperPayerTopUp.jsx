@@ -271,28 +271,26 @@ export default function TaperPayerTopUp() {
 
       {/* Top Up Sheet */}
       {showTopUpForm && (
-        <div className="fixed inset-0 z-50 flex flex-col md:flex-col-reverse">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-black/50 md:bg-black/30"
+            className="absolute inset-0 bg-black/50"
             onClick={() => setShowTopUpForm(false)}
           />
-          
           <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="relative md:absolute md:top-20 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-md bg-white rounded-t-2xl md:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
           >
             <button
               onClick={() => setShowTopUpForm(false)}
-              className="sticky top-4 right-4 p-2 hover:bg-gray-100 rounded-full float-right md:absolute md:top-4 md:right-4"
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
             >
               ✕
             </button>
-            <div className="p-6 md:p-8 pt-12 md:pt-8">
+            <div className="p-6 pt-12">
               <TopUpForm />
             </div>
           </motion.div>

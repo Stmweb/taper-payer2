@@ -11,8 +11,11 @@ async function sendMailgunEmail(opts) {
   if (text) formData.append("text", text);
   if (replyTo) formData.append("h:Reply-To", replyTo);
 
+  // Try US endpoint first, fall back to EU if needed
+  const endpoint = "https://api.mailgun.net/v3/" + MAILGUN_DOMAIN + "/messages";
+  console.log("Posting to:", endpoint);
   const response = await fetch(
-    "https://api.mailgun.net/v3/" + MAILGUN_DOMAIN + "/messages",
+    endpoint,
     {
       method: "POST",
       headers: {

@@ -3,9 +3,13 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
 import TpayReloadForm from '@/components/topup/TpayReloadForm';
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

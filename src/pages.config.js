@@ -86,7 +86,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "AccountSettings",
+    mainPage: "TaperPayerHome",
     Pages: PAGES,
     Layout: __Layout,
 };

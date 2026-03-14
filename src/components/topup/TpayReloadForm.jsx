@@ -27,10 +27,16 @@ export default function TpayReloadForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [paymentDetails, setPaymentDetails] = useState({ method: '', cardLast4: '' });
 
-  const handleSubmit = async () => {
+  const handlePayment = async () => {
     if (!phoneNumber || !amount || !selectedCountry) {
       setError('Please fill in all fields.');
+      return;
+    }
+
+    if (!paymentDetails.method) {
+      setError('Please select a payment method.');
       return;
     }
 
@@ -42,11 +48,10 @@ export default function TpayReloadForm() {
       const res = await base44.functions.invoke('reloadlyTopUp', {
         phoneNumber: fullPhone,
         amount: parseFloat(amount),
-        operatorId: 1,
         countryCode: selectedCountry.iso,
       });
 
-      if (res.data?.success || res.data?.transactionId) {
+      if (res.data?.success) {
         setSuccess(true);
       } else {
         setError(res.data?.message || 'Top-up failed. Please try again.');

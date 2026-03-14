@@ -90,7 +90,7 @@ export default function TaperPayerHome() {
       {/* Header */}
       <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="relative flex items-center justify-between h-20 md:h-24">
+          <div className="relative flex items-center justify-between h-14 md:h-16">
             {/* Mobile Menu Button - Left */}
             <button
               className="md:hidden text-slate-700 p-2 z-10"

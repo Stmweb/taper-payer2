@@ -20,6 +20,15 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export default function AccountSettings() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If user navigated directly to root/AccountSettings (default page), redirect to Home
+    if (window.location.pathname === '/' || window.location.pathname === '/AccountSettings') {
+      navigate('/TaperPayerHome', { replace: true });
+    }
+  }, []);
+
   const [darkMode, setDarkMode] = useState(
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   );

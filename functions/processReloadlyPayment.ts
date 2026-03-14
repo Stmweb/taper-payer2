@@ -88,7 +88,7 @@ Deno.serve(async (req) => {
     const reloadlyData = await reloadlyRes.json();
     console.log('Reloadly response:', { status: reloadlyRes.status, data: reloadlyData });
 
-    if (!reloadlyRes.ok) {
+    if (!reloadlyRes.ok || reloadlyData.status !== 'SUCCESSFUL') {
      return Response.json(
        { error: reloadlyData.message || reloadlyData.error || 'Top-up failed', details: reloadlyData },
        { status: reloadlyRes.status }

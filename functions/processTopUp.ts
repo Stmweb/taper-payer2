@@ -66,10 +66,10 @@ Deno.serve(async (req) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
         'X-Dtone-Signature': signatureHex,
         'X-Dtone-Timestamp': timestamp,
         'X-Dtone-Nonce': nonce,
+        'X-Dtone-Api-Key': apiKey,
       },
       body: JSON.stringify(payload),
     });

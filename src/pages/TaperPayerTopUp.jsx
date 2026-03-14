@@ -5,7 +5,6 @@ import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, User
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
-import ReloadlyWidget from '@/components/topup/ReloadlyWidget';
 
 export default function TaperPayerTopUp() {
   useEffect(() => {

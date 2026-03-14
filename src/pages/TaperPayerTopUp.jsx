@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Settings } from 'lucide-react';
+import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 

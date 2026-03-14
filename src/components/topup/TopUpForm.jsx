@@ -106,17 +106,16 @@ export default function TopUpForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Country Code</label>
+          <label className="block text-sm font-medium text-slate-700 mb-2">Country</label>
           <select
             value={countryCode}
             onChange={(e) => setCountryCode(e.target.value)}
             disabled={loading}
             className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
           >
-            <option value="NG">Nigeria (NG)</option>
-            <option value="GH">Ghana (GH)</option>
-            <option value="KE">Kenya (KE)</option>
-            <option value="SN">Senegal (SN)</option>
+            {COUNTRIES.map(c => (
+              <option key={c.code} value={c.code}>{c.name} ({c.dial})</option>
+            ))}
           </select>
         </div>
 

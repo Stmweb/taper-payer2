@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Loader2 } from 'lucide-react';
+import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 
 export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showTopUpForm, setShowTopUpForm] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const [bgSettings, setBgSettings] = useState({
+    posX: 'center',
+    posY: 'center',
+    size: 'cover',
+    height: 480,
+    opacity: 40,
+  });
 
   const steps = [
     { icon: Smartphone, title: 'Select Your Mobile Number', desc: 'Enter your phone number or select from your contacts.' },

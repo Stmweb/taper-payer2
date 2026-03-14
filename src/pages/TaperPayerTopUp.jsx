@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users } from 'lucide-react';
@@ -6,6 +6,14 @@ import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
 import ReloadlyWidget from '@/components/topup/ReloadlyWidget';
+
+export default function TaperPayerTopUp() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.reloadly.com/widget/v2/reloadly-widget.js';
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
 
 export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

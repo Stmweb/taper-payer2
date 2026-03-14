@@ -303,7 +303,7 @@ export default function TaperPayerTopUp() {
               ✕
             </button>
             <div className="p-6 pt-12">
-              <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
+              <TopUpForm />
             </div>
           </motion.div>
         </div>,

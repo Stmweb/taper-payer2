@@ -19,8 +19,8 @@ Deno.serve(async (req) => {
     // Authenticate with Reloadly
     const authRes = await fetch('https://auth.reloadly.com/oauth/token', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
         client_id: clientId,
         client_secret: clientSecret,
         grant_type: 'client_credentials',
@@ -30,7 +30,8 @@ Deno.serve(async (req) => {
 
     const authData = await authRes.json();
     if (!authData.access_token) {
-      return Response.json({ error: 'Failed to authenticate with Reloadly' }, { status: 401 });
+      console.error('Auth error:', authData);
+      return Response.json({ error: 'Failed to authenticate with Reloadly', details: authData }, { status: 401 });
     }
 
     // Fetch operators for the country

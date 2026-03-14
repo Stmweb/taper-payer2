@@ -261,7 +261,7 @@ export default function TaperPayerTopUp() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h4 className="font-bold text-white mb-4">TPAY TopUp</h4>
+              <h4 className="font-bold text-white mb-4">TPAY Mobile</h4>
               <p className="text-sm">Fast, secure mobile recharges powered by TaperPayer.</p>
             </div>
             <div>

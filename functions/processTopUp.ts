@@ -98,7 +98,6 @@ Deno.serve(async (req) => {
         operator: operatorId,
         status: topupResult.status,
         timestamp: new Date().toISOString(),
-        userId: user.id,
       },
       dtoneResponse: topupResult,
     });

@@ -5,6 +5,7 @@ import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, User
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
+import TpayReloadForm from '@/components/topup/TpayReloadForm';
 
 export default function TaperPayerTopUp() {
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function TaperPayerTopUp() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showTopUpForm, setShowTopUpForm] = useState(false);
   const [showTaperConnect, setShowTaperConnect] = useState(false);
+  const [showReloadForm, setShowReloadForm] = useState(false);
   const bgSettings = {
     posX: 'center',
     posY: 'center',
@@ -125,7 +127,7 @@ export default function TaperPayerTopUp() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
               <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
                 <Button onClick={() => setShowTopUpForm(true)} className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg flex-1 sm:flex-none">Top Up Now</Button>
-                <Button onClick={() => setShowTaperConnect(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg font-bold border-2 border-white flex-1 sm:flex-none">Taper Connect</Button>
+                <Button onClick={() => setShowReloadForm(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg font-bold border-2 border-white flex-1 sm:flex-none">Taper Reload</Button>
               </div>
             </motion.div>
           </motion.div>
@@ -237,18 +239,6 @@ export default function TaperPayerTopUp() {
 
 
 
-      {/* Reloadly Widget */}
-      <section className="py-20 md:py-28 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900">
-            Quick Top-Up
-          </motion.h2>
-          <div className="flex justify-center">
-            <reloadly-widget data-widget-id="iyKRR8o7DZYoQkMJgzBXRtqpKET7Ga4BNCMslPm6U"></reloadly-widget>
-          </div>
-        </div>
-      </section>
-
       {/* Get Started CTA */}
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-500 via-blue-500 to-slate-900">
         <div className="container mx-auto px-4 text-center">
@@ -292,6 +282,35 @@ export default function TaperPayerTopUp() {
       )}
 
 
+
+      {/* Reload Form Sheet */}
+      {showReloadForm && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setShowReloadForm(false)}
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+          >
+            <button
+              onClick={() => setShowReloadForm(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
+            >
+              ✕
+            </button>
+            <div className="p-6 pt-12">
+              <TpayReloadForm />
+            </div>
+          </motion.div>
+        </div>,
+        document.body
+      )}
 
       {/* Top Up Sheet */}
       {showTopUpForm && createPortal(

@@ -16,18 +16,21 @@ Deno.serve(async (req) => {
       return Response.json({ error: "API credentials not configured" }, { status: 500 });
     }
 
-    // Create DTONE request
-    const auth = btoa(`${DTONE_API_KEY}:${DTONE_API_SECRET}`);
-    const res = await fetch("https://api.dtone.com/coupons/topups", {
+    const authString = `${DTONE_API_KEY}:${DTONE_API_SECRET}`;
+    const encoded = new TextEncoder().encode(authString);
+    const auth = btoa(String.fromCharCode(...encoded));
+    
+    const res = await fetch("https://api.dtone.com/topups", {
       method: "POST",
       headers: {
         "Authorization": `Basic ${auth}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Accept": "application/json"
       },
       body: JSON.stringify({
-        destination: { phone: phoneNumber },
-        product: { amount, currency: "USD" },
-        beneficiary: { countryCode }
+        phone: phoneNumber,
+        amount: parseFloat(amount),
+        countryCode: countryCode
       })
     });
 
@@ -42,11 +45,11 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      transactionId: data.transactionId || `tpay-${Date.now()}`,
-      message: `Top-up processed successfully`,
+      transactionId: data.id || `tpay-${Date.now()}`,
       data
     });
   } catch (error) {
+    console.error("Error:", error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

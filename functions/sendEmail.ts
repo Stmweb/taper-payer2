@@ -22,8 +22,11 @@ async function sendMailgunEmail(opts) {
     }
   );
 
-  const result = await response.json();
-  if (!response.ok) throw new Error(result.message || "Mailgun error");
+  const responseText = await response.text();
+  console.log("Mailgun status:", response.status, "body:", responseText.substring(0, 200));
+  let result = {};
+  try { result = JSON.parse(responseText); } catch {}
+  if (!response.ok) throw new Error(result.message || responseText || "Mailgun error");
   return result;
 }
 

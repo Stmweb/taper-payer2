@@ -276,7 +276,7 @@ export default function TaperPayerTopUp() {
 
       {/* Tpay Reload Sheet */}
       {showTpayReload && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -284,10 +284,10 @@ export default function TaperPayerTopUp() {
             onClick={() => setShowTpayReload(false)}
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-full sm:max-w-md max-h-[100vh] sm:max-h-[90vh] overflow-y-auto"
+            className="relative bg-white w-full sm:rounded-2xl shadow-2xl sm:max-w-md max-h-[95vh] sm:max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl"
           >
             <button
               onClick={() => setShowTpayReload(false)}

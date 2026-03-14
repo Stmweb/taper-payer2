@@ -5,7 +5,7 @@ import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, User
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectForm from '@/components/topup/TaperConnectForm';
-import TpayReloadForm from '@/components/topup/TpayReloadForm';
+import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 
 export default function TaperPayerTopUp() {
   useEffect(() => {
@@ -305,7 +305,7 @@ export default function TaperPayerTopUp() {
               ✕
             </button>
             <div className="p-6 pt-12">
-              <TpayReloadForm />
+              <TpayReloadFormWrapper />
             </div>
           </motion.div>
         </div>,

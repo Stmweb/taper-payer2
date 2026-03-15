@@ -170,10 +170,6 @@ export default function SimpleTopUpForm() {
             <h3 className="text-lg font-bold text-slate-900">Choose Payment</h3>
           </div>
 
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg mb-3">
-            <p className="text-sm text-amber-800">MonCash payment is temporarily unavailable.</p>
-          </div>
-
           <div className="space-y-2">
             <button
               onClick={() => setPaymentMethod('card')}

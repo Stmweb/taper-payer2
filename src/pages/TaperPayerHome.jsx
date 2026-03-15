@@ -200,7 +200,7 @@ export default function TaperPayerHome() {
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
               >
-                Send Money To Your <span style={{ color: '#00D9FF' }}>Loved Ones</span>
+                Send Money To Your <span style={{ color: '#3D7BB7' }}>Loved Ones</span>
               </motion.h1>
               <div className="flex flex-wrap gap-4">
                 <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">

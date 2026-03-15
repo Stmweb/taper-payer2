@@ -153,16 +153,16 @@ export default function TaperPayerRates() {
             </Link>
             
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>How It Works</Link>
-              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-900 dark:text-white text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>Exchange Rates</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors" style={{ userSelect: 'none' }}>Contact</Link>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-900 dark:text-white text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>Exchange Rates</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>Contact</Link>
               <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="text-slate-700 dark:text-gray-300 dark:border-gray-600 border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800" style={{ userSelect: 'none' }}>Login</Button>
               </a>
               <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                <Button size="sm" style={{ backgroundColor: '#2479C2', userSelect: 'none' }} className="hover:opacity-90">Sign up</Button>
+                <Button size="sm" style={{ backgroundColor: '#3D7BB7', userSelect: 'none' }} className="hover:opacity-90">Sign up</Button>
               </a>
             </div>
 
@@ -202,7 +202,7 @@ export default function TaperPayerRates() {
             Live Exchange Rates
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
-            Real-Time <span style={{ color: '#2479C2' }}>Currency</span> Exchange Rates
+            Real-Time <span style={{ color: '#3D7BB7' }}>Currency</span> Exchange Rates
           </h1>
           <p className="text-xl text-slate-600 dark:text-gray-400 leading-relaxed mb-6">
             Stay informed with our live exchange rates. We update our rates constantly to ensure you get the best value for your money.
@@ -349,7 +349,7 @@ export default function TaperPayerRates() {
               <h4 className="font-bold mb-4 text-xl">Contact</h4>
               <ul className="space-y-3 text-slate-300">
                 <li className="flex items-start gap-2">
-                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#2479C2' }} />
+                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#3D7BB7' }} />
                   <span>254 Chapman Rd, Ste 208 #26415<br />Newark, Delaware 19702</span>
                 </li>
                 <li className="flex items-center gap-2">

@@ -203,9 +203,11 @@ export default function TaperPayerHome() {
                 <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">
                   Download App
                 </Button>
-                <Button variant="outline" className="text-lg px-8 py-6">
-                  Learn More
-                </Button>
+                <a href="/TaperPayerTopUp">
+                  <Button className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0">
+                    Tpay Mobile
+                  </Button>
+                </a>
               </div>
             </motion.div>
 

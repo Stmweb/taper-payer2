@@ -9,6 +9,8 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
   const [error, setError] = useState('');
   const [moncashToken, setMoncashToken] = useState('');
   const [success, setSuccess] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState(130); // Default fallback
+  const [loadingRate, setLoadingRate] = useState(true);
 
   // Initialize Moncash when component mounts
   useEffect(() => {

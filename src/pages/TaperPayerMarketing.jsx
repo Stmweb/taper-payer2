@@ -376,6 +376,9 @@ export default function TaperPayerMarketing() {
         {/* AI Flyer Generator */}
         {activeTab === 'flyer' && <FlyerGenerator />}
 
+        {/* AI Video Creator */}
+        {activeTab === 'video' && <AIVideoGenerator />}
+
         {/* Social Media Sizes */}
         {activeTab === 'social' && (
           <div className="space-y-10">

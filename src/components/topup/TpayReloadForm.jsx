@@ -284,15 +284,7 @@ export default function TpayReloadForm() {
               </div>
             )}
 
-            {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (
-              <MoncashPaymentForm
-                phoneNumber={`${selectedCountry?.dial}${phoneNumber}`}
-                amount={amount}
-                operatorId={selectedOperator?.operatorId || selectedOperator?.id}
-                countryCode={selectedCountry?.iso}
-                onSuccess={() => setSuccess(true)}
-              />
-            )}
+
 
 
 

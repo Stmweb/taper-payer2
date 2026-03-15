@@ -10,6 +10,25 @@ export default function RSAPaymentForm({ phoneNumber, amount, operatorId, countr
   const [exchangeRate, setExchangeRate] = useState(130);
   const [loadingRate, setLoadingRate] = useState(true);
 
+  // Fetch exchange rate
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      try {
+        setLoadingRate(true);
+        const res = await base44.functions.invoke('getExchangeRate', { from: 'USD', to: 'HTG' });
+        if (res.data?.rate && res.data.rate > 0) {
+          setExchangeRate(res.data.rate);
+        }
+      } catch (e) {
+        // Silently fall back to default rate
+      } finally {
+        setLoadingRate(false);
+      }
+    };
+
+    fetchExchangeRate();
+  }, []);
+
   useEffect(() => {
     // Initialize RSA SDK
     const script = document.createElement('script');

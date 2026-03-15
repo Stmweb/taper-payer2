@@ -191,29 +191,6 @@ export default function TpayReloadForm() {
             </button>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Select Operator</label>
-              {operators.length === 0 ? (
-                <p className="text-sm text-slate-500">No operators available for this country.</p>
-              ) : (
-                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                  {operators.map((op, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedOperator(op)}
-                      className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
-                        selectedOperator === op
-                          ? 'border-teal-500 bg-teal-50'
-                          : 'border-slate-200 hover:border-teal-300'
-                      }`}
-                    >
-                      <span className="text-sm font-medium text-slate-800">{op.name || op.operatorName}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
               <div className="flex gap-2">
                 <span className="flex items-center px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700 text-sm font-medium">
@@ -223,10 +200,45 @@ export default function TpayReloadForm() {
                   type="tel"
                   placeholder="Enter number"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
                   className="flex-1"
                 />
               </div>
+              {detectingOperator && (
+                <p className="text-xs text-teal-600 mt-1 flex items-center gap-1">
+                  <Loader2 className="w-3 h-3 animate-spin" /> Detecting operator...
+                </p>
+              )}
+              {!detectingOperator && selectedOperator && (
+                <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3" /> Detected: <strong>{selectedOperator.name || selectedOperator.operatorName}</strong>
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Operator {selectedOperator ? <span className="text-teal-600 font-normal">(auto-detected — change if needed)</span> : ''}
+              </label>
+              {operators.length === 0 ? (
+                <p className="text-sm text-slate-500">No operators available for this country.</p>
+              ) : (
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {operators.map((op, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedOperator(op)}
+                      className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
+                        selectedOperator?.operatorId === op.operatorId || selectedOperator?.id === op.id
+                          ? 'border-teal-500 bg-teal-50'
+                          : 'border-slate-200 hover:border-teal-300'
+                      }`}
+                    >
+                      <span className="text-sm font-medium text-slate-800">{op.name || op.operatorName}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div>

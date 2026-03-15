@@ -176,8 +176,31 @@ export default function AIVideoGenerator() {
   const [generatedScript, setGeneratedScript] = useState(null);
   const [videoFrames, setVideoFrames] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [error, setError] = useState(null);
   const [step, setStep] = useState('setup'); // setup | preview
+  const speechRef = useRef(null);
+
+  const handleSpeak = (text) => {
+    if (!window.speechSynthesis) return;
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    utterance.lang = 'en-US';
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    speechRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
+  };
+
+  // Stop speech on unmount
+  useEffect(() => () => window.speechSynthesis?.cancel(), []);
 
   const handleGenerate = async () => {
     if (!selectedTopic) return;

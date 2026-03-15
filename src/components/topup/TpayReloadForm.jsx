@@ -34,7 +34,7 @@ export default function TpayReloadForm() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [cardError, setCardError] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'moncash'
+  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card', 'moncash', or 'rsa'
   const detectTimeout = useRef(null);
   const stripe = useStripe();
   const elements = useElements();

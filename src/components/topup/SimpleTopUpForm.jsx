@@ -162,16 +162,30 @@ export default function SimpleTopUpForm() {
         </div>
       )}
 
-      {/* Step 3: Payment Method - Hidden for now */}
+      {/* Step 3: Payment Method */}
       {step === 3 && (
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-4">
             <Button variant="ghost" size="sm" onClick={() => setStep(2)}>← Back</Button>
-            <h3 className="text-lg font-bold text-slate-900">Processing Payment</h3>
+            <h3 className="text-lg font-bold text-slate-900">Choose Payment</h3>
           </div>
 
-          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center">
-            <p className="text-slate-700">Payment methods are temporarily unavailable. Please try again soon.</p>
+          <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg mb-3">
+            <p className="text-sm text-amber-800">MonCash payment is temporarily unavailable.</p>
+          </div>
+
+          <div className="space-y-2">
+            <button
+              onClick={() => setPaymentMethod('card')}
+              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                paymentMethod === 'card'
+                  ? 'border-teal-500 bg-teal-50'
+                  : 'border-slate-200 hover:border-teal-300'
+              }`}
+            >
+              <p className="font-bold text-slate-900">💳 Card</p>
+              <p className="text-sm text-slate-600">Secure card payment</p>
+            </button>
           </div>
 
           {error && (
@@ -180,6 +194,18 @@ export default function SimpleTopUpForm() {
               {error}
             </div>
           )}
+
+          <Button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+          >
+            {loading ? (
+              <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
+            ) : (
+              <>Pay ${amount} for {phone}</>
+            )}
+          </Button>
         </div>
       )}
     </div>

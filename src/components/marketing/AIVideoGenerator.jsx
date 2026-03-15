@@ -33,11 +33,93 @@ function AnimatedVideoPreview({ frames, isPlaying, onTogglePlay, onReset, title 
   const intervalRef = useRef(null);
 
   const handleDownload = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!frames || frames.length === 0) return;
+
+    // Build a wide marketing banner with all frames side by side
+    const frameW = 320;
+    const frameH = 568;
+    const padding = 20;
+    const cols = frames.length;
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = frameW * cols + padding * (cols + 1);
+    exportCanvas.height = frameH + padding * 2 + 80; // extra 80 for header
+
+    const ctx = exportCanvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#0F172A';
+    ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+    // Header bar
+    const headerGrad = ctx.createLinearGradient(0, 0, exportCanvas.width, 0);
+    headerGrad.addColorStop(0, '#2479C2');
+    headerGrad.addColorStop(1, '#61AF39');
+    ctx.fillStyle = headerGrad;
+    ctx.fillRect(0, 0, exportCanvas.width, 60);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`TAPER PAYER — ${title || 'Marketing Video'}`, exportCanvas.width / 2, 38);
+
+    // Draw each frame onto the export canvas
+    frames.forEach((frame, i) => {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = frameW;
+      tempCanvas.height = frameH;
+      const tc = tempCanvas.getContext('2d');
+
+      // Copy draw logic
+      tc.fillStyle = frame.bg || '#0F172A';
+      tc.fillRect(0, 0, frameW, frameH);
+      const grad = tc.createLinearGradient(0, 0, frameW, frameH);
+      grad.addColorStop(0, frame.gradFrom || 'rgba(36,121,194,0.6)');
+      grad.addColorStop(1, frame.gradTo || 'rgba(97,175,57,0.6)');
+      tc.fillStyle = grad;
+      tc.fillRect(0, 0, frameW, frameH);
+
+      tc.font = '64px serif';
+      tc.textAlign = 'center';
+      tc.fillText(frame.emoji || '💸', frameW / 2, frameH * 0.28);
+
+      tc.fillStyle = '#FFFFFF';
+      tc.font = 'bold 22px sans-serif';
+      tc.textAlign = 'center';
+      wrapText(tc, frame.headline || '', frameW / 2, frameH * 0.48, frameW - 40, 28);
+
+      tc.fillStyle = 'rgba(255,255,255,0.8)';
+      tc.font = '14px sans-serif';
+      wrapText(tc, frame.body || '', frameW / 2, frameH * 0.68, frameW - 60, 20);
+
+      if (frame.cta) {
+        const ctaY = frameH * 0.82;
+        tc.fillStyle = frame.ctaColor || '#F88F2B';
+        roundRect(tc, frameW / 2 - 90, ctaY - 18, 180, 36, 18);
+        tc.fillStyle = '#FFFFFF';
+        tc.font = 'bold 14px sans-serif';
+        tc.textAlign = 'center';
+        tc.fillText(frame.cta, frameW / 2, ctaY + 5);
+      }
+
+      // Scene label
+      tc.fillStyle = 'rgba(255,255,255,0.6)';
+      tc.font = '12px monospace';
+      tc.textAlign = 'center';
+      tc.fillText(`Scene ${i + 1} · ${frame.time}`, frameW / 2, frameH - 10);
+
+      const x = padding + i * (frameW + padding);
+      const y = 60 + padding;
+      ctx.drawImage(tempCanvas, x, y);
+
+      // Frame border
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, frameW, frameH);
+    });
+
     const a = document.createElement('a');
-    a.href = canvas.toDataURL('image/png');
-    a.download = `${title || 'taper-payer-video'}-frame.png`;
+    a.href = exportCanvas.toDataURL('image/png');
+    a.download = `taper-payer-${title ? title.toLowerCase().replace(/\s+/g, '-') : 'video'}-storyboard.png`;
     a.click();
   };
 

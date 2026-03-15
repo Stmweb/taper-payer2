@@ -114,17 +114,17 @@ export default function TaperPayerHome() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
-              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Exchange Rates</Link>
-              <Link to={createPageUrl('TaperPayerTopUp')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">TPAY Mobile</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Exchange Rates</Link>
+              <Link to={createPageUrl('TaperPayerTopUp')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">TPAY Mobile</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Contact</Link>
               <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
               </a>
               <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                <Button size="sm" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
+                <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
               </a>
             </div>
 
@@ -240,7 +240,7 @@ export default function TaperPayerHome() {
                     <button
                       type="button"
                       onClick={() => setShowCountryDrawer(true)}
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-between focus:ring-2 focus:ring-[#2479C2] focus:outline-none"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 flex items-center justify-between focus:ring-2 focus:ring-[#3D7BB7] focus:outline-none"
                       style={{ userSelect: 'none' }}
                     >
                       <span className={sendTo ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-400'}>
@@ -301,7 +301,7 @@ export default function TaperPayerHome() {
                     </div>
                   )}
 
-                  <Button style={{ backgroundColor: '#2479C2' }} className="w-full hover:opacity-90 text-lg py-6">
+                  <Button style={{ backgroundColor: '#3D7BB7' }} className="w-full hover:opacity-90 text-lg py-6">
                     Continue <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
 
@@ -336,7 +336,7 @@ export default function TaperPayerHome() {
           >
             <Card className="p-8 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: '#e3f2fd' }}>
-                <Zap className="w-10 h-10" style={{ color: '#2479C2' }} />
+                <Zap className="w-10 h-10" style={{ color: '#3D7BB7' }} />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-slate-900">We're Fast</h3>
               <p className="text-slate-600 text-lg">From instant to next day availability.</p>
@@ -386,7 +386,7 @@ export default function TaperPayerHome() {
 
         <div className="grid md:grid-cols-3 gap-8">
           <Card className="p-8 hover:shadow-xl transition-shadow">
-            <Users className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
+            <Users className="w-12 h-12 mb-4" style={{ color: '#3D7BB7' }} />
             <h3 className="text-2xl font-bold mb-4 text-slate-900">Same Day Remittances</h3>
             <p className="text-slate-600 text-lg">
               Send money and have it delivered the same day to your loved ones. Fast, reliable, and secure transfers.
@@ -404,13 +404,13 @@ export default function TaperPayerHome() {
           <Link to={createPageUrl('TaperPayerTopUp')} className="no-underline">
             <Card className="p-8 hover:shadow-xl transition-shadow cursor-pointer h-full flex flex-col justify-between">
               <div>
-                <Smartphone className="w-12 h-12 mb-4" style={{ color: '#2479C2' }} />
+                <Smartphone className="w-12 h-12 mb-4" style={{ color: '#3D7BB7' }} />
                 <h3 className="text-2xl font-bold mb-4 text-slate-900">TPAY Mobile</h3>
                 <p className="text-slate-600 text-lg">
                   Instant mobile top-ups and airtime recharges for any carrier worldwide.
                 </p>
               </div>
-              <Button className="mt-6" style={{ backgroundColor: '#2479C2' }}>TOP-UP NOW</Button>
+              <Button className="mt-6" style={{ backgroundColor: '#3D7BB7' }}>TOP-UP NOW</Button>
             </Card>
           </Link>
         </div>
@@ -424,7 +424,7 @@ export default function TaperPayerHome() {
           <div className="max-w-6xl mx-auto">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
-                Join Our <span style={{ color: '#2479C2' }}>Membership</span> Program
+                Join Our <span style={{ color: '#3D7BB7' }}>Membership</span> Program
               </h2>
               <p className="text-xl text-slate-600 dark:text-gray-300 max-w-3xl mx-auto">
                 Become a Taper Payer member and enjoy exclusive benefits, lower fees, and priority support
@@ -435,7 +435,7 @@ export default function TaperPayerHome() {
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
                 <Card className="p-8 text-center h-full hover:shadow-xl transition-shadow">
                   <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: '#e3f2fd' }}>
-                    <DollarSign className="w-8 h-8" style={{ color: '#2479C2' }} />
+                    <DollarSign className="w-8 h-8" style={{ color: '#3D7BB7' }} />
                   </div>
                   <h3 className="text-2xl font-bold mb-4 text-slate-900">Lower Fees</h3>
                   <p className="text-slate-600">Save up to 50% on transfer fees with our membership program</p>
@@ -473,7 +473,7 @@ export default function TaperPayerHome() {
                 <p className="text-lg text-slate-600 dark:text-gray-300 mb-8">Sign up today and start enjoying member-only benefits</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 px-8 py-6 text-lg w-full sm:w-auto">
+                    <Button size="lg" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90 px-8 py-6 text-lg w-full sm:w-auto">
                       Become a Member
                     </Button>
                   </a>
@@ -488,7 +488,7 @@ export default function TaperPayerHome() {
       </section>
 
       {/* Download App Section */}
-      <section style={{ background: 'linear-gradient(to right, #2479C2, #61AF39)' }} className="py-20">
+      <section style={{ background: 'linear-gradient(to right, #3D7BB7, #61AF39)' }} className="py-20">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">
@@ -497,7 +497,7 @@ export default function TaperPayerHome() {
                 Download our app for free to send money online in minutes. Track your payments and view your transfer history from anywhere.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button className="bg-white hover:opacity-90 px-8 py-6 text-lg" style={{ color: '#2479C2' }}>App Store</Button>
+                <Button className="bg-white hover:opacity-90 px-8 py-6 text-lg" style={{ color: '#3D7BB7' }}>App Store</Button>
                 <Button className="px-8 py-6 text-lg text-white hover:opacity-90" style={{ backgroundColor: '#61AF39' }}>Google Play</Button>
               </div>
             </div>
@@ -506,7 +506,7 @@ export default function TaperPayerHome() {
               <div className="relative">
                 <div className="relative w-80 h-[600px] bg-slate-900 rounded-[3rem] p-4 shadow-2xl">
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-slate-900 rounded-b-2xl z-10"></div>
-                  <div className="w-full h-full rounded-[2.5rem] overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #2479C2, #61AF39)' }}>
+                  <div className="w-full h-full rounded-[2.5rem] overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #3D7BB7, #61AF39)' }}>
                     <div className="p-6 text-white">
                       <div className="flex items-center justify-between mb-8">
                         <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" className="h-24 w-auto" />
@@ -515,7 +515,7 @@ export default function TaperPayerHome() {
                       <div className="bg-white/20 backdrop-blur-lg rounded-3xl p-6 mb-6">
                         <p className="text-sm text-white/80 mb-2">Available Balance</p>
                         <p className="text-4xl font-bold mb-4">$1,250.00</p>
-                        <button className="bg-white px-6 py-3 rounded-full font-semibold w-full" style={{ color: '#2479C2' }}>Send Money</button>
+                        <button className="bg-white px-6 py-3 rounded-full font-semibold w-full" style={{ color: '#3D7BB7' }}>Send Money</button>
                       </div>
                       <div className="grid grid-cols-3 gap-4 mb-6">
                         <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-4 text-center"><div className="text-2xl mb-2">💸</div><p className="text-xs">Send</p></div>
@@ -559,7 +559,7 @@ export default function TaperPayerHome() {
               <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/50986bd44_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer Logo" className="w-48 h-auto mb-4 brightness-110" />
               <p className="text-slate-300 text-lg mb-4">Trusted global money transfer service with over 20 years of excellence.</p>
               <div className="flex gap-4">
-                <a href="https://www.facebook.com/profile.php?id=61583727643100" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#2479C2' }}><span className="text-white text-lg">f</span></a>
+                <a href="https://www.facebook.com/profile.php?id=61583727643100" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#3D7BB7' }}><span className="text-white text-lg">f</span></a>
                 <a href="https://x.com/Taperpayer" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#61AF39' }}><span className="text-white text-lg">𝕏</span></a>
                 <a href="#" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#F88F2B' }}><span className="text-white text-lg">in</span></a>
                 <a href="https://www.instagram.com/taperpayerofficial/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)' }}><Instagram className="w-5 h-5 text-white" /></a>
@@ -580,7 +580,7 @@ export default function TaperPayerHome() {
               <h4 className="font-bold mb-4 text-xl">Contact Us</h4>
               <ul className="space-y-3 text-slate-300">
                 <li className="flex items-start gap-2">
-                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#2479C2' }} />
+                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#3D7BB7' }} />
                   <span>254 Chapman Rd, Ste 208 #26415<br />Newark, Delaware 19702</span>
                 </li>
                 <li className="flex items-center gap-2">

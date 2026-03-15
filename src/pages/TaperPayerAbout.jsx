@@ -398,7 +398,7 @@ export default function TaperPayerAbout() {
               <h4 className="font-bold mb-4 text-xl">Contact</h4>
               <ul className="space-y-3 text-slate-300">
                 <li className="flex items-start gap-2">
-                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#2479C2' }} />
+                  <MapPin className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#3D7BB7' }} />
                   <span>254 Chapman Rd, Ste 208 #26415<br />Newark, Delaware 19702</span>
                 </li>
                 <li className="flex items-center gap-2">

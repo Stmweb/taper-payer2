@@ -89,7 +89,7 @@ Deno.serve(async (req) => {
     const topupRes = await fetch('https://api.reloadly.com/topups', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${access_token}`,
+        'Authorization': `Bearer ${reloadlyAccessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

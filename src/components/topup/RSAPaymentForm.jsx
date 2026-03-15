@@ -7,6 +7,8 @@ export default function RSAPaymentForm({ phoneNumber, amount, operatorId, countr
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [rsaToken, setRsaToken] = useState('');
+  const [exchangeRate, setExchangeRate] = useState(130);
+  const [loadingRate, setLoadingRate] = useState(true);
 
   useEffect(() => {
     // Initialize RSA SDK

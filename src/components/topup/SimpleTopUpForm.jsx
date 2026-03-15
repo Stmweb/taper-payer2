@@ -162,32 +162,16 @@ export default function SimpleTopUpForm() {
         </div>
       )}
 
-      {/* Step 3: Payment Method */}
+      {/* Step 3: Payment Method - Hidden for now */}
       {step === 3 && (
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-4">
             <Button variant="ghost" size="sm" onClick={() => setStep(2)}>← Back</Button>
-            <h3 className="text-lg font-bold text-slate-900">Choose Payment</h3>
+            <h3 className="text-lg font-bold text-slate-900">Processing Payment</h3>
           </div>
 
-          <div className="space-y-2">
-            <button
-              onClick={() => setPaymentMethod('moncash')}
-              disabled
-              className="w-full p-4 rounded-lg border-2 border-slate-100 text-left opacity-50 cursor-not-allowed"
-            >
-              <p className="font-bold text-slate-900">💳 MonCash</p>
-              <p className="text-sm text-slate-600">Temporarily unavailable</p>
-            </button>
-
-            <button
-              onClick={() => setPaymentMethod('card')}
-              disabled
-              className="w-full p-4 rounded-lg border-2 border-slate-100 text-left opacity-50 cursor-not-allowed"
-            >
-              <p className="font-bold text-slate-900">💳 Cards</p>
-              <p className="text-sm text-slate-600">Coming soon</p>
-            </button>
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center">
+            <p className="text-slate-700">Payment methods are temporarily unavailable. Please try again soon.</p>
           </div>
 
           {error && (
@@ -196,18 +180,6 @@ export default function SimpleTopUpForm() {
               {error}
             </div>
           )}
-
-          <Button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full bg-teal-500 hover:bg-teal-600 text-white"
-          >
-            {loading ? (
-              <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
-            ) : (
-              <>Pay ${amount} for {phone}</>
-            )}
-          </Button>
         </div>
       )}
     </div>

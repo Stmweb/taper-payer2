@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     }
 
     // Fetch operators for country
-    const opRes = await fetch(`https://topups.reloadly.com/operators/countries/${countryIso}?size=50&page=1&includeData=true`, {
+    const opRes = await fetch(`https://topups-sandbox.reloadly.com/operators/countries/${countryIso}?size=50&page=1&includeData=true`, {
       headers: {
         'Authorization': `Bearer ${authData.access_token}`,
         'Accept': 'application/com.reloadly.topups-v1+json'

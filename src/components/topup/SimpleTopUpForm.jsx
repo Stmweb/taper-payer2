@@ -188,7 +188,7 @@ export default function SimpleTopUpForm() {
               disabled
               className="w-full p-4 rounded-lg border-2 border-slate-100 text-left opacity-50 cursor-not-allowed"
             >
-              <p className="font-bold text-slate-900">💳 Card</p>
+              <p className="font-bold text-slate-900">💳 Cards</p>
               <p className="text-sm text-slate-600">Coming soon</p>
             </button>
           </div>

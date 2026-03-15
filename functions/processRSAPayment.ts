@@ -22,10 +22,35 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'RSA credentials not configured' }, { status: 500 });
     }
 
+    // Get live exchange rate from Reloadly
+    const reloadlyAuth = await fetch('https://api.reloadly.com/auth/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: Deno.env.get('RELOADLY_CLIENT_ID'),
+        client_secret: Deno.env.get('RELOADLY_CLIENT_SECRET'),
+        grant_type: 'client_credentials',
+        audience: 'https://api.reloadly.com',
+      }),
+    });
+
+    const authData = await reloadlyAuth.json();
+    const access_token = authData.access_token;
+
+    // Get the exchange rate for USD to HTG
+    const ratesRes = await fetch(`https://api.reloadly.com/rates?from=USD&to=HTG`, {
+      headers: {
+        'Authorization': `Bearer ${access_token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const ratesData = await ratesRes.json();
+    const exchangeRate = ratesData.rate || 130; // Fallback to 130 if API fails
+
     // Process payment via RSA API
     const transactionRef = `TPAY-${Date.now()}`;
-    // Convert USD to HTG (1 USD ≈ 130 HTG)
-    const amountInHTG = parseFloat(amount) * 130;
+    const amountInHTG = parseFloat(amount) * exchangeRate;
     const paymentData = {
       reference: transactionRef,
       amount: amountInHTG,

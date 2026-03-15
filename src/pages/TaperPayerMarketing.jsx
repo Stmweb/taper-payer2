@@ -327,6 +327,7 @@ export default function TaperPayerMarketing() {
 
   const tabs = [
     { id: 'flyer', label: 'AI Flyer Generator', icon: Wand2 },
+    { id: 'video', label: 'AI Video Creator', icon: Video },
     { id: 'social', label: 'Social Media Sizes', icon: Smartphone },
     { id: 'digital', label: 'Digital & Ads', icon: Monitor },
     { id: 'print', label: 'Print Formats', icon: FileText },

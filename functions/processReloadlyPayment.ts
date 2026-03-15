@@ -72,7 +72,7 @@ Deno.serve(async (req) => {
 
     console.log('Reloadly request:', { operatorId, amount, countryCode, cleanPhone, originalPhone: phoneNumber });
 
-    const reloadlyRes = await fetch('https://topups-sandbox.reloadly.com/topups', {
+    const reloadlyRes = await fetch('https://topups.reloadly.com/topups', {
      method: 'POST',
      headers,
      body: JSON.stringify({

@@ -206,9 +206,18 @@ export default function TaperPayerHome() {
                 <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 text-lg px-8 py-6">
                   Download App
                 </Button>
-                <Button onClick={() => setShowReloadForm(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0">
-                  Tpay Mobile
-                </Button>
+                <div className="relative inline-block">
+                  <Button onClick={() => setShowReloadForm(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0">
+                    Tpay Mobile
+                  </Button>
+                  <motion.span
+                    className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-2xl pointer-events-none select-none"
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    👆
+                  </motion.span>
+                </div>
               </div>
             </motion.div>
 

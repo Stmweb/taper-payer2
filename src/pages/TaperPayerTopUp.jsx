@@ -125,8 +125,8 @@ export default function TaperPayerTopUp() {
             </h1>
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
-                <Button onClick={() => setShowReloadForm(true)} className="bg-white text-cyan-600 hover:bg-cyan-50 px-4 sm:px-8 py-1.5 sm:py-3 text-sm sm:text-lg font-bold border-2 border-white flex-1 sm:flex-none">Tpay Reload</Button>
+              <div className="flex justify-start">
+                <Button onClick={() => setShowReloadForm(true)} className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg font-bold border-0">Tpay Reload</Button>
               </div>
             </motion.div>
           </motion.div>

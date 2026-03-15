@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, countryCode, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [moncashToken, setMoncashToken] = useState('');
   const [success, setSuccess] = useState(false);
-  const [exchangeRate, setExchangeRate] = useState(130); // Default fallback
+  const [exchangeRate, setExchangeRate] = useState(130);
   const [loadingRate, setLoadingRate] = useState(true);
 
   // Fetch exchange rate on component mount

@@ -93,8 +93,9 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
     <div className="space-y-4">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-slate-700">
-          <strong>Amount:</strong> {amount} HTG to {phoneNumber}
+          <strong>Amount:</strong> ${amount} USD = {(parseFloat(amount) * exchangeRate).toFixed(2)} HTG to {phoneNumber}
         </p>
+        {loadingRate && <p className="text-xs text-slate-500 mt-1">Fetching current exchange rate...</p>}
       </div>
 
       {error && (

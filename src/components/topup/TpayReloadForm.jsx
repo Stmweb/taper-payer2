@@ -28,9 +28,11 @@ export default function TpayReloadForm() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
+  const [detectingOperator, setDetectingOperator] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [cardError, setCardError] = useState('');
+  const detectTimeout = useRef(null);
   const stripe = useStripe();
   const elements = useElements();
 

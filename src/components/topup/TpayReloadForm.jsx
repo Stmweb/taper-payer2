@@ -255,42 +255,84 @@ export default function TpayReloadForm() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
-              <div className="p-3 border border-slate-200 rounded-lg bg-white">
-                <CardElement
-                  options={{
-                    style: {
-                      base: {
-                        fontSize: '14px',
-                        color: '#1e293b',
-                        '::placeholder': {
-                          color: '#cbd5e1'
-                        }
-                      },
-                      invalid: {
-                        color: '#dc2626'
-                      }
-                    }
-                  }}
-                />
+            {selectedCountry?.iso === 'HT' && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={() => setPaymentMethod('card')}
+                    className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
+                      paymentMethod === 'card'
+                        ? 'border-teal-500 bg-teal-50'
+                        : 'border-slate-200 hover:border-teal-300'
+                    }`}
+                  >
+                    <span className="text-sm font-medium">💳 Card</span>
+                  </button>
+                  <button
+                    onClick={() => setPaymentMethod('moncash')}
+                    className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
+                      paymentMethod === 'moncash'
+                        ? 'border-teal-500 bg-teal-50'
+                        : 'border-slate-200 hover:border-teal-300'
+                    }`}
+                  >
+                    <span className="text-sm font-medium">📱 Moncash</span>
+                  </button>
+                </div>
               </div>
-              {cardError && (
-                <p className="text-red-600 text-sm mt-2">{cardError}</p>
-              )}
-            </div>
+            )}
 
-            <Button
-              onClick={handlePayment}
-              disabled={loading || !phoneNumber || !amount || !selectedOperator || !stripe}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-white"
-            >
-              {loading ? (
-                <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
-              ) : (
-                <><Lock className="w-4 h-4 mr-2" /> Pay ${parseFloat(amount || 0).toFixed(2)} & Send Airtime</>
-              )}
-            </Button>
+            {paymentMethod === 'card' && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
+                <div className="p-3 border border-slate-200 rounded-lg bg-white">
+                  <CardElement
+                    options={{
+                      style: {
+                        base: {
+                          fontSize: '14px',
+                          color: '#1e293b',
+                          '::placeholder': {
+                            color: '#cbd5e1'
+                          }
+                        },
+                        invalid: {
+                          color: '#dc2626'
+                        }
+                      }
+                    }}
+                  />
+                </div>
+                {cardError && (
+                  <p className="text-red-600 text-sm mt-2">{cardError}</p>
+                )}
+              </div>
+            )}
+
+            {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (
+              <MoncashPaymentForm
+                phoneNumber={selectedCountry?.dial}{phoneNumber}
+                amount={amount}
+                operatorId={selectedOperator?.operatorId || selectedOperator?.id}
+                countryCode={selectedCountry?.iso}
+                onSuccess={() => setSuccess(true)}
+              />
+            )}
+
+            {paymentMethod === 'card' && (
+              <Button
+                onClick={handlePayment}
+                disabled={loading || !phoneNumber || !amount || !selectedOperator || !stripe}
+                className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+              >
+                {loading ? (
+                  <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
+                ) : (
+                  <><Lock className="w-4 h-4 mr-2" /> Pay ${parseFloat(amount || 0).toFixed(2)} & Send Airtime</>
+                )}
+              </Button>
+            )}
           </div>
         )}
       </div>

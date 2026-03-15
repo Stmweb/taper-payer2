@@ -46,6 +46,7 @@ export default function TaperPayerHome() {
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
    const [showCountryDrawer, setShowCountryDrawer] = useState(false);
    const [isDark, setIsDark] = useState(false);
+   const [showReloadForm, setShowReloadForm] = useState(false);
 
    const toggleDarkMode = () => {
      setIsDark(!isDark);

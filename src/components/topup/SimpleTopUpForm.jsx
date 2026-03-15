@@ -173,14 +173,11 @@ export default function SimpleTopUpForm() {
           <div className="space-y-2">
             <button
               onClick={() => setPaymentMethod('moncash')}
-              className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-                paymentMethod === 'moncash'
-                  ? 'border-teal-500 bg-teal-50'
-                  : 'border-slate-200 hover:border-teal-300'
-              }`}
+              disabled
+              className="w-full p-4 rounded-lg border-2 border-slate-100 text-left opacity-50 cursor-not-allowed"
             >
               <p className="font-bold text-slate-900">💳 MonCash</p>
-              <p className="text-sm text-slate-600">Fast & secure mobile wallet</p>
+              <p className="text-sm text-slate-600">Temporarily unavailable</p>
             </button>
 
             <button

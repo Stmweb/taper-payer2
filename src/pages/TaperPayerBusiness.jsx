@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { CreditCard, Smartphone, Zap, Menu, X } from 'lucide-react';
+import { CreditCard, Smartphone, Zap, Menu, X, MapPin, Globe } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 
 export default function TaperPayerBusiness() {

@@ -79,19 +79,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // If payment successful, process the top-up via Reloadly
-    const reloadlyAuth = await fetch('https://api.reloadly.com/auth/oauth/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        client_id: Deno.env.get('RELOADLY_CLIENT_ID'),
-        client_secret: Deno.env.get('RELOADLY_CLIENT_SECRET'),
-        grant_type: 'client_credentials',
-        audience: 'https://api.reloadly.com',
-      }),
-    });
-
-    const { access_token } = await reloadlyAuth.json();
+    // If payment successful, process the top-up via Reloadly (reuse token from above)
 
     const topupRes = await fetch('https://api.reloadly.com/topups', {
       method: 'POST',

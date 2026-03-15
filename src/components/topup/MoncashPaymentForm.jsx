@@ -12,6 +12,29 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
   const [exchangeRate, setExchangeRate] = useState(130); // Default fallback
   const [loadingRate, setLoadingRate] = useState(true);
 
+  // Fetch exchange rate on component mount
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      try {
+        setLoadingRate(true);
+        const res = await base44.integrations.Core.InvokeLLM({
+          prompt: 'What is the current USD to HTG exchange rate? Return only the number.',
+          add_context_from_internet: true,
+        });
+        const rate = parseFloat(res);
+        if (!isNaN(rate) && rate > 0) {
+          setExchangeRate(rate);
+        }
+      } catch (e) {
+        // Silently fall back to default rate
+      } finally {
+        setLoadingRate(false);
+      }
+    };
+
+    fetchExchangeRate();
+  }, []);
+
   // Initialize Moncash when component mounts
   useEffect(() => {
     const script = document.createElement('script');

@@ -322,15 +322,7 @@ export default function TpayReloadForm() {
               />
             )}
 
-            {paymentMethod === 'rsa' && selectedCountry?.iso === 'HT' && (
-              <RSAPaymentForm
-                phoneNumber={`${selectedCountry?.dial}${phoneNumber}`}
-                amount={amount}
-                operatorId={selectedOperator?.operatorId || selectedOperator?.id}
-                countryCode={selectedCountry?.iso}
-                onSuccess={() => setSuccess(true)}
-              />
-            )}
+
 
             {paymentMethod === 'card' && (
               <Button

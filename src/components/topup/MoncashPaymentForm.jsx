@@ -17,13 +17,9 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
     const fetchExchangeRate = async () => {
       try {
         setLoadingRate(true);
-        const res = await base44.integrations.Core.InvokeLLM({
-          prompt: 'What is the current USD to HTG exchange rate? Return only the number.',
-          add_context_from_internet: true,
-        });
-        const rate = parseFloat(res);
-        if (!isNaN(rate) && rate > 0) {
-          setExchangeRate(rate);
+        const res = await base44.functions.invoke('getExchangeRate', { from: 'USD', to: 'HTG' });
+        if (res.data?.rate && res.data.rate > 0) {
+          setExchangeRate(res.data.rate);
         }
       } catch (e) {
         // Silently fall back to default rate

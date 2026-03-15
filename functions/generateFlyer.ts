@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing prompt' }, { status: 400 });
     }
 
-    const enhancedPrompt = `You are a multilingual AI that understands prompts in any language including French. Based on the following prompt, generate a professional marketing flyer image: ${prompt}`;
+    const enhancedPrompt = `You are a multilingual AI that understands prompts in any language including French. Important context: "recharge", "recharger", "top-up", "top up", "recharger le téléphone", or any similar phrase means adding airtime credit or calling minutes to a mobile phone. Based on the following prompt, generate a professional marketing flyer image: ${prompt}`;
     const result = await base44.asServiceRole.integrations.Core.GenerateImage({ prompt: enhancedPrompt });
 
     return Response.json({ url: result.url });

@@ -53,6 +53,15 @@ export default function SimpleTopUpForm() {
 
     try {
       if (paymentMethod === 'moncash') {
+        // Store payment details in sessionStorage for callback handling
+        const paymentInfo = {
+          phone: phone.replace(/\D/g, ''),
+          amount: parseFloat(amount),
+          operatorId: detectedOperator.operatorId || detectedOperator.id,
+          timestamp: Date.now(),
+        };
+        sessionStorage.setItem('pendingTopupPayment', JSON.stringify(paymentInfo));
+
         // Initiate Moncash payment
         const res = await base44.functions.invoke('initiateMoncashPayment', {
           amount: parseFloat(amount),
@@ -69,7 +78,6 @@ export default function SimpleTopUpForm() {
           setLoading(false);
         }
       } else {
-        // Card payment (would redirect to Stripe)
         setError('Card payment coming soon');
         setLoading(false);
       }

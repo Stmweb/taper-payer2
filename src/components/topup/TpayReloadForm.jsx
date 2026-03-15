@@ -312,7 +312,7 @@ export default function TpayReloadForm() {
 
             {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (
               <MoncashPaymentForm
-                phoneNumber={selectedCountry?.dial}{phoneNumber}
+                phoneNumber={`${selectedCountry?.dial}${phoneNumber}`}
                 amount={amount}
                 operatorId={selectedOperator?.operatorId || selectedOperator?.id}
                 countryCode={selectedCountry?.iso}

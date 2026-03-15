@@ -119,7 +119,7 @@ export default function TaperPayerTopUp() {
 
 
         <div className="container mx-auto px-4 relative z-10 py-12 md:py-20">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl mt-16 md:mt-24">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
               Recharge Your Phone in <span className="text-cyan-400">Seconds</span>
             </h1>

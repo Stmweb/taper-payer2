@@ -277,7 +277,7 @@ export default function TpayReloadForm() {
                         : 'border-slate-200 hover:border-teal-300'
                     }`}
                   >
-                    <span className="text-sm font-medium">📱 Moncash</span>
+                    <span className="text-sm font-medium">📱 MonCash</span>
                   </button>
                 </div>
               </div>

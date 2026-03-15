@@ -4,6 +4,9 @@ async function getReloadlyToken(audience) {
   const clientId = Deno.env.get('RELOADLY_CLIENT_ID');
   const clientSecret = Deno.env.get('RELOADLY_CLIENT_SECRET');
 
+  console.log('Attempting auth with audience:', audience);
+  console.log('client_id length:', clientId?.length, 'client_id preview:', clientId?.slice(0,8));
+
   const authRes = await fetch('https://auth.reloadly.com/oauth/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -17,9 +20,10 @@ async function getReloadlyToken(audience) {
 
   const authData = await authRes.json();
   if (!authData.access_token) {
-    console.error('Auth error for audience', audience, ':', JSON.stringify(authData));
+    console.error('Auth failed:', JSON.stringify(authData));
     return null;
   }
+  console.log('Auth success for:', audience);
   return authData.access_token;
 }
 
@@ -27,10 +31,6 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const { countryIso } = await req.json();
-
-    if (!countryIso) {
-      return Response.json({ error: 'Country ISO code required' }, { status: 400 });
-    }
 
     const clientId = Deno.env.get('RELOADLY_CLIENT_ID');
     const clientSecret = Deno.env.get('RELOADLY_CLIENT_SECRET');
@@ -52,7 +52,6 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Could not authenticate with Reloadly. Check credentials.' }, { status: 401 });
     }
 
-    // Fetch operators for the country
     const operatorsRes = await fetch(
       `${baseUrl}/operators/countries/${countryIso}?includePin=false&includeBundles=false&size=20&page=1`,
       {
@@ -64,8 +63,7 @@ Deno.serve(async (req) => {
     );
 
     const operatorsData = await operatorsRes.json();
-    console.log('Operators response status:', operatorsRes.status);
-    console.log('Operators data sample:', JSON.stringify(operatorsData).slice(0, 500));
+    console.log('Operators status:', operatorsRes.status);
 
     return Response.json({ operators: operatorsData?.content || operatorsData?.data || operatorsData || [] });
   } catch (error) {

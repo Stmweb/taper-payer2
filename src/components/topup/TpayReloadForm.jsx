@@ -87,7 +87,8 @@ export default function TpayReloadForm() {
         paymentMethodId: paymentMethod.id,
         phoneNumber: fullPhone,
         amount: parseFloat(amount),
-        countryCode: selectedCountry.iso
+        countryCode: selectedCountry.iso,
+        operatorId: selectedOperator?.operatorId || selectedOperator?.id
       });
 
       if (res.data?.success) {

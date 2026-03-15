@@ -88,6 +88,7 @@ export default function TaperPayerAbout() {
               <Link to={createPageUrl('TaperPayerHome')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Home</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">How It Works</Link>
               <Link to={createPageUrl('TaperPayerAbout')} className="block text-white font-semibold hover:text-white transition-colors py-2">About</Link>
+              <Link to={createPageUrl('TaperPayerTopUp')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">TPAY Mobile</Link>
               <Link to={createPageUrl('TaperPayerContact')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</Link>
               <div className="pt-3 space-y-3">
                 <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">

@@ -14,7 +14,7 @@ async function getReloadlyToken() {
       client_id: RELOADLY_CLIENT_ID,
       client_secret: RELOADLY_CLIENT_SECRET,
       grant_type: 'client_credentials',
-      audience: 'https://topups-sandbox.reloadly.com'
+      audience: 'https://topups.reloadly.com'
     })
   });
   const data = await res.json();

@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
         client_id: clientId,
         client_secret: clientSecret,
         grant_type: 'client_credentials',
-        audience: 'https://topups-sandbox.reloadly.com'
+        audience: 'https://topups.reloadly.com'
       })
     });
 

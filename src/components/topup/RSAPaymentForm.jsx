@@ -107,9 +107,10 @@ export default function RSAPaymentForm({ phoneNumber, amount, operatorId, countr
 
       <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <p className="text-sm text-slate-700 mb-3">
-          <strong>Amount:</strong> ${parseFloat(amount || 0).toFixed(2)}<br />
+          <strong>Amount:</strong> ${parseFloat(amount || 0).toFixed(2)} USD = {(parseFloat(amount || 0) * exchangeRate).toFixed(2)} HTG<br />
           <strong>Phone:</strong> {phoneNumber}
         </p>
+        {loadingRate && <p className="text-xs text-slate-500">Fetching exchange rate...</p>}
         <Button
           onClick={handleRSAPayment}
           disabled={loading || !amount || !phoneNumber}

@@ -244,15 +244,22 @@ export default function TpayReloadForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Amount (USD)</label>
-              <Input
-                type="number"
-                placeholder="10"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                min="1"
-                step="1"
-              />
+              <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
+              <div className="grid grid-cols-4 gap-2">
+                {[5, 10, 20, 50].map((amt) => (
+                  <button
+                    key={amt}
+                    onClick={() => setAmount(amt.toString())}
+                    className={`p-2 rounded-lg border font-medium text-sm transition-all ${
+                      amount === amt.toString()
+                        ? 'border-teal-500 bg-teal-50 text-teal-700'
+                        : 'border-slate-200 text-slate-700 hover:border-teal-300'
+                    }`}
+                  >
+                    ${amt}
+                  </button>
+                ))}
+              </div>
             </div>
 
 

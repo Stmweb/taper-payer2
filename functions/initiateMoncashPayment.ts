@@ -72,18 +72,16 @@ Deno.serve(async (req) => {
     const gatewayBaseUrl = 'https://sandbox.moncashbutton.digicelgroup.com/Moncash-middleware';
     const redirectUrl = `${gatewayBaseUrl}/Payment/Redirect?token=${paymentData.payment_token.token}`;
 
-    // Store payment info in database for callback verification
-    await base44.asServiceRole.integrations.Core.UploadFile({
-      file: JSON.stringify({
-        orderId,
-        amount,
-        amountInHTG,
-        phoneNumber,
-        operatorId,
-        countryCode,
-        exchangeRate,
-        timestamp: new Date().toISOString(),
-      }),
+    // Log payment info for callback verification
+    console.log('Moncash payment initiated:', {
+      orderId,
+      amount,
+      amountInHTG,
+      phoneNumber,
+      operatorId,
+      countryCode,
+      exchangeRate,
+      timestamp: new Date().toISOString(),
     });
 
     return Response.json({

@@ -27,10 +27,19 @@ const DURATIONS = [
 ];
 
 // Animated video preview using canvas
-function AnimatedVideoPreview({ frames, isPlaying, onTogglePlay, onReset }) {
+function AnimatedVideoPreview({ frames, isPlaying, onTogglePlay, onReset, title }) {
   const canvasRef = useRef(null);
   const frameRef = useRef(0);
   const intervalRef = useRef(null);
+
+  const handleDownload = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = `${title || 'taper-payer-video'}-frame.png`;
+    a.click();
+  };
 
   useEffect(() => {
     if (!frames || frames.length === 0) return;

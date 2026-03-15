@@ -36,6 +36,34 @@ export default function TpayReloadForm() {
   const stripe = useStripe();
   const elements = useElements();
 
+  const handlePhoneChange = (value) => {
+    setPhoneNumber(value);
+    setSelectedOperator(null);
+
+    // Only auto-detect when we have enough digits
+    const digits = value.replace(/\D/g, '');
+    if (digits.length < 7 || !selectedCountry) return;
+
+    if (detectTimeout.current) clearTimeout(detectTimeout.current);
+    detectTimeout.current = setTimeout(async () => {
+      setDetectingOperator(true);
+      try {
+        const fullPhone = selectedCountry.dial + digits.replace(/^0/, '');
+        const res = await base44.functions.invoke('detectOperator', {
+          phoneNumber: fullPhone,
+          countryIso: selectedCountry.iso
+        });
+        if (res.data?.operator) {
+          setSelectedOperator(res.data.operator);
+        }
+      } catch (e) {
+        // Silent fail — user can still manually pick
+      } finally {
+        setDetectingOperator(false);
+      }
+    }, 800);
+  };
+
   const loadOperators = async (country) => {
     setSelectedCountry(country);
     setLoading(true);

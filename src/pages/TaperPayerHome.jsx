@@ -616,6 +616,25 @@ export default function TaperPayerHome() {
           </div>
         </div>
       </footer>
+
+      {/* Tpay Mobile Form Modal */}
+      {showReloadForm && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/50" onClick={() => setShowReloadForm(false)} />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+          >
+            <button onClick={() => setShowReloadForm(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10">✕</button>
+            <div className="p-6 pt-12">
+              <TpayReloadFormWrapper />
+            </div>
+          </motion.div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

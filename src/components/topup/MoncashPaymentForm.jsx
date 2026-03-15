@@ -56,32 +56,27 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
   }, [amount, exchangeRate]);
 
   const handleMoncashPayment = async () => {
-    if (!moncashToken) {
-      setError('Please complete Moncash payment');
-      return;
-    }
-
     setLoading(true);
     setError('');
 
     try {
-      const res = await base44.functions.invoke('processMoncashPayment', {
+      const res = await base44.functions.invoke('initiateMoncashPayment', {
         amount: parseFloat(amount),
         phoneNumber: phoneNumber,
         countryCode: countryCode,
         operatorId: operatorId,
-        moncashToken: moncashToken,
+        exchangeRate: exchangeRate,
       });
 
-      if (res.data?.success) {
-        setSuccess(true);
-        onSuccess?.();
+      if (res.data?.redirectUrl) {
+        // Redirect to Moncash payment gateway
+        window.location.href = res.data.redirectUrl;
       } else {
-        setError(res.data?.error || 'Payment failed');
+        setError(res.data?.error || 'Failed to initiate payment');
+        setLoading(false);
       }
     } catch (e) {
-      setError('Payment processing failed. Please try again.');
-    } finally {
+      setError('Payment initiation failed. Please try again.');
       setLoading(false);
     }
   };

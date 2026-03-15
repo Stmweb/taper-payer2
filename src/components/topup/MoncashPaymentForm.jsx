@@ -84,7 +84,7 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-slate-900 mb-2">Payment Successful!</h3>
         <p className="text-slate-600 mb-2">Airtime has been sent to {phoneNumber}.</p>
-        <p className="text-sm text-slate-500">Amount: {amount} HTG</p>
+        <p className="text-sm text-slate-500">Amount: ${amount} USD = {(parseFloat(amount) * exchangeRate).toFixed(2)} HTG</p>
       </div>
     );
   }

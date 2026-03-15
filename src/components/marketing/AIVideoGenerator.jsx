@@ -392,7 +392,31 @@ Generate ${Math.max(3, Math.floor(parseInt(selectedDuration) / 10))} frames that
             {/* Script & details */}
             <div className="space-y-4">
               <Card className="p-5">
-                <h4 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">🎙️ Voiceover Script</h4>
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-semibold text-slate-900 flex items-center gap-2">🎙️ Voiceover Script</h4>
+                  {window.speechSynthesis ? (
+                    <Button
+                      size="sm"
+                      variant={isSpeaking ? 'destructive' : 'outline'}
+                      onClick={() => handleSpeak(generatedScript.voiceover)}
+                      className="gap-2 flex-shrink-0"
+                    >
+                      {isSpeaking ? <><VolumeX className="w-4 h-4" /> Stop</> : <><Volume2 className="w-4 h-4" /> Play Voice</>}
+                    </Button>
+                  ) : (
+                    <span className="text-xs text-slate-400 flex items-center gap-1"><MicOff className="w-3 h-3" /> Not supported</span>
+                  )}
+                </div>
+                {isSpeaking && (
+                  <div className="flex items-center gap-2 mb-3 text-xs text-green-600 bg-green-50 rounded-lg px-3 py-2">
+                    <span className="flex gap-0.5">
+                      {[1,2,3,4].map(i => (
+                        <span key={i} className="w-1 bg-green-500 rounded-full animate-pulse" style={{ height: `${8 + i * 3}px`, animationDelay: `${i * 0.1}s` }} />
+                      ))}
+                    </span>
+                    Speaking voiceover...
+                  </div>
+                )}
                 <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-line">{generatedScript.voiceover}</p>
               </Card>
 

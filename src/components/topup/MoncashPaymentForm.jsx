@@ -34,14 +34,28 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
   // Initialize Moncash when component mounts
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'https://sandbox.moncash.ht/js/moncash-sdk.js'; // Use sandbox for testing
+    script.src = 'https://sandbox.moncash.ht/js/moncash-sdk.js';
     script.async = true;
+    script.onload = () => {
+      if (window.MonCash) {
+        window.MonCash.UI.embedded.mollie({
+          amount: (parseFloat(amount) * exchangeRate).toFixed(2),
+          currency: 'HTG',
+          orderId: `TPAY-${Date.now()}`,
+          successUrl: `${window.location.origin}/success`,
+          failureUrl: `${window.location.origin}/failure`,
+          onToken: (token) => setMoncashToken(token),
+        });
+      }
+    };
     document.head.appendChild(script);
 
     return () => {
-      document.head.removeChild(script);
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
     };
-  }, []);
+  }, [amount, exchangeRate]);
 
   const handleMoncashPayment = async () => {
     if (!moncashToken) {

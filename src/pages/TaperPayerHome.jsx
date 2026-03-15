@@ -203,7 +203,7 @@ export default function TaperPayerHome() {
                 Send Money To Your <span style={{ color: '#5FAE2E' }}>Loved Ones</span>
               </motion.h1>
               <div className="flex flex-wrap gap-4">
-                <Button style={{ backgroundColor: '#61AF39' }} className="hover:opacity-90 text-lg px-8 py-6">
+                <Button style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90 text-lg px-8 py-6">
                   Download App
                 </Button>
                 <Button onClick={() => setShowReloadForm(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0">

@@ -84,20 +84,15 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
         </div>
       )}
 
-      {/* Moncash iframe will be injected here */}
-      <div id="moncash-container" className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-        <p className="text-sm text-slate-500 text-center py-8">Loading Moncash payment...</p>
-      </div>
-
       <Button
         onClick={handleMoncashPayment}
-        disabled={loading || !moncashToken}
+        disabled={loading}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white"
       >
         {loading ? (
-          <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
+          <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Redirecting to MonCash...</>
         ) : (
-          'Complete Payment'
+          '💳 Pay with MonCash'
         )}
       </Button>
     </div>

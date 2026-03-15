@@ -280,16 +280,7 @@ export default function TpayReloadForm() {
                   >
                     <span className="text-sm font-medium">📱 MonCash</span>
                   </button>
-                  <button
-                    onClick={() => setPaymentMethod('rsa')}
-                    className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
-                      paymentMethod === 'rsa'
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-slate-200 hover:border-teal-300'
-                    }`}
-                  >
-                    <span className="text-sm font-medium">💳 RSA</span>
-                  </button>
+
                 </div>
               </div>
             )}

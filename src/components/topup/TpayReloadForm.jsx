@@ -125,7 +125,7 @@ export default function TpayReloadForm() {
           <Zap className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-slate-900">Tpay Reload</h3>
+          <h3 className="text-xl font-bold text-slate-900">Tpay Mobile</h3>
         </div>
       </div>
 

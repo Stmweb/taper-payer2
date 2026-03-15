@@ -260,6 +260,8 @@ Generate ${Math.max(3, Math.floor(parseInt(selectedDuration) / 10))} frames that
   };
 
   const handleReset = () => {
+    window.speechSynthesis?.cancel();
+    setIsSpeaking(false);
     setIsPlaying(false);
     setStep('setup');
     setGeneratedScript(null);

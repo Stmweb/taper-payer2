@@ -255,34 +255,7 @@ export default function TpayReloadForm() {
               />
             </div>
 
-            {selectedCountry?.iso === 'HT' && (
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
-                <div className="flex gap-2 mb-4">
-                  <button
-                    onClick={() => setPaymentMethod('card')}
-                    className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
-                      paymentMethod === 'card'
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-slate-200 hover:border-teal-300'
-                    }`}
-                  >
-                    <span className="text-sm font-medium">💳 Card</span>
-                  </button>
-                  <button
-                    onClick={() => setPaymentMethod('moncash')}
-                    className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
-                      paymentMethod === 'moncash'
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-slate-200 hover:border-teal-300'
-                    }`}
-                  >
-                    <span className="text-sm font-medium">📱 MonCash</span>
-                  </button>
 
-                </div>
-              </div>
-            )}
 
             {paymentMethod === 'card' && (
               <div>

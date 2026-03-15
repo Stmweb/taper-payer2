@@ -35,12 +35,12 @@ Deno.serve(async (req) => {
     });
 
     const authData = await reloadlyAuth.json();
-    const access_token = authData.access_token;
+    let reloadlyAccessToken = authData.access_token;
 
     // Get the exchange rate for USD to HTG
     const ratesRes = await fetch(`https://api.reloadly.com/rates?from=USD&to=HTG`, {
       headers: {
-        'Authorization': `Bearer ${access_token}`,
+        'Authorization': `Bearer ${reloadlyAccessToken}`,
         'Content-Type': 'application/json',
       },
     });

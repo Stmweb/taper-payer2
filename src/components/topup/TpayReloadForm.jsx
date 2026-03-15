@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Loader2, CheckCircle, AlertCircle, Zap, Lock, Search } from 'lucide-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import MoncashPaymentForm from './MoncashPaymentForm';
+import RSAPaymentForm from './RSAPaymentForm';
 
 const COUNTRIES = [
   { name: 'India', iso: 'IN', flag: '🇮🇳', dial: '+91' },

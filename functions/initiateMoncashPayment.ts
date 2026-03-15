@@ -27,6 +27,7 @@ Deno.serve(async (req) => {
     const credentials = `${moncashClientId}:${moncashClientSecret}`;
     const encodedCredentials = btoa(credentials);
     
+    console.log('Authenticating with Moncash...');
     const authRes = await fetch(authUrl, {
       method: 'POST',
       headers: {
@@ -37,11 +38,13 @@ Deno.serve(async (req) => {
       body: 'scope=read,write&grant_type=client_credentials',
     });
 
+    console.log('Auth response status:', authRes.status);
     const authData = await authRes.json();
+    console.log('Auth response data:', authData);
     const accessToken = authData.access_token;
 
     if (!accessToken) {
-      return Response.json({ error: 'Failed to authenticate with Moncash' }, { status: 500 });
+      return Response.json({ error: 'Failed to authenticate with Moncash', details: authData }, { status: 500 });
     }
 
     // Step 2: Create payment

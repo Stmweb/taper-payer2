@@ -206,35 +206,12 @@ Return a JSON object with:
 Generate ${Math.max(3, Math.floor(parseInt(selectedDuration) / 10))} frames that tell a visual story. Vary the emoji and colors per frame.`;
 
     try {
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        response_json_schema: {
-          type: 'object',
-          properties: {
-            title: { type: 'string' },
-            duration: { type: 'string' },
-            voiceover: { type: 'string' },
-            frames: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  time: { type: 'string' },
-                  emoji: { type: 'string' },
-                  headline: { type: 'string' },
-                  body: { type: 'string' },
-                  cta: { type: 'string' },
-                  ctaColor: { type: 'string' },
-                  bg: { type: 'string' },
-                  gradFrom: { type: 'string' },
-                  gradTo: { type: 'string' },
-                }
-              }
-            },
-            hashtags: { type: 'string' },
-          }
-        }
-      });
+      const raw = await base44.integrations.Core.InvokeLLM({ prompt });
+      // Strip markdown code fences if present
+      const cleaned = typeof raw === 'string'
+        ? raw.replace(/```json|```/g, '').trim()
+        : JSON.stringify(raw);
+      const result = JSON.parse(cleaned);
 
       setGeneratedScript(result);
       setVideoFrames(result.frames);

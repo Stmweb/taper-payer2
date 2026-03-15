@@ -210,7 +210,7 @@ function AnimatedVideoPreview({ frames, isPlaying, onTogglePlay, onReset, title 
           <RotateCcw className="w-4 h-4" /> Restart
         </Button>
         <Button size="sm" onClick={handleDownload} className="gap-2 text-white" style={{ backgroundColor: '#2479C2' }}>
-          <Download className="w-4 h-4" /> Download Frame
+          <Download className="w-4 h-4" /> Download Storyboard
         </Button>
       </div>
     </div>

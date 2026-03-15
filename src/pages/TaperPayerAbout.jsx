@@ -60,6 +60,7 @@ export default function TaperPayerAbout() {
               <Link to={createPageUrl('TaperPayerHome')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors font-medium">Home</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors font-medium">How It Works</Link>
               <Link to={createPageUrl('TaperPayerAbout')} className="text-gray-900 dark:text-white hover:text-blue-600 transition-colors font-medium">About</Link>
+              <Link to={createPageUrl('TaperPayerTopUp')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors font-medium">TPAY Mobile</Link>
               <Link to={createPageUrl('TaperPayerContact')} className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors font-medium">Contact</Link>
             </div>
             <div className="hidden md:flex items-center gap-3">

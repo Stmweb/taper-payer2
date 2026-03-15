@@ -24,10 +24,12 @@ Deno.serve(async (req) => {
 
     // Process payment via RSA API
     const transactionRef = `TPAY-${Date.now()}`;
+    // Convert USD to HTG (1 USD ≈ 130 HTG)
+    const amountInHTG = parseFloat(amount) * 130;
     const paymentData = {
       reference: transactionRef,
-      amount: amount,
-      currency: 'USD',
+      amount: amountInHTG,
+      currency: 'HTG',
       description: `Airtime top-up for ${phoneNumber}`,
       token: rsaToken,
       businessKey: rsaBusinessKey,

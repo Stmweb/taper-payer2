@@ -358,6 +358,7 @@ Generate ${Math.max(3, Math.floor(parseInt(selectedDuration) / 10))} frames that
               <AnimatedVideoPreview
                 frames={videoFrames}
                 isPlaying={isPlaying}
+                title={generatedScript.title}
                 onTogglePlay={() => setIsPlaying(p => !p)}
                 onReset={() => { setIsPlaying(false); setTimeout(() => setIsPlaying(true), 100); }}
               />

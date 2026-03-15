@@ -23,11 +23,38 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Moncash credentials not configured' }, { status: 500 });
     }
 
+    // Get live exchange rate from Reloadly
+    const reloadlyAuth = await fetch('https://api.reloadly.com/auth/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: Deno.env.get('RELOADLY_CLIENT_ID'),
+        client_secret: Deno.env.get('RELOADLY_CLIENT_SECRET'),
+        grant_type: 'client_credentials',
+        audience: 'https://api.reloadly.com',
+      }),
+    });
+
+    const authData = await reloadlyAuth.json();
+    let reloadlyAccessToken = authData.access_token;
+
+    // Get the exchange rate for USD to HTG
+    const ratesRes = await fetch(`https://api.reloadly.com/rates?from=USD&to=HTG`, {
+      headers: {
+        'Authorization': `Bearer ${reloadlyAccessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const ratesData = await ratesRes.json();
+    const exchangeRate = ratesData.rate || 130; // Fallback to 130 if API fails
+    const amountInHTG = parseFloat(amount) * exchangeRate;
+
     // Process payment via Moncash API
     const transactionRef = `TPAY-${Date.now()}`;
     const paymentData = {
       reference: transactionRef,
-      amount: amount,
+      amount: amountInHTG,
       currency: 'HTG',
       description: `Airtime top-up for ${phoneNumber}`,
       token: moncashToken,

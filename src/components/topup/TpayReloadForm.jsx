@@ -245,7 +245,7 @@ export default function TpayReloadForm() {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-4 gap-2 mb-2">
                 {[5, 10, 20, 50].map((amt) => (
                   <button
                     key={amt}
@@ -260,6 +260,15 @@ export default function TpayReloadForm() {
                   </button>
                 ))}
               </div>
+              <Input
+                type="number"
+                placeholder="Or enter custom amount (5-50)"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                min="5"
+                max="50"
+                step="1"
+              />
             </div>
 
 

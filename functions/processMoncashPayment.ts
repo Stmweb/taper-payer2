@@ -106,7 +106,7 @@ Deno.serve(async (req) => {
       status: 'completed',
     });
   } catch (error) {
-    console.error('Moncash payment error:', error);
-    return Response.json({ error: 'Payment processing failed' }, { status: 500 });
+    console.error('Moncash payment error:', error.message, error.stack);
+    return Response.json({ error: error.message || 'Payment processing failed' }, { status: 500 });
   }
 });

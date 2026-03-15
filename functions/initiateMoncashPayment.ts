@@ -24,10 +24,13 @@ Deno.serve(async (req) => {
 
     // Step 1: Get OAuth token from Moncash
     const authUrl = 'https://sandbox.moncashbutton.digicelgroup.com/Api/oauth/token';
+    const credentials = `${moncashClientId}:${moncashClientSecret}`;
+    const encodedCredentials = Buffer.from(credentials).toString('base64');
+    
     const authRes = await fetch(authUrl, {
       method: 'POST',
       headers: {
-        'Authorization': 'Basic ' + btoa(`${moncashClientId}:${moncashClientSecret}`),
+        'Authorization': `Basic ${encodedCredentials}`,
         'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
       },

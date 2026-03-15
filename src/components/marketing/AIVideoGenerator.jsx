@@ -119,13 +119,16 @@ function AnimatedVideoPreview({ frames, isPlaying, onTogglePlay, onReset, title 
       <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-slate-700">
         <canvas ref={canvasRef} width={320} height={568} className="block" />
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap justify-center">
         <Button variant="outline" size="sm" onClick={onTogglePlay} className="gap-2">
           {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           {isPlaying ? 'Pause' : 'Play'}
         </Button>
         <Button variant="outline" size="sm" onClick={onReset} className="gap-2">
           <RotateCcw className="w-4 h-4" /> Restart
+        </Button>
+        <Button size="sm" onClick={handleDownload} className="gap-2 text-white" style={{ backgroundColor: '#2479C2' }}>
+          <Download className="w-4 h-4" /> Download Frame
         </Button>
       </div>
     </div>

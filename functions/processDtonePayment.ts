@@ -20,6 +20,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    if (parseFloat(amount) < 0.50) {
+      return Response.json({ error: 'Minimum top-up amount is $0.50 USD. Please select a higher value plan.' }, { status: 400 });
+    }
+
     // Step 1: Charge card via Stripe
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(parseFloat(amount) * 100),

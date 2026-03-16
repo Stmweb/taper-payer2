@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users } from 'lucide-react';
+import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
@@ -61,7 +61,7 @@ export default function TaperPayerTopUp() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <ChevronDown className="w-6 h-6 rotate-180" /> : <ChevronDown className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
 
             <a href="/TaperPayerHome" className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">

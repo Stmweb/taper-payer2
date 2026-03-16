@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
     if (action === 'getProducts') {
       const { countryIso } = body;
       // DTone uses ISO 3166-1 alpha-3 codes
-      const iso2To3 = { HT: 'HTI', IN: 'IND', PH: 'PHL', NG: 'NGA', KE: 'KEN', GH: 'GHA', MX: 'MEX', BR: 'BRA', SN: 'SEN', AO: 'AGO', DO: 'DOM', CL: 'CHL' };
+      const iso2To3 = { HT: 'HTI', IN: 'IND', PH: 'PHL', NG: 'NGA', KE: 'KEN', GH: 'GHA', MX: 'MEX', BR: 'BRA', SN: 'SEN', AO: 'AGO', DO: 'DOM', CL: 'CHL', MA: 'MAR' };
       const iso3 = iso2To3[countryIso] || countryIso;
       const res = await fetch(
         `${BASE_URL}/products?country_iso_code=${iso3}&type=FIXED_VALUE_RECHARGE&per_page=100`,

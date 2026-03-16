@@ -279,7 +279,7 @@ export default function TpayReloadForm() {
                     paymentMethod === 'card' ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-slate-200 text-slate-700 hover:border-teal-300'
                   }`}
                 >
-                  💳 Card
+                  💳 Credit/Debit Card
                 </button>
                 {selectedCountry?.iso === 'HT' && (
                   <button

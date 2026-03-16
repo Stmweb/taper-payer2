@@ -59,8 +59,8 @@ export default function TaperConnectForm() {
     setProducts([]);
     setSelectedProduct(null);
     try {
-      const res = await base44.functions.invoke('dingTopUp', { action: 'getProducts', countryIso: country.iso });
-      const items = res.data?.Products || res.data?.products || [];
+      const res = await base44.functions.invoke('dtoneTopUp', { action: 'getProducts', countryIso: country.iso });
+      const items = res.data?.products || res.data?.data || [];
       setProducts(items.slice(0, 20));
       setStep(2);
     } catch (e) {
@@ -79,16 +79,12 @@ export default function TaperConnectForm() {
     setError('');
     try {
       const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
-      const res = await base44.functions.invoke('dingTopUp', {
+      const res = await base44.functions.invoke('dtoneTopUp', {
         action: 'sendTopUp',
         phoneNumber: fullPhone,
-        skuCode: selectedProduct.SkuCode || selectedProduct.skuCode,
-        sendingAmount: selectedProduct.SendingAmounts?.[0]?.SendingAmount || selectedProduct.sendingAmount,
-        sendingCurrencyIso: 'USD',
+        productId: selectedProduct.id || selectedProduct.product_id,
       });
-      if (res.data?.Errors?.length > 0 || res.data?.errors?.length > 0) {
-        setError(res.data.Errors?.[0]?.ErrorMessage || res.data.errors?.[0]?.message || 'Top-up failed.');
-      } else if (res.data?.success === false) {
+      if (res.data?.success === false) {
         setError(res.data?.error || 'Top-up failed. Please try again.');
       } else {
         setSuccess(true);

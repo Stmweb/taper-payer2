@@ -307,7 +307,7 @@ export default function AdminPageManager() {
           <div className="space-y-3">
             <div className="flex gap-2">
               <Input
-                placeholder="Section ID"
+                placeholder="Custom section ID"
                 value={newSection}
                 onChange={(e) => setNewSection(e.target.value)}
               />
@@ -315,16 +315,18 @@ export default function AdminPageManager() {
                 <Plus className="w-4 h-4" />
               </Button>
             </div>
-            <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-              {hiddenSections.map((sec) => (
-                <div key={sec} className="flex items-center justify-between bg-red-50 p-2 rounded-lg border border-red-200">
-                  <span className="text-xs text-slate-700 font-mono truncate">{sec}</span>
-                  <button onClick={() => handleRemoveSection(sec)} className="text-red-600 hover:text-red-700 flex-shrink-0">
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
+            {hiddenSections.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+                {hiddenSections.map((sec) => (
+                  <div key={sec} className="flex items-center justify-between bg-red-50 p-2 rounded-lg border border-red-200">
+                    <span className="text-xs text-slate-700 font-mono truncate">{sec}</span>
+                    <button onClick={() => handleRemoveSection(sec)} className="text-red-600 hover:text-red-700 flex-shrink-0">
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

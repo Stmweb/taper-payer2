@@ -21,6 +21,19 @@ const COUNTRIES = [
   { name: 'Dominican Republic', iso: 'DO', flag: '🇩🇴', dial: '+1' },
 ];
 
+const spanishToEnglish = {
+  'Plan Prepagado 7 Dias': '7-Day Prepaid Plan',
+  'Plan Prepagado': 'Prepaid Plan',
+  'Recarga': 'Recharge',
+  'Saldo': 'Balance',
+  'Minutos': 'Minutes',
+  'Datos': 'Data',
+};
+
+const translatePlanName = (name) => {
+  return spanishToEnglish[name] || name;
+};
+
 export default function TpayReloadForm() {
   const [step, setStep] = useState(1);
   const [selectedCountry, setSelectedCountry] = useState(null);

@@ -338,7 +338,11 @@ export default function TaperConnectForm({ initialCountry }) {
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
             </label>
-            {products.length === 0 ? (
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-5 h-5 animate-spin text-cyan-500" />
+              </div>
+            ) : products.length === 0 ? (
               <p className="text-sm text-slate-500">No products available for this country.</p>
             ) : (
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">

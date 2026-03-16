@@ -253,8 +253,9 @@ export default function TaperConnectForm() {
                     >
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium text-slate-800">{name}</span>
-                        {amount && <span className="text-sm font-bold text-cyan-600">{currency} {amount}</span>}
+                        {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
                       </div>
+                      {destAmount && <p className="text-xs text-slate-500 mt-0.5">Delivers: {destAmount} {destUnit}</p>}
                     </button>
                   );
                 })}

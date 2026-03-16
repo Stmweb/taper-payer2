@@ -76,13 +76,13 @@ const COUNTRIES = [
   { name: 'United States', iso: 'US', flag: '🇺🇸', dial: '+1' },
 ];
 
-export default function TaperConnectForm() {
-  const [step, setStep] = useState(1);
-  const [selectedCountry, setSelectedCountry] = useState(null);
+export default function TaperConnectForm({ initialCountry }) {
+  const [step, setStep] = useState(initialCountry ? 2 : 1);
+  const [selectedCountry, setSelectedCountry] = useState(initialCountry || null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(initialCountry ? true : false);
   const [error, setError] = useState('');
   const [cardError, setCardError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -92,6 +92,12 @@ export default function TaperConnectForm() {
   const detectTimeout = useRef(null);
   const stripe = useStripe();
   const elements = useElements();
+
+  React.useEffect(() => {
+    if (initialCountry && step === 2) {
+      loadProducts(initialCountry);
+    }
+  }, []);
 
   const handlePhoneChange = (value) => {
     setPhoneNumber(value);

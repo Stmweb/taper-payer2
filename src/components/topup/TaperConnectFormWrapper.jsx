@@ -18,7 +18,7 @@ async function getStripePromise() {
   return stripePromise;
 }
 
-export default function TaperConnectFormWrapper() {
+export default function TaperConnectFormWrapper({ initialCountry }) {
   const [stripePromiseValue, setStripePromiseValue] = React.useState(null);
 
   React.useEffect(() => {
@@ -31,7 +31,7 @@ export default function TaperConnectFormWrapper() {
 
   return (
     <Elements stripe={stripePromiseValue}>
-      <TaperConnectForm />
+      <TaperConnectForm initialCountry={initialCountry} />
     </Elements>
   );
 }

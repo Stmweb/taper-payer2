@@ -14,6 +14,7 @@ import CountryDrawer from '@/components/mobile/CountryDrawer';
 import SEOHead from '@/components/SEOHead';
 import StructuredData from '@/components/StructuredData';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
+import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
 
@@ -51,6 +52,7 @@ export default function TaperPayerHome() {
    const [showCountryDrawer, setShowCountryDrawer] = useState(false);
    const [isDark, setIsDark] = useState(false);
    const [showReloadForm, setShowReloadForm] = useState(false);
+   const [showTaperConnect, setShowTaperConnect] = useState(false);
    const [showTransferModal, setShowTransferModal] = useState(false);
 
    const toggleDarkMode = () => {
@@ -214,7 +216,7 @@ export default function TaperPayerHome() {
                   </Button>
                 )}
                 {!isElementHidden('tpay-mobile-btn') && (
-                  <Button onClick={() => setShowReloadForm(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0 flex items-center gap-2">
+                  <Button onClick={() => setShowTaperConnect(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0 flex items-center gap-2">
                     <span className="text-2xl">📱</span>
                     Taper Connect
                   </Button>
@@ -675,6 +677,25 @@ export default function TaperPayerHome() {
         </div>,
         document.body
       )}
-    </div>
-  );
-}
+
+      {/* Taper Connect Form Modal */}
+      {showTaperConnect && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/50" onClick={() => setShowTaperConnect(false)} />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+          >
+            <button onClick={() => setShowTaperConnect(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10">✕</button>
+            <div className="p-6 pt-12">
+              <TaperConnectFormWrapper />
+            </div>
+          </motion.div>
+        </div>,
+        document.body
+      )}
+      </div>
+      );
+      }

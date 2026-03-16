@@ -16,6 +16,7 @@ import StructuredData from '@/components/StructuredData';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
+import ComingSoonModal from '@/components/ComingSoonModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
 import { loadStripe } from '@stripe/stripe-js';
 

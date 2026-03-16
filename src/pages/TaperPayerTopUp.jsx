@@ -61,6 +61,7 @@ export default function TaperPayerTopUp() {
     { name: 'Morocco', flag: '🇲🇦', code: 'MAD' },
     { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
     { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
+    { name: 'Honduras', flag: '🇭🇳', code: 'HNL' },
     { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
   ];
 

@@ -165,6 +165,23 @@ export default function AdminPageManager() {
     setContentOverrides(newOverrides);
   };
 
+  const handleAddButtonOverride = () => {
+    if (editingButtonId.trim() && editingButtonData.label.trim()) {
+      setButtonOverrides({
+        ...buttonOverrides,
+        [editingButtonId]: editingButtonData,
+      });
+      setEditingButtonId('');
+      setEditingButtonData({ label: '', color: '#3D7BB7' });
+    }
+  };
+
+  const handleRemoveButtonOverride = (buttonId) => {
+    const newOverrides = { ...buttonOverrides };
+    delete newOverrides[buttonId];
+    setButtonOverrides(newOverrides);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">

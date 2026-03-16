@@ -46,15 +46,21 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       const customerGuid = custRes.data?.customer?.guid;
       if (!customerGuid) throw new Error('Could not create customer profile.');
 
-      // 2. Get or create USD fiat account
+      // 2. Check KYC/verification status
+      const statusRes = await invoke('getCustomerStatus', { customerGuid });
+      const customer = statusRes.data?.customer;
+      setKycStatus(customer?.state); // pending, approved, rejected, etc.
+
+      // 3. Get or create account (fiat or trading based on selection)
       const accRes = await invoke('getOrCreateAccount', {
         customerGuid,
         asset: 'USD',
+        accountType,
       });
       const accountGuid = accRes.data?.account?.guid;
       if (!accountGuid) throw new Error('Could not create account.');
 
-      // 3. Create quote
+      // 4. Create quote
       const quoteRes = await invoke('createQuote', {
         customerGuid,
         asset: 'USD',
@@ -63,7 +69,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       const quoteGuid = quoteRes.data?.quote?.guid;
       if (!quoteGuid) throw new Error('Could not get quote.');
 
-      // 4. Execute transfer
+      // 5. Execute transfer
       const transferRes = await invoke('createTransfer', {
         quoteGuid,
         sourceAccountGuid: accountGuid,

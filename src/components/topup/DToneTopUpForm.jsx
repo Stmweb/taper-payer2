@@ -46,6 +46,7 @@ export default function DToneTopUpForm() {
     setPhoneNumber('');
     setError('');
     setPaymentMethod('card');
+    setDetectedOperator(null);
     setLoadingProducts(true);
     setStep(2);
 

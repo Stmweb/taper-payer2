@@ -70,11 +70,19 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
 
   return (
     <div className="space-y-4">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-1">
         <p className="text-sm text-slate-700">
-          <strong>Amount:</strong> ${amount} USD = {(parseFloat(amount) * exchangeRate).toFixed(2)} HTG to {phoneNumber}
+          <strong>Plan Amount:</strong> ${parseFloat(amount).toFixed(2)} USD
         </p>
-        {loadingRate && <p className="text-xs text-slate-500 mt-1">Fetching current exchange rate...</p>}
+        {loadingRate ? (
+          <p className="text-xs text-slate-500">Fetching current exchange rate...</p>
+        ) : (
+          <p className="text-sm text-slate-700">
+            <strong>Equivalent:</strong> {(parseFloat(amount) * exchangeRate).toFixed(2)} HTG
+            <span className="text-xs text-slate-400 ml-1">(rate: {exchangeRate} HTG/USD)</span>
+          </p>
+        )}
+        <p className="text-sm text-slate-700"><strong>To:</strong> {phoneNumber}</p>
       </div>
 
       {error && (

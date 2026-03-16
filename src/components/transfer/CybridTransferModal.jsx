@@ -28,7 +28,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     base44.functions.invoke('cybridTransfer', { action, ...params });
 
   // Check KYC status on mount
-  React.useEffect(() => {
+  useEffect(() => {
     const checkKYC = async () => {
       setLoading(true);
       try {

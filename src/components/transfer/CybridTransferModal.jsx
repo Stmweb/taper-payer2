@@ -12,7 +12,7 @@ const TRANSFER_METHODS = [
 ];
 
 export default function CybridTransferModal({ amount, country, onClose }) {
-  const [step, setStep] = useState('account'); // account → method → details → processing → done
+  const [step, setStep] = useState('kyc-check'); // kyc-check → account → method → details → processing → done
   const [accountType, setAccountType] = useState('fiat'); // fiat or trading
   const [method, setMethod] = useState('ach');
   const [routingNumber, setRoutingNumber] = useState('');
@@ -22,9 +22,40 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   const [error, setError] = useState('');
   const [transferResult, setTransferResult] = useState(null);
   const [kycStatus, setKycStatus] = useState(null); // KYC/verification info from Cybrid
+  const [customerGuid, setCustomerGuid] = useState(null); // Store for later use
 
   const invoke = (action, params = {}) =>
     base44.functions.invoke('cybridTransfer', { action, ...params });
+
+  // Check KYC status on mount
+  React.useEffect(() => {
+    const checkKYC = async () => {
+      setLoading(true);
+      try {
+        const user = await base44.auth.me();
+        const custRes = await invoke('createCustomer', {
+          name: user.full_name,
+          email: user.email,
+        });
+        const guid = custRes.data?.customer?.guid;
+        if (!guid) throw new Error('Could not create customer profile.');
+        setCustomerGuid(guid);
+
+        const statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+        const customer = statusRes.data?.customer;
+        setKycStatus(customer?.state);
+
+        if (customer?.state === 'approved') {
+          setStep('account');
+        }
+      } catch (e) {
+        setError(e.message || 'Failed to check KYC status.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkKYC();
+  }, []);
 
   const handleSubmit = async () => {
     if (!routingNumber || !accountNumber || !accountName) {

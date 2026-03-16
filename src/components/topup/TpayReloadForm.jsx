@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, CheckCircle, AlertCircle, Zap, Lock, Search } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, Zap, Lock } from 'lucide-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import MoncashPaymentForm from './MoncashPaymentForm';
 
@@ -33,7 +33,7 @@ export default function TpayReloadForm() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [cardError, setCardError] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card', 'moncash', or 'rsa'
+  const [paymentMethod, setPaymentMethod] = useState('card');
   const detectTimeout = useRef(null);
   const stripe = useStripe();
   const elements = useElements();
@@ -42,7 +42,6 @@ export default function TpayReloadForm() {
     setPhoneNumber(value);
     setSelectedOperator(null);
 
-    // Only auto-detect when we have enough digits
     const digits = value.replace(/\D/g, '');
     if (digits.length < 7 || !selectedCountry) return;
 
@@ -59,7 +58,7 @@ export default function TpayReloadForm() {
           setSelectedOperator(res.data.operator);
         }
       } catch (e) {
-        // Silent fail — user can still manually pick
+        // Silent fail
       } finally {
         setDetectingOperator(false);
       }
@@ -72,6 +71,7 @@ export default function TpayReloadForm() {
     setError('');
     setOperators([]);
     setSelectedOperator(null);
+    setPaymentMethod('card');
     try {
       const res = await base44.functions.invoke('getReloadlyProducts', { countryIso: country.iso });
       setOperators(res.data?.data || res.data?.operators || []);
@@ -101,8 +101,7 @@ export default function TpayReloadForm() {
     try {
       const cardElement = elements.getElement(CardElement);
 
-      // Create payment method
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
+      const { error, paymentMethod: pm } = await stripe.createPaymentMethod({
         type: 'card',
         card: cardElement
       });
@@ -113,10 +112,9 @@ export default function TpayReloadForm() {
         return;
       }
 
-      // Process payment and topup
       const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
       const res = await base44.functions.invoke('processReloadlyPayment', {
-        paymentMethodId: paymentMethod.id,
+        paymentMethodId: pm.id,
         phoneNumber: fullPhone,
         amount: parseFloat(amount),
         countryCode: selectedCountry.iso,
@@ -177,7 +175,7 @@ export default function TpayReloadForm() {
               onClick={() => loadOperators(c)}
               disabled={loading}
               className={`flex flex-col items-center gap-1 p-3 rounded-xl border transition-all disabled:opacity-50 ${
-                selectedCountry === c ? 'border-teal-500 bg-teal-50' : 'border-slate-200 hover:border-teal-400 hover:bg-teal-50'
+                selectedCountry?.iso === c.iso ? 'border-teal-500 bg-teal-50' : 'border-slate-200 hover:border-teal-400 hover:bg-teal-50'
               }`}
             >
               <span className="text-2xl">{c.flag}</span>
@@ -271,7 +269,30 @@ export default function TpayReloadForm() {
               />
             </div>
 
-
+            {/* Payment Method — MonCash only shown for Haiti */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setPaymentMethod('card')}
+                  className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                    paymentMethod === 'card' ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-slate-200 text-slate-700 hover:border-teal-300'
+                  }`}
+                >
+                  💳 Credit Card
+                </button>
+                {selectedCountry?.iso === 'HT' && (
+                  <button
+                    onClick={() => setPaymentMethod('moncash')}
+                    className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                      paymentMethod === 'moncash' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700 hover:border-blue-300'
+                    }`}
+                  >
+                    🇭🇹 MonCash
+                  </button>
+                )}
+              </div>
+            </div>
 
             {paymentMethod === 'card' && (
               <div>
@@ -283,26 +304,26 @@ export default function TpayReloadForm() {
                         base: {
                           fontSize: '14px',
                           color: '#1e293b',
-                          '::placeholder': {
-                            color: '#cbd5e1'
-                          }
+                          '::placeholder': { color: '#cbd5e1' }
                         },
-                        invalid: {
-                          color: '#dc2626'
-                        }
+                        invalid: { color: '#dc2626' }
                       }
                     }}
                   />
                 </div>
-                {cardError && (
-                  <p className="text-red-600 text-sm mt-2">{cardError}</p>
-                )}
+                {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
               </div>
             )}
 
-
-
-
+            {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (
+              <MoncashPaymentForm
+                phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
+                amount={amount}
+                operatorId={selectedOperator?.operatorId || selectedOperator?.id}
+                countryCode={selectedCountry.iso}
+                onSuccess={() => setSuccess(true)}
+              />
+            )}
 
             {paymentMethod === 'card' && (
               <Button

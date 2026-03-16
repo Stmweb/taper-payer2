@@ -65,6 +65,9 @@ export default function AdminPageManager() {
   const [newSection, setNewSection] = useState('');
   const [contentBlockId, setContentBlockId] = useState('');
   const [contentBlockData, setContentBlockData] = useState({ title: '', body: '', imageUrl: '', html: '' });
+  const [buttonOverrides, setButtonOverrides] = useState({});
+  const [editingButtonId, setEditingButtonId] = useState('');
+  const [editingButtonData, setEditingButtonData] = useState({ label: '', color: '#3D7BB7' });
 
   // Load config for selected page
   useEffect(() => {

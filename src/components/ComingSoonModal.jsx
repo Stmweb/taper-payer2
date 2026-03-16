@@ -45,7 +45,7 @@ export default function ComingSoonModal({ isOpen, onClose }) {
         onClick={onClose}
       />
       <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-      <motion.div
+        <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}

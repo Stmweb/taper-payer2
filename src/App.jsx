@@ -17,6 +17,7 @@ import TaperPayerMarketing from './pages/TaperPayerMarketing';
 import TaperPayerBusiness from './pages/TaperPayerBusiness';
 import TaperPayerWhiteLabel from './pages/TaperPayerWhiteLabel';
 import TaperPayerTopUp from './pages/TaperPayerTopUp';
+import AdminPageManager from './pages/AdminPageManager';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];

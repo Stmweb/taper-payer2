@@ -65,19 +65,25 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'getOrCreateAccount') {
-      const { customerGuid, asset } = params;
-      // List existing accounts for this customer
-      const existing = await cybridApi(token, 'GET', `/api/accounts?customer_guid=${customerGuid}&asset=${asset}&type=fiat`);
+      const { customerGuid, asset, accountType } = params;
+      // List existing accounts for this customer (type: fiat or trading)
+      const existing = await cybridApi(token, 'GET', `/api/accounts?customer_guid=${customerGuid}&asset=${asset}&type=${accountType || 'fiat'}`);
       if (existing.objects?.length > 0) {
         return Response.json({ account: existing.objects[0] });
       }
-      // Create new fiat account
+      // Create new account
       const account = await cybridApi(token, 'POST', '/api/accounts', {
-        type: 'fiat',
+        type: accountType || 'fiat',
         customer_guid: customerGuid,
         asset,
       });
       return Response.json({ account });
+    }
+
+    if (action === 'getCustomerStatus') {
+      const { customerGuid } = params;
+      const customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
+      return Response.json({ customer });
     }
 
     if (action === 'createQuote') {

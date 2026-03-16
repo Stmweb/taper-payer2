@@ -107,18 +107,24 @@ export default function TaperConnectForm() {
       }
 
       const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
-      const res = await base44.functions.invoke('processReloadlyPayment', {
+      const fullPhone = selectedCountry.dial + localDigits;
+      const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+
+      // Step 1: charge card via Stripe
+      const paymentRes = await base44.functions.invoke('processReloadlyPayment', {
         paymentMethodId: pm.id,
         phoneNumber: localDigits,
-        amount: selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value,
+        amount: retailAmount,
         countryCode: selectedCountry.iso,
         operatorId: selectedProduct?.operator?.id,
+        dtoneProductId: selectedProduct?.id,
+        fullPhone,
       });
 
-      if (res.data?.success) {
+      if (paymentRes.data?.success) {
         setSuccess(true);
       } else {
-        setError(res.data?.error || 'Transaction failed. Please try again.');
+        setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
       }
     } catch (e) {
       setError('Payment or top-up failed. Please try again.');

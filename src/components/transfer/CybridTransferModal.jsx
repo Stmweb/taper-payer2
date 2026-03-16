@@ -69,7 +69,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     try {
       const user = await base44.auth.me();
 
-      // 1. Get or create account (fiat or trading based on selection)
+      // Get or create account (fiat or trading based on selection)
       const accRes = await invoke('getOrCreateAccount', {
         customerGuid,
         asset: 'USD',
@@ -78,7 +78,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       const accountGuid = accRes.data?.account?.guid;
       if (!accountGuid) throw new Error('Could not create account.');
 
-      // 4. Create quote
+      // Create quote
       const quoteRes = await invoke('createQuote', {
         customerGuid,
         asset: 'USD',
@@ -87,7 +87,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       const quoteGuid = quoteRes.data?.quote?.guid;
       if (!quoteGuid) throw new Error('Could not get quote.');
 
-      // 5. Execute transfer
+      // Execute transfer
       const transferRes = await invoke('createTransfer', {
         quoteGuid,
         sourceAccountGuid: accountGuid,

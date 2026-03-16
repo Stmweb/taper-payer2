@@ -136,6 +136,7 @@ export default function TaperPayerTopUp() {
                     👆
                   </motion.span>
                 </div>
+                <Button onClick={() => setShowReloadForm(true)} className="bg-white/20 hover:bg-white/30 text-white border border-white/40 px-8 py-3 text-lg font-bold">Tpay Mobile</Button>
               </div>
             </motion.div>
           </motion.div>

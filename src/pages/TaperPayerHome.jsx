@@ -43,6 +43,7 @@ const countries = [
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
   { name: 'Angola', flag: '🇦🇴', code: 'AOA' },
+  { name: 'Cameroon', flag: '🇨🇲', code: 'XAF' },
   { name: 'Morocco', flag: '🇲🇦', code: 'MAD' },
   { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
   { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },

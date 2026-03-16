@@ -16,7 +16,7 @@ const PAGES = [
 const PREDEFINED_ELEMENTS = {
   'TaperPayerHome': [
     { id: 'download-app-btn', label: 'Download App Button' },
-    { id: 'tpay-mobile-btn', label: 'Tpay Mobile Button' },
+    { id: 'tpay-mobile-btn', label: 'Taper Connect Button' },
     { id: 'why-choose-section', label: 'Why Choose Us Section' },
     { id: 'services-section', label: 'Our Services Section' },
     { id: 'membership-section', label: 'Membership Section' },

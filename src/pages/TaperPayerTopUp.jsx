@@ -144,6 +144,7 @@ export default function TaperPayerTopUp() {
               {!isElementHidden('tpay-mobile-btn-hero') && (
                 <Button onClick={() => setShowReloadForm(true)} className="bg-white/20 hover:bg-white/30 text-white border border-white/40 px-8 py-3 text-lg font-bold">Tpay Mobile</Button>
               )}
+              {isElementHidden('tpay-mobile-btn-hero') && null}
               </div>
             </motion.div>
           </motion.div>

@@ -89,6 +89,7 @@ export default function TaperConnectForm({ initialCountry }) {
   const [detectedOperator, setDetectedOperator] = useState(null); // { id, name }
   const [detectingOperator, setDetectingOperator] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('card');
+  const [countrySearch, setCountrySearch] = useState('');
   const detectTimeout = useRef(null);
   const stripe = useStripe();
   const elements = useElements();

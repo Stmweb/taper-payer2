@@ -246,24 +246,53 @@ export default function AdminPageManager() {
 
           {/* Hidden Elements */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold text-slate-900 mb-4">Hide Elements</h2>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">Hide Buttons & Components</h2>
             <div className="space-y-3">
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Element ID or class"
-                  value={newElement}
-                  onChange={(e) => setNewElement(e.target.value)}
-                />
-                <Button onClick={handleAddElement} size="icon" className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="w-4 h-4" />
-                </Button>
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-2">Quick Select</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {(PREDEFINED_ELEMENTS[selectedPage] || []).map((elem) => (
+                    <button
+                      key={elem.id}
+                      onClick={() => {
+                        if (!hiddenElements.includes(elem.id)) {
+                          setHiddenElements([...hiddenElements, elem.id]);
+                        }
+                      }}
+                      disabled={hiddenElements.includes(elem.id)}
+                      className={`text-xs p-2 rounded-lg border transition-all text-left ${
+                        hiddenElements.includes(elem.id)
+                          ? 'border-red-300 bg-red-50 text-red-700 cursor-not-allowed'
+                          : 'border-slate-200 hover:border-blue-300 hover:bg-blue-50'
+                      }`}
+                    >
+                      {elem.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
+              
+              <div className="pt-3 border-t">
+                <label className="block text-xs font-medium text-slate-600 mb-2">Custom ID</label>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Custom element ID"
+                    value={newElement}
+                    onChange={(e) => setNewElement(e.target.value)}
+                    className="text-xs"
+                  />
+                  <Button onClick={handleAddElement} size="icon" className="bg-blue-600 hover:bg-blue-700">
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2 max-h-40 overflow-y-auto">
                 {hiddenElements.map((elem) => (
                   <div key={elem} className="flex items-center justify-between bg-red-50 p-2 rounded-lg border border-red-200">
-                    <span className="text-sm text-slate-700 font-mono">{elem}</span>
-                    <button onClick={() => handleRemoveElement(elem)} className="text-red-600 hover:text-red-700">
-                      <Trash2 className="w-4 h-4" />
+                    <span className="text-xs text-slate-700 font-mono truncate">{elem}</span>
+                    <button onClick={() => handleRemoveElement(elem)} className="text-red-600 hover:text-red-700 flex-shrink-0">
+                      <Trash2 className="w-3 h-3" />
                     </button>
                   </div>
                 ))}

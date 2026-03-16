@@ -80,11 +80,13 @@ export default function AdminPageManager() {
           setHiddenElements(result[0].hidden_elements || []);
           setHiddenSections(result[0].hidden_sections || []);
           setContentOverrides(result[0].content_overrides || {});
+          setButtonOverrides(result[0].button_overrides || {});
         } else {
           setConfig(null);
           setHiddenElements([]);
           setHiddenSections([]);
           setContentOverrides({});
+          setButtonOverrides({});
         }
       } catch (e) {
         toast.error('Failed to load config');

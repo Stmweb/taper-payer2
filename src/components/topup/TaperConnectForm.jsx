@@ -25,6 +25,9 @@ export default function TaperConnectForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [detectedOperator, setDetectedOperator] = useState(null);
+  const [detectingOperator, setDetectingOperator] = useState(false);
+  const detectTimeout = useRef(null);
 
   const loadProducts = async (country) => {
     setSelectedCountry(country);

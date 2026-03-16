@@ -107,8 +107,9 @@ export default function ComingSoonModal({ isOpen, onClose }) {
         >
           Got It
         </button>
-        </motion.div>
-      </div>
-    </>
+        </div>
+      </motion.div>
+    </>,
+    document.body
   );
 }

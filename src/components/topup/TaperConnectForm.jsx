@@ -175,10 +175,20 @@ export default function TaperConnectForm() {
                 type="tel"
                 placeholder="Enter number"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={(e) => handlePhoneChange(e.target.value)}
                 className="flex-1"
               />
             </div>
+            {detectingOperator && (
+              <p className="text-xs text-cyan-600 mt-1 flex items-center gap-1">
+                <Loader2 className="w-3 h-3 animate-spin" /> Detecting operator...
+              </p>
+            )}
+            {!detectingOperator && detectedOperator && (
+              <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+                <CheckCircle className="w-3 h-3" /> Detected: <strong>{detectedOperator}</strong>
+              </p>
+            )}
           </div>
 
           <div>

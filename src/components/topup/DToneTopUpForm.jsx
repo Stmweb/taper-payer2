@@ -33,6 +33,9 @@ export default function DToneTopUpForm() {
   const [success, setSuccess] = useState(false);
   const [step, setStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState('card');
+  const [detectedOperator, setDetectedOperator] = useState(null);
+  const [detectingOperator, setDetectingOperator] = useState(false);
+  const detectTimeout = useRef(null);
   const stripe = useStripe();
   const elements = useElements();
 

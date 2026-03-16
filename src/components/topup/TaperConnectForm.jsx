@@ -52,7 +52,10 @@ export default function TaperConnectForm() {
         // DTone returns a direct array of operators
         const ops = Array.isArray(res.data) ? res.data : (res.data?.operators || []);
         const identified = ops.find(o => o.identified) || ops[0];
-        if (identified) setDetectedOperator({ id: identified.id, name: identified.name });
+        if (identified) {
+          setDetectedOperator({ id: identified.id, name: identified.name });
+          setSelectedProduct(null); // reset selection when operator changes
+        }
       } catch (e) { /* silent */ } finally {
         setDetectingOperator(false);
       }

@@ -24,7 +24,7 @@ const PREDEFINED_ELEMENTS = {
   ],
   'TaperPayerTopUp': [
     { id: 'top-up-now-btn', label: 'Top Up Now Button' },
-    { id: 'tpay-mobile-btn-hero', label: 'Tpay Mobile Button (Hero)' },
+    { id: 'tpay-mobile-btn-hero', label: 'Taper Connect Button (Hero)' },
     { id: 'how-it-works-section', label: 'How It Works Section' },
     { id: 'why-choose-section', label: 'Why Choose Section' },
     { id: 'testimonial-section', label: 'Testimonial Section' },

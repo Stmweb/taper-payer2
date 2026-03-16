@@ -55,26 +55,43 @@ Deno.serve(async (req) => {
     });
 
     const topupData = await topupRes.json();
-    console.log('DTone topup response:', topupRes.status, JSON.stringify(topupData).substring(0, 500));
+    console.log('DTone topup response:', topupRes.status, JSON.stringify(topupData).substring(0, 600));
 
-    // DTone returns 201 for created transactions; errors come as 4xx with an errors array
     if (!topupRes.ok || topupData.errors) {
       const errMsg = topupData.errors?.[0]?.message || topupData.message || 'Top-up delivery failed';
       console.error('DTone topup failed:', errMsg, JSON.stringify(topupData));
       return Response.json({ error: errMsg, paymentIntentId: paymentIntent.id, details: topupData }, { status: 400 });
     }
 
-    // DTone sync transaction — check for explicit FAILED status in response
-    if (topupData.status === 'FAILED') {
-      const errMsg = topupData.errors?.[0]?.message || topupData.message || 'Top-up delivery failed after charge';
-      console.error('DTone topup FAILED status:', errMsg);
-      return Response.json({ error: errMsg, paymentIntentId: paymentIntent.id, details: topupData }, { status: 400 });
+    const txId = topupData.id;
+    let finalStatus = topupData.status;
+
+    // If transaction is in CONFIRMING state, explicitly confirm it
+    if (finalStatus === 'CONFIRMING') {
+      console.log('DTone transaction in CONFIRMING state, confirming...', txId);
+      const confirmRes = await fetch(`${DTONE_BASE}/sync/transactions/${txId}/confirm`, {
+        method: 'POST',
+        headers: { Authorization: dtoneAuth(), Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: txId }),
+      });
+      const confirmData = await confirmRes.json();
+      console.log('DTone confirm response:', confirmRes.status, JSON.stringify(confirmData).substring(0, 400));
+
+      if (!confirmRes.ok || confirmData.errors) {
+        const errMsg = confirmData.errors?.[0]?.message || 'Top-up confirmation failed';
+        return Response.json({ error: errMsg, paymentIntentId: paymentIntent.id }, { status: 400 });
+      }
+      finalStatus = confirmData.status;
+    }
+
+    if (finalStatus === 'FAILED') {
+      return Response.json({ error: 'Top-up delivery failed after charge', paymentIntentId: paymentIntent.id }, { status: 400 });
     }
 
     return Response.json({
       success: true,
-      transactionId: topupData.id,
-      status: topupData.status,
+      transactionId: txId,
+      status: finalStatus,
       paymentIntentId: paymentIntent.id,
       phoneNumber: fullPhone,
       amount: parseFloat(amount),

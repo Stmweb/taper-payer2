@@ -700,6 +700,9 @@ export default function TaperPayerHome() {
         document.body
       )}
 
+      {/* Coming Soon Modal */}
+      <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
+
       {/* Taper Connect Form Modal */}
       {showTaperConnect && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

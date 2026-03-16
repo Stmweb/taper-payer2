@@ -226,7 +226,12 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         <div className="flex flex-col items-center py-8 gap-4">
           <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
           <p className="font-semibold text-slate-800">Processing your transfer…</p>
-          <p className="text-sm text-slate-500 text-center">Connecting to Cybrid — this takes just a moment.</p>
+          <p className="text-sm text-slate-500 text-center">Verifying identity & routing details through Cybrid.</p>
+          {kycStatus && (
+            <div className="text-xs bg-slate-50 px-3 py-2 rounded text-slate-600">
+              KYC Status: <strong className="capitalize">{kycStatus}</strong>
+            </div>
+          )}
         </div>
       )}
 

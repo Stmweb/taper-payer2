@@ -237,8 +237,10 @@ export default function TaperConnectForm() {
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {products.map((p, idx) => {
                   const name = p.name || p.description || String(p.id);
-                  const amount = p.suggested_amounts?.[0] || p.prices?.retail?.amount || p.face_value;
+                  const amount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
                   const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';
+                  const destAmount = p.destination?.amount;
+                  const destUnit = p.destination?.unit;
                   return (
                     <button
                       key={idx}

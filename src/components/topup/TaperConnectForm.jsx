@@ -224,8 +224,11 @@ export default function TaperConnectForm() {
             )}
             {!detectingOperator && detectedOperator && (
               <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
-                <CheckCircle className="w-3 h-3" /> Detected: <strong>{detectedOperator}</strong>
+                <CheckCircle className="w-3 h-3" /> Detected: <strong>{detectedOperator.name}</strong> — showing matching plans
               </p>
+            )}
+            {!detectingOperator && !detectedOperator && phoneNumber.replace(/\D/g, '').length >= 7 && (
+              <p className="text-xs text-amber-600 mt-1">Could not detect operator — showing all plans</p>
             )}
           </div>
 

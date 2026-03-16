@@ -51,9 +51,9 @@ export default function ComingSoonModal({ isOpen, onClose }) {
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none"
       >
-        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden pointer-events-auto">
+        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-y-auto max-h-[90vh] pointer-events-auto">
           {/* Header Gradient */}
-          <div className="h-32 bg-gradient-to-br from-[#3D7BB7] via-cyan-500 to-[#61AF39] relative overflow-hidden">
+          <div className="h-24 sm:h-32 bg-gradient-to-br from-[#3D7BB7] via-cyan-500 to-[#61AF39] relative overflow-hidden flex-shrink-0">
             <motion.div
               className="absolute inset-0 opacity-20"
               animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
@@ -72,7 +72,7 @@ export default function ComingSoonModal({ isOpen, onClose }) {
           </div>
 
           {/* Content */}
-          <div className="p-8 text-center relative -mt-12">
+          <div className="p-6 sm:p-8 text-center relative -mt-8 sm:-mt-12">
             <motion.div
               animate={{ rotate: 360, y: [0, -8, 0] }}
               transition={{ rotate: { duration: 20, repeat: Infinity, ease: 'linear' }, y: { duration: 3, repeat: Infinity } }}

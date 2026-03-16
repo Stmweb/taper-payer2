@@ -13,6 +13,40 @@ const PAGES = [
   'TaperPayerAbout',
 ];
 
+const PREDEFINED_ELEMENTS = {
+  'TaperPayerHome': [
+    { id: 'download-app-btn', label: 'Download App Button' },
+    { id: 'tpay-mobile-btn', label: 'Tpay Mobile Button' },
+    { id: 'why-choose-section', label: 'Why Choose Us Section' },
+    { id: 'services-section', label: 'Our Services Section' },
+    { id: 'membership-section', label: 'Membership Section' },
+    { id: 'app-download-section', label: 'Get the App Section' },
+  ],
+  'TaperPayerTopUp': [
+    { id: 'top-up-now-btn', label: 'Top Up Now Button' },
+    { id: 'tpay-mobile-btn-hero', label: 'Tpay Mobile Button (Hero)' },
+    { id: 'how-it-works-section', label: 'How It Works Section' },
+    { id: 'why-choose-section', label: 'Why Choose Section' },
+    { id: 'testimonial-section', label: 'Testimonial Section' },
+    { id: 'get-started-cta', label: 'Get Started CTA Section' },
+  ],
+  'TaperPayerRates': [
+    { id: 'exchange-rate-cards', label: 'Exchange Rate Cards' },
+    { id: 'refresh-rates-btn', label: 'Refresh Rates Button' },
+  ],
+  'TaperPayerHowItWorks': [
+    { id: 'step-guides', label: 'Step Guides Section' },
+    { id: 'features-section', label: 'Features Section' },
+    { id: 'methods-section', label: 'Delivery Methods Section' },
+  ],
+  'TaperPayerAbout': [
+    { id: 'about-hero', label: 'Hero Section' },
+    { id: 'values-section', label: 'Values Section' },
+    { id: 'services-section', label: 'Services Section' },
+    { id: 'timeline-section', label: 'Timeline Section' },
+  ],
+};
+
 const BACKGROUND_POSITIONS = [
   'top', 'center', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'
 ];

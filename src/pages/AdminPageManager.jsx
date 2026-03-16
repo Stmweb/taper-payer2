@@ -353,6 +353,87 @@ export default function AdminPageManager() {
           </div>
         </div>
 
+        {/* Button Overrides */}
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">Edit Buttons</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Button ID</label>
+              <Input
+                placeholder="e.g., download-app-btn, tpay-mobile-btn"
+                value={editingButtonId}
+                onChange={(e) => setEditingButtonId(e.target.value)}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Button Label</label>
+                <Input
+                  placeholder="Button text"
+                  value={editingButtonData.label}
+                  onChange={(e) => setEditingButtonData({ ...editingButtonData, label: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Color</label>
+                <div className="flex gap-2">
+                  <input
+                    type="color"
+                    value={editingButtonData.color}
+                    onChange={(e) => setEditingButtonData({ ...editingButtonData, color: e.target.value })}
+                    className="w-12 h-10 rounded-lg cursor-pointer border border-slate-200"
+                  />
+                  <Input
+                    placeholder="#3D7BB7"
+                    value={editingButtonData.color}
+                    onChange={(e) => setEditingButtonData({ ...editingButtonData, color: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                className="flex-1 px-4 py-2 rounded-lg text-white font-medium"
+                style={{ backgroundColor: editingButtonData.color }}
+                disabled={!editingButtonId.trim() || !editingButtonData.label.trim()}
+              >
+                Preview
+              </button>
+              <Button onClick={handleAddButtonOverride} className="flex-1 bg-green-600 hover:bg-green-700">
+                <Plus className="w-4 h-4 mr-2" /> Add Button Override
+              </Button>
+            </div>
+
+            {/* Display Added Button Overrides */}
+            <div className="space-y-2 mt-4">
+              {Object.entries(buttonOverrides).map(([buttonId, data]) => (
+                <div key={buttonId} className="bg-purple-50 border border-purple-200 p-3 rounded-lg">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="font-mono text-xs text-slate-600 mb-1">{buttonId}</p>
+                      <div className="flex items-center gap-3">
+                        <button
+                          className="px-4 py-2 rounded-lg text-white font-medium text-sm"
+                          style={{ backgroundColor: data.color }}
+                        >
+                          {data.label}
+                        </button>
+                        <span className="text-xs text-slate-600 font-mono">{data.color}</span>
+                      </div>
+                    </div>
+                    <button onClick={() => handleRemoveButtonOverride(buttonId)} className="text-red-600 hover:text-red-700 flex-shrink-0">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Content Overrides */}
         <div className="bg-white rounded-lg shadow p-6 mt-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Content Blocks</h2>

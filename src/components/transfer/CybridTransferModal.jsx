@@ -12,7 +12,8 @@ const TRANSFER_METHODS = [
 ];
 
 export default function CybridTransferModal({ amount, country, onClose }) {
-  const [step, setStep] = useState('method'); // method → details → processing → done
+  const [step, setStep] = useState('account'); // account → method → details → processing → done
+  const [accountType, setAccountType] = useState('fiat'); // fiat or trading
   const [method, setMethod] = useState('ach');
   const [routingNumber, setRoutingNumber] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -20,6 +21,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [transferResult, setTransferResult] = useState(null);
+  const [kycStatus, setKycStatus] = useState(null); // KYC/verification info from Cybrid
 
   const invoke = (action, params = {}) =>
     base44.functions.invoke('cybridTransfer', { action, ...params });

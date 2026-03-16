@@ -26,10 +26,19 @@ export default function CountryDrawer({ open, onOpenChange, countries, value, on
         <DrawerHeader>
           <DrawerTitle className="dark:text-white">{title}</DrawerTitle>
           <DrawerDescription className="dark:text-gray-400">Choose from the list below</DrawerDescription>
+          <div className="mt-4 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="Search by country name..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+            />
+          </div>
         </DrawerHeader>
         <div className="px-4 pb-4 max-h-[60vh] overflow-y-auto">
           <div className="space-y-2">
-            {countries.map((country) => {
+            {filteredCountries.map((country) => {
               const isSelected = typeof country === 'string' 
                 ? country === value 
                 : country.name === value;

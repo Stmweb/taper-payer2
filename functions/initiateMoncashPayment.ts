@@ -1,5 +1,3 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
-
 Deno.serve(async (req) => {
   try {
     const { amount, phoneNumber, countryCode, operatorId, exchangeRate } = await req.json();
@@ -16,14 +14,15 @@ Deno.serve(async (req) => {
     }
 
     const orderId = `TPAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    const amountInHTG = (parseFloat(amount) * exchangeRate).toFixed(2);
+    const rate = exchangeRate || 130;
+    const amountInHTG = (parseFloat(amount) * rate).toFixed(2);
 
     try {
-      // Step 1: Get OAuth token from Moncash
-      const authUrl = 'https://sandbox.moncashbutton.digicelgroup.com/Api/oauth/token';
+      // Step 1: Get OAuth token from Moncash (production)
+      const authUrl = 'https://moncashbutton.digicelgroup.com/Api/oauth/token';
       const credentials = `${moncashClientId}:${moncashClientSecret}`;
       const encodedCredentials = btoa(credentials);
-      
+
       const authRes = await Promise.race([
         fetch(authUrl, {
           method: 'POST',
@@ -34,18 +33,27 @@ Deno.serve(async (req) => {
           },
           body: 'scope=read,write&grant_type=client_credentials',
         }),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Auth timeout')), 10000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Auth timeout')), 15000))
       ]);
 
-      const authData = await authRes.json();
-      const accessToken = authData.access_token;
+      const authText = await authRes.text();
+      console.log('Moncash auth status:', authRes.status);
+      console.log('Moncash auth response:', authText);
 
-      if (!accessToken) {
-        throw new Error('No access token received from Moncash');
+      let authData;
+      try {
+        authData = JSON.parse(authText);
+      } catch (e) {
+        throw new Error(`Invalid auth response: ${authText.substring(0, 200)}`);
       }
 
-      // Step 2: Create payment
-      const createPaymentUrl = 'https://sandbox.moncashbutton.digicelgroup.com/Api/v1/CreatePayment';
+      const accessToken = authData.access_token;
+      if (!accessToken) {
+        throw new Error(`No access token. Response: ${JSON.stringify(authData)}`);
+      }
+
+      // Step 2: Create payment (production)
+      const createPaymentUrl = 'https://moncashbutton.digicelgroup.com/Api/v1/CreatePayment';
       const paymentRes = await Promise.race([
         fetch(createPaymentUrl, {
           method: 'POST',
@@ -59,17 +67,18 @@ Deno.serve(async (req) => {
             orderId: orderId,
           }),
         }),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Payment creation timeout')), 10000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Payment creation timeout')), 15000))
       ]);
 
       const paymentData = await paymentRes.json();
+      console.log('Moncash payment response:', JSON.stringify(paymentData));
 
       if (!paymentData.payment_token || !paymentData.payment_token.token) {
-        throw new Error('Failed to create payment token');
+        throw new Error(`Failed to create payment token: ${JSON.stringify(paymentData)}`);
       }
 
-      // Step 3: Build redirect URL to Moncash payment gateway
-      const gatewayBaseUrl = 'https://sandbox.moncashbutton.digicelgroup.com/Moncash-middleware';
+      // Step 3: Build redirect URL to Moncash payment gateway (production)
+      const gatewayBaseUrl = 'https://moncashbutton.digicelgroup.com/Moncash-middleware';
       const redirectUrl = `${gatewayBaseUrl}/Payment/Redirect?token=${paymentData.payment_token.token}`;
 
       return Response.json({
@@ -80,8 +89,7 @@ Deno.serve(async (req) => {
       });
     } catch (apiError) {
       console.error('Moncash API error:', apiError.message);
-      // Return error but don't expose internal details
-      return Response.json({ error: 'Unable to connect to payment provider. Please try again.' }, { status: 503 });
+      return Response.json({ error: `Payment provider error: ${apiError.message}` }, { status: 503 });
     }
   } catch (error) {
     console.error('Moncash payment initiation error:', error.message);

@@ -504,9 +504,11 @@ export default function TaperPayerHome() {
             </motion.div>
           </div>
         </div>
-      </section>
+        </section>
+        )}
 
-      {/* Download App Section */}
+        {/* Download App Section */}
+        {!isHidden('app-download-section') && (
       <section style={{ background: 'linear-gradient(to right, #3D7BB7, #61AF39)' }} className="py-20">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">

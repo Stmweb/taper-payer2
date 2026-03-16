@@ -37,13 +37,14 @@ export default function ComingSoonModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50">
+    <>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="absolute inset-0"
+        className="fixed inset-0 bg-black/50 z-[9998]"
         onClick={onClose}
       />
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

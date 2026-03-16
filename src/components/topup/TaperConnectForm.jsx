@@ -249,11 +249,34 @@ export default function TaperConnectForm({ initialCountry }) {
       {step === 1 && (
         <div>
           <p className="text-sm font-medium text-slate-700 mb-3">Select Country</p>
-          <div className="grid grid-cols-3 gap-2">
-            {COUNTRIES.map((c) => (
+          
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search countries..."
+              value={countrySearch}
+              onChange={(e) => setCountrySearch(e.target.value)}
+              className="w-full pl-10 pr-10 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-sm"
+            />
+            {countrySearch && (
+              <button
+                onClick={() => setCountrySearch('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1">
+            {COUNTRIES.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase())).map((c) => (
               <button
                 key={c.iso}
-                onClick={() => loadProducts(c)}
+                onClick={() => {
+                  loadProducts(c);
+                  setCountrySearch('');
+                }}
                 disabled={loading}
                 className="flex flex-col items-center gap-1 p-3 rounded-xl border border-slate-200 hover:border-cyan-400 hover:bg-cyan-50 transition-all text-center disabled:opacity-50"
               >
@@ -262,6 +285,11 @@ export default function TaperConnectForm({ initialCountry }) {
               </button>
             ))}
           </div>
+          
+          {countrySearch && COUNTRIES.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase())).length === 0 && (
+            <p className="text-sm text-slate-500 text-center py-4">No countries found</p>
+          )}
+          
           {loading && (
             <div className="flex items-center justify-center gap-2 mt-4 text-slate-500">
               <Loader2 className="w-4 h-4 animate-spin" /> Loading products...

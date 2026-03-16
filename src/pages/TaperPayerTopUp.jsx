@@ -141,10 +141,10 @@ export default function TaperPayerTopUp() {
                   </motion.span>
                 </div>
               )}
-              {!isElementHidden('tpay-mobile-btn-hero') && (
-                <Button onClick={() => setShowReloadForm(true)} className="bg-white/20 hover:bg-white/30 text-white border border-white/40 px-8 py-3 text-lg font-bold">Tpay Mobile</Button>
+              {!isElementHidden('taper-mobile-btn-hero') && (
+                <Button onClick={() => setShowReloadForm(true)} className="bg-white/20 hover:bg-white/30 text-white border border-white/40 px-8 py-3 text-lg font-bold">Taper Mobile</Button>
               )}
-              {isElementHidden('tpay-mobile-btn-hero') && null}
+              {isElementHidden('taper-mobile-btn-hero') && null}
               </div>
             </motion.div>
           </motion.div>
@@ -155,7 +155,7 @@ export default function TaperPayerTopUp() {
       <section className="py-20 md:py-28 bg-slate-50">
         <div className="container mx-auto px-4">
           <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900">
-            How TPAY Mobile Works
+            How Taper Mobile Works
           </motion.h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, idx) => {
@@ -184,7 +184,7 @@ export default function TaperPayerTopUp() {
       <section className="py-20 md:py-28 bg-white">
         <div className="container mx-auto px-4">
           <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="text-4xl md:text-5xl font-bold text-center mb-16 text-slate-900">
-            Why Choose TPAY Mobile?
+            Why Choose Taper Mobile?
           </motion.h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit, idx) => {
@@ -260,10 +260,10 @@ export default function TaperPayerTopUp() {
       <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-500 via-blue-500 to-slate-900">
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Get Started with TPAY Mobile Today</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Get Started with Taper Mobile Today</h2>
             <div className="space-y-4 mb-8 text-white text-lg">
               <p>✓ Log in to your TaperPayer account</p>
-              <p>✓ Open the TPAY Mobile section</p>
+              <p>✓ Open the Taper Mobile section</p>
               <p>✓ Follow the quick steps to recharge your mobile</p>
             </div>
             <Button className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Get Started</Button>
@@ -363,7 +363,7 @@ export default function TaperPayerTopUp() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h4 className="font-bold text-white mb-4">TPAY Mobile</h4>
+              <h4 className="font-bold text-white mb-4">Taper Mobile</h4>
               <p className="text-sm">Fast, secure mobile recharges powered by TaperPayer.</p>
             </div>
             <div>

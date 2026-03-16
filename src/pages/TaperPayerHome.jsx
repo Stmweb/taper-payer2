@@ -14,6 +14,7 @@ import CountryDrawer from '@/components/mobile/CountryDrawer';
 import SEOHead from '@/components/SEOHead';
 import StructuredData from '@/components/StructuredData';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
+import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 
 function createPageUrl(page) {
   return `/${page}`;

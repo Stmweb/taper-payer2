@@ -241,12 +241,16 @@ export default function TaperConnectForm() {
                   const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';
                   const destAmount = p.destination?.amount;
                   const destUnit = p.destination?.unit;
+                  const isTooSmall = amount != null && Number(amount) < 0.50;
                   return (
                     <button
                       key={idx}
-                      onClick={() => setSelectedProduct(p)}
+                      onClick={() => !isTooSmall && setSelectedProduct(p)}
+                      disabled={isTooSmall}
                       className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
-                        selectedProduct === p
+                        isTooSmall
+                          ? 'border-slate-100 bg-slate-50 opacity-40 cursor-not-allowed'
+                          : selectedProduct === p
                           ? 'border-cyan-500 bg-cyan-50'
                           : 'border-slate-200 hover:border-cyan-300'
                       }`}
@@ -256,6 +260,7 @@ export default function TaperConnectForm() {
                         {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
                       </div>
                       {destAmount && <p className="text-xs text-slate-500 mt-0.5">Delivers: {destAmount} {destUnit}</p>}
+                      {isTooSmall && <p className="text-xs text-red-400 mt-0.5">Min. $0.50 required</p>}
                     </button>
                   );
                 })}

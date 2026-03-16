@@ -418,8 +418,8 @@ export default function TaperPayerTopUp() {
 
 
 
-      {/* Reload Form Sheet */}
-      {showReloadForm && createPortal(
+      {/* Reload Form Sheet - HIDDEN (Using DTone only) */}
+      {/* {showReloadForm && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -445,7 +445,7 @@ export default function TaperPayerTopUp() {
           </motion.div>
         </div>,
         document.body
-      )}
+      )} */
 
       {/* Top Up Sheet */}
       {showTopUpForm && createPortal(

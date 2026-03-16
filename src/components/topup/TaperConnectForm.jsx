@@ -106,11 +106,11 @@ export default function TaperConnectForm() {
         return;
       }
 
-      const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
+      const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
       const res = await base44.functions.invoke('processReloadlyPayment', {
         paymentMethodId: pm.id,
-        phoneNumber: fullPhone,
-        amount: selectedProduct?.prices?.retail?.amount,
+        phoneNumber: localDigits,
+        amount: selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value,
         countryCode: selectedCountry.iso,
         operatorId: selectedProduct?.operator?.id,
       });

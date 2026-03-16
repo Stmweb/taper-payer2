@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, CheckCircle, AlertCircle, Wifi, Lock } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, Wifi, Lock, Search, X } from 'lucide-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import MoncashPaymentForm from './MoncashPaymentForm';
 

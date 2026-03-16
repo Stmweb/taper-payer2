@@ -110,15 +110,11 @@ export default function TaperConnectForm() {
       const fullPhone = selectedCountry.dial + localDigits;
       const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
 
-      // Step 1: charge card via Stripe
-      const paymentRes = await base44.functions.invoke('processReloadlyPayment', {
+      const paymentRes = await base44.functions.invoke('processDtonePayment', {
         paymentMethodId: pm.id,
-        phoneNumber: localDigits,
-        amount: retailAmount,
-        countryCode: selectedCountry.iso,
-        operatorId: selectedProduct?.operator?.id,
-        dtoneProductId: selectedProduct?.id,
         fullPhone,
+        amount: retailAmount,
+        productId: selectedProduct?.id,
       });
 
       if (paymentRes.data?.success) {

@@ -16,6 +16,11 @@ const COUNTRIES = [
   { name: 'Dominican Republic', iso: 'DO', flag: '🇩🇴', dial: '+1' },
   { name: 'Angola', iso: 'AO', flag: '🇦🇴', dial: '+244' },
   { name: 'Morocco', iso: 'MA', flag: '🇲🇦', dial: '+212' },
+  { name: 'Jamaica', iso: 'JM', flag: '🇯🇲', dial: '+1876' },
+  { name: 'Brazil', iso: 'BR', flag: '🇧🇷', dial: '+55' },
+  { name: 'India', iso: 'IN', flag: '🇮🇳', dial: '+91' },
+  { name: 'Philippines', iso: 'PH', flag: '🇵🇭', dial: '+63' },
+  { name: 'Chile', iso: 'CL', flag: '🇨🇱', dial: '+56' },
 ];
 
 export default function TaperConnectForm() {

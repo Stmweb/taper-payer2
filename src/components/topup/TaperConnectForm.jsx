@@ -321,15 +321,20 @@ export default function TaperConnectForm() {
           )}
 
           {/* MonCash (Haiti only) */}
-          {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (
-            <MoncashPaymentForm
-              phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
-              amount={selectedProduct?.prices?.retail?.amount?.toString() || ''}
-              operatorId={selectedProduct?.operator?.id}
-              countryCode={selectedCountry.iso}
-              onSuccess={() => setSuccess(true)}
-            />
-          )}
+          {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (() => {
+            const retailAmount = selectedProduct?.prices?.retail?.amount
+              || selectedProduct?.suggested_amounts?.[0]
+              || selectedProduct?.face_value;
+            return (
+              <MoncashPaymentForm
+                phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
+                amount={retailAmount?.toString() || ''}
+                operatorId={selectedProduct?.operator?.id}
+                countryCode={selectedCountry.iso}
+                onSuccess={() => setSuccess(true)}
+              />
+            );
+          })()}
         </div>
       )}
     </div>

@@ -76,20 +76,20 @@ export default function ComingSoonModal({ isOpen, onClose }) {
             <motion.div
               animate={{ rotate: 360, y: [0, -8, 0] }}
               transition={{ rotate: { duration: 20, repeat: Infinity, ease: 'linear' }, y: { duration: 3, repeat: Infinity } }}
-              className="inline-block mb-6 p-4 bg-gradient-to-br from-[#3D7BB7] to-cyan-400 rounded-2xl shadow-lg"
+              className="inline-block mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-br from-[#3D7BB7] to-cyan-400 rounded-2xl shadow-lg"
             >
-              <Sparkles className="w-12 h-12 text-white" />
+              <Sparkles className="w-10 sm:w-12 h-10 sm:h-12 text-white" />
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2">
               Coming Soon
             </h2>
-            <p className="text-lg text-slate-600 mb-8 font-medium">Global Money Transfers Reimagined</p>
+            <p className="text-base sm:text-lg text-slate-600 mb-6 sm:mb-8 font-medium">Global Money Transfers Reimagined</p>
 
             {/* Countdown */}
-            <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 mb-8 border border-slate-100">
-              <p className="text-xs uppercase tracking-widest text-slate-500 mb-3 font-bold">Official Launch</p>
-              <p className="text-3xl font-bold text-[#3D7BB7] mb-6">May 18, 2026</p>
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-slate-100">
+              <p className="text-xs uppercase tracking-widest text-slate-500 mb-2 sm:mb-3 font-bold">Official Launch</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#3D7BB7] mb-4 sm:mb-6">May 18, 2026</p>
 
               <div className="grid grid-cols-4 gap-2">
                 {[
@@ -100,17 +100,17 @@ export default function ComingSoonModal({ isOpen, onClose }) {
                 ].map((item, idx) => (
                   <motion.div
                     key={idx}
-                    className="bg-white rounded-xl p-3 shadow-sm border border-slate-100"
+                    className="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-slate-100"
                     whileHover={{ scale: 1.05 }}
                   >
-                    <div className="text-2xl font-bold text-[#3D7BB7]">{String(item.value).padStart(2, '0')}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-[#3D7BB7]">{String(item.value).padStart(2, '0')}</div>
                     <div className="text-xs text-slate-500 mt-1 font-medium">{item.label}</div>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            <p className="text-slate-600 mb-8 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 mb-6 sm:mb-8 leading-relaxed">
               The fastest, safest, and easiest way to send money globally—launching very soon.
             </p>
 
@@ -118,9 +118,9 @@ export default function ComingSoonModal({ isOpen, onClose }) {
               onClick={onClose}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full px-6 py-3 bg-gradient-to-r from-[#3D7BB7] to-cyan-500 hover:shadow-lg text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+              className="w-full px-4 sm:px-6 py-3 bg-gradient-to-r from-[#3D7BB7] to-cyan-500 hover:shadow-lg text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm sm:text-base flex-shrink-0"
             >
-              Notify Me <ArrowRight className="w-4 h-4" />
+              Notify Me <ArrowRight className="w-4 h-4 flex-shrink-0" />
             </motion.button>
           </div>
         </div>

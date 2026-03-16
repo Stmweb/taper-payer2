@@ -70,7 +70,7 @@ export default function TaperConnectForm() {
     try {
       const res = await base44.functions.invoke('dtoneTopUp', { action: 'getProducts', countryIso: country.iso });
       const items = Array.isArray(res.data) ? res.data : (res.data?.products || res.data?.data || []);
-      setProducts(items.slice(0, 20));
+      setProducts(items);
       setStep(2);
     } catch (e) {
       setError('Failed to load products. Please try again.');

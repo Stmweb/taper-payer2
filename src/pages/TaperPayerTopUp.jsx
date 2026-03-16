@@ -226,6 +226,7 @@ export default function TaperPayerTopUp() {
       </section>
 
       {/* Supported Countries */}
+      {!isSectionHidden('supported-countries-section') && (
       <section className="py-20 md:py-28 bg-white border-b border-slate-200">
         <div className="container mx-auto px-4">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="max-w-2xl mx-auto">
@@ -268,6 +269,7 @@ export default function TaperPayerTopUp() {
           </motion.div>
         </div>
       </section>
+      )}
 
       {/* How It Works */}
       <section className="py-20 md:py-28 bg-slate-50">

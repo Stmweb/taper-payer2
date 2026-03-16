@@ -60,53 +60,53 @@ export default function ComingSoonModal({ isOpen, onClose }) {
           </button>
 
           <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-          className="inline-block mb-6"
-        >
-          <Sparkles className="w-16 h-16 text-cyan-500" />
-        </motion.div>
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            className="inline-block mb-6"
+          >
+            <Sparkles className="w-16 h-16 text-cyan-500" />
+          </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-          A Smarter Way to Move Money
-        </h2>
-        <p className="text-xl text-slate-600 mb-8">Is Coming</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
+            A Smarter Way to Move Money
+          </h2>
+          <p className="text-xl text-slate-600 mb-8">Is Coming</p>
 
-        <div className="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-6 mb-8">
-          <p className="text-sm text-slate-600 mb-4 font-medium">Official Launch</p>
-          <p className="text-2xl font-bold text-slate-900 mb-6">May 18, 2026</p>
+          <div className="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-6 mb-8">
+            <p className="text-sm text-slate-600 mb-4 font-medium">Official Launch</p>
+            <p className="text-2xl font-bold text-slate-900 mb-6">May 18, 2026</p>
 
-          <div className="grid grid-cols-4 gap-3">
-            <div className="bg-white rounded-lg p-3 shadow-sm">
-              <div className="text-2xl font-bold text-cyan-600">{timeLeft.days}</div>
-              <div className="text-xs text-slate-600 mt-1">Days</div>
-            </div>
-            <div className="bg-white rounded-lg p-3 shadow-sm">
-              <div className="text-2xl font-bold text-cyan-600">{timeLeft.hours}</div>
-              <div className="text-xs text-slate-600 mt-1">Hours</div>
-            </div>
-            <div className="bg-white rounded-lg p-3 shadow-sm">
-              <div className="text-2xl font-bold text-cyan-600">{timeLeft.minutes}</div>
-              <div className="text-xs text-slate-600 mt-1">Mins</div>
-            </div>
-            <div className="bg-white rounded-lg p-3 shadow-sm">
-              <div className="text-2xl font-bold text-cyan-600">{timeLeft.seconds}</div>
-              <div className="text-xs text-slate-600 mt-1">Secs</div>
+            <div className="grid grid-cols-4 gap-3">
+              <div className="bg-white rounded-lg p-3 shadow-sm">
+                <div className="text-2xl font-bold text-cyan-600">{timeLeft.days}</div>
+                <div className="text-xs text-slate-600 mt-1">Days</div>
+              </div>
+              <div className="bg-white rounded-lg p-3 shadow-sm">
+                <div className="text-2xl font-bold text-cyan-600">{timeLeft.hours}</div>
+                <div className="text-xs text-slate-600 mt-1">Hours</div>
+              </div>
+              <div className="bg-white rounded-lg p-3 shadow-sm">
+                <div className="text-2xl font-bold text-cyan-600">{timeLeft.minutes}</div>
+                <div className="text-xs text-slate-600 mt-1">Mins</div>
+              </div>
+              <div className="bg-white rounded-lg p-3 shadow-sm">
+                <div className="text-2xl font-bold text-cyan-600">{timeLeft.seconds}</div>
+                <div className="text-xs text-slate-600 mt-1">Secs</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <p className="text-slate-600 mb-6">
-          Stay tuned for the fastest, safest, and easiest way to send money globally.
-        </p>
+          <p className="text-slate-600 mb-6">
+            Stay tuned for the fastest, safest, and easiest way to send money globally.
+          </p>
 
-        <button
-          onClick={onClose}
-          className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors"
-        >
-          Got It
-        </button>
-        </div>
+          <button
+            onClick={onClose}
+            className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors"
+          >
+            Got It
+          </button>
+          </div>
       </motion.div>
     </>,
     document.body

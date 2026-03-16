@@ -136,11 +136,22 @@ export default function TaperConnectForm({ initialCountry }) {
     setPaymentMethod('card');
     try {
       const res = await base44.functions.invoke('dtoneTopUp', { action: 'getProducts', countryIso: country.iso });
-      const items = Array.isArray(res.data) ? res.data : (res.data?.products || res.data?.data || []);
+      // Check if response is an error or empty
+      if (res.data?.error || res.data?.status === 400 || !Array.isArray(res.data)) {
+        setError(`No products available for ${country.name}. Please try another country.`);
+        setProducts([]);
+        return;
+      }
+      const items = Array.isArray(res.data) ? res.data : [];
+      if (items.length === 0) {
+        setError(`No products available for ${country.name}. Please try another country.`);
+        setProducts([]);
+        return;
+      }
       setProducts(items);
       setStep(2);
     } catch (e) {
-      setError('Failed to load products. Please try again.');
+      setError(`Failed to load products for ${country.name}. Please try again.`);
     } finally {
       setLoading(false);
     }

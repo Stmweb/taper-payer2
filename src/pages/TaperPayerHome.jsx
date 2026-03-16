@@ -17,6 +17,21 @@ import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
+import { loadStripe } from '@stripe/stripe-js';
+
+let stripePromise;
+
+async function preloadStripe() {
+  if (!stripePromise) {
+    try {
+      const res = await base44.functions.invoke('getStripeKey', {});
+      stripePromise = loadStripe(res.data.publicKey);
+    } catch (e) {
+      console.error('Failed to preload Stripe:', e);
+    }
+  }
+  return stripePromise;
+}
 
 function createPageUrl(page) {
   return `/${page}`;
@@ -93,6 +108,10 @@ export default function TaperPayerHome() {
   useEffect(() => {
     if (sendTo) fetchExchangeRate();
   }, [sendTo]);
+
+  useEffect(() => {
+    preloadStripe();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>

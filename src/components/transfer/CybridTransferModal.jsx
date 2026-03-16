@@ -165,13 +165,16 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               </div>
             </button>
           ))}
-          <Button
-            onClick={() => setStep('details')}
-            className="w-full mt-2"
-            style={{ backgroundColor: '#3D7BB7' }}
-          >
-            Continue <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
+          <div className="flex gap-3 pt-1">
+            <Button variant="outline" onClick={() => setStep('account')} className="flex-1">Back</Button>
+            <Button
+              onClick={() => setStep('details')}
+              className="flex-1"
+              style={{ backgroundColor: '#3D7BB7' }}
+            >
+              Continue <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </div>
         </div>
       )}
 

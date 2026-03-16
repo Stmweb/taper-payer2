@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { base44 } from '@/api/base44Client';
-import DToneTopUpForm from './DToneTopUpForm';
+import TpayReloadForm from './TpayReloadForm';
 
 let stripePromise;
 
@@ -31,7 +31,7 @@ export default function TpayReloadFormWrapper() {
 
   return (
     <Elements stripe={stripePromiseValue}>
-      <DToneTopUpForm />
+      <TpayReloadForm />
     </Elements>
   );
 }

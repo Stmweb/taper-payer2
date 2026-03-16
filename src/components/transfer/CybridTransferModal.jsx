@@ -69,20 +69,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     try {
       const user = await base44.auth.me();
 
-      // 1. Create or get customer
-      const custRes = await invoke('createCustomer', {
-        name: user.full_name || accountName,
-        email: user.email,
-      });
-      const customerGuid = custRes.data?.customer?.guid;
-      if (!customerGuid) throw new Error('Could not create customer profile.');
-
-      // 2. Check KYC/verification status
-      const statusRes = await invoke('getCustomerStatus', { customerGuid });
-      const customer = statusRes.data?.customer;
-      setKycStatus(customer?.state); // pending, approved, rejected, etc.
-
-      // 3. Get or create account (fiat or trading based on selection)
+      // 1. Get or create account (fiat or trading based on selection)
       const accRes = await invoke('getOrCreateAccount', {
         customerGuid,
         asset: 'USD',

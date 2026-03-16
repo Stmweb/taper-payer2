@@ -108,6 +108,7 @@ export default function AdminPageManager() {
         hidden_elements: hiddenElements,
         hidden_sections: hiddenSections,
         content_overrides: contentOverrides,
+        button_overrides: buttonOverrides,
         is_active: config?.is_active ?? true,
       };
 

@@ -135,9 +135,10 @@ export default function TaperConnectForm({ initialCountry }) {
     setProducts([]);
     setSelectedProduct(null);
     setPaymentMethod('card');
+    setStep(2); // Move to step 2 immediately
+    
     try {
       const res = await base44.functions.invoke('dtoneTopUp', { action: 'getProducts', countryIso: country.iso });
-      // Function returns array of products or error object with products: []
       const items = Array.isArray(res.data) ? res.data : (res.data?.products || []);
       if (items.length === 0) {
         setError(`No products available for ${country.name}. Please try another country.`);
@@ -145,7 +146,6 @@ export default function TaperConnectForm({ initialCountry }) {
         return;
       }
       setProducts(items);
-      setStep(2);
     } catch (e) {
       setError(`Failed to load products for ${country.name}. Please try again.`);
     } finally {

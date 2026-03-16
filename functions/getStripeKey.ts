@@ -1,8 +1,5 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
-
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
     const stripePublicKey = Deno.env.get('STRIPE_PUBLIC_KEY');
     
     if (!stripePublicKey) {

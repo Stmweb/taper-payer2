@@ -53,13 +53,13 @@ export default function ComingSoonModal({ isOpen, onClose }) {
       >
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center pointer-events-auto">
           <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
-        >
-          ✕
-        </button>
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
+          >
+            ✕
+          </button>
 
-        <motion.div
+          <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           className="inline-block mb-6"

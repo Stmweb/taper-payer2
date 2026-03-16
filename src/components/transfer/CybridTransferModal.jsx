@@ -243,12 +243,23 @@ export default function CybridTransferModal({ amount, country, onClose }) {
           <p className="text-slate-600 text-sm">
             Your transfer of <strong>${parseFloat(amount).toFixed(2)} USD</strong> to <strong>{country}</strong> has been submitted via Cybrid.
           </p>
-          {transferResult?.guid && (
-            <p className="text-xs text-slate-400 font-mono bg-slate-50 px-3 py-1 rounded">
-              Ref: {transferResult.guid}
-            </p>
-          )}
-          <p className="text-xs text-slate-500 capitalize">Status: {transferResult?.state || 'pending'}</p>
+          <div className="space-y-2 text-xs w-full">
+            {transferResult?.guid && (
+              <div className="bg-slate-50 px-3 py-2 rounded text-slate-600 font-mono">
+                Ref: {transferResult.guid}
+              </div>
+            )}
+            <div className="bg-blue-50 px-3 py-2 rounded text-blue-700">
+              <p className="font-medium">Account: <span className="capitalize">{accountType}</span></p>
+              <p className="text-xs">Method: {method.toUpperCase()}</p>
+            </div>
+            {kycStatus && (
+              <div className="bg-green-50 px-3 py-2 rounded text-green-700">
+                <p className="font-medium">KYC: <span className="capitalize">{kycStatus}</span></p>
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-slate-500 capitalize">Transfer Status: {transferResult?.state || 'pending'}</p>
           <Button onClick={onClose} className="mt-2 w-full" style={{ backgroundColor: '#3D7BB7' }}>
             Done
           </Button>

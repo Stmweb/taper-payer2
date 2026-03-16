@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Drawer,
   DrawerClose,
@@ -9,9 +9,17 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Check, Search } from 'lucide-react';
 
 export default function CountryDrawer({ open, onOpenChange, countries, value, onSelect, title = "Select Country" }) {
+  const [search, setSearch] = useState('');
+
+  const filteredCountries = countries.filter((country) => {
+    const name = typeof country === 'string' ? country : country.name;
+    return name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="dark:bg-slate-900">

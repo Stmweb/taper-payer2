@@ -431,11 +431,13 @@ export default function TaperPayerHome() {
             </Card>
           </Link>
         </div>
-      </section>
+        </section>
+        )}
 
 
 
-      {/* Membership Section */}
+        {/* Membership Section */}
+        {!isHidden('membership-section') && (
       <section className="py-20 bg-white dark:bg-slate-800">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">

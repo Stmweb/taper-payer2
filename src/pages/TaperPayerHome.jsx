@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   ArrowRight, Shield, Zap, DollarSign, Globe, Users, TrendingUp,
-  RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram, Phone
+  RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram
 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import CountryDrawer from '@/components/mobile/CountryDrawer';
@@ -215,7 +215,7 @@ export default function TaperPayerHome() {
                 )}
                 {!isElementHidden('tpay-mobile-btn') && (
                   <Button onClick={() => setShowReloadForm(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0 flex items-center gap-2">
-                    <Phone className="w-5 h-5" />
+                    <Smartphone className="w-5 h-5" />
                     Taper Connect
                   </Button>
                 )}

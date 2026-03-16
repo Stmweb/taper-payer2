@@ -49,12 +49,10 @@ export default function TaperConnectForm() {
           action: 'lookupOperator',
           phoneNumber: fullPhone,
         });
-        // DTone lookup returns { operators: [...] } or direct operator fields
-        const ops = res.data?.operators;
-        const operatorName = (Array.isArray(ops) && ops.length > 0)
-          ? ops[0].name
-          : res.data?.operator?.name || res.data?.name;
-        if (operatorName) setDetectedOperator(operatorName);
+        // DTone returns a direct array of operators
+        const ops = Array.isArray(res.data) ? res.data : (res.data?.operators || []);
+        const identified = ops.find(o => o.identified) || ops[0];
+        if (identified?.name) setDetectedOperator(identified.name);
       } catch (e) { /* silent */ } finally {
         setDetectingOperator(false);
       }

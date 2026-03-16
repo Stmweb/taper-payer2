@@ -28,7 +28,7 @@ export default function TaperConnectForm() {
   const [error, setError] = useState('');
   const [cardError, setCardError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [detectedOperator, setDetectedOperator] = useState(null);
+  const [detectedOperator, setDetectedOperator] = useState(null); // { id, name }
   const [detectingOperator, setDetectingOperator] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('card');
   const detectTimeout = useRef(null);

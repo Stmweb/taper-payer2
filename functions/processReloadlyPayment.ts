@@ -62,10 +62,10 @@ Deno.serve(async (req) => {
      'Accept': 'application/com.reloadly.topups-v1+json'
     };
 
-    // Clean phone number - remove leading +, country code, and formatting
-    const cleanPhone = phoneNumber.replace(/^\+/, '').replace(/^[0-9]{1,3}/, '').replace(/\D/g, '');
+    // phoneNumber is already local digits (no country code prefix)
+    const cleanPhone = phoneNumber.replace(/\D/g, '');
 
-    console.log('Reloadly request:', { operatorId, amount, countryCode, cleanPhone, originalPhone: phoneNumber });
+    console.log('Reloadly request:', { operatorId, amount, countryCode, cleanPhone });
 
     const reloadlyRes = await fetch('https://topups.reloadly.com/topups', {
      method: 'POST',

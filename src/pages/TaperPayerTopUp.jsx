@@ -127,7 +127,7 @@ export default function TaperPayerTopUp() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
               <div className="flex justify-start">
                 <div className="relative inline-block">
-                  <Button onClick={() => setShowReloadForm(true)} className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg font-bold border-0">Tpay Mobile</Button>
+                  <Button onClick={() => setShowReloadForm(true)} className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg font-bold border-0">Top Up Now</Button>
                   <motion.span
                     className="absolute -bottom-9 left-1/2 -translate-x-1/2 text-2xl pointer-events-none select-none"
                     animate={{ y: [0, -6, 0] }}

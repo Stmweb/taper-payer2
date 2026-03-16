@@ -233,12 +233,17 @@ export default function TaperConnectForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Select Plan</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
+            </label>
             {products.length === 0 ? (
               <p className="text-sm text-slate-500">No products available for this country.</p>
             ) : (
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                {products.map((p, idx) => {
+                {(detectedOperator
+                  ? products.filter(p => p.operator?.id === detectedOperator.id)
+                  : products
+                ).map((p, idx) => {
                   const name = p.name || p.description || String(p.id);
                   const amount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
                   const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';

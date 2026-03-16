@@ -22,6 +22,7 @@ export default function TaperPayerTopUp() {
   const [showTaperConnect, setShowTaperConnect] = useState(false);
   const [showReloadForm, setShowReloadForm] = useState(false);
   const [countrySearch, setCountrySearch] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const bgSettings = {
     posX: 'center',
     posY: 'center',
@@ -241,17 +242,21 @@ export default function TaperPayerTopUp() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredCountries.map((country) => (
-                <motion.div
+                <motion.button
                   key={country.code}
+                  onClick={() => {
+                    setSelectedCountry(country);
+                    setShowTaperConnect(true);
+                  }}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gradient-to-br from-cyan-50 to-blue-50 p-4 rounded-lg border border-cyan-200 hover:border-cyan-400 text-center transition-all"
+                  className="bg-gradient-to-br from-cyan-50 to-blue-50 p-4 rounded-lg border border-cyan-200 hover:border-cyan-400 hover:shadow-lg text-center transition-all cursor-pointer"
                 >
                   <div className="text-3xl mb-2">{country.flag}</div>
                   <div className="font-semibold text-slate-900 text-sm">{country.name}</div>
                   <div className="text-xs text-slate-600">{country.code}</div>
-                </motion.div>
+                </motion.button>
               ))}
             </div>
 

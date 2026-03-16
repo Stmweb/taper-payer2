@@ -96,6 +96,7 @@ export default function TaperPayerTopUp() {
               <a href="/TaperPayerAbout" className="block text-white/90 font-medium hover:text-white transition-colors py-2">About</a>
               <a href="/TaperPayerHowItWorks" className="block text-white/90 font-medium hover:text-white transition-colors py-2">How It Works</a>
               <a href="/TaperPayerRates" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Exchange Rates</a>
+              <a href="/TaperPayerTopUp" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Taper Mobile</a>
               <a href="/TaperPayerContact" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</a>
               <div className="pt-3 space-y-3">
                 <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">

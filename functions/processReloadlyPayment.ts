@@ -3,25 +3,36 @@ import Stripe from 'npm:stripe@16.11.0';
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
 
-const DTONE_KEY = Deno.env.get('DTONE_API_KEY');
-const DTONE_SECRET = Deno.env.get('DTONE_API_SECRET');
-const DTONE_BASE = 'https://dvs-api.dtone.com/v1';
+const RELOADLY_CLIENT_ID = Deno.env.get('RELOADLY_CLIENT_ID');
+const RELOADLY_CLIENT_SECRET = Deno.env.get('RELOADLY_CLIENT_SECRET');
 
-function dtoneAuth() {
-  return 'Basic ' + btoa(`${DTONE_KEY}:${DTONE_SECRET}`);
+async function getReloadlyToken() {
+  const res = await fetch('https://auth.reloadly.com/oauth/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: RELOADLY_CLIENT_ID,
+      client_secret: RELOADLY_CLIENT_SECRET,
+      grant_type: 'client_credentials',
+      audience: 'https://topups.reloadly.com'
+    })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || 'Auth failed');
+  return data.access_token;
 }
 
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    const { paymentMethodId, amount, phoneNumber, countryCode, operatorId, dtoneProductId, fullPhone } = await req.json();
+    const { paymentMethodId, amount, phoneNumber, countryCode, operatorId } = await req.json();
 
     if (!paymentMethodId || !amount || !phoneNumber || !countryCode) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Step 1: Charge card via Stripe
+    // Create payment intent with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(parseFloat(amount) * 100),
       currency: 'usd',
@@ -29,65 +40,66 @@ Deno.serve(async (req) => {
       confirm: true,
       automatic_payment_methods: {
         enabled: true,
-        allow_redirects: 'never',
-      },
+        allow_redirects: 'never'
+      }
     });
 
     if (paymentIntent.status !== 'succeeded') {
-      return Response.json({ error: 'Payment failed', status: paymentIntent.status }, { status: 400 });
-    }
-
-    // Step 2: Send top-up via DTone
-    const mobileNumber = fullPhone || phoneNumber;
-    const externalId = `TPAY-${paymentIntent.id.substring(0, 20)}`;
-
-    let productId = dtoneProductId;
-
-    // If no product ID, look one up by operator
-    if (!productId && operatorId) {
-      const iso2To3 = { HT: 'HTI', IN: 'IND', PH: 'PHL', NG: 'NGA', KE: 'KEN', GH: 'GHA', MX: 'MEX', BR: 'BRA', SN: 'SEN', AO: 'AGO', DO: 'DOM', CL: 'CHL', MA: 'MAR' };
-      const iso3 = iso2To3[countryCode] || countryCode;
-      const pRes = await fetch(
-        `${DTONE_BASE}/products?country_iso_code=${iso3}&type=FIXED_VALUE_RECHARGE&per_page=100`,
-        { headers: { Authorization: dtoneAuth(), Accept: 'application/json' } }
+      return Response.json(
+        { error: 'Payment failed', status: paymentIntent.status },
+        { status: 400 }
       );
-      const products = await pRes.json();
-      const match = Array.isArray(products) ? products.find(p => p.operator?.id === parseInt(operatorId)) : null;
-      if (match) productId = match.id;
     }
 
-    if (!productId) {
-      return Response.json({ error: 'Could not determine product for top-up. Payment was charged — please contact support.', paymentIntentId: paymentIntent.id }, { status: 400 });
-    }
+    // Process Reloadly topup
+    const token = await getReloadlyToken();
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/com.reloadly.topups-v1+json'
+    };
 
-    const topupRes = await fetch(`${DTONE_BASE}/sync/transactions`, {
+    // phoneNumber should be the full international number e.g. +233241234567
+    // Strip leading + for Reloadly number field, keep country code separate
+    const cleanPhone = phoneNumber.replace(/^\+/, '').replace(/\D/g, '');
+
+    console.log('Reloadly request:', { operatorId, amount, countryCode, cleanPhone });
+
+    const reloadlyRes = await fetch('https://topups.reloadly.com/topups', {
       method: 'POST',
-      headers: { Authorization: dtoneAuth(), Accept: 'application/json', 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
-        product_id: productId,
-        auto_confirm: true,
-        credit_party_identifier: { mobile_number: mobileNumber },
-        external_id: externalId,
-      }),
+        operatorId: parseInt(operatorId) || 173,
+        amount: parseFloat(amount),
+        useLocalAmount: false,
+        customIdentifier: `tpay-${paymentIntent.id}`,
+        recipientPhone: { countryCode, number: cleanPhone },
+        senderPhone: { countryCode: 'US', number: '3051234567' }
+      })
     });
 
-    const topupData = await topupRes.json();
-    console.log('DTone topup response:', topupRes.status, JSON.stringify(topupData).substring(0, 500));
+    const reloadlyData = await reloadlyRes.json();
+    console.log('Reloadly response:', { status: reloadlyRes.status, data: reloadlyData });
 
-    if (!topupRes.ok || topupData.status === 'FAILED' || topupData.errors) {
-      const errMsg = topupData.errors?.[0]?.message || topupData.message || 'Top-up delivery failed';
-      return Response.json({ error: errMsg, paymentIntentId: paymentIntent.id, details: topupData }, { status: 400 });
+    if (!reloadlyRes.ok || reloadlyData.status !== 'SUCCESSFUL') {
+      return Response.json(
+        { error: reloadlyData.message || reloadlyData.error || 'Top-up failed', details: reloadlyData },
+        { status: reloadlyRes.status }
+      );
     }
 
     return Response.json({
       success: true,
-      transactionId: topupData.id,
+      transactionId: reloadlyData.id,
       paymentIntentId: paymentIntent.id,
-      phoneNumber: mobileNumber,
+      phoneNumber,
       amount: parseFloat(amount),
+      countryCode
     });
   } catch (error) {
-    console.error('processReloadlyPayment error:', error.message);
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json(
+      { error: error.message },
+      { status: 500 }
+    );
   }
 });

@@ -64,6 +64,28 @@ export default function DToneTopUpForm() {
     }
   };
 
+  const handlePhoneChange = (value) => {
+    setPhoneNumber(value);
+    setDetectedOperator(null);
+    if (detectTimeout.current) clearTimeout(detectTimeout.current);
+    const digits = value.replace(/\D/g, '');
+    if (digits.length < 7 || !selectedCountry) return;
+    detectTimeout.current = setTimeout(async () => {
+      setDetectingOperator(true);
+      try {
+        const fullPhone = selectedCountry.dial + digits.replace(/^0/, '');
+        const res = await base44.functions.invoke('dtoneTopUp', {
+          action: 'lookupOperator',
+          phoneNumber: fullPhone,
+        });
+        const operatorName = res.data?.operator?.name || res.data?.name;
+        if (operatorName) setDetectedOperator(operatorName);
+      } catch (e) { /* silent */ } finally {
+        setDetectingOperator(false);
+      }
+    }, 800);
+  };
+
   const handleCardPayment = async () => {
     if (!phoneNumber || !selectedProduct) {
       setError('Please enter a phone number and select a product.');

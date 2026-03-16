@@ -3,6 +3,8 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2, CheckCircle, AlertCircle, Zap, Lock } from 'lucide-react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import MoncashPaymentForm from './MoncashPaymentForm';
 
 const COUNTRIES = [
   { name: 'Haiti', iso: 'HT', flag: '🇭🇹', dial: '+509' },
@@ -27,9 +29,12 @@ export default function DToneTopUpForm() {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [processingPayment, setProcessingPayment] = useState(false);
   const [error, setError] = useState('');
+  const [cardError, setCardError] = useState('');
   const [success, setSuccess] = useState(false);
   const [step, setStep] = useState(1);
-  const detectTimeout = useRef(null);
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  const stripe = useStripe();
+  const elements = useElements();
 
   const handleCountrySelect = async (country) => {
     setSelectedCountry(country);
@@ -37,6 +42,7 @@ export default function DToneTopUpForm() {
     setSelectedProduct(null);
     setPhoneNumber('');
     setError('');
+    setPaymentMethod('card');
     setLoadingProducts(true);
     setStep(2);
 
@@ -54,37 +60,49 @@ export default function DToneTopUpForm() {
     }
   };
 
-  const handlePhoneChange = (value) => {
-    setPhoneNumber(value);
-    if (detectTimeout.current) clearTimeout(detectTimeout.current);
-  };
-
-  const handleTopUp = async () => {
+  const handleCardPayment = async () => {
     if (!phoneNumber || !selectedProduct) {
       setError('Please enter a phone number and select a product.');
+      return;
+    }
+    if (!stripe || !elements) {
+      setError('Payment system is loading. Please wait and try again.');
       return;
     }
 
     setProcessingPayment(true);
     setError('');
+    setCardError('');
 
     try {
-      const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
-      const res = await base44.functions.invoke('dtoneTopUp', {
-        action: 'sendTopUp',
-        productId: selectedProduct.id,
-        mobileNumber: fullPhone,
-        externalId: `TPAY-${Date.now()}`,
+      const cardElement = elements.getElement(CardElement);
+      const { error: stripeError, paymentMethod: pm } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
       });
 
-      const data = res.data;
-      if (data?.status === 'COMPLETED' || data?.status === 'CONFIRMED' || data?.id) {
+      if (stripeError) {
+        setCardError(stripeError.message);
+        setProcessingPayment(false);
+        return;
+      }
+
+      const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
+      const res = await base44.functions.invoke('processReloadlyPayment', {
+        paymentMethodId: pm.id,
+        phoneNumber: fullPhone,
+        amount: selectedProduct?.prices?.retail?.amount,
+        countryCode: selectedCountry.iso,
+        operatorId: selectedProduct?.operator?.id,
+      });
+
+      if (res.data?.success) {
         setSuccess(true);
       } else {
-        setError(data?.error_message || data?.message || 'Top-up failed. Please try again.');
+        setError(res.data?.error || 'Transaction failed. Please try again.');
       }
     } catch (e) {
-      setError('Top-up failed. Please try again.');
+      setError('Payment or top-up failed. Please try again.');
     } finally {
       setProcessingPayment(false);
     }
@@ -98,6 +116,8 @@ export default function DToneTopUpForm() {
     setSelectedProduct(null);
     setSuccess(false);
     setError('');
+    setCardError('');
+    setPaymentMethod('card');
   };
 
   if (success) {
@@ -106,7 +126,7 @@ export default function DToneTopUpForm() {
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-slate-900 mb-2">Top-Up Sent!</h3>
         <p className="text-slate-600 mb-2">
-          {selectedProduct?.destination?.amount} {selectedProduct?.destination?.unit} sent to {selectedCountry?.dial}{phoneNumber}.
+          Airtime sent to {selectedCountry?.dial}{phoneNumber}.
         </p>
         <p className="text-sm text-slate-500 mb-6">
           Operator: {selectedProduct?.operator?.name}
@@ -124,7 +144,7 @@ export default function DToneTopUpForm() {
         <div className="bg-gradient-to-br from-teal-400 to-teal-500 w-10 h-10 rounded-lg flex items-center justify-center">
           <Zap className="w-5 h-5 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-slate-900">Top Up Now</h3>
+        <h3 className="text-xl font-bold text-slate-900">Tpay Mobile</h3>
       </div>
 
       {error && (
@@ -153,7 +173,7 @@ export default function DToneTopUpForm() {
         </div>
       )}
 
-      {/* Step 2: Phone + Product */}
+      {/* Step 2: Phone + Product + Payment */}
       {step === 2 && (
         <div className="space-y-4">
           <button onClick={reset} className="text-sm text-teal-600 hover:underline">
@@ -170,7 +190,7 @@ export default function DToneTopUpForm() {
                 type="tel"
                 placeholder="Enter number"
                 value={phoneNumber}
-                onChange={(e) => handlePhoneChange(e.target.value)}
+                onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
           </div>
@@ -184,7 +204,7 @@ export default function DToneTopUpForm() {
             ) : products.length === 0 ? (
               <p className="text-sm text-slate-500">No products available for this country.</p>
             ) : (
-              <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {products.map((p) => (
                   <button
                     key={p.id}
@@ -198,7 +218,7 @@ export default function DToneTopUpForm() {
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-slate-800">{p.name || p.operator?.name}</span>
                       <span className="text-sm font-bold text-teal-600">
-                        ${p.prices?.retail?.amount?.toFixed(2) || '—'} {p.prices?.retail?.unit}
+                        ${p.prices?.retail?.amount?.toFixed(2)}
                       </span>
                     </div>
                     {p.destination && (
@@ -212,17 +232,76 @@ export default function DToneTopUpForm() {
             )}
           </div>
 
-          <Button
-            onClick={handleTopUp}
-            disabled={processingPayment || !phoneNumber || !selectedProduct}
-            className="w-full bg-teal-500 hover:bg-teal-600 text-white"
-          >
-            {processingPayment ? (
-              <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
-            ) : (
-              <><Lock className="w-4 h-4 mr-2" /> Top Up Now — ${selectedProduct?.prices?.retail?.amount?.toFixed(2) || '—'}</>
-            )}
-          </Button>
+          {/* Payment Method */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setPaymentMethod('card')}
+                className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                  paymentMethod === 'card' ? 'border-teal-500 bg-teal-50 text-teal-700' : 'border-slate-200 text-slate-700 hover:border-teal-300'
+                }`}
+              >
+                💳 Credit/Debit Card
+              </button>
+              {selectedCountry?.iso === 'HT' && (
+                <button
+                  onClick={() => setPaymentMethod('moncash')}
+                  className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                    paymentMethod === 'moncash' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700 hover:border-blue-300'
+                  }`}
+                >
+                  🇭🇹 MonCash
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Card Payment */}
+          {paymentMethod === 'card' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
+                <div className="p-3 border border-slate-200 rounded-lg bg-white">
+                  <CardElement
+                    options={{
+                      style: {
+                        base: {
+                          fontSize: '14px',
+                          color: '#1e293b',
+                          '::placeholder': { color: '#cbd5e1' },
+                        },
+                        invalid: { color: '#dc2626' },
+                      },
+                    }}
+                  />
+                </div>
+                {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
+              </div>
+              <Button
+                onClick={handleCardPayment}
+                disabled={processingPayment || !phoneNumber || !selectedProduct || !stripe}
+                className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+              >
+                {processingPayment ? (
+                  <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
+                ) : (
+                  <><Lock className="w-4 h-4 mr-2" /> Pay ${selectedProduct?.prices?.retail?.amount?.toFixed(2) || '—'} & Send Airtime</>
+                )}
+              </Button>
+            </>
+          )}
+
+          {/* Moncash Payment (Haiti only) */}
+          {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (
+            <MoncashPaymentForm
+              phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
+              amount={selectedProduct?.prices?.retail?.amount?.toString() || ''}
+              operatorId={selectedProduct?.operator?.id}
+              countryCode={selectedCountry.iso}
+              onSuccess={() => setSuccess(true)}
+            />
+          )}
         </div>
       )}
     </div>

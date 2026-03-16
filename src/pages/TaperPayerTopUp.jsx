@@ -117,9 +117,6 @@ export default function TaperPayerTopUp() {
     { name: 'Brazil', flag: '🇧🇷', code: 'BRL' },
     { name: 'Paraguay', flag: '🇵🇾', code: 'PYG' },
     { name: 'Uruguay', flag: '🇺🇾', code: 'UYU' },
-    { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
-    { name: 'Canada', flag: '🇨🇦', code: 'CAD' },
-    { name: 'United States', flag: '🇺🇸', code: 'USD' },
   ];
 
   const filteredCountries = countries.filter(country =>

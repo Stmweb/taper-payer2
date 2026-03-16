@@ -71,9 +71,6 @@ const COUNTRIES = [
   { name: 'Brazil', iso: 'BR', flag: '🇧🇷', dial: '+55' },
   { name: 'Paraguay', iso: 'PY', flag: '🇵🇾', dial: '+595' },
   { name: 'Uruguay', iso: 'UY', flag: '🇺🇾', dial: '+598' },
-  { name: 'Mexico', iso: 'MX', flag: '🇲🇽', dial: '+52' },
-  { name: 'Canada', iso: 'CA', flag: '🇨🇦', dial: '+1' },
-  { name: 'United States', iso: 'US', flag: '🇺🇸', dial: '+1' },
 ];
 
 export default function TaperConnectForm({ initialCountry }) {

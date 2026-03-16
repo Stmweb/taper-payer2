@@ -126,17 +126,17 @@ export default function TaperPayerTopUp() {
             <p className="text-xl text-slate-200 mb-8">Fast, secure, and convenient mobile top-ups anywhere, anytime.</p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}>
               <div className="flex justify-start gap-4 flex-wrap">
-                <div className="relative inline-block">
-                  <Button onClick={() => setShowReloadForm(true)} className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg font-bold border-0">Top Up Now</Button>
-                  <motion.span
-                    className="absolute -bottom-9 left-1/2 -translate-x-1/2 text-2xl pointer-events-none select-none"
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    👆
-                  </motion.span>
-                </div>
-                <Button onClick={() => setShowReloadForm(true)} className="bg-white/20 hover:bg-white/30 text-white border border-white/40 px-8 py-3 text-lg font-bold">Tpay Mobile</Button>
+              <div className="relative inline-block">
+                <Button onClick={() => setShowTaperConnect(true)} className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg font-bold border-0">Top Up Now</Button>
+                <motion.span
+                  className="absolute -bottom-9 left-1/2 -translate-x-1/2 text-2xl pointer-events-none select-none"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  👆
+                </motion.span>
+              </div>
+              <Button onClick={() => setShowReloadForm(true)} className="bg-white/20 hover:bg-white/30 text-white border border-white/40 px-8 py-3 text-lg font-bold">Tpay Mobile</Button>
               </div>
             </motion.div>
           </motion.div>

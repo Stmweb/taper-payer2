@@ -41,6 +41,8 @@ export default function TaperPayerHome() {
      url: 'https://taperpayer.com/'
    });
 
+   const { config, isHidden, getContentOverride } = usePageConfig('TaperPayerHome');
+
    const [amount, setAmount] = useState('100');
    const [sendTo, setSendTo] = useState('');
    const [exchangeRate, setExchangeRate] = useState(null);

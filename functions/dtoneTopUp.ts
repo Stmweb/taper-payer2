@@ -26,8 +26,15 @@ Deno.serve(async (req) => {
         { headers: { Authorization: auth, Accept: 'application/json' } }
       );
       const data = await res.json();
-      console.log('DTone products status:', res.status);
-      return Response.json(data);
+      console.log('DTone products status:', res.status, 'Country:', countryIso, '->', iso3);
+      // Check if the API returned an error
+      if (!res.ok || data.error || (data.data && data.data.length === 0 && res.status >= 400)) {
+        console.log('DTone products error:', JSON.stringify(data));
+        return Response.json({ error: data.error || `No products for ${countryIso}`, products: [] }, { status: res.status || 400 });
+      }
+      // Return products array
+      const products = Array.isArray(data) ? data : (data.data || []);
+      return Response.json(products);
     }
 
     // Detect operator via mobile number lookup

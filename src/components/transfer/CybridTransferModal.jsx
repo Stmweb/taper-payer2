@@ -139,6 +139,40 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         </div>
       )}
 
+      {/* Step: KYC Check */}
+      {step === 'kyc-check' && (
+        <div className="flex flex-col items-center py-12 gap-4">
+          {loading ? (
+            <>
+              <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
+              <p className="font-semibold text-slate-800">Checking verification status…</p>
+            </>
+          ) : kycStatus === 'approved' ? (
+            <>
+              <CheckCircle className="w-16 h-16 text-green-500" />
+              <p className="font-semibold text-slate-800">Verified & Ready</p>
+              <p className="text-sm text-slate-600 text-center">Your account is approved. Let's proceed with your transfer.</p>
+              <Button onClick={() => setStep('account')} className="mt-2 w-full" style={{ backgroundColor: '#3D7BB7' }}>
+                Continue <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <AlertCircle className="w-16 h-16 text-amber-500" />
+              <p className="font-semibold text-slate-800">Verification Required</p>
+              <p className="text-sm text-slate-600 text-center">
+                {kycStatus === 'pending'
+                  ? 'Your verification is pending. Please wait for approval or contact support.'
+                  : 'Your account needs verification before you can transfer funds.'}
+              </p>
+              <Button onClick={onClose} variant="outline" className="mt-2 w-full">
+                Close
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Step: Select Account Type */}
       {step === 'account' && (
         <div className="space-y-3">

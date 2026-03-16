@@ -6,37 +6,17 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing from or to currency' }, { status: 400 });
     }
 
-    // Get Reloadly access token
-    const authRes = await fetch('https://auth.reloadly.com/oauth/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        client_id: Deno.env.get('RELOADLY_CLIENT_ID'),
-        client_secret: Deno.env.get('RELOADLY_CLIENT_SECRET'),
-        grant_type: 'client_credentials',
-        audience: 'https://api.reloadly.com',
-      }),
-    });
+    // Use open.er-api.com — free, no auth required
+    const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+    const data = await res.json();
 
-    const authData = await authRes.json();
-    const accessToken = authData.access_token;
-
-    if (!accessToken) {
-      return Response.json({ rate: 130, source: 'fallback' }, { status: 200 });
+    if (data?.result === 'success' && data?.rates?.[to]) {
+      const rate = data.rates[to];
+      return Response.json({ rate, source: 'er-api' });
     }
 
-    // Fetch exchange rate
-    const ratesRes = await fetch(`https://api.reloadly.com/rates?from=${from}&to=${to}`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const ratesData = await ratesRes.json();
-    const rate = ratesData.rate || 130;
-
-    return Response.json({ rate, source: 'reloadly' });
+    // Fallback hardcoded rate
+    return Response.json({ rate: 130, source: 'fallback' });
   } catch (error) {
     console.error('Exchange rate error:', error.message);
     return Response.json({ rate: 130, source: 'fallback' }, { status: 200 });

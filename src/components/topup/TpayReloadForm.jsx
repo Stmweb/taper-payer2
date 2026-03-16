@@ -271,7 +271,7 @@ export default function TpayReloadForm() {
 
             {/* Payment Method — MonCash only shown for Haiti */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Payment Methods</label>
               <div className="flex gap-2">
                 <button
                   onClick={() => setPaymentMethod('card')}

@@ -236,8 +236,14 @@ export default function TaperPayerHome() {
                 )}
                 {!isElementHidden('tpay-mobile-btn') && (
                   <Button onClick={() => setShowTaperConnect(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0 flex items-center gap-2">
-                    <span className="text-2xl">📱</span>
-                    Taper Connect
+                    <motion.span 
+                      className="text-2xl"
+                      animate={{ scale: [1, 1.1, 1], opacity: [1, 0.7, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      📱
+                    </motion.span>
+                    Taper Mobile
                   </Button>
                 )}
               </div>

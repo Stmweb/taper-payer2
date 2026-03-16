@@ -338,7 +338,7 @@ export default function TaperPayerHome() {
                   <Button
                     style={{ backgroundColor: '#3D7BB7' }}
                     className="w-full hover:opacity-90 text-lg py-6"
-                    onClick={() => { if (sendTo && amount) setShowTransferModal(true); }}
+                    onClick={() => { if (sendTo && amount) setShowComingSoon(true); }}
                     disabled={!sendTo || !amount}
                   >
                     Continue <ArrowRight className="ml-2 w-5 h-5" />

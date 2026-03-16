@@ -57,17 +57,29 @@ Deno.serve(async (req) => {
     const topupData = await topupRes.json();
     console.log('DTone topup response:', topupRes.status, JSON.stringify(topupData).substring(0, 500));
 
-    if (!topupRes.ok || topupData.status === 'FAILED' || topupData.errors) {
+    // DTone returns 201 for created transactions; errors come as 4xx with an errors array
+    if (!topupRes.ok || topupData.errors) {
       const errMsg = topupData.errors?.[0]?.message || topupData.message || 'Top-up delivery failed';
+      console.error('DTone topup failed:', errMsg, JSON.stringify(topupData));
+      return Response.json({ error: errMsg, paymentIntentId: paymentIntent.id, details: topupData }, { status: 400 });
+    }
+
+    // DTone sync transaction — check for explicit FAILED status in response
+    if (topupData.status === 'FAILED') {
+      const errMsg = topupData.errors?.[0]?.message || topupData.message || 'Top-up delivery failed after charge';
+      console.error('DTone topup FAILED status:', errMsg);
       return Response.json({ error: errMsg, paymentIntentId: paymentIntent.id, details: topupData }, { status: 400 });
     }
 
     return Response.json({
       success: true,
       transactionId: topupData.id,
+      status: topupData.status,
       paymentIntentId: paymentIntent.id,
       phoneNumber: fullPhone,
       amount: parseFloat(amount),
+      delivered: topupData.benefits?.[0]?.amount?.total_including_tax,
+      deliveredUnit: topupData.benefits?.[0]?.unit,
     });
   } catch (error) {
     console.error('processDtonePayment error:', error.message);

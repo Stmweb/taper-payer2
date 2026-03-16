@@ -2,7 +2,9 @@ import React, { useState, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, CheckCircle, AlertCircle, Wifi } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, Wifi, Lock } from 'lucide-react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import MoncashPaymentForm from './MoncashPaymentForm';
 
 const COUNTRIES = [
   { name: 'Ghana', iso: 'GH', flag: '🇬🇭', dial: '+233' },
@@ -24,10 +26,14 @@ export default function TaperConnectForm() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [cardError, setCardError] = useState('');
   const [success, setSuccess] = useState(false);
   const [detectedOperator, setDetectedOperator] = useState(null);
   const [detectingOperator, setDetectingOperator] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('card');
   const detectTimeout = useRef(null);
+  const stripe = useStripe();
+  const elements = useElements();
 
   const handlePhoneChange = (value) => {
     setPhoneNumber(value);
@@ -58,6 +64,7 @@ export default function TaperConnectForm() {
     setError('');
     setProducts([]);
     setSelectedProduct(null);
+    setPaymentMethod('card');
     try {
       const res = await base44.functions.invoke('dtoneTopUp', { action: 'getProducts', countryIso: country.iso });
       const items = Array.isArray(res.data) ? res.data : (res.data?.products || res.data?.data || []);
@@ -70,30 +77,65 @@ export default function TaperConnectForm() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleCardPayment = async () => {
     if (!phoneNumber || !selectedProduct) {
-      setError('Please fill in all fields.');
+      setError('Please enter a phone number and select a product.');
       return;
     }
+    if (!stripe || !elements) {
+      setError('Payment system is loading. Please wait and try again.');
+      return;
+    }
+
     setLoading(true);
     setError('');
+    setCardError('');
+
     try {
-      const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
-      const res = await base44.functions.invoke('dtoneTopUp', {
-        action: 'sendTopUp',
-        mobileNumber: fullPhone,
-        productId: selectedProduct.id || selectedProduct.product_id,
+      const cardElement = elements.getElement(CardElement);
+      const { error: stripeError, paymentMethod: pm } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
       });
-      if (res.data?.success === false) {
-        setError(res.data?.error || 'Top-up failed. Please try again.');
-      } else {
+
+      if (stripeError) {
+        setCardError(stripeError.message);
+        setLoading(false);
+        return;
+      }
+
+      const fullPhone = selectedCountry.dial + phoneNumber.replace(/^0/, '');
+      const res = await base44.functions.invoke('processReloadlyPayment', {
+        paymentMethodId: pm.id,
+        phoneNumber: fullPhone,
+        amount: selectedProduct?.prices?.retail?.amount,
+        countryCode: selectedCountry.iso,
+        operatorId: selectedProduct?.operator?.id,
+      });
+
+      if (res.data?.success) {
         setSuccess(true);
+      } else {
+        setError(res.data?.error || 'Transaction failed. Please try again.');
       }
     } catch (e) {
-      setError('Top-up failed. Please try again.');
+      setError('Payment or top-up failed. Please try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const reset = () => {
+    setStep(1);
+    setSelectedCountry(null);
+    setPhoneNumber('');
+    setProducts([]);
+    setSelectedProduct(null);
+    setSuccess(false);
+    setError('');
+    setCardError('');
+    setPaymentMethod('card');
+    setDetectedOperator(null);
   };
 
   if (success) {
@@ -102,8 +144,7 @@ export default function TaperConnectForm() {
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-slate-900 mb-2">Top-Up Sent!</h3>
         <p className="text-slate-600 mb-6">Airtime has been sent to {selectedCountry?.dial}{phoneNumber}.</p>
-        <Button onClick={() => { setSuccess(false); setStep(1); setPhoneNumber(''); setSelectedProduct(null); }}
-          className="bg-cyan-500 hover:bg-cyan-600 text-white">
+        <Button onClick={reset} className="bg-cyan-500 hover:bg-cyan-600 text-white">
           Send Another
         </Button>
       </div>
@@ -116,10 +157,7 @@ export default function TaperConnectForm() {
         <div className="bg-gradient-to-br from-cyan-400 to-blue-500 w-10 h-10 rounded-lg flex items-center justify-center">
           <Wifi className="w-5 h-5 text-white" />
         </div>
-        <div>
-          <h3 className="text-xl font-bold text-slate-900">Taper Connect</h3>
-          
-        </div>
+        <h3 className="text-xl font-bold text-slate-900">Taper Connect</h3>
       </div>
 
       {error && (
@@ -154,7 +192,7 @@ export default function TaperConnectForm() {
         </div>
       )}
 
-      {/* Step 2: Select Product & Enter Phone */}
+      {/* Step 2: Phone + Product + Payment */}
       {step === 2 && (
         <div className="space-y-4">
           <button onClick={() => setStep(1)} className="text-sm text-cyan-600 hover:underline flex items-center gap-1">
@@ -164,7 +202,7 @@ export default function TaperConnectForm() {
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
             <div className="flex gap-2">
-              <span className="flex items-center px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700 text-sm font-medium">
+              <span className="flex items-center px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700 text-sm font-medium whitespace-nowrap">
                 {selectedCountry?.dial}
               </span>
               <Input
@@ -192,7 +230,7 @@ export default function TaperConnectForm() {
             {products.length === 0 ? (
               <p className="text-sm text-slate-500">No products available for this country.</p>
             ) : (
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {products.map((p, idx) => {
                   const name = p.name || p.description || String(p.id);
                   const amount = p.suggested_amounts?.[0] || p.prices?.retail?.amount || p.face_value;
@@ -218,13 +256,76 @@ export default function TaperConnectForm() {
             )}
           </div>
 
-          <Button
-            onClick={handleSubmit}
-            disabled={loading || !selectedProduct || !phoneNumber}
-            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
-          >
-            {loading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</> : 'Send Airtime'}
-          </Button>
+          {/* Payment Method */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setPaymentMethod('card')}
+                className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                  paymentMethod === 'card' ? 'border-cyan-500 bg-cyan-50 text-cyan-700' : 'border-slate-200 text-slate-700 hover:border-cyan-300'
+                }`}
+              >
+                💳 Credit/Debit Card
+              </button>
+              {selectedCountry?.iso === 'HT' && (
+                <button
+                  onClick={() => setPaymentMethod('moncash')}
+                  className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                    paymentMethod === 'moncash' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700 hover:border-blue-300'
+                  }`}
+                >
+                  🇭🇹 MonCash
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Card Payment */}
+          {paymentMethod === 'card' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
+                <div className="p-3 border border-slate-200 rounded-lg bg-white">
+                  <CardElement
+                    options={{
+                      style: {
+                        base: {
+                          fontSize: '14px',
+                          color: '#1e293b',
+                          '::placeholder': { color: '#cbd5e1' },
+                        },
+                        invalid: { color: '#dc2626' },
+                      },
+                    }}
+                  />
+                </div>
+                {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
+              </div>
+              <Button
+                onClick={handleCardPayment}
+                disabled={loading || !phoneNumber || !selectedProduct || !stripe}
+                className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
+              >
+                {loading ? (
+                  <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
+                ) : (
+                  <><Lock className="w-4 h-4 mr-2" /> Pay ${selectedProduct?.prices?.retail?.amount?.toFixed(2) || '—'} & Send Airtime</>
+                )}
+              </Button>
+            </>
+          )}
+
+          {/* MonCash (Haiti only) */}
+          {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (
+            <MoncashPaymentForm
+              phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
+              amount={selectedProduct?.prices?.retail?.amount?.toString() || ''}
+              operatorId={selectedProduct?.operator?.id}
+              countryCode={selectedCountry.iso}
+              onSuccess={() => setSuccess(true)}
+            />
+          )}
         </div>
       )}
     </div>

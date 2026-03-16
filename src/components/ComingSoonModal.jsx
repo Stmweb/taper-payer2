@@ -37,7 +37,7 @@ export default function ComingSoonModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <>
       <motion.div
         initial={{ opacity: 0 }}
@@ -45,13 +45,14 @@ export default function ComingSoonModal({ isOpen, onClose }) {
         className="fixed inset-0 bg-black/50 z-[9998]"
         onClick={onClose}
       />
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-        <motion.div
+      <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center"
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none"
       >
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center pointer-events-auto"
+        >
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"

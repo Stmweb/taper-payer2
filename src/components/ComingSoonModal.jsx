@@ -51,9 +51,8 @@ export default function ComingSoonModal({ isOpen, onClose }) {
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none"
       >
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center pointer-events-auto"
-        >
-        <button
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center pointer-events-auto">
+          <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
         >

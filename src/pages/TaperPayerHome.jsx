@@ -15,7 +15,7 @@ import SEOHead from '@/components/SEOHead';
 import StructuredData from '@/components/StructuredData';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
-import usePageConfig from '@/hooks/usePageConfig';
+import { usePageConfig } from '@/hooks/usePageConfig';
 
 function createPageUrl(page) {
   return `/${page}`;
@@ -41,7 +41,7 @@ export default function TaperPayerHome() {
      url: 'https://taperpayer.com/'
    });
 
-   const { config, isHidden, getContentOverride } = usePageConfig('TaperPayerHome');
+   const { config, isElementHidden, isSectionHidden, getContentOverride } = usePageConfig('TaperPayerHome');
 
    const [amount, setAmount] = useState('100');
    const [sendTo, setSendTo] = useState('');
@@ -208,12 +208,12 @@ export default function TaperPayerHome() {
                 Send Money To Your <span style={{ color: '#5FAE2E' }}>Loved Ones</span>
               </motion.h1>
               <div className="flex flex-wrap gap-4">
-                {!isHidden('download-app-btn') && (
+                {!isElementHidden('download-app-btn') && (
                   <Button style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 text-lg px-8 py-6">
                     Download App
                   </Button>
                 )}
-                {!isHidden('tpay-mobile-btn') && (
+                {!isElementHidden('tpay-mobile-btn') && (
                   <Button onClick={() => setShowReloadForm(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0">
                     Tpay Mobile
                   </Button>
@@ -333,8 +333,8 @@ export default function TaperPayerHome() {
 
 
       {/* Why Choose Us */}
-      {!isHidden('why-choose-section') && (
-      <section className="container mx-auto px-6 py-20">
+      {!isSectionHidden('why-choose-section') && (
+        <section className="container mx-auto px-6 py-20">
         <h2 className="text-4xl font-bold text-center mb-6 text-slate-900 dark:text-white">
           Why Choose Taper Payer?
         </h2>
@@ -391,11 +391,9 @@ export default function TaperPayerHome() {
         </section>
         )}
 
-
-
         {/* Services Section */}
-        {!isHidden('services-section') && (
-      <section className="container mx-auto px-6 py-20">
+        {!isSectionHidden('services-section') && (
+        <section className="container mx-auto px-6 py-20">
         <h2 className="text-4xl font-bold text-center mb-6 text-slate-900 dark:text-white">Our Services</h2>
         <p className="text-xl text-slate-600 dark:text-gray-300 text-center mb-16 max-w-3xl mx-auto">
           They are designed to meet all your needs. Our service allows you to send money at a competitive exchange rate with fair commissions, ensuring better value for your money.
@@ -434,11 +432,9 @@ export default function TaperPayerHome() {
         </section>
         )}
 
-
-
         {/* Membership Section */}
-        {!isHidden('membership-section') && (
-      <section className="py-20 bg-white dark:bg-slate-800">
+        {!isSectionHidden('membership-section') && (
+        <section className="py-20 bg-white dark:bg-slate-800">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
@@ -508,8 +504,8 @@ export default function TaperPayerHome() {
         )}
 
         {/* Download App Section */}
-        {!isHidden('app-download-section') && (
-      <section style={{ background: 'linear-gradient(to right, #3D7BB7, #61AF39)' }} className="py-20">
+        {!isSectionHidden('app-download-section') && (
+        <section style={{ background: 'linear-gradient(to right, #3D7BB7, #61AF39)' }} className="py-20">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-white">

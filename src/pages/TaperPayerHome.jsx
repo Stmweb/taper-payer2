@@ -388,11 +388,13 @@ export default function TaperPayerHome() {
             </Card>
           </motion.div>
         </div>
-      </section>
+        </section>
+        )}
 
 
 
-      {/* Services Section */}
+        {/* Services Section */}
+        {!isHidden('services-section') && (
       <section className="container mx-auto px-6 py-20">
         <h2 className="text-4xl font-bold text-center mb-6 text-slate-900 dark:text-white">Our Services</h2>
         <p className="text-xl text-slate-600 dark:text-gray-300 text-center mb-16 max-w-3xl mx-auto">

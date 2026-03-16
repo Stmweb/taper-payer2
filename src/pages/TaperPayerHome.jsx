@@ -215,7 +215,7 @@ export default function TaperPayerHome() {
                 )}
                 {!isElementHidden('tpay-mobile-btn') && (
                   <Button onClick={() => setShowReloadForm(true)} className="text-lg px-8 py-6 bg-orange-500 hover:bg-orange-600 text-white border-0 flex items-center gap-2">
-                    <Smartphone className="w-5 h-5" />
+                    <span className="text-2xl">📱</span>
                     Taper Connect
                   </Button>
                 )}

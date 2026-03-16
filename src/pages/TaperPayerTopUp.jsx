@@ -225,51 +225,7 @@ export default function TaperPayerTopUp() {
         </div>
       </section>
 
-      {/* Supported Countries */}
-      {!isSectionHidden('supported-countries-section') && (
-      <section className="py-20 md:py-28 bg-white border-b border-slate-200">
-        <div className="container mx-auto px-4">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} className="max-w-2xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-6 text-slate-900">Supported Countries</h2>
-            <p className="text-center text-slate-600 mb-8">Search and find all countries where you can send airtime</p>
 
-            <input
-              type="text"
-              placeholder="Search by country name..."
-              value={countrySearch}
-              onChange={(e) => setCountrySearch(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg mb-8 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-            />
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {filteredCountries.map((country) => (
-                <motion.button
-                  key={country.code}
-                  onClick={() => {
-                    setSelectedCountry(country);
-                    setShowTaperConnect(true);
-                  }}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-gradient-to-br from-cyan-50 to-blue-50 p-4 rounded-lg border border-cyan-200 hover:border-cyan-400 hover:shadow-lg text-center transition-all cursor-pointer"
-                >
-                  <div className="text-3xl mb-2">{country.flag}</div>
-                  <div className="font-semibold text-slate-900 text-sm">{country.name}</div>
-                  <div className="text-xs text-slate-600">{country.code}</div>
-                </motion.button>
-              ))}
-            </div>
-
-            {filteredCountries.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-slate-600 text-lg">No countries found matching "{countrySearch}"</p>
-              </div>
-            )}
-          </motion.div>
-        </div>
-      </section>
-      )}
 
       {/* How It Works */}
       <section className="py-20 md:py-28 bg-slate-50">

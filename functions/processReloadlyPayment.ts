@@ -59,9 +59,9 @@ Deno.serve(async (req) => {
       'Accept': 'application/com.reloadly.topups-v1+json'
     };
 
-    // phoneNumber should be the full international number e.g. +233241234567
-    // Strip leading + for Reloadly number field, keep country code separate
-    const cleanPhone = phoneNumber.replace(/^\+/, '').replace(/\D/g, '');
+    // phoneNumber is the full international number e.g. +233241234567 or 233241234567
+    // Reloadly wants just digits, no + sign
+    const cleanPhone = phoneNumber.replace(/\D/g, '');
 
     console.log('Reloadly request:', { operatorId, amount, countryCode, cleanPhone });
 

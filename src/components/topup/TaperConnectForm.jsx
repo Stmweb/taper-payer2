@@ -349,11 +349,12 @@ export default function TaperConnectForm() {
             const retailAmount = selectedProduct?.prices?.retail?.amount
               || selectedProduct?.suggested_amounts?.[0]
               || selectedProduct?.face_value;
+            const opId = detectedOperator?.id || selectedProduct?.operator?.id || selectedProduct?.operatorId;
             return (
               <MoncashPaymentForm
                 phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
                 amount={retailAmount?.toString() || ''}
-                operatorId={selectedProduct?.operator?.id}
+                operatorId={opId}
                 countryCode={selectedCountry.iso}
                 onSuccess={() => setSuccess(true)}
               />

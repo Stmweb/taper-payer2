@@ -7,7 +7,7 @@ Deno.serve(async (req) => {
     }
 
     // Get Reloadly access token
-    const authRes = await fetch('https://api.reloadly.com/auth/oauth/token', {
+    const authRes = await fetch('https://auth.reloadly.com/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

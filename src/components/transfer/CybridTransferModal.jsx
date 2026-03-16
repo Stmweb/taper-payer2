@@ -108,6 +108,44 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         </div>
       )}
 
+      {/* Step: Select Account Type */}
+      {step === 'account' && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-slate-700">Choose Funding Source</p>
+          <button
+            onClick={() => setAccountType('fiat')}
+            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${
+              accountType === 'fiat' ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-300'
+            }`}
+          >
+            <span className="text-2xl">🏦</span>
+            <div>
+              <p className="font-semibold text-slate-900 text-sm">Virtual Bank Account</p>
+              <p className="text-xs text-slate-500">ACH/Wire/RTP via Cybrid virtual account</p>
+            </div>
+          </button>
+          <button
+            onClick={() => setAccountType('trading')}
+            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${
+              accountType === 'trading' ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-300'
+            }`}
+          >
+            <span className="text-2xl">💱</span>
+            <div>
+              <p className="font-semibold text-slate-900 text-sm">Trading Account</p>
+              <p className="text-xs text-slate-500">USDC/USDT conversion before delivery</p>
+            </div>
+          </button>
+          <Button
+            onClick={() => setStep('method')}
+            className="w-full mt-2"
+            style={{ backgroundColor: '#3D7BB7' }}
+          >
+            Continue <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        </div>
+      )}
+
       {/* Step: Select Method */}
       {step === 'method' && (
         <div className="space-y-3">

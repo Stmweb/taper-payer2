@@ -144,6 +144,7 @@ export default function DToneTopUpForm() {
     setError('');
     setCardError('');
     setPaymentMethod('card');
+    setDetectedOperator(null);
   };
 
   if (success) {

@@ -247,7 +247,7 @@ export default function TpayReloadForm() {
                           : 'border-slate-200 hover:border-teal-300'
                       }`}
                     >
-                      <span className="text-sm font-medium text-slate-800">{op.name || op.operatorName}</span>
+                      <span className="text-sm font-medium text-slate-800">{translatePlanName(op.name || op.operatorName)}</span>
                     </button>
                   ))}
                 </div>

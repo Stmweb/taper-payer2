@@ -50,6 +50,19 @@ export default function TaperPayerTopUp() {
     { title: 'Frequent Users', desc: 'Save time with quick, one-click top-ups.' },
   ];
 
+  const countries = [
+    { name: 'Nigeria', flag: '🇳🇬', code: 'NGN' },
+    { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
+    { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
+    { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
+    { name: 'Angola', flag: '🇦🇴', code: 'AOA' },
+    { name: 'Cameroon', flag: '🇨🇲', code: 'XAF' },
+    { name: 'Morocco', flag: '🇲🇦', code: 'MAD' },
+    { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
+    { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
+    { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}

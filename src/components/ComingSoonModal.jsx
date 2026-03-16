@@ -51,62 +51,79 @@ export default function ComingSoonModal({ isOpen, onClose }) {
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none"
       >
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center pointer-events-auto">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10"
-          >
-            ✕
-          </button>
+        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden pointer-events-auto">
+          {/* Header Gradient */}
+          <div className="h-32 bg-gradient-to-br from-[#3D7BB7] via-cyan-500 to-[#61AF39] relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 opacity-20"
+              animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+              style={{
+                backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+                backgroundSize: '20px 20px',
+              }}
+            />
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full z-10 text-white transition-colors"
+            >
+              ✕
+            </button>
+          </div>
 
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="inline-block mb-6"
-          >
-            <Sparkles className="w-16 h-16 text-cyan-500" />
-          </motion.div>
+          {/* Content */}
+          <div className="p-8 text-center relative -mt-12">
+            <motion.div
+              animate={{ rotate: 360, y: [0, -8, 0] }}
+              transition={{ rotate: { duration: 20, repeat: Infinity, ease: 'linear' }, y: { duration: 3, repeat: Infinity } }}
+              className="inline-block mb-6 p-4 bg-gradient-to-br from-[#3D7BB7] to-cyan-400 rounded-2xl shadow-lg"
+            >
+              <Sparkles className="w-12 h-12 text-white" />
+            </motion.div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-            A Smarter Way to Move Money
-          </h2>
-          <p className="text-xl text-slate-600 mb-8">Is Coming</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+              Coming Soon
+            </h2>
+            <p className="text-lg text-slate-600 mb-8 font-medium">Global Money Transfers Reimagined</p>
 
-          <div className="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-6 mb-8">
-            <p className="text-sm text-slate-600 mb-4 font-medium">Official Launch</p>
-            <p className="text-2xl font-bold text-slate-900 mb-6">May 18, 2026</p>
+            {/* Countdown */}
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 mb-8 border border-slate-100">
+              <p className="text-xs uppercase tracking-widest text-slate-500 mb-3 font-bold">Official Launch</p>
+              <p className="text-3xl font-bold text-[#3D7BB7] mb-6">May 18, 2026</p>
 
-            <div className="grid grid-cols-4 gap-3">
-              <div className="bg-white rounded-lg p-3 shadow-sm">
-                <div className="text-2xl font-bold text-cyan-600">{timeLeft.days}</div>
-                <div className="text-xs text-slate-600 mt-1">Days</div>
-              </div>
-              <div className="bg-white rounded-lg p-3 shadow-sm">
-                <div className="text-2xl font-bold text-cyan-600">{timeLeft.hours}</div>
-                <div className="text-xs text-slate-600 mt-1">Hours</div>
-              </div>
-              <div className="bg-white rounded-lg p-3 shadow-sm">
-                <div className="text-2xl font-bold text-cyan-600">{timeLeft.minutes}</div>
-                <div className="text-xs text-slate-600 mt-1">Mins</div>
-              </div>
-              <div className="bg-white rounded-lg p-3 shadow-sm">
-                <div className="text-2xl font-bold text-cyan-600">{timeLeft.seconds}</div>
-                <div className="text-xs text-slate-600 mt-1">Secs</div>
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { value: timeLeft.days, label: 'Days' },
+                  { value: timeLeft.hours, label: 'Hours' },
+                  { value: timeLeft.minutes, label: 'Mins' },
+                  { value: timeLeft.seconds, label: 'Secs' }
+                ].map((item, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="bg-white rounded-xl p-3 shadow-sm border border-slate-100"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <div className="text-2xl font-bold text-[#3D7BB7]">{String(item.value).padStart(2, '0')}</div>
+                    <div className="text-xs text-slate-500 mt-1 font-medium">{item.label}</div>
+                  </motion.div>
+                ))}
               </div>
             </div>
-          </div>
 
-          <p className="text-slate-600 mb-6">
-            Stay tuned for the fastest, safest, and easiest way to send money globally.
-          </p>
+            <p className="text-slate-600 mb-8 leading-relaxed">
+              The fastest, safest, and easiest way to send money globally—launching very soon.
+            </p>
 
-          <button
-            onClick={onClose}
-            className="w-full px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors"
-          >
-            Got It
-          </button>
+            <motion.button
+              onClick={onClose}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full px-6 py-3 bg-gradient-to-r from-[#3D7BB7] to-cyan-500 hover:shadow-lg text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+            >
+              Notify Me <ArrowRight className="w-4 h-4" />
+            </motion.button>
           </div>
+        </div>
       </motion.div>
     </>,
     document.body

@@ -48,7 +48,7 @@ export default function ComingSoonModal({ isOpen, onClose }) {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center"
+        className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center"
       >
         <button
           onClick={onClose}

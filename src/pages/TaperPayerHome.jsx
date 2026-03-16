@@ -333,6 +333,7 @@ export default function TaperPayerHome() {
 
 
       {/* Why Choose Us */}
+      {!isHidden('why-choose-section') && (
       <section className="container mx-auto px-6 py-20">
         <h2 className="text-4xl font-bold text-center mb-6 text-slate-900 dark:text-white">
           Why Choose Taper Payer?

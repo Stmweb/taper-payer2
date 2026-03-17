@@ -42,8 +42,8 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Verify payment with Moncash using the token
-    if (token) {
+    // Verify payment with Moncash using the transactionId
+    if (transactionId || token) {
       const moncashClientId = Deno.env.get('MONCASH_API_KEY');
       const moncashClientSecret = Deno.env.get('MONCASH_API_SECRET');
       const encodedCredentials = btoa(`${moncashClientId}:${moncashClientSecret}`);

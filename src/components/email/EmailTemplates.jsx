@@ -7,7 +7,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:linear-gradient(135deg,#3D7BB7 0%,#61AF39 100%);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
     <h1 style="color:#ffffff;font-size:28px;margin:0;font-weight:bold;">Welcome to Taper Payer!</h1>
     <p style="color:rgba(255,255,255,0.9);font-size:16px;margin-top:10px;">Your trusted partner for global money transfers</p>
   </div>
@@ -38,7 +38,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#1e293b;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 16px auto;object-fit:contain;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 16px auto;object-fit:contain;" />
     <div style="background:#F88F2B;color:#ffffff;font-size:13px;font-weight:bold;padding:6px 16px;border-radius:20px;display:inline-block;margin-bottom:16px;">LIMITED TIME OFFER</div>
     <h1 style="color:#ffffff;font-size:32px;margin:0;">Send Money with <span style="color:#F88F2B;">ZERO Fees</span></h1>
     <p style="color:#94a3b8;font-size:15px;margin-top:10px;">This week only – for all money transfers worldwide</p>
@@ -81,7 +81,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:linear-gradient(135deg,#06b6d4 0%,#3b82f6 100%);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
     <div style="font-size:48px;margin-bottom:10px;">📱</div>
     <h1 style="color:#ffffff;font-size:28px;margin:0;">Introducing Taper Mobile</h1>
     <p style="color:rgba(255,255,255,0.9);font-size:16px;margin-top:10px;">Instant airtime top-ups to 150+ countries in seconds</p>
@@ -116,7 +116,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#0f172a;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
     <h1 style="color:#ffffff;font-size:26px;margin:0;">Stay Connected With<br/>Your Loved Ones 🤝</h1>
     <p style="color:#94a3b8;font-size:15px;margin-top:10px;">A quick top-up keeps the conversation going</p>
   </div>
@@ -146,7 +146,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:linear-gradient(135deg,#1e3a5f 0%,#3D7BB7 100%);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 16px auto;object-fit:contain;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 16px auto;object-fit:contain;" />
     <p style="color:rgba(255,255,255,0.75);font-size:13px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px;">Monthly Newsletter</p>
     <h1 style="color:#ffffff;font-size:26px;margin:0;">What's New at Taper Payer</h1>
   </div>
@@ -184,7 +184,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:linear-gradient(135deg,#7c3aed 0%,#db2777 100%);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
     <div style="font-size:48px;margin-bottom:8px;">👋</div>
     <h1 style="color:#ffffff;font-size:28px;margin:0;">We Miss You!</h1>
     <p style="color:rgba(255,255,255,0.9);font-size:15px;margin-top:10px;">It's been a while – here's what's new</p>

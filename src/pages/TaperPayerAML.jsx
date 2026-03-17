@@ -162,14 +162,9 @@ export default function TaperPayerAML() {
           <Link to="/TaperPayerHome">
             <TaperPayerLogo height="h-16" />
           </Link>
-          <div className="flex items-center gap-4">
-            <Button onClick={generatePDF} variant="outline" className="flex items-center gap-2 text-sm">
-              <Download className="w-4 h-4" /> Download PDF
-            </Button>
-            <Link to="/TaperPayerHome" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">
-              ← Back to Home
-            </Link>
-          </div>
+          <Link to="/TaperPayerHome" className="text-sm text-slate-500 hover:text-blue-600 transition-colors">
+            ← Back to Home
+          </Link>
         </div>
       </nav>
 

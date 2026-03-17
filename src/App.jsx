@@ -21,6 +21,7 @@ import TaperPayerAML from './pages/TaperPayerAML';
 import TaperPayerCompliance from './pages/TaperPayerCompliance';
 import AdminPageManager from './pages/AdminPageManager';
 import AdminEmailMarketing from './pages/AdminEmailMarketing';
+import AdminStripeDashboard from './pages/AdminStripeDashboard';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];

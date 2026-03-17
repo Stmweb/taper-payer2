@@ -8,6 +8,7 @@ import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 import { usePageConfig } from '@/hooks/usePageConfig';
+import SEOHead from '@/components/SEOHead';
 
 export default function TaperPayerTopUp() {
   const { isElementHidden, isSectionHidden } = usePageConfig('TaperPayerTopUp');

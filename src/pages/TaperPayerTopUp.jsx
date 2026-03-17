@@ -246,6 +246,42 @@ export default function TaperPayerTopUp() {
 
 
 
+      {/* Moncash Return Banner */}
+      {moncashStatus && (
+        <div ref={bannerRef} className={`mx-4 mt-6 rounded-2xl p-6 text-center shadow-lg border ${
+          moncashStatus === 'success'
+            ? 'bg-green-50 border-green-200'
+            : moncashStatus === 'paid_but_topup_failed'
+            ? 'bg-yellow-50 border-yellow-200'
+            : 'bg-red-50 border-red-200'
+        }`}>
+          {moncashStatus === 'success' && (
+            <>
+              <div className="text-4xl mb-3">✅</div>
+              <h3 className="text-xl font-bold text-green-800 mb-1">Top-Up Successful!</h3>
+              <p className="text-green-700">
+                {moncashPhone ? `Airtime has been sent to ${moncashPhone}.` : 'Your phone has been credited successfully.'}
+              </p>
+            </>
+          )}
+          {moncashStatus === 'paid_but_topup_failed' && (
+            <>
+              <div className="text-4xl mb-3">⚠️</div>
+              <h3 className="text-xl font-bold text-yellow-800 mb-1">Payment received, but top-up failed</h3>
+              <p className="text-yellow-700">Your payment was collected but we could not credit the phone. Please contact support at Support@taperpayer.com with your order details.</p>
+            </>
+          )}
+          {moncashStatus === 'error' && (
+            <>
+              <div className="text-4xl mb-3">❌</div>
+              <h3 className="text-xl font-bold text-red-800 mb-1">Payment Not Completed</h3>
+              <p className="text-red-700">Your payment was not completed. Please try again or contact support.</p>
+            </>
+          )}
+          <button onClick={() => setMoncashStatus(null)} className="mt-4 text-sm underline opacity-60 hover:opacity-100">Dismiss</button>
+        </div>
+      )}
+
       {/* How It Works */}
       <section className="py-20 md:py-28 bg-slate-50">
         <div className="container mx-auto px-4">

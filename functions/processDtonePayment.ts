@@ -24,9 +24,12 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Minimum top-up amount is $0.50 USD. Please select a higher value plan.' }, { status: 400 });
     }
 
-    // Step 1: Charge card via Stripe
+    const SERVICE_FEE = 1.00; // $1 service fee
+    const totalCharge = parseFloat(amount) + SERVICE_FEE;
+
+    // Step 1: Charge card via Stripe (top-up amount + $1 service fee)
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(parseFloat(amount) * 100),
+      amount: Math.round(totalCharge * 100),
       currency: 'usd',
       payment_method: paymentMethodId,
       confirm: true,
@@ -95,6 +98,8 @@ Deno.serve(async (req) => {
       paymentIntentId: paymentIntent.id,
       phoneNumber: fullPhone,
       amount: parseFloat(amount),
+      serviceFee: SERVICE_FEE,
+      totalCharged: totalCharge,
       delivered: topupData.benefits?.[0]?.amount?.total_including_tax,
       deliveredUnit: topupData.benefits?.[0]?.unit,
     });

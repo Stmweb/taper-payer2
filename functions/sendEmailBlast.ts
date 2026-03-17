@@ -16,9 +16,9 @@ Deno.serve(async (req) => {
     }
 
     const MAILGUN_API_KEY = Deno.env.get('MAILGUN_API_KEY');
-    const MAILGUN_DOMAIN = Deno.env.get('MAILGUN_DOMAIN');
+    const MAILGUN_DOMAIN = 'mail.taperpayer.com';
 
-    if (!MAILGUN_API_KEY || !MAILGUN_DOMAIN) {
+    if (!MAILGUN_API_KEY) {
       return Response.json({ error: 'Mailgun credentials not configured' }, { status: 500 });
     }
 

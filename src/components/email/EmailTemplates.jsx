@@ -38,7 +38,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#1e293b;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:55px;width:auto;margin-bottom:16px;" />
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:50px;width:auto;max-width:200px;display:block;margin:0 auto 16px auto;object-fit:contain;" />
     <div style="background:#F88F2B;color:#ffffff;font-size:13px;font-weight:bold;padding:6px 16px;border-radius:20px;display:inline-block;margin-bottom:16px;">LIMITED TIME OFFER</div>
     <h1 style="color:#ffffff;font-size:32px;margin:0;">Send Money with <span style="color:#F88F2B;">ZERO Fees</span></h1>
     <p style="color:#94a3b8;font-size:15px;margin-top:10px;">This week only – for all money transfers worldwide</p>
@@ -146,7 +146,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:linear-gradient(135deg,#1e3a5f 0%,#3D7BB7 100%);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:55px;width:auto;margin-bottom:16px;" />
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:50px;width:auto;max-width:200px;display:block;margin:0 auto 16px auto;object-fit:contain;" />
     <p style="color:rgba(255,255,255,0.75);font-size:13px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px;">Monthly Newsletter</p>
     <h1 style="color:#ffffff;font-size:26px;margin:0;">What's New at Taper Payer</h1>
   </div>

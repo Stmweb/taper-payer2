@@ -38,7 +38,6 @@ export default function SiteFooter() {
               <li><Link to="/TaperPayerCookies" className="hover:text-white transition-colors">Cookies Policy</Link></li>
               <li><Link to="/TaperPayerWhiteLabel" className="hover:text-white transition-colors">White Label</Link></li>
               <li><Link to="/TaperPayerAML" className="hover:text-white transition-colors">AML Policy</Link></li>
-              <li><Link to="/TaperPayerCompliance" className="hover:text-white transition-colors">Compliance Verification</Link></li>
             </ul>
           </div>
 

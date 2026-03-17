@@ -100,7 +100,7 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
         {loading ? (
           <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Redirecting to MonCash...</>
         ) : (
-          '💳 Pay with MonCash'
+          <img src="https://moncashbutton.digicelgroup.com/Moncash-middleware/resources/assets/images/MC_button.png" alt="Pay with MonCash" className="h-8 w-auto" />
         )}
       </Button>
     </div>

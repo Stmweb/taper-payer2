@@ -51,11 +51,11 @@ export default function SiteFooter() {
               </li>
               <li className="flex items-center gap-2">
                 <Globe className="w-5 h-5 flex-shrink-0" style={{ color: '#61AF39' }} />
-                <a href="mailto:Support@taperpayer.com" className="hover:text-white transition-colors">Support@taperpayer.com</a>
+                <a href="mailto:info@taperpayer.com" className="hover:text-white transition-colors">info@taperpayer.com</a>
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-lg" style={{ color: '#F88F2B' }}>☎</span>
-                <a href="tel:1-800-827-3772" className="hover:text-white transition-colors">1-800-TAPER-PAY</a>
+                <a href="tel:404-994-0766" className="hover:text-white transition-colors">404-994-0766</a>
               </li>
             </ul>
           </div>

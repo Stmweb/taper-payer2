@@ -6,7 +6,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Mail, Users, Send, Plus, Trash2, Upload, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
+import {
+  Mail, Users, Send, Plus, Trash2, Upload, CheckCircle2, AlertCircle,
+  Clock, Sparkles, Eye, X, Calendar, FileText, RefreshCw
+} from 'lucide-react';
+import { EMAIL_TEMPLATES, TEMPLATE_CATEGORIES } from '@/components/email/EmailTemplates';
+
+const statusBadge = {
+  sent: 'bg-green-100 text-green-700',
+  draft: 'bg-gray-100 text-gray-600',
+  failed: 'bg-red-100 text-red-600',
+  scheduled: 'bg-blue-100 text-blue-700',
+};
 
 export default function AdminEmailMarketing() {
   const [subscribers, setSubscribers] = useState([]);
@@ -20,9 +31,14 @@ export default function AdminEmailMarketing() {
   const [newName, setNewName] = useState('');
   const [newTags, setNewTags] = useState('');
 
-  // New campaign form
-  const [campaign, setCampaign] = useState({ name: '', subject: '', body_html: '' });
+  // Compose form
+  const [campaign, setCampaign] = useState({ name: '', subject: '', body_html: '', category: '' });
   const [savingCampaign, setSavingCampaign] = useState(false);
+  const [scheduledAt, setScheduledAt] = useState('');
+
+  // Templates
+  const [templateCategory, setTemplateCategory] = useState('All');
+  const [previewTemplate, setPreviewTemplate] = useState(null);
 
   // Bulk import
   const [bulkEmails, setBulkEmails] = useState('');
@@ -49,9 +65,7 @@ export default function AdminEmailMarketing() {
     e.preventDefault();
     if (!newEmail) return;
     await base44.entities.Subscriber.create({
-      email: newEmail.trim(),
-      name: newName.trim(),
-      status: 'active',
+      email: newEmail.trim(), name: newName.trim(), status: 'active',
       tags: newTags ? newTags.split(',').map(t => t.trim()).filter(Boolean) : [],
       source: 'manual'
     });
@@ -79,12 +93,7 @@ export default function AdminEmailMarketing() {
     for (const line of lines) {
       const [email, name] = line.split(',');
       if (email && email.includes('@')) {
-        await base44.entities.Subscriber.create({
-          email: email.trim(),
-          name: name ? name.trim() : '',
-          status: 'active',
-          source: 'import'
-        });
+        await base44.entities.Subscriber.create({ email: email.trim(), name: name ? name.trim() : '', status: 'active', source: 'import' });
         count++;
       }
     }
@@ -93,12 +102,28 @@ export default function AdminEmailMarketing() {
     fetchData();
   };
 
+  const useTemplate = (tmpl) => {
+    setCampaign({ name: tmpl.name, subject: tmpl.subject, body_html: tmpl.body_html.trim(), category: tmpl.category });
+    setPreviewTemplate(null);
+    showToast('Template loaded into composer!');
+  };
+
   const saveCampaign = async (e) => {
     e.preventDefault();
     setSavingCampaign(true);
-    await base44.entities.EmailCampaign.create({ ...campaign, status: 'draft' });
-    setCampaign({ name: '', subject: '', body_html: '' });
-    showToast('Campaign saved as draft!');
+    const newCampaign = await base44.entities.EmailCampaign.create({ ...campaign, status: 'draft' });
+
+    if (scheduledAt) {
+      await base44.functions.invoke('scheduleEmailCampaign', {
+        campaign_id: newCampaign.id,
+        scheduled_at: scheduledAt
+      });
+      showToast('Campaign scheduled!');
+    } else {
+      showToast('Campaign saved as draft!');
+    }
+    setCampaign({ name: '', subject: '', body_html: '', category: '' });
+    setScheduledAt('');
     fetchData();
     setSavingCampaign(false);
   };
@@ -122,10 +147,12 @@ export default function AdminEmailMarketing() {
   };
 
   const activeCount = subscribers.filter(s => s.status === 'active').length;
+  const filteredTemplates = templateCategory === 'All'
+    ? EMAIL_TEMPLATES
+    : EMAIL_TEMPLATES.filter(t => t.category === templateCategory);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      {/* Toast */}
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       {toast && (
         <div className={`fixed top-4 right-4 z-50 px-5 py-3 rounded-xl shadow-lg text-white font-medium flex items-center gap-2 ${toast.type === 'error' ? 'bg-red-500' : 'bg-green-600'}`}>
           {toast.type === 'error' ? <AlertCircle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
@@ -133,27 +160,64 @@ export default function AdminEmailMarketing() {
         </div>
       )}
 
+      {/* Template Preview Modal */}
+      {previewTemplate && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b">
+              <div>
+                <h3 className="font-bold text-gray-900">{previewTemplate.name}</h3>
+                <p className="text-sm text-gray-500">{previewTemplate.subject}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" onClick={() => useTemplate(previewTemplate)} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Use Template
+                </Button>
+                <button onClick={() => setPreviewTemplate(null)} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
+              </div>
+            </div>
+            <div className="overflow-y-auto flex-1 p-4">
+              <iframe
+                srcDoc={previewTemplate.body_html}
+                title="Email Preview"
+                className="w-full border rounded-lg"
+                style={{ height: '500px' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-            <Mail className="w-6 h-6 text-white" />
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+              <Mail className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Email Marketing</h1>
+              <p className="text-gray-500 text-sm">{activeCount} active subscribers</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Email Marketing</h1>
-            <p className="text-gray-500 text-sm">{activeCount} active subscribers</p>
-          </div>
+          <Button variant="outline" size="sm" onClick={fetchData} className="gap-2">
+            <RefreshCw className="w-4 h-4" /> Refresh
+          </Button>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <Card className="p-5 text-center">
             <div className="text-3xl font-bold text-blue-600">{activeCount}</div>
             <div className="text-sm text-gray-500 mt-1">Active Subscribers</div>
           </Card>
           <Card className="p-5 text-center">
             <div className="text-3xl font-bold text-green-600">{campaigns.filter(c => c.status === 'sent').length}</div>
-            <div className="text-sm text-gray-500 mt-1">Sent Campaigns</div>
+            <div className="text-sm text-gray-500 mt-1">Sent</div>
+          </Card>
+          <Card className="p-5 text-center">
+            <div className="text-3xl font-bold text-blue-500">{campaigns.filter(c => c.status === 'scheduled').length}</div>
+            <div className="text-sm text-gray-500 mt-1">Scheduled</div>
           </Card>
           <Card className="p-5 text-center">
             <div className="text-3xl font-bold text-orange-500">{campaigns.filter(c => c.status === 'draft').length}</div>
@@ -162,9 +226,10 @@ export default function AdminEmailMarketing() {
         </div>
 
         <Tabs defaultValue="campaigns">
-          <TabsList className="mb-6">
+          <TabsList className="mb-6 flex-wrap h-auto">
             <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-            <TabsTrigger value="compose">Compose New</TabsTrigger>
+            <TabsTrigger value="templates" className="gap-1"><Sparkles className="w-3.5 h-3.5" /> Templates</TabsTrigger>
+            <TabsTrigger value="compose">Compose</TabsTrigger>
             <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
             <TabsTrigger value="import">Bulk Import</TabsTrigger>
           </TabsList>
@@ -173,16 +238,17 @@ export default function AdminEmailMarketing() {
           <TabsContent value="campaigns">
             <div className="space-y-4">
               {campaigns.length === 0 && !loading && (
-                <Card className="p-10 text-center text-gray-400">No campaigns yet. Create one in "Compose New".</Card>
+                <Card className="p-10 text-center text-gray-400">No campaigns yet. Start from a template or compose from scratch.</Card>
               )}
               {campaigns.map(c => (
                 <Card key={c.id} className="p-5 flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="font-semibold text-gray-900">{c.name}</span>
-                      {c.status === 'sent' && <Badge className="bg-green-100 text-green-700">Sent</Badge>}
-                      {c.status === 'draft' && <Badge className="bg-gray-100 text-gray-600">Draft</Badge>}
-                      {c.status === 'failed' && <Badge className="bg-red-100 text-red-600">Failed</Badge>}
+                      <Badge className={statusBadge[c.status] || 'bg-gray-100 text-gray-600'}>
+                        {c.status}
+                      </Badge>
+                      {c.category && <Badge className="bg-purple-100 text-purple-700 text-xs">{c.category}</Badge>}
                     </div>
                     <p className="text-sm text-gray-500 truncate">{c.subject}</p>
                     {c.status === 'sent' && (
@@ -190,18 +256,18 @@ export default function AdminEmailMarketing() {
                         <CheckCircle2 className="w-3 h-3" /> {c.sent_count} emails sent · {c.sent_at ? new Date(c.sent_at).toLocaleDateString() : ''}
                       </p>
                     )}
+                    {c.status === 'scheduled' && c.scheduled_at && (
+                      <p className="text-xs text-blue-600 mt-1 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" /> Scheduled: {new Date(c.scheduled_at).toLocaleString()}
+                      </p>
+                    )}
                     {c.status === 'draft' && (
                       <p className="text-xs text-gray-400 mt-1 flex items-center gap-1"><Clock className="w-3 h-3" /> Draft</p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {c.status === 'draft' && (
-                      <Button
-                        size="sm"
-                        onClick={() => sendCampaign(c.id)}
-                        disabled={sendingId === c.id}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
-                      >
+                    {(c.status === 'draft' || c.status === 'scheduled') && (
+                      <Button size="sm" onClick={() => sendCampaign(c.id)} disabled={sendingId === c.id} className="bg-blue-600 hover:bg-blue-700 text-white">
                         <Send className="w-4 h-4 mr-1" />
                         {sendingId === c.id ? 'Sending...' : 'Send Now'}
                       </Button>
@@ -215,14 +281,63 @@ export default function AdminEmailMarketing() {
             </div>
           </TabsContent>
 
+          {/* TEMPLATES TAB */}
+          <TabsContent value="templates">
+            <div className="mb-5 flex gap-2 flex-wrap">
+              {TEMPLATE_CATEGORIES.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setTemplateCategory(cat)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${templateCategory === cat ? 'bg-blue-600 text-white' : 'bg-white border text-gray-600 hover:bg-gray-50'}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredTemplates.map(tmpl => (
+                <Card key={tmpl.id} className="p-5 hover:shadow-md transition-shadow">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <Badge className="bg-purple-100 text-purple-700 text-xs mb-2">{tmpl.category}</Badge>
+                      <h3 className="font-semibold text-gray-900 text-sm leading-tight">{tmpl.name}</h3>
+                    </div>
+                    <FileText className="w-5 h-5 text-gray-300 flex-shrink-0 ml-2 mt-1" />
+                  </div>
+                  <p className="text-xs text-gray-500 mb-4 line-clamp-2">{tmpl.subject}</p>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => setPreviewTemplate(tmpl)} className="flex-1 gap-1 text-xs">
+                      <Eye className="w-3.5 h-3.5" /> Preview
+                    </Button>
+                    <Button size="sm" onClick={() => useTemplate(tmpl)} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs gap-1">
+                      <Plus className="w-3.5 h-3.5" /> Use
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
           {/* COMPOSE TAB */}
           <TabsContent value="compose">
             <Card className="p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-5">Compose Email Campaign</h2>
+              {campaign.body_html && (
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-2 text-sm text-blue-700">
+                  <Sparkles className="w-4 h-4" /> Template loaded: <strong>{campaign.name}</strong>
+                  <button onClick={() => setCampaign({ name: '', subject: '', body_html: '', category: '' })} className="ml-auto text-blue-400 hover:text-blue-600"><X className="w-4 h-4" /></button>
+                </div>
+              )}
               <form onSubmit={saveCampaign} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Name</label>
-                  <Input value={campaign.name} onChange={e => setCampaign({...campaign, name: e.target.value})} placeholder="e.g. March Newsletter" required />
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Name</label>
+                    <Input value={campaign.name} onChange={e => setCampaign({...campaign, name: e.target.value})} placeholder="e.g. March Newsletter" required />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <Input value={campaign.category} onChange={e => setCampaign({...campaign, category: e.target.value})} placeholder="e.g. Money Transfer, Mobile Top-Up" />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email Subject</label>
@@ -237,12 +352,23 @@ export default function AdminEmailMarketing() {
                     className="min-h-64 font-mono text-sm"
                     required
                   />
-                  <p className="text-xs text-gray-400 mt-1">You can use HTML to style your email.</p>
+                  <p className="text-xs text-gray-400 mt-1">Tip: Load a template from the Templates tab to get a head start.</p>
                 </div>
-                <div className="flex gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1">
+                    <Calendar className="w-4 h-4" /> Schedule Send (optional)
+                  </label>
+                  <Input
+                    type="datetime-local"
+                    value={scheduledAt}
+                    onChange={e => setScheduledAt(e.target.value)}
+                    className="max-w-xs"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Leave empty to save as draft and send manually.</p>
+                </div>
+                <div className="flex gap-3 flex-wrap">
                   <Button type="submit" disabled={savingCampaign} className="bg-blue-600 hover:bg-blue-700 text-white">
-                    <Plus className="w-4 h-4 mr-1" />
-                    {savingCampaign ? 'Saving...' : 'Save as Draft'}
+                    {scheduledAt ? <><Calendar className="w-4 h-4 mr-1" />{savingCampaign ? 'Scheduling...' : 'Schedule Campaign'}</> : <><Plus className="w-4 h-4 mr-1" />{savingCampaign ? 'Saving...' : 'Save as Draft'}</>}
                   </Button>
                 </div>
               </form>
@@ -262,11 +388,8 @@ export default function AdminEmailMarketing() {
                 </Button>
               </form>
             </Card>
-
             <Card className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-900">All Subscribers ({subscribers.length})</h2>
-              </div>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">All Subscribers ({subscribers.length})</h2>
               {loading && <p className="text-gray-400 text-center py-8">Loading...</p>}
               <div className="divide-y">
                 {subscribers.map(sub => (
@@ -275,19 +398,13 @@ export default function AdminEmailMarketing() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-gray-900 text-sm">{sub.email}</span>
                         {sub.name && <span className="text-gray-500 text-sm">· {sub.name}</span>}
-                        <Badge className={sub.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}>
-                          {sub.status}
-                        </Badge>
-                        {sub.tags?.map(tag => (
-                          <Badge key={tag} className="bg-blue-100 text-blue-600 text-xs">{tag}</Badge>
-                        ))}
+                        <Badge className={sub.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}>{sub.status}</Badge>
+                        {sub.tags?.map(tag => <Badge key={tag} className="bg-blue-100 text-blue-600 text-xs">{tag}</Badge>)}
                       </div>
                     </div>
                     <div className="flex gap-2 flex-shrink-0">
                       {sub.status === 'active' && (
-                        <Button size="sm" variant="ghost" onClick={() => unsubscribe(sub.id)} className="text-orange-400 hover:text-orange-600 text-xs">
-                          Unsub
-                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => unsubscribe(sub.id)} className="text-orange-400 hover:text-orange-600 text-xs">Unsub</Button>
                       )}
                       <Button size="sm" variant="ghost" onClick={() => removeSubscriber(sub.id)} className="text-red-400 hover:text-red-600">
                         <Trash2 className="w-4 h-4" />
@@ -295,9 +412,7 @@ export default function AdminEmailMarketing() {
                     </div>
                   </div>
                 ))}
-                {subscribers.length === 0 && !loading && (
-                  <p className="text-gray-400 text-center py-8">No subscribers yet.</p>
-                )}
+                {subscribers.length === 0 && !loading && <p className="text-gray-400 text-center py-8">No subscribers yet.</p>}
               </div>
             </Card>
           </TabsContent>
@@ -306,7 +421,7 @@ export default function AdminEmailMarketing() {
           <TabsContent value="import">
             <Card className="p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-2">Bulk Import Subscribers</h2>
-              <p className="text-sm text-gray-500 mb-4">Paste one email per line. Optionally add a name separated by a comma: <code className="bg-gray-100 px-1 rounded">email@example.com, John Doe</code></p>
+              <p className="text-sm text-gray-500 mb-4">One email per line. Optionally add a name separated by a comma: <code className="bg-gray-100 px-1 rounded">email@example.com, John Doe</code></p>
               <Textarea
                 value={bulkEmails}
                 onChange={e => setBulkEmails(e.target.value)}

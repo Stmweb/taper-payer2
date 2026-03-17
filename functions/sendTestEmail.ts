@@ -43,11 +43,14 @@ Deno.serve(async (req) => {
       body: formData
     });
 
-    const result = await response.json();
+    let result;
+    const text = await response.text();
+    try { result = JSON.parse(text); } catch { result = text; }
 
     return Response.json({ 
       success: response.ok, 
       status: response.status,
+      domain: MAILGUN_DOMAIN,
       result
     });
 

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { TrendingUp, RefreshCw, ArrowRight, Menu, X, MapPin, Globe } from 'lucide-react';
+import SiteFooter from '@/components/SiteFooter';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';

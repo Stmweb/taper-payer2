@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare, Menu, X } from 'lucide-react';
+import SiteFooter from '@/components/SiteFooter';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';

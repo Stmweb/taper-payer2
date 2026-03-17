@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3 } from 'lucide-react';
+import SiteFooter from '@/components/SiteFooter';
 
 function createPageUrl(page) {
   return `/${page}`;

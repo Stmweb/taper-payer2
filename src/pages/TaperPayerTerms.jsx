@@ -43,6 +43,8 @@ const sections = [
   },
 ];
 
+import SiteFooter from '@/components/SiteFooter';
+
 export default function TaperPayerTerms() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">

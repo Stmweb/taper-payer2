@@ -10,13 +10,32 @@ import { usePageConfig } from '@/hooks/usePageConfig';
 
 export default function TaperPayerTopUp() {
   const { isElementHidden, isSectionHidden } = usePageConfig('TaperPayerTopUp');
-  
+  const [moncashStatus, setMoncashStatus] = useState(null); // 'success' | 'error' | 'paid_but_topup_failed'
+  const [moncashPhone, setMoncashPhone] = useState('');
+  const bannerRef = useRef(null);
+
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://cdn.reloadly.com/widget/v2/reloadly-widget.js';
     script.async = true;
     document.head.appendChild(script);
   }, []);
+
+  // Handle Moncash return redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const moncash = params.get('moncash');
+    const phone = params.get('phone');
+    if (moncash) {
+      setMoncashStatus(moncash);
+      if (phone) setMoncashPhone(phone);
+      // Clean URL without reload
+      window.history.replaceState({}, '', '/TaperPayerTopUp');
+      // Scroll to banner
+      setTimeout(() => bannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+    }
+  }, []);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showTopUpForm, setShowTopUpForm] = useState(false);
   const [showTaperConnect, setShowTaperConnect] = useState(false);

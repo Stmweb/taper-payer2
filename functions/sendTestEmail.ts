@@ -1,12 +1,24 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
-
 Deno.serve(async (req) => {
   try {
     const MAILGUN_API_KEY = Deno.env.get('MAILGUN_API_KEY');
     const MAILGUN_DOMAIN = Deno.env.get('MAILGUN_DOMAIN');
 
-    if (!MAILGUN_API_KEY || !MAILGUN_DOMAIN) {
-      return Response.json({ error: 'Mailgun credentials not configured' }, { status: 500 });
+    // First, try to list domains to verify the API key works
+    const domainsResponse = await fetch('https://api.mailgun.net/v3/domains', {
+      headers: {
+        'Authorization': 'Basic ' + btoa(`api:${MAILGUN_API_KEY}`)
+      }
+    });
+
+    const domainsResult = await domainsResponse.json();
+
+    if (!domainsResponse.ok) {
+      return Response.json({ 
+        error: 'API key invalid or unauthorized', 
+        details: domainsResult,
+        domain_used: MAILGUN_DOMAIN,
+        key_present: !!MAILGUN_API_KEY
+      }, { status: 401 });
     }
 
     const formData = new FormData();
@@ -25,11 +37,13 @@ Deno.serve(async (req) => {
 
     const result = await response.json();
 
-    if (!response.ok) {
-      return Response.json({ error: result }, { status: response.status });
-    }
-
-    return Response.json({ success: true, message: 'Test email sent to support@taperpayer.com', result });
+    return Response.json({ 
+      success: response.ok, 
+      status: response.status,
+      message: response.ok ? 'Test email sent to support@taperpayer.com' : 'Failed',
+      result,
+      domains: domainsResult.items?.map(d => d.name)
+    });
 
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

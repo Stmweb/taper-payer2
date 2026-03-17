@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
   <table cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;">
     <tr>
       <td style="padding-bottom:12px;">
-        <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:50px;width:auto;max-width:200px;display:block;object-fit:contain;" />
+        <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;object-fit:contain;" />
       </td>
     </tr>
     <tr>

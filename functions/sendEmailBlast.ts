@@ -54,6 +54,9 @@ Deno.serve(async (req) => {
       formData.append('subject', campaign.subject);
       const signature = `
 <div style="margin-top:40px;padding-top:24px;border-top:2px solid #e2e8f0;font-family:Arial,sans-serif;background:#f8fafc;padding:24px;border-radius:8px;">
+  <div style="text-align:center;margin-bottom:16px;">
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:80px;width:auto;max-width:250px;display:block;margin:0 auto;object-fit:contain;" />
+  </div>
   <div style="text-align:center;margin-bottom:20px;">
     <h3 style="color:#1e293b;margin:0 0 4px 0;font-size:16px;font-weight:bold;">Taper Payer</h3>
     <p style="color:#64748b;margin:0;font-size:12px;">Redefining the Future of Payments</p>

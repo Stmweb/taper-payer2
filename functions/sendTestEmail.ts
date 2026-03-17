@@ -8,7 +8,7 @@ Deno.serve(async (req) => {
   <div style="background:linear-gradient(135deg,#3D7BB7 0%,#61AF39 100%);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
     <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
       alt="Taper Payer"
-      style="height:50px;width:auto;max-width:200px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
+      style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
     <h1 style="color:#ffffff;font-size:26px;margin:0;font-weight:bold;">Email Test – Taper Payer</h1>
     <p style="color:rgba(255,255,255,0.9);font-size:15px;margin-top:10px;">Logo render test</p>
   </div>
@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
     <div style="margin-top:40px;padding-top:24px;border-top:2px solid #e2e8f0;">
       <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
         alt="Taper Payer"
-        style="height:50px;width:auto;max-width:200px;display:block;object-fit:contain;" />
+        style="height:120px;width:auto;max-width:300px;display:block;object-fit:contain;" />
       <p style="font-size:13px;color:#475569;line-height:1.6;margin-top:10px;">
         <strong style="color:#1e293b;">Taper Payer LLC</strong><br/>
         254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702<br/>

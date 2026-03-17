@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
 
       const signature = `
 <div style="margin-top:40px;padding-top:24px;border-top:2px solid #e2e8f0;font-family:Arial,sans-serif;">
-  <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 10px auto;object-fit:contain;" /><br/>
+  <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/074f6eff5_TaperPayerLogoTransparent.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;margin:0 auto 10px auto;object-fit:contain;" /><br/>
   <span style="font-size:13px;color:#475569;">Taper Payer LLC · 254 Chapman Rd, Ste 208, Newark, DE 19702<br/>
   <a href="mailto:info@taperpayer.com" style="color:#3D7BB7;">info@taperpayer.com</a> · <a href="https://taperpayer.com" style="color:#3D7BB7;">taperpayer.com</a></span>
 </div>`;

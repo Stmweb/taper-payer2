@@ -64,8 +64,9 @@ Deno.serve(async (req) => {
         const accessToken = authData.access_token;
 
         if (accessToken) {
-          // Retrieve payment details to confirm
-          const paymentCheckRes = await fetch(`https://moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment?token=${token}`, {
+          // Retrieve payment details to confirm using transactionId or token
+          const lookupId = transactionId || token;
+          const paymentCheckRes = await fetch(`https://moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment?transactionId=${lookupId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`,
               'Accept': 'application/json',

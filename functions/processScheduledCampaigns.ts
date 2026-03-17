@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
     }
 
     const MAILGUN_API_KEY = Deno.env.get('MAILGUN_API_KEY');
-    const MAILGUN_DOMAIN = Deno.env.get('MAILGUN_DOMAIN');
+    const MAILGUN_DOMAIN = 'mail.taperpayer.com';
 
     let processed = 0;
     for (const campaign of due) {

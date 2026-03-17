@@ -111,17 +111,12 @@ export default function AdminEmailMarketing() {
   const saveCampaign = async (e) => {
     e.preventDefault();
     setSavingCampaign(true);
-    const newCampaign = await base44.entities.EmailCampaign.create({ ...campaign, status: 'draft' });
-
-    if (scheduledAt) {
-      await base44.functions.invoke('scheduleEmailCampaign', {
-        campaign_id: newCampaign.id,
-        scheduled_at: scheduledAt
-      });
-      showToast('Campaign scheduled!');
-    } else {
-      showToast('Campaign saved as draft!');
-    }
+    await base44.entities.EmailCampaign.create({
+      ...campaign,
+      status: scheduledAt ? 'scheduled' : 'draft',
+      scheduled_at: scheduledAt || undefined,
+    });
+    showToast(scheduledAt ? 'Campaign scheduled!' : 'Campaign saved as draft!');
     setCampaign({ name: '', subject: '', body_html: '', category: '' });
     setScheduledAt('');
     fetchData();

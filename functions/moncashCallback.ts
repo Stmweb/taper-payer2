@@ -4,12 +4,13 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Parse orderId from query params (Moncash returns GET with orderId and token)
+    // Parse orderId from query params (Moncash returns GET with orderId and transactionId)
     const url = new URL(req.url);
     const orderId = url.searchParams.get('orderId');
-    const token = url.searchParams.get('token');
+    const transactionId = url.searchParams.get('transactionId');
+    const token = url.searchParams.get('token'); // sometimes token is also returned
 
-    console.log('Moncash callback received:', { method: req.method, orderId, token });
+    console.log('Moncash callback received:', { method: req.method, orderId, transactionId, token, allParams: Object.fromEntries(url.searchParams) });
 
     if (!orderId) {
       // Redirect to home if no orderId (could be a bad callback)

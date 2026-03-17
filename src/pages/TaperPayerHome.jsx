@@ -598,7 +598,6 @@ export default function TaperPayerHome() {
         {/* Footer */}
       <SiteFooter />
 
-      {/* OLD FOOTER REPLACED - keeping this comment as placeholder to prevent re-adding */}
       {false && <footer id="contact" className="bg-slate-900 text-white py-16">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-12">

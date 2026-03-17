@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Menu, X } from 'lucide-react';
+import SiteFooter from '@/components/SiteFooter';
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
@@ -462,42 +463,7 @@ export default function TaperPayerTopUp() {
         document.body
       )}
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-bold text-white mb-4">Taper Mobile</h4>
-              <p className="text-sm">Fast, secure mobile recharges powered by TaperPayer.</p>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="/TaperPayerHome" className="hover:text-white">Home</a></li>
-                <li><a href="/TaperPayerRates" className="hover:text-white">Rates</a></li>
-                <li><a href="/TaperPayerAbout" className="hover:text-white">About</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-4">Support</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="/TaperPayerFAQ" className="hover:text-white">FAQ</a></li>
-                <li><a href="/TaperPayerContact" className="hover:text-white">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-white mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="/TaperPayerPrivacy" className="hover:text-white">Privacy</a></li>
-                <li><a href="/TaperPayerTerms" className="hover:text-white">Terms</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 pt-8 text-center text-sm">
-            <p>&copy; 2026 TaperPayer. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

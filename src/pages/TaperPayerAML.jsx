@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, AlertTriangle, FileText, Users, Eye, Ban, Phone } from 'lucide-react';
+import { Shield, AlertTriangle, FileText, Users, Eye, Ban, Phone, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { jsPDF } from 'jspdf';
 import SiteFooter from '@/components/SiteFooter';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
 

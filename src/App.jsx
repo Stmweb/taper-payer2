@@ -20,7 +20,7 @@ import TaperPayerTopUp from './pages/TaperPayerTopUp';
 import TaperPayerAML from './pages/TaperPayerAML';
 import TaperPayerCompliance from './pages/TaperPayerCompliance';
 import AdminPageManager from './pages/AdminPageManager';
-import AdminEmailMarketing from './pages/AdminEmailMarketing';
+import AdminEmailMarketing from './pages/AdminEmailMarketing.jsx';
 import AdminStripeDashboard from './pages/AdminStripeDashboard';
 
 const { Pages, Layout, mainPage } = pagesConfig;

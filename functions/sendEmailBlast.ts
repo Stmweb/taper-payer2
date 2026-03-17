@@ -53,36 +53,23 @@ Deno.serve(async (req) => {
       formData.append('to', subscriber.email);
       formData.append('subject', campaign.subject);
       const signature = `
-<div style="margin-top:40px;padding-top:24px;border-top:2px solid #e2e8f0;font-family:Arial,sans-serif;">
-  <table cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;">
-    <tr>
-      <td style="padding-bottom:12px;">
-        <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:120px;width:auto;max-width:300px;display:block;object-fit:contain;" />
-      </td>
-    </tr>
-    <tr>
-      <td style="font-size:13px;color:#475569;line-height:1.6;">
-        <strong style="color:#1e293b;">Taper Payer LLC</strong><br/>
-        254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702<br/>
-        📞 <a href="tel:404-994-0766" style="color:#3D7BB7;text-decoration:none;">404-994-0766</a> &nbsp;|&nbsp;
-        ✉️ <a href="mailto:info@taperpayer.com" style="color:#3D7BB7;text-decoration:none;">info@taperpayer.com</a><br/>
-        🌐 <a href="https://taperpayer.com" style="color:#3D7BB7;text-decoration:none;">taperpayer.com</a>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding-top:12px;">
-        <a href="https://www.facebook.com/profile.php?id=61583727643100" style="margin-right:8px;text-decoration:none;color:#3D7BB7;font-weight:bold;">Facebook</a>
-        <a href="https://x.com/Taperpayer" style="margin-right:8px;text-decoration:none;color:#61AF39;font-weight:bold;">X (Twitter)</a>
-        <a href="https://www.instagram.com/taperpayerofficial/" style="text-decoration:none;color:#dc2743;font-weight:bold;">Instagram</a>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding-top:12px;font-size:11px;color:#94a3b8;">
-        You are receiving this email because you subscribed to Taper Payer updates.
-        To unsubscribe, reply with "unsubscribe" in the subject line.
-      </td>
-    </tr>
-  </table>
+<div style="margin-top:40px;padding-top:24px;border-top:2px solid #e2e8f0;font-family:Arial,sans-serif;background:#f8fafc;padding:24px;border-radius:8px;">
+  <div style="text-align:center;margin-bottom:20px;">
+    <h3 style="color:#1e293b;margin:0 0 4px 0;font-size:16px;font-weight:bold;">Taper Payer</h3>
+    <p style="color:#64748b;margin:0;font-size:12px;">Redefining the Future of Payments</p>
+  </div>
+  <div style="text-align:center;font-size:13px;color:#475569;line-height:1.8;margin-bottom:16px;">
+    🌐 <a href="https://www.taperpayer.com" style="color:#3D7BB7;text-decoration:none;font-weight:bold;">www.taperpayer.com</a><br/>
+    📧 <a href="mailto:support@taperpayer.com" style="color:#3D7BB7;text-decoration:none;font-weight:bold;">support@taperpayer.com</a><br/>
+    Newark, Delaware
+  </div>
+  <div style="text-align:center;font-size:12px;color:#64748b;margin-bottom:16px;">
+    Follow Us: <a href="https://x.com/Taperpayer" style="color:#3D7BB7;text-decoration:none;font-weight:bold;">Twitter</a> • <a href="https://www.instagram.com/taperpayerofficial/" style="color:#3D7BB7;text-decoration:none;font-weight:bold;">Instagram</a> • <a href="https://www.facebook.com/profile.php?id=61583727643100" style="color:#3D7BB7;text-decoration:none;font-weight:bold;">Facebook</a>
+  </div>
+  <div style="border-top:1px solid #e2e8f0;padding-top:12px;font-size:11px;color:#94a3b8;text-align:center;">
+    <p style="margin:0 0 8px 0;">This email and any attachments are confidential and intended solely for the recipient.</p>
+    <p style="margin:0;">© 2026 Taper Payer. All rights reserved.</p>
+  </div>
 </div>`;
 
       formData.append('html', campaign.body_html + signature);

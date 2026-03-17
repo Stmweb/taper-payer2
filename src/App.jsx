@@ -149,6 +149,7 @@ const AuthenticatedApp = () => {
         <Route path="/TaperPayerCompliance" element={<LayoutWrapper currentPageName="TaperPayerCompliance"><TaperPayerCompliance /></LayoutWrapper>} />
         <Route path="/AdminPageManager" element={<AdminPageManager />} />
         <Route path="/AdminEmailMarketing" element={<AdminEmailMarketing />} />
+        <Route path="/AdminStripeDashboard" element={<AdminStripeDashboard />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

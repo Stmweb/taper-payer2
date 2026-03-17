@@ -93,6 +93,66 @@ Last Updated: March 2026`
   }
 ];
 
+function generatePDF() {
+  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const margin = 50;
+  const maxWidth = pageWidth - margin * 2;
+  let y = 60;
+
+  // Title
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(30, 64, 175);
+  doc.text('Anti-Money Laundering (AML) Policy', pageWidth / 2, y, { align: 'center' });
+  y += 28;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text('Taper Payer LLC  |  Effective: January 1, 2026  |  Last Updated: March 2026', pageWidth / 2, y, { align: 'center' });
+  y += 30;
+
+  // Divider
+  doc.setDrawColor(200, 200, 200);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += 20;
+
+  sections.forEach((section) => {
+    // Section title
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 23, 42);
+    const titleLines = doc.splitTextToSize(section.title, maxWidth);
+    if (y + titleLines.length * 18 > 720) { doc.addPage(); y = 50; }
+    doc.text(titleLines, margin, y);
+    y += titleLines.length * 18 + 6;
+
+    // Section content
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(71, 85, 105);
+    const contentLines = doc.splitTextToSize(section.content, maxWidth);
+    contentLines.forEach((line) => {
+      if (y + 14 > 720) { doc.addPage(); y = 50; }
+      doc.text(line, margin, y);
+      y += 14;
+    });
+    y += 14;
+  });
+
+  // Footer on each page
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Taper Payer LLC — AML Policy — Page ${i} of ${totalPages}`, pageWidth / 2, 750, { align: 'center' });
+  }
+
+  doc.save('TaperPayer_AML_Policy.pdf');
+}
+
 export default function TaperPayerAML() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">

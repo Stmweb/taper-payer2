@@ -65,6 +65,7 @@ export default function TaperPayerTerms() {
           ))}
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

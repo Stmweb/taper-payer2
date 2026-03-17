@@ -316,6 +316,7 @@ export default function TaperPayerContact() {
         </motion.div>
       </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

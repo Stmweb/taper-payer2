@@ -90,6 +90,7 @@ export default function TaperPayerFAQ() {
           </Link>
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

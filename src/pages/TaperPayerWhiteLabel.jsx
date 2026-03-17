@@ -242,48 +242,7 @@ export default function TaperPayerWhiteLabel() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-900 text-white py-16">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/50986bd44_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" className="w-48 h-auto mb-4 brightness-110" />
-              <p className="text-slate-300 text-lg">Build your fintech empire with Taper Payer.</p>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4 text-xl">Quick Links</h4>
-              <ul className="space-y-3 text-slate-300">
-                <li><Link to={createPageUrl('TaperPayerHome')} className="hover:text-white transition-colors">Home</Link></li>
-                <li><Link to={createPageUrl('TaperPayerAbout')} className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link to={createPageUrl('TaperPayerHowItWorks')} className="hover:text-white transition-colors">How It Works</Link></li>
-                <li><Link to={createPageUrl('TaperPayerContact')} className="hover:text-white transition-colors">Contact</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4 text-xl">Resources</h4>
-              <ul className="space-y-3 text-slate-300">
-                <li><Link to={createPageUrl('TaperPayerFAQ')} className="hover:text-white transition-colors">FAQs</Link></li>
-                <li><Link to={createPageUrl('TaperPayerTerms')} className="hover:text-white transition-colors">Terms</Link></li>
-                <li><Link to={createPageUrl('TaperPayerPrivacy')} className="hover:text-white transition-colors">Privacy</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4 text-xl">Support</h4>
-              <ul className="space-y-3 text-slate-300">
-                <li><a href="mailto:Support@taperpayer.com" className="hover:text-white transition-colors">Support@taperpayer.com</a></li>
-                <li><a href="tel:1-800-827-3772" className="hover:text-white transition-colors">1-800-TAPER-PAY</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-700 pt-8">
-            <p className="text-center text-slate-400">&copy; 2026 Taper Payer LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

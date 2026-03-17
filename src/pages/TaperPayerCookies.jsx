@@ -57,6 +57,7 @@ export default function TaperPayerCookies() {
           ))}
         </div>
       </div>
+      <SiteFooter />
     </div>
   );
 }

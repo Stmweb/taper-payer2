@@ -17,6 +17,8 @@ import TaperPayerMarketing from './pages/TaperPayerMarketing';
 import TaperPayerBusiness from './pages/TaperPayerBusiness';
 import TaperPayerWhiteLabel from './pages/TaperPayerWhiteLabel';
 import TaperPayerTopUp from './pages/TaperPayerTopUp';
+import TaperPayerAML from './pages/TaperPayerAML';
+import TaperPayerCompliance from './pages/TaperPayerCompliance';
 import AdminPageManager from './pages/AdminPageManager';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -141,6 +143,8 @@ const AuthenticatedApp = () => {
         <Route path="/TaperPayerBusiness" element={<LayoutWrapper currentPageName="TaperPayerBusiness"><TaperPayerBusiness /></LayoutWrapper>} />
         <Route path="/TaperPayerWhiteLabel" element={<LayoutWrapper currentPageName="TaperPayerWhiteLabel"><TaperPayerWhiteLabel /></LayoutWrapper>} />
         <Route path="/TaperPayerTopUp" element={<LayoutWrapper currentPageName="TaperPayerTopUp"><TaperPayerTopUp /></LayoutWrapper>} />
+        <Route path="/TaperPayerAML" element={<LayoutWrapper currentPageName="TaperPayerAML"><TaperPayerAML /></LayoutWrapper>} />
+        <Route path="/TaperPayerCompliance" element={<LayoutWrapper currentPageName="TaperPayerCompliance"><TaperPayerCompliance /></LayoutWrapper>} />
         <Route path="/AdminPageManager" element={<AdminPageManager />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -11,6 +11,13 @@ import { usePageConfig } from '@/hooks/usePageConfig';
 import SEOHead from '@/components/SEOHead';
 
 export default function TaperPayerTopUp() {
+  SEOHead({
+    title: 'Taper Mobile - Instant Mobile Top-Up & Airtime Recharge | Taper Payer',
+    description: 'Top up any mobile phone instantly with Taper Mobile. Send airtime and data to 150+ countries. Fast, secure, and affordable mobile recharges for Nigeria, Ghana, Haiti, and more.',
+    keywords: 'mobile top-up, airtime recharge, send airtime, international top-up, mobile recharge, taper mobile, phone top-up online, send credit abroad, recharge phone internationally',
+    url: 'https://taperpayer.com/TaperPayerTopUp',
+  });
+
   const { isElementHidden, isSectionHidden } = usePageConfig('TaperPayerTopUp');
   const [moncashStatus, setMoncashStatus] = useState(null); // 'success' | 'error' | 'paid_but_topup_failed'
   const [moncashPhone, setMoncashPhone] = useState('');

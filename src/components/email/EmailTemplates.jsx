@@ -7,7 +7,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:linear-gradient(135deg,#3D7BB7 0%,#61AF39 100%);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:60px;width:auto;margin-bottom:20px;" />
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png" alt="Taper Payer" style="height:50px;width:auto;max-width:200px;display:block;margin:0 auto 20px auto;object-fit:contain;" />
     <h1 style="color:#ffffff;font-size:28px;margin:0;font-weight:bold;">Welcome to Taper Payer!</h1>
     <p style="color:rgba(255,255,255,0.9);font-size:16px;margin-top:10px;">Your trusted partner for global money transfers</p>
   </div>

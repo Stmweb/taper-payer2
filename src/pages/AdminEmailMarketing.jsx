@@ -125,13 +125,17 @@ export default function AdminEmailMarketing() {
 
   const sendCampaign = async (id) => {
     setSendingId(id);
-    const res = await base44.functions.invoke('sendEmailBlast', { campaign_id: id });
-    setSendingId(null);
-    if (res.data?.success) {
-      showToast(`✅ Sent to ${res.data.sent_count} subscribers!`);
-    } else {
-      showToast(res.data?.error || 'Failed to send.', 'error');
+    try {
+      const res = await base44.functions.invoke('sendEmailBlast', { campaign_id: id });
+      if (res.data?.success) {
+        showToast(`✅ Sent to ${res.data.sent_count} subscribers!`);
+      } else {
+        showToast(res.data?.error || 'Failed to send.', 'error');
+      }
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Failed to send campaign.', 'error');
     }
+    setSendingId(null);
     fetchData();
   };
 

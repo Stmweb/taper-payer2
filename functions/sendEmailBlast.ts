@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     }
 
     if (subscribers.length === 0) {
-      return Response.json({ error: 'No active subscribers found' }, { status: 400 });
+      return Response.json({ success: false, error: 'No active subscribers found' });
     }
 
     // Send emails via Mailgun

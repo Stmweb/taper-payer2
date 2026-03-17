@@ -20,6 +20,7 @@ import TaperPayerTopUp from './pages/TaperPayerTopUp';
 import TaperPayerAML from './pages/TaperPayerAML';
 import TaperPayerCompliance from './pages/TaperPayerCompliance';
 import AdminPageManager from './pages/AdminPageManager';
+import AdminEmailMarketing from './pages/AdminEmailMarketing';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];

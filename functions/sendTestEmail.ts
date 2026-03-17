@@ -1,7 +1,7 @@
 Deno.serve(async (req) => {
   try {
     const MAILGUN_API_KEY = Deno.env.get('MAILGUN_API_KEY');
-    const MAILGUN_DOMAIN = Deno.env.get('MAILGUN_DOMAIN');
+    const MAILGUN_DOMAIN = Deno.env.get('MAILGUN_DOMAIN') || 'mail.taperpayer.com';
 
     const htmlBody = `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">

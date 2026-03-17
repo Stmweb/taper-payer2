@@ -428,6 +428,17 @@ export default function TaperConnectForm({ initialCountry }) {
                 </div>
                 {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
               </div>
+              {selectedProduct && (() => {
+                const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+                const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : null;
+                return (
+                  <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-600 space-y-1">
+                    <div className="flex justify-between"><span>Top-up amount</span><span>${parseFloat(topupAmt).toFixed(2)}</span></div>
+                    <div className="flex justify-between"><span>Service fee</span><span>$1.00</span></div>
+                    <div className="flex justify-between font-bold text-slate-800 border-t border-slate-200 pt-1 mt-1"><span>Total charged</span><span>${total}</span></div>
+                  </div>
+                );
+              })()}
               <Button
                 onClick={handleCardPayment}
                 disabled={loading || !phoneNumber || !selectedProduct || !stripe}
@@ -435,9 +446,11 @@ export default function TaperConnectForm({ initialCountry }) {
               >
                 {loading ? (
                   <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
-                ) : (
-                  <><Lock className="w-4 h-4 mr-2" /> Pay ${selectedProduct?.prices?.retail?.amount?.toFixed(2) || '—'} & Send Airtime</>
-                )}
+                ) : (() => {
+                  const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+                  const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : '—';
+                  return <><Lock className="w-4 h-4 mr-2" /> Pay ${total} & Send Airtime</>;
+                })()}
               </Button>
             </>
           )}

@@ -9,6 +9,7 @@ import {
   ArrowRight, Shield, Zap, DollarSign, Globe, Users, TrendingUp,
   RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram
 } from 'lucide-react';
+import SiteFooter from '@/components/SiteFooter';
 import { base44 } from '@/api/base44Client';
 import CountryDrawer from '@/components/mobile/CountryDrawer';
 import SEOHead from '@/components/SEOHead';

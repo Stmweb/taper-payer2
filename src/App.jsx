@@ -151,6 +151,7 @@ const AuthenticatedApp = () => {
         <Route path="/AdminPageManager" element={<AdminPageManager />} />
         <Route path="/AdminEmailMarketing" element={<AdminEmailMarketing />} />
         <Route path="/AdminStripeDashboard" element={<AdminStripeDashboard />} />
+        <Route path="/MoncashReturn" element={<MoncashReturn />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

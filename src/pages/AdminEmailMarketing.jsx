@@ -57,12 +57,14 @@ export default function AdminEmailMarketing() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [subs, cams] = await Promise.all([
+    const [subs, cams, lists] = await Promise.all([
       base44.entities.Subscriber.list('-created_date', 200),
-      base44.entities.EmailCampaign.list('-created_date', 50)
+      base44.entities.EmailCampaign.list('-created_date', 50),
+      base44.entities.ContactList.list('-created_date', 50)
     ]);
     setSubscribers(subs);
     setCampaigns(cams);
+    setContactLists(lists);
     setLoading(false);
   };
 

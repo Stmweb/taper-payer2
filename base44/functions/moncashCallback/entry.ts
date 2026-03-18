@@ -1,28 +1,27 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
 
 Deno.serve(async (req) => {
+  const APP_URL = 'https://taperpayer.com';
+
   try {
+    // Use service role — this endpoint is called by Moncash (no user session)
     const base44 = createClientFromRequest(req);
 
-    // Parse orderId from query params (Moncash returns GET with orderId and transactionId)
     const url = new URL(req.url);
     const orderId = url.searchParams.get('orderId');
     const transactionId = url.searchParams.get('transactionId');
-    const token = url.searchParams.get('token'); // sometimes token is also returned
+    const token = url.searchParams.get('token');
 
-    console.log('Moncash callback received:', { method: req.method, orderId, transactionId, token, allParams: Object.fromEntries(url.searchParams) });
-
-    const APP_URL = 'https://taperpayer.com';
+    console.log('Moncash callback received:', { orderId, transactionId, token });
 
     if (!orderId) {
-      // Redirect to home if no orderId (could be a bad callback)
       return new Response(null, {
         status: 302,
         headers: { 'Location': `${APP_URL}/TaperPayerTopUp?moncash=error` }
       });
     }
 
-    // Look up the pending topup by orderId
+    // Look up the pending topup by orderId (service role - no user auth needed)
     const pendingTopups = await base44.asServiceRole.entities.PendingTopup.filter({ order_id: orderId });
 
     if (!pendingTopups || pendingTopups.length === 0) {
@@ -44,102 +43,82 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Verify payment with Moncash using the transactionId
-    if (transactionId || token) {
-      const moncashClientId = Deno.env.get('MONCASH_API_KEY');
-      const moncashClientSecret = Deno.env.get('MONCASH_API_SECRET');
-      const encodedCredentials = btoa(`${moncashClientId}:${moncashClientSecret}`);
-
-      try {
-        // Re-authenticate
-        const authRes = await fetch('https://moncashbutton.digicelgroup.com/Api/oauth/token', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Basic ${encodedCredentials}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: 'scope=read,write&grant_type=client_credentials',
-        });
-
-        const authData = await authRes.json();
-        const accessToken = authData.access_token;
-
-        if (accessToken) {
-          // Retrieve payment details to confirm using transactionId or token
-          const lookupId = transactionId || token;
-          const paymentCheckRes = await fetch(`https://moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment?transactionId=${lookupId}`, {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`,
-              'Accept': 'application/json',
-            },
-          });
-          const paymentCheck = await paymentCheckRes.json();
-          console.log('Moncash payment verification:', JSON.stringify(paymentCheck));
-        }
-      } catch (verifyErr) {
-        console.warn('Payment verification failed (continuing anyway):', verifyErr.message);
-      }
+    if (pending.status === 'failed') {
+      return new Response(null, {
+        status: 302,
+        headers: { 'Location': `${APP_URL}/TaperPayerTopUp?moncash=paid_but_topup_failed` }
+      });
     }
 
-    // Process the airtime top-up via Reloadly
+    // Process the airtime top-up via DTone (same provider as card payments)
     try {
-      // Get Reloadly OAuth token
-      const reloadlyAuth = await fetch('https://auth.reloadly.com/oauth/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          client_id: Deno.env.get('RELOADLY_CLIENT_ID'),
-          client_secret: Deno.env.get('RELOADLY_CLIENT_SECRET'),
-          grant_type: 'client_credentials',
-          audience: 'https://topups.reloadly.com',
-        }),
-      });
+      const dtoneKey = Deno.env.get('DTONE_API_KEY');
+      const dtoneSecret = Deno.env.get('DTONE_API_SECRET');
+      const dtoneAuth = 'Basic ' + btoa(`${dtoneKey}:${dtoneSecret}`);
 
-      const reloadlyAuthData = await reloadlyAuth.json();
-      const accessToken = reloadlyAuthData.access_token;
+      const externalId = `MONCASH-${orderId}`;
 
-      if (!accessToken) {
-        throw new Error('Failed to authenticate with Reloadly');
+      // Use product_id if we have it, otherwise find the product by operator
+      let productId = pending.product_id;
+
+      if (!productId) {
+        // Fallback: look up products for the operator and pick the closest amount
+        console.log('No product_id stored, looking up DTone products for operator:', pending.operator_id);
+        const productsRes = await fetch(
+          `https://dvs-api.dtone.com/v1/products?operator_id=${pending.operator_id}&type=FIXED_VALUE_RECHARGE&per_page=100`,
+          { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
+        );
+        const productsData = await productsRes.json();
+        const products = Array.isArray(productsData) ? productsData : (productsData.data || []);
+        console.log('DTone products found:', products.length);
+
+        if (products.length === 0) {
+          throw new Error(`No DTone products found for operator ${pending.operator_id}`);
+        }
+
+        // Pick product whose retail amount is closest to the stored amount
+        const targetAmount = parseFloat(pending.amount);
+        const best = products.reduce((prev, curr) => {
+          const prevAmt = parseFloat(prev.prices?.retail?.amount ?? prev.suggested_amounts?.[0] ?? prev.face_value ?? 0);
+          const currAmt = parseFloat(curr.prices?.retail?.amount ?? curr.suggested_amounts?.[0] ?? curr.face_value ?? 0);
+          return Math.abs(currAmt - targetAmount) < Math.abs(prevAmt - targetAmount) ? curr : prev;
+        });
+        productId = best.id;
+        console.log('Selected closest product:', productId, 'for amount:', targetAmount);
       }
 
-      // Send the topup
-      const topupRes = await fetch('https://topups.reloadly.com/topups', {
+      // Send the top-up via DTone synchronous transactions
+      const payload = {
+        product_id: parseInt(productId),
+        auto_confirm: true,
+        credit_party_identifier: { mobile_number: pending.phone_number },
+        external_id: externalId,
+      };
+
+      console.log('Sending DTone top-up:', JSON.stringify(payload));
+
+      const topupRes = await fetch('https://dvs-api.dtone.com/v1/sync/transactions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: dtoneAuth,
+          Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Accept': 'application/com.reloadly.topups-v1+json',
         },
-        body: JSON.stringify({
-          operatorId: parseInt(pending.operator_id),
-          amount: pending.amount,
-          useLocalAmount: false,
-          recipientPhone: {
-            countryCode: pending.country_code,
-            number: pending.phone_number.replace(/\D/g, ''),
-          },
-          customIdentifier: orderId,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const topupData = await topupRes.json();
-      console.log('Reloadly topup result:', JSON.stringify(topupData));
+      console.log('DTone topup result:', JSON.stringify(topupData).substring(0, 500));
 
       if (!topupRes.ok) {
-        throw new Error(topupData.message || 'Topup failed');
+        throw new Error(topupData.message || topupData.description || `DTone error: ${topupRes.status}`);
       }
 
       // Mark as completed
       await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'completed' });
 
-      console.log('Topup completed successfully:', {
-        phone: pending.phone_number,
-        amount: pending.amount,
-        orderId,
-      });
+      console.log('Topup completed successfully for phone:', pending.phone_number, 'orderId:', orderId);
 
-      // Redirect to success page
       return new Response(null, {
         status: 302,
         headers: {
@@ -148,8 +127,11 @@ Deno.serve(async (req) => {
       });
 
     } catch (topupErr) {
-      console.error('Topup failed after payment:', topupErr.message);
-      await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'failed' });
+      console.error('Topup failed after Moncash payment:', topupErr.message);
+      await base44.asServiceRole.entities.PendingTopup.update(pending.id, {
+        status: 'failed',
+        error_message: topupErr.message,
+      });
 
       return new Response(null, {
         status: 302,

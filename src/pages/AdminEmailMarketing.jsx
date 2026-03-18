@@ -594,9 +594,14 @@ export default function AdminEmailMarketing() {
                 placeholder={"john@example.com, John Doe\njane@example.com\nbob@example.com, Bob Smith"}
                 className="min-h-48 font-mono text-sm mb-4"
               />
-              <Button onClick={bulkImport} disabled={importing} className="bg-blue-600 hover:bg-blue-700 text-white">
-                <Upload className="w-4 h-4 mr-2" /> {importing ? 'Importing...' : 'Import Subscribers'}
-              </Button>
+              <div className="flex gap-3 flex-wrap">
+                <Button onClick={bulkImport} disabled={importing} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Upload className="w-4 h-4 mr-2" /> {importing ? 'Importing...' : 'Import Subscribers'}
+                </Button>
+                <Button onClick={deduplicateSubscribers} disabled={deduplicating} variant="outline" className="border-red-300 text-red-600 hover:bg-red-50">
+                  <Trash2 className="w-4 h-4 mr-2" /> {deduplicating ? 'Removing Duplicates...' : 'Remove Duplicates'}
+                </Button>
+              </div>
             </Card>
           </TabsContent>
         </Tabs>

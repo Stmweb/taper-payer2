@@ -317,8 +317,8 @@ export default function AdminEmailMarketing() {
           {/* CAMPAIGNS TAB */}
           <TabsContent value="campaigns">
             <div className="space-y-4">
-              {loading && <Card className="p-10 text-center text-gray-400">Loading campaigns...</Card>}
-              {campaigns.length === 0 && !loading && (
+              {campaignsLoading && <Card className="p-10 text-center text-gray-400">Loading campaigns...</Card>}
+              {campaigns.length === 0 && !campaignsLoading && (
                 <Card className="p-10 text-center text-gray-400">No campaigns yet. Start from a template or compose from scratch.</Card>
               )}
               {campaigns.map(c => (

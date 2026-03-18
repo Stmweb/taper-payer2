@@ -402,23 +402,19 @@ export default function TaperConnectForm({ initialCountry }) {
                   const currency = isFromDing ? 'USD' : (p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD');
                   return (
                     <button
-                      key={idx}
-                      onClick={() => !isTooSmall && setSelectedProduct(p)}
-                      disabled={isTooSmall}
-                      className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
-                        isTooSmall
-                          ? 'border-slate-100 bg-slate-50 opacity-40 cursor-not-allowed'
-                          : selectedProduct === p
-                          ? 'border-cyan-500 bg-cyan-50'
-                          : 'border-slate-200 hover:border-cyan-300'
-                      }`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-slate-800">{name}</span>
-                        {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
-                      </div>
-                      {isTooSmall && <p className="text-xs text-red-400 mt-0.5">Min. $0.50 required</p>}
-                    </button>
+                       key={idx}
+                       onClick={() => setSelectedProduct(p)}
+                       className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
+                         selectedProduct === p
+                           ? 'border-cyan-500 bg-cyan-50'
+                           : 'border-slate-200 hover:border-cyan-300'
+                       }`}
+                     >
+                       <div className="flex justify-between items-center">
+                         <span className="text-sm font-medium text-slate-800">{name}</span>
+                         {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
+                       </div>
+                     </button>
                   );
                 })}
               </div>

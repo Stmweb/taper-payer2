@@ -194,36 +194,19 @@ export default function TaperConnectForm({ initialCountry }) {
       const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
       const fullPhone = selectedCountry.dial + localDigits;
 
-      // Handle Ding for Haiti (flexible amount)
-      if (selectedCountry.iso === 'HT') {
-        const paymentRes = await base44.functions.invoke('processDingPayment', {
-          paymentMethodId: pm.id,
-          fullPhone,
-          amount: parseFloat(customAmount),
-          skuCode: null, // Flexible amount, no specific SKU
-          countryCode: selectedCountry.iso,
-        });
+      // Use DTone for all countries
+      const retailAmount = selectedCountry.iso === 'HT' ? parseFloat(customAmount) : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
+      const paymentRes = await base44.functions.invoke('processDtonePayment', {
+        paymentMethodId: pm.id,
+        fullPhone,
+        amount: retailAmount,
+        productId: selectedProduct?.id,
+      });
 
-        if (paymentRes.data?.success) {
-          setSuccess(true);
-        } else {
-          setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
-        }
+      if (paymentRes.data?.success) {
+        setSuccess(true);
       } else {
-        // DTone for other countries
-        const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
-        const paymentRes = await base44.functions.invoke('processDtonePayment', {
-          paymentMethodId: pm.id,
-          fullPhone,
-          amount: retailAmount,
-          productId: selectedProduct?.id,
-        });
-
-        if (paymentRes.data?.success) {
-          setSuccess(true);
-        } else {
-          setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
-        }
+        setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
       }
     } catch (e) {
       setError('Payment or top-up failed. Please try again.');

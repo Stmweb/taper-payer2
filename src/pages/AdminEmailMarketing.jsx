@@ -420,17 +420,45 @@ export default function AdminEmailMarketing() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Send To (Contact List)</label>
-                  <select
-                    value={campaign.contact_list_id}
-                    onChange={e => setCampaign({...campaign, contact_list_id: e.target.value})}
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-                  >
-                    <option value="">All Active Subscribers</option>
-                    {contactLists.map(l => (
-                      <option key={l.id} value={l.id}>{l.name} ({(l.subscriber_ids || []).length} contacts)</option>
-                    ))}
-                  </select>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Send To</label>
+                  <div className="flex gap-3 mb-3">
+                    <button
+                      type="button"
+                      onClick={() => setCampaign({...campaign, recipient_mode: 'list', manual_emails: ''})}
+                      className={`flex-1 py-2 px-4 rounded-lg border text-sm font-medium transition-colors ${(!campaign.recipient_mode || campaign.recipient_mode === 'list') ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                    >
+                      Contact List
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCampaign({...campaign, recipient_mode: 'manual', contact_list_id: ''})}
+                      className={`flex-1 py-2 px-4 rounded-lg border text-sm font-medium transition-colors ${campaign.recipient_mode === 'manual' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                    >
+                      Paste Emails Manually
+                    </button>
+                  </div>
+                  {(!campaign.recipient_mode || campaign.recipient_mode === 'list') ? (
+                    <select
+                      value={campaign.contact_list_id}
+                      onChange={e => setCampaign({...campaign, contact_list_id: e.target.value})}
+                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+                    >
+                      <option value="">All Active Subscribers</option>
+                      {contactLists.map(l => (
+                        <option key={l.id} value={l.id}>{l.name} ({(l.subscriber_ids || []).length} contacts)</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div>
+                      <Textarea
+                        value={campaign.manual_emails || ''}
+                        onChange={e => setCampaign({...campaign, manual_emails: e.target.value})}
+                        placeholder={"john@example.com\njane@example.com, Jane Doe\nbob@example.com"}
+                        className="min-h-28 font-mono text-sm"
+                      />
+                      <p className="text-xs text-gray-400 mt-1">One email per line. Optionally add a name: <code className="bg-gray-100 px-1 rounded">email, Name</code></p>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email Subject</label>

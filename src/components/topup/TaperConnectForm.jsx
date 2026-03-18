@@ -386,9 +386,9 @@ export default function TaperConnectForm({ initialCountry }) {
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {(detectedOperator
                   ? products.filter(p => {
-                      // For Ding (Haiti), filter by Natcom provider code
+                      // For Ding (Haiti), show all Natcom products
                       if (detectedOperator.provider === 'ding') {
-                        return p.ProviderCode === '00C45BPA'; // Natcom Haiti
+                        return p.OperatorCode === '00C45BPA' || p.ProviderCode === '00C45BPA' || p.Operator?.includes('Natcom');
                       }
                       // For DTone, filter by operator ID
                       return p.operator?.id === detectedOperator.id;

@@ -48,8 +48,14 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AccountSettings from './pages/AccountSettings';
+import AdminEmailMarketing from './pages/AdminEmailMarketing';
+import AdminPageManager from './pages/AdminPageManager';
+import AdminStripeDashboard from './pages/AdminStripeDashboard';
+import MoncashReturn from './pages/MoncashReturn';
+import TaperPayerAML from './pages/TaperPayerAML';
 import TaperPayerAbout from './pages/TaperPayerAbout';
 import TaperPayerBusiness from './pages/TaperPayerBusiness';
+import TaperPayerCompliance from './pages/TaperPayerCompliance';
 import TaperPayerContact from './pages/TaperPayerContact';
 import TaperPayerCookies from './pages/TaperPayerCookies';
 import TaperPayerFAQ from './pages/TaperPayerFAQ';
@@ -68,8 +74,14 @@ import __Layout from './Layout.jsx';
 
 export const PAGES = {
     "AccountSettings": AccountSettings,
+    "AdminEmailMarketing": AdminEmailMarketing,
+    "AdminPageManager": AdminPageManager,
+    "AdminStripeDashboard": AdminStripeDashboard,
+    "MoncashReturn": MoncashReturn,
+    "TaperPayerAML": TaperPayerAML,
     "TaperPayerAbout": TaperPayerAbout,
     "TaperPayerBusiness": TaperPayerBusiness,
+    "TaperPayerCompliance": TaperPayerCompliance,
     "TaperPayerContact": TaperPayerContact,
     "TaperPayerCookies": TaperPayerCookies,
     "TaperPayerFAQ": TaperPayerFAQ,

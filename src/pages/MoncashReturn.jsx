@@ -41,14 +41,20 @@ export default function MoncashReturn() {
     }
 
     setStatus('processing');
-    base44.functions.invoke('moncashCallback', { orderId, token })
-      .then(res => {
-        if (res.data?.success || res.data?.already_completed) {
-          setPhone(res.data.phone || '');
-          setAmount(res.data.amount || '');
+    // Use plain fetch (no auth required) to call the callback endpoint
+    fetch(`/api/apps/695c31d62d68bbb4ef8cc5b3/functions/moncashCallback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, token }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data?.success || data?.already_completed) {
+          setPhone(data.phone || '');
+          setAmount(data.amount || '');
           setStatus('success');
         } else {
-          setErrorMsg(res.data?.error || 'Top-up could not be completed.');
+          setErrorMsg(data?.error || 'Top-up could not be completed.');
           setStatus('failed');
         }
       })

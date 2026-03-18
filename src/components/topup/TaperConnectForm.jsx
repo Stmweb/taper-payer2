@@ -120,7 +120,13 @@ export default function TaperConnectForm({ initialCountry }) {
         const ops = Array.isArray(res.data) ? res.data : (res.data?.operators || []);
         const identified = ops.find(o => o.identified) || ops[0];
         if (identified) {
-          setDetectedOperator({ id: identified.id, name: identified.name, provider: 'dtone' });
+          // Validate Haiti operator IDs (1701=Digicel, 1703=Natcom)
+          let validatedId = identified.id;
+          if (selectedCountry.iso === 'HT' && ![1701, 1703].includes(Number(identified.id))) {
+            console.warn(`Invalid Haiti operator ID ${identified.id}, defaulting to 1703`);
+            validatedId = 1703;
+          }
+          setDetectedOperator({ id: validatedId, name: identified.name, provider: 'dtone' });
           setSelectedProduct(null);
           // For Haiti, also show products for detected operator
           if (selectedCountry.iso === 'HT') {

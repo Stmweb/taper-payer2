@@ -394,13 +394,12 @@ export default function TaperConnectForm({ initialCountry }) {
                   // Handle both Ding and DTone product formats
                   const isFromDing = p.SkuCode !== undefined;
                   const name = isFromDing 
-                    ? p.DefaultDisplayText || `${p.Maximum?.ReceiveValue} ${p.Maximum?.ReceiveCurrencyIso}`
+                    ? p.DefaultDisplayText || `${p.Description || p.Operator || 'Plan'}`
                     : (p.name || p.description || String(p.id));
                   const amount = isFromDing
-                    ? p.Maximum?.SendValue
+                    ? p.SendValue ?? p.Maximum?.SendValue
                     : (p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value);
                   const currency = isFromDing ? 'USD' : (p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD');
-                  const isTooSmall = amount != null && Number(amount) < 0.50;
                   return (
                     <button
                       key={idx}

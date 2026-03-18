@@ -135,6 +135,19 @@ export default function AdminEmailMarketing() {
     setImporting(false);
   };
 
+  const deduplicateSubscribers = async () => {
+    if (!window.confirm('This will remove all duplicate subscribers (keeping the most recent per email). Continue?')) return;
+    setDeduplicating(true);
+    try {
+      const res = await base44.functions.invoke('deduplicateSubscribers', {});
+      showToast(`✅ Removed ${res.data.deleted} duplicates. ${res.data.remaining} subscribers remain.`);
+      fetchData();
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Deduplication failed.', 'error');
+    }
+    setDeduplicating(false);
+  };
+
   const createContactList = async (e) => {
     e.preventDefault();
     if (!newListName.trim()) return;

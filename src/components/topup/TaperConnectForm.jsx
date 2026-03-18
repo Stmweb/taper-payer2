@@ -512,13 +512,14 @@ export default function TaperConnectForm({ initialCountry }) {
               })()}
               <Button
                 onClick={handleCardPayment}
-                disabled={loading || !phoneNumber || !selectedProduct || !stripe}
+                disabled={loading || !phoneNumber || !(selectedCountry?.iso === 'HT' ? customAmount : selectedProduct) || !stripe}
                 className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
               >
                 {loading ? (
                   <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
                 ) : (() => {
-                  const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+                  const isHaiti = selectedCountry?.iso === 'HT';
+                  const topupAmt = isHaiti ? customAmount : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
                   const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : '—';
                   return <><Lock className="w-4 h-4 mr-2" /> Pay ${total} & Send Airtime</>;
                 })()}

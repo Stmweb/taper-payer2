@@ -102,10 +102,8 @@ export default function AdminEmailMarketing() {
     const records = [];
     for (const line of lines) {
       const parts = line.split('\t').length > 1 ? line.split('\t') : line.split(',');
-      // Support: email, name format OR First Last Email (tab-separated from spreadsheet)
       let email, name;
       if (parts.length >= 3) {
-        // Spreadsheet format: First Name, Last Name, Email
         const possibleEmail = parts.find(p => p.trim().includes('@'));
         email = possibleEmail ? possibleEmail.trim() : null;
         const nonEmailParts = parts.filter(p => !p.trim().includes('@') && p.trim());
@@ -123,10 +121,17 @@ export default function AdminEmailMarketing() {
       showToast('No valid email addresses found.', 'error');
       return;
     }
-    await base44.entities.Subscriber.bulkCreate(records);
-    setBulkEmails('');
-    showToast(`${records.length} subscribers imported!`);
-    fetchData();
+    setImporting(true);
+    try {
+      const res = await base44.functions.invoke('bulkImportSubscribers', { records });
+      const { imported, errors } = res.data;
+      setBulkEmails('');
+      showToast(`${imported} subscribers imported!${errors?.length ? ` (${errors.length} failed)` : ''}`);
+      fetchData();
+    } catch (err) {
+      showToast(err?.response?.data?.error || 'Import failed.', 'error');
+    }
+    setImporting(false);
   };
 
   const createContactList = async (e) => {

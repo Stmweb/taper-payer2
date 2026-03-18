@@ -23,6 +23,7 @@ export default function AdminEmailMarketing() {
   const [subscribers, setSubscribers] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [campaignsLoading, setCampaignsLoading] = useState(true);
   const [sendingId, setSendingId] = useState(null);
   const [toast, setToast] = useState(null);
 

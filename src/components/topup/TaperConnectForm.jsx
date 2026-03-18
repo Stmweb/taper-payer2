@@ -212,14 +212,13 @@ export default function TaperConnectForm({ initialCountry }) {
       const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
       const fullPhone = selectedCountry.dial + localDigits;
 
-      // Handle Ding for Haiti
+      // Handle Ding for Haiti (flexible amount)
       if (selectedCountry.iso === 'HT') {
-        const sendAmount = selectedProduct?.Maximum?.SendValue;
         const paymentRes = await base44.functions.invoke('processDingPayment', {
           paymentMethodId: pm.id,
           fullPhone,
-          amount: sendAmount,
-          skuCode: selectedProduct?.SkuCode,
+          amount: parseFloat(customAmount),
+          skuCode: null, // Flexible amount, no specific SKU
           countryCode: selectedCountry.iso,
         });
 

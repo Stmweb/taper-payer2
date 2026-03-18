@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 
-export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, countryCode, productId, onSuccess }) {
+export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, countryCode, productId, isFromDing, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);

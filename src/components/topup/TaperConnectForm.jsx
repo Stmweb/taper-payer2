@@ -110,16 +110,29 @@ export default function TaperConnectForm({ initialCountry }) {
       setDetectingOperator(true);
       try {
         const fullPhone = selectedCountry.dial + digits.replace(/^0/, '');
-        const res = await base44.functions.invoke('dtoneTopUp', {
-          action: 'lookupOperator',
-          phoneNumber: fullPhone,
-        });
-        // DTone returns a direct array of operators
-        const ops = Array.isArray(res.data) ? res.data : (res.data?.operators || []);
-        const identified = ops.find(o => o.identified) || ops[0];
-        if (identified) {
-          setDetectedOperator({ id: identified.id, name: identified.name });
-          setSelectedProduct(null); // reset selection when operator changes
+        // For Haiti, detect Natcom (which maps to Ding)
+        if (selectedCountry.iso === 'HT') {
+          const res = await base44.functions.invoke('dingTopUp', {
+            action: 'detectOperator',
+            phoneNumber: fullPhone,
+          });
+          const opData = res.data;
+          if (opData?.name) {
+            setDetectedOperator({ id: opData.id, name: opData.name, provider: 'ding' });
+            setSelectedProduct(null);
+          }
+        } else {
+          // DTone for other countries
+          const res = await base44.functions.invoke('dtoneTopUp', {
+            action: 'lookupOperator',
+            phoneNumber: fullPhone,
+          });
+          const ops = Array.isArray(res.data) ? res.data : (res.data?.operators || []);
+          const identified = ops.find(o => o.identified) || ops[0];
+          if (identified) {
+            setDetectedOperator({ id: identified.id, name: identified.name, provider: 'dtone' });
+            setSelectedProduct(null);
+          }
         }
       } catch (e) { /* silent */ } finally {
         setDetectingOperator(false);

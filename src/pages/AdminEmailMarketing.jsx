@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Mail, Users, Send, Plus, Trash2, Upload, CheckCircle2, AlertCircle,
-  Clock, Sparkles, Eye, X, Calendar, FileText, RefreshCw
+  Clock, Sparkles, Eye, X, Calendar, FileText, RefreshCw, List, Pencil
 } from 'lucide-react';
 import { EMAIL_TEMPLATES, TEMPLATE_CATEGORIES } from '@/components/email/EmailTemplates';
 

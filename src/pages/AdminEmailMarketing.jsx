@@ -40,7 +40,7 @@ export default function AdminEmailMarketing() {
   const [listSubscriberSearch, setListSubscriberSearch] = useState('');
 
   // Compose form
-  const [campaign, setCampaign] = useState({ name: '', subject: '', body_html: '', category: '', sender_email: 'noreply@mail.taperpayer.com', sender_name: 'Taper Payer', contact_list_id: '', recipient_mode: 'list', manual_emails: '' });
+  const [campaign, setCampaign] = useState({ name: '', subject: '', body_html: '', category: '', sender_email: 'support@mail.taperpayer.com', sender_name: 'Taper Payer', contact_list_id: '', recipient_mode: 'list', manual_emails: '' });
   const [savingCampaign, setSavingCampaign] = useState(false);
   const [scheduledAt, setScheduledAt] = useState('');
 

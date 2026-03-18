@@ -12,11 +12,13 @@ Deno.serve(async (req) => {
 
     console.log('Moncash callback received:', { method: req.method, orderId, transactionId, token, allParams: Object.fromEntries(url.searchParams) });
 
+    const APP_URL = 'https://taperpayer.com';
+
     if (!orderId) {
       // Redirect to home if no orderId (could be a bad callback)
       return new Response(null, {
         status: 302,
-        headers: { 'Location': '/TaperPayerTopUp?moncash=error' }
+        headers: { 'Location': `${APP_URL}/TaperPayerTopUp?moncash=error` }
       });
     }
 

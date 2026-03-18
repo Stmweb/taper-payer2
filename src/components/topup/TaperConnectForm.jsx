@@ -149,10 +149,16 @@ export default function TaperConnectForm({ initialCountry }) {
     setSelectedProduct(null);
     setPaymentMethod('card');
     setStep(2); // Move to step 2 immediately
-    
+
     try {
-      const res = await base44.functions.invoke('dtoneTopUp', { action: 'getProducts', countryIso: country.iso });
-      const items = Array.isArray(res.data) ? res.data : (res.data?.products || []);
+      let res;
+      // Use Ding for Haiti, DTone for others
+      if (country.iso === 'HT') {
+        res = await base44.functions.invoke('dingTopUp', { action: 'getProducts', countryIso: country.iso });
+      } else {
+        res = await base44.functions.invoke('dtoneTopUp', { action: 'getProducts', countryIso: country.iso });
+      }
+      const items = Array.isArray(res.data) ? res.data : (res.data?.Items || res.data?.products || []);
       if (items.length === 0) {
         setError(`No products available for ${country.name}. Please try another country.`);
         setProducts([]);

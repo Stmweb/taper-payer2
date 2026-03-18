@@ -5,40 +5,54 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
 export default function MoncashReturn() {
-  const [status, setStatus] = useState('loading'); // loading | processing | success | failed | error
+  const [status, setStatus] = useState('loading');
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+
+    // Case 1: Redirected here from our own moncashCallback GET (already processed server-side)
+    if (params.get('success') === '1') {
+      setPhone(params.get('phone') || '');
+      setAmount(params.get('amount') || '');
+      setStatus('success');
+      return;
+    }
+    if (params.get('failed') === '1') {
+      setStatus('failed');
+      return;
+    }
+    if (params.get('error')) {
+      setErrorMsg('Payment could not be verified. Please contact support.');
+      setStatus('error');
+      return;
+    }
+
+    // Case 2: Moncash redirected user directly here with orderId/token — process via API
     const orderId = params.get('orderId');
     const token = params.get('token');
 
     if (!orderId && !token) {
+      setErrorMsg('No order information received.');
       setStatus('error');
-      setErrorMsg('No order information found.');
       return;
     }
 
-    // Process the top-up now that user has returned
     setStatus('processing');
-
     base44.functions.invoke('moncashCallback', { orderId, token })
       .then(res => {
-        if (res.data?.success) {
+        if (res.data?.success || res.data?.already_completed) {
           setPhone(res.data.phone || '');
           setAmount(res.data.amount || '');
-          setStatus('success');
-        } else if (res.data?.already_completed) {
-          setPhone(res.data.phone || '');
           setStatus('success');
         } else {
           setErrorMsg(res.data?.error || 'Top-up could not be completed.');
           setStatus('failed');
         }
       })
-      .catch(err => {
+      .catch(() => {
         setErrorMsg('An error occurred while processing your top-up.');
         setStatus('error');
       });
@@ -48,7 +62,6 @@ export default function MoncashReturn() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
 
-        {/* Logo */}
         <img
           src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png"
           alt="Taper Payer"
@@ -78,7 +91,7 @@ export default function MoncashReturn() {
             {amount && (
               <p className="text-slate-500 text-sm mb-6">Amount: <strong>${parseFloat(amount).toFixed(2)} USD</strong></p>
             )}
-            {!amount && !phone && <p className="text-slate-500 mb-6">Your airtime has been sent successfully.</p>}
+            {!phone && !amount && <p className="text-slate-500 mb-6">Your airtime has been sent successfully.</p>}
             <Link to="/TaperPayerTopUp">
               <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Top Up Another Phone</Button>
             </Link>
@@ -89,7 +102,7 @@ export default function MoncashReturn() {
           <div className="py-4">
             <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-slate-900 mb-2">Payment Received — Top-Up Pending</h2>
-            <p className="text-slate-500 text-sm mb-2">Your Moncash payment was received, but the airtime could not be sent automatically.</p>
+            <p className="text-slate-500 text-sm mb-2">Your Moncash payment was received but the airtime could not be sent automatically.</p>
             {errorMsg && <p className="text-xs text-red-500 mb-4 bg-red-50 rounded-lg p-3">{errorMsg}</p>}
             <p className="text-slate-600 text-sm mb-6">Please contact our support team and we'll resolve this right away.</p>
             <div className="flex flex-col gap-3">

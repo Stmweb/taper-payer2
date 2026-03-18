@@ -22,6 +22,7 @@ import TaperPayerCompliance from './pages/TaperPayerCompliance';
 import AdminPageManager from './pages/AdminPageManager';
 import AdminEmailMarketing from './pages/AdminEmailMarketing.jsx';
 import AdminStripeDashboard from './pages/AdminStripeDashboard';
+import MoncashReturn from './pages/MoncashReturn';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];

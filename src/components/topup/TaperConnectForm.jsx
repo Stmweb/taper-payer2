@@ -384,16 +384,12 @@ export default function TaperConnectForm({ initialCountry }) {
               <p className="text-sm text-slate-500">No products available for this country.</p>
             ) : (
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                {(detectedOperator
-                  ? products.filter(p => {
-                      // For Ding (Haiti), show all Natcom products
-                      if (detectedOperator.provider === 'ding') {
-                        return p.OperatorCode === '00C45BPA' || p.ProviderCode === '00C45BPA' || p.Operator?.includes('Natcom');
-                      }
-                      // For DTone, filter by operator ID
-                      return p.operator?.id === detectedOperator.id;
-                    })
-                  : products
+                {(detectedOperator && selectedCountry?.iso !== 'HT'
+                   ? products.filter(p => {
+                       // For DTone, filter by operator ID
+                       return p.operator?.id === detectedOperator.id;
+                     })
+                   : products
                 ).map((p, idx) => {
                   // Handle both Ding and DTone product formats
                   const isFromDing = p.SkuCode !== undefined;

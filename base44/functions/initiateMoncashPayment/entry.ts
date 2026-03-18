@@ -84,6 +84,7 @@ Deno.serve(async (req) => {
       phone_number: phoneNumber,
       country_code: countryCode,
       operator_id: String(operatorId),
+      product_id: productId ? String(productId) : undefined,
       amount: parseFloat(amount),
       status: 'pending',
     });

@@ -180,13 +180,19 @@ export default function AdminEmailMarketing() {
     e.preventDefault();
     setSavingCampaign(true);
     await base44.entities.EmailCampaign.create({
-      ...campaign,
+      name: campaign.name,
+      subject: campaign.subject,
+      body_html: campaign.body_html,
+      category: campaign.category,
+      sender_email: campaign.sender_email,
+      sender_name: campaign.sender_name,
       status: scheduledAt ? 'scheduled' : 'draft',
       scheduled_at: scheduledAt || undefined,
-      contact_list_id: campaign.contact_list_id || undefined,
+      contact_list_id: campaign.recipient_mode === 'list' ? (campaign.contact_list_id || undefined) : undefined,
+      manual_emails: campaign.recipient_mode === 'manual' ? campaign.manual_emails : undefined,
     });
     showToast(scheduledAt ? 'Campaign scheduled!' : 'Campaign saved as draft!');
-    setCampaign({ name: '', subject: '', body_html: '', category: '', sender_email: '', sender_name: '', contact_list_id: '' });
+    setCampaign({ name: '', subject: '', body_html: '', category: '', sender_email: '', sender_name: '', contact_list_id: '', recipient_mode: 'list', manual_emails: '' });
     setScheduledAt('');
     fetchData();
     setSavingCampaign(false);

@@ -161,7 +161,7 @@ Deno.serve(async (req) => {
     console.error('Moncash Callback Error:', error.message, error.stack);
     return new Response(null, {
       status: 302,
-      headers: { 'Location': '/TaperPayerTopUp?moncash=error' }
+      headers: { 'Location': `${APP_URL}/TaperPayerTopUp?moncash=error` }
     });
   }
 });

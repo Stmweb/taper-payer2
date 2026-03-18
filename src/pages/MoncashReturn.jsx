@@ -47,7 +47,10 @@ export default function MoncashReturn() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ orderId, token }),
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         if (data?.success || data?.already_completed) {
           setPhone(data.phone || '');
@@ -58,8 +61,9 @@ export default function MoncashReturn() {
           setStatus('failed');
         }
       })
-      .catch(() => {
-        setErrorMsg('An error occurred while processing your top-up.');
+      .catch(err => {
+        console.error('Moncash callback error:', err);
+        setErrorMsg('An error occurred while processing your top-up. Please try again or contact support.');
         setStatus('error');
       });
   }, []);

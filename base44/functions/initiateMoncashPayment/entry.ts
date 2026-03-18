@@ -3,7 +3,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const { amount, phoneNumber, countryCode, operatorId, exchangeRate } = await req.json();
+    const { amount, phoneNumber, countryCode, operatorId, productId, exchangeRate } = await req.json();
 
     if (!amount || !phoneNumber || !countryCode || !operatorId) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });

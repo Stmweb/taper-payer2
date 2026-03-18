@@ -122,6 +122,17 @@ export default function TaperConnectForm({ initialCountry }) {
         if (identified) {
           setDetectedOperator({ id: identified.id, name: identified.name, provider: 'dtone' });
           setSelectedProduct(null);
+          // For Haiti, also show products for detected operator
+          if (selectedCountry.iso === 'HT') {
+            try {
+              const productsRes = await base44.functions.invoke('dtoneTopUp', {
+                action: 'getProducts',
+                countryIso: 'HT',
+              });
+              const items = Array.isArray(productsRes.data) ? productsRes.data : (productsRes.data?.products || []);
+              setProducts(items);
+            } catch (e) { /* silent */ }
+          }
         }
       } catch (e) { /* silent */ } finally {
         setDetectingOperator(false);

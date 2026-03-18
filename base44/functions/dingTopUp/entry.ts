@@ -14,7 +14,7 @@ Deno.serve(async (req) => {
     if (action === "getProducts") {
       const { countryIso } = body;
       const res = await fetch(`${BASE_URL}/GetProducts?countryIso=${countryIso}`, {
-        headers: { Authorization: AUTH, "Content-Type": "application/json" }
+        headers: { "api_key": DING_API_KEY, "Content-Type": "application/json" }
       });
       const data = await res.json();
       return Response.json(data);

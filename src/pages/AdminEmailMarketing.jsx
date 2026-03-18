@@ -111,6 +111,28 @@ export default function AdminEmailMarketing() {
     fetchData();
   };
 
+  const createContactList = async (e) => {
+    e.preventDefault();
+    if (!newListName.trim()) return;
+    await base44.entities.ContactList.create({ name: newListName.trim(), description: newListDesc.trim(), subscriber_ids: [] });
+    setNewListName(''); setNewListDesc('');
+    showToast('Contact list created!');
+    fetchData();
+  };
+
+  const deleteContactList = async (id) => {
+    await base44.entities.ContactList.delete(id);
+    showToast('List deleted.');
+    fetchData();
+  };
+
+  const toggleSubscriberInList = async (list, subId) => {
+    const ids = list.subscriber_ids || [];
+    const updated = ids.includes(subId) ? ids.filter(i => i !== subId) : [...ids, subId];
+    await base44.entities.ContactList.update(list.id, { subscriber_ids: updated });
+    fetchData();
+  };
+
   const useTemplate = (tmpl) => {
     setCampaign({ name: tmpl.name, subject: tmpl.subject, body_html: tmpl.body_html.trim(), category: tmpl.category });
     setPreviewTemplate(null);

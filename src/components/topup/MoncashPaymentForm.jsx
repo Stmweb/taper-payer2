@@ -28,7 +28,6 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
         countryCode: countryCode,
         operatorId: operatorId,
         productId: productId,
-        exchangeRate: exchangeRate,
       });
 
       if (res.data?.redirectUrl) {

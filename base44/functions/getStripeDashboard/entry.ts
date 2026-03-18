@@ -30,6 +30,9 @@ Deno.serve(async (req) => {
     const monthlyCharges = succeededCharges.filter(c => c.created >= thirtyDaysAgo);
     const monthlyVolume = monthlyCharges.reduce((sum, c) => sum + c.amount, 0);
 
+    // Fetch Moncash topup records
+    const moncashTopups = await base44.asServiceRole.entities.PendingTopup.list('-created_date', 200);
+
     return Response.json({
       transactions: paymentIntents.data.map(pi => ({
         id: pi.id,
@@ -40,6 +43,7 @@ Deno.serve(async (req) => {
         description: pi.description,
         customer: pi.customer,
       })),
+      moncash_topups: moncashTopups,
       subscriptions: subscriptions.data.map(sub => ({
         id: sub.id,
         status: sub.status,

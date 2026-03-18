@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
     for (const subscriber of subscribers) {
       const formData = new FormData();
       const senderName = campaign.sender_name || 'Taper Payer';
-      const senderEmail = campaign.sender_email || `noreply@${MAILGUN_DOMAIN}`;
+      const senderEmail = campaign.sender_email || `noreply@mail.taperpayer.com`;
       formData.append('from', `${senderName} <${senderEmail}>`);
       formData.append('to', subscriber.email);
       formData.append('subject', campaign.subject);

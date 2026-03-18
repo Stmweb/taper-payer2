@@ -388,7 +388,8 @@ export default function TaperConnectForm({ initialCountry }) {
                   .filter(p => {
                     // For Haiti (Ding), only show Natcom products
                     if (selectedCountry?.iso === 'HT') {
-                      return p.Operator?.includes('Natcom') || p.OperatorName?.includes('Natcom');
+                      const operatorStr = (p.Operator || p.OperatorName || p.operator || '').toString();
+                      return operatorStr.includes('Natcom');
                     }
                     // For DTone, filter by operator ID if detected
                     if (detectedOperator && selectedCountry?.iso !== 'HT') {

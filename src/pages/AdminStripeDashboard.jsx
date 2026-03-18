@@ -235,6 +235,55 @@ export default function AdminStripeDashboard() {
           </Card>
         )}
 
+        {/* Moncash Top-Ups Table */}
+        {activeTab === 'moncash' && (
+          <Card className="overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-orange-50 border-b">
+                  <tr>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">Order ID</th>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">Phone Number</th>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">Country</th>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">Operator ID</th>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">Amount (USD)</th>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">Status</th>
+                    <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">Date</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {moncash_topups.length === 0 ? (
+                    <tr><td colSpan={7} className="text-center py-12 text-slate-400">No Moncash transactions found</td></tr>
+                  ) : moncash_topups.map(tx => (
+                    <tr key={tx.id} className="hover:bg-orange-50 transition-colors">
+                      <td className="px-6 py-4 font-mono text-xs text-slate-500">{tx.order_id || '—'}</td>
+                      <td className="px-6 py-4 font-medium text-slate-900">{tx.phone_number || '—'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{tx.country_code || '—'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{tx.operator_id || '—'}</td>
+                      <td className="px-6 py-4 font-semibold text-slate-900">${Number(tx.amount || 0).toFixed(2)}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                          tx.status === 'completed' ? 'bg-green-100 text-green-700' :
+                          tx.status === 'failed' ? 'bg-red-100 text-red-700' :
+                          'bg-yellow-100 text-yellow-700'
+                        }`}>
+                          {tx.status === 'completed' ? <CheckCircle className="w-3 h-3" /> :
+                           tx.status === 'failed' ? <XCircle className="w-3 h-3" /> :
+                           <Clock className="w-3 h-3" />}
+                          {tx.status || 'pending'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-500">
+                        {tx.created_date ? format(new Date(tx.created_date), 'MMM d, yyyy HH:mm') : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
+
       </div>
     </div>
   );

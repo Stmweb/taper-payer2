@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
     if (!productId) {
       console.log('No product_id stored, looking up DTone products for operator:', pending.operator_id);
       const productsRes = await fetch(
-        `https://dvs-api.dtone.com/v1/products?operator_id=${pending.operator_id}&type=FIXED_VALUE_RECHARGE&per_page=100`,
+        `https://dvs-api.dtone.com/v1/products?operator_id=${pending.operator_id}&per_page=100`,
         { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
       );
       const productsData = await productsRes.json();
@@ -71,13 +71,22 @@ Deno.serve(async (req) => {
       if (products.length === 0) throw new Error(`No DTone products found for operator ${pending.operator_id}`);
 
       const targetAmount = parseFloat(pending.amount);
-      const best = products.reduce((prev, curr) => {
-        const prevAmt = parseFloat(prev.prices?.retail?.amount ?? prev.suggested_amounts?.[0] ?? prev.face_value ?? 0);
-        const currAmt = parseFloat(curr.prices?.retail?.amount ?? curr.suggested_amounts?.[0] ?? curr.face_value ?? 0);
-        return Math.abs(currAmt - targetAmount) < Math.abs(prevAmt - targetAmount) ? curr : prev;
-      });
+      
+      // First try to find exact or closest match
+      let best = products[0];
+      let smallestDiff = Math.abs(parseFloat(best.prices?.retail?.amount ?? best.suggested_amounts?.[0] ?? best.face_value ?? 0) - targetAmount);
+      
+      for (const prod of products) {
+        const prodAmt = parseFloat(prod.prices?.retail?.amount ?? prod.suggested_amounts?.[0] ?? prod.face_value ?? 0);
+        const diff = Math.abs(prodAmt - targetAmount);
+        if (diff < smallestDiff) {
+          best = prod;
+          smallestDiff = diff;
+        }
+      }
+      
       productId = best.id;
-      console.log('Selected closest product:', productId);
+      console.log(`Selected product ${productId} with amount ~${best.prices?.retail?.amount || best.suggested_amounts?.[0] || best.face_value} for target ${targetAmount}`);
     }
 
     const payload = {

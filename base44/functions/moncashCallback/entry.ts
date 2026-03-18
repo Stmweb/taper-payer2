@@ -51,58 +51,118 @@ Deno.serve(async (req) => {
       return new Response(null, { status: 302, headers: { 'Location': `${APP_URL}/MoncashReturn?failed=1` } });
     }
 
-    // Process airtime top-up via DTone
-    const dtoneKey = Deno.env.get('DTONE_API_KEY');
-    const dtoneSecret = Deno.env.get('DTONE_API_SECRET');
-    const dtoneAuth = 'Basic ' + btoa(`${dtoneKey}:${dtoneSecret}`);
-    const externalId = `MONCASH-${orderId}`;
+    // Process airtime top-up via Ding (for Natcom Haiti) or DTone (for others)
+    const isNatcom = pending.operator_id === '00C45BPA';
 
-    let productId = pending.product_id;
+    if (isNatcom) {
+      // Handle Ding for Natcom Haiti
+      const dingKey = Deno.env.get('DING_API_KEY');
+      const dingBase = 'https://api.dingconnect.com/api/V1';
+      const externalId = `MONCASH-${orderId}`;
 
-    if (!productId) {
-      console.log('No product_id stored, looking up DTone products for operator:', pending.operator_id);
-      const productsRes = await fetch(
-        `https://dvs-api.dtone.com/v1/products?operator_id=${pending.operator_id}&type=FIXED_VALUE_RECHARGE&per_page=100`,
-        { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
-      );
-      const productsData = await productsRes.json();
-      const products = Array.isArray(productsData) ? productsData : (productsData.data || []);
+      let skuCode = pending.product_id;
 
-      if (products.length === 0) throw new Error(`No DTone products found for operator ${pending.operator_id}`);
+      if (!skuCode) {
+        console.log('No SkuCode stored, looking up Ding products for Haiti');
+        const productsRes = await fetch(`${dingBase}/GetProducts?countryIso=HT`, {
+          headers: { 'api_key': dingKey, 'Content-Type': 'application/json' }
+        });
+        const productsData = await productsRes.json();
+        const products = Array.isArray(productsData) ? productsData : (productsData.Items || []);
 
-      const targetAmount = parseFloat(pending.amount);
-      const best = products.reduce((prev, curr) => {
-        const prevAmt = parseFloat(prev.prices?.retail?.amount ?? prev.suggested_amounts?.[0] ?? prev.face_value ?? 0);
-        const currAmt = parseFloat(curr.prices?.retail?.amount ?? curr.suggested_amounts?.[0] ?? curr.face_value ?? 0);
-        return Math.abs(currAmt - targetAmount) < Math.abs(prevAmt - targetAmount) ? curr : prev;
+        if (products.length === 0) throw new Error('No Ding products found for Haiti');
+
+        const targetAmount = parseFloat(pending.amount);
+        const best = products.find(p => p.ProviderCode === '00C45BPA') || products.reduce((prev, curr) => {
+          const prevAmt = parseFloat(prev.Maximum?.SendValue ?? 0);
+          const currAmt = parseFloat(curr.Maximum?.SendValue ?? 0);
+          return Math.abs(currAmt - targetAmount) < Math.abs(prevAmt - targetAmount) ? curr : prev;
+        });
+        skuCode = best.SkuCode;
+        console.log('Selected closest Ding product:', skuCode);
+      }
+
+      const payload = {
+        SenderPhoneNumber: "+10000000000",
+        RecipientPhoneNumber: pending.phone_number,
+        SkuCode: skuCode,
+        SendingAmount: parseFloat(pending.amount),
+        SendingCurrencyIso: "USD",
+        DistributorRef: externalId,
+        ValidateOnly: false,
+      };
+
+      console.log('Sending Ding top-up:', JSON.stringify(payload).substring(0, 300));
+
+      const topupRes = await fetch(`${dingBase}/SendTransfer`, {
+        method: 'POST',
+        headers: { 'api_key': dingKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
-      productId = best.id;
-      console.log('Selected closest product:', productId);
-    }
 
-    const payload = {
-      product_id: parseInt(productId),
-      auto_confirm: true,
-      credit_party_identifier: { mobile_number: pending.phone_number },
-      external_id: externalId,
-    };
+      const topupData = await topupRes.json();
+      console.log('Ding result:', JSON.stringify(topupData).substring(0, 500));
 
-    console.log('Sending DTone top-up:', JSON.stringify(payload));
+      if (topupData.ResultCode !== 1) {
+        const errMsg = topupData.ErrorCodes?.[0]?.Code || 'Ding top-up failed';
+        await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'failed', error_message: errMsg });
+        if (isJsonRequest) return Response.json({ error: errMsg }, { status: 400 });
+        return new Response(null, { status: 302, headers: { 'Location': `${APP_URL}/MoncashReturn?failed=1` } });
+      }
+    } else {
+      // Handle DTone for other operators
+      const dtoneKey = Deno.env.get('DTONE_API_KEY');
+      const dtoneSecret = Deno.env.get('DTONE_API_SECRET');
+      const dtoneAuth = 'Basic ' + btoa(`${dtoneKey}:${dtoneSecret}`);
+      const externalId = `MONCASH-${orderId}`;
 
-    const topupRes = await fetch('https://dvs-api.dtone.com/v1/sync/transactions', {
-      method: 'POST',
-      headers: { Authorization: dtoneAuth, Accept: 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+      let productId = pending.product_id;
 
-    const topupData = await topupRes.json();
-    console.log('DTone result:', JSON.stringify(topupData).substring(0, 500));
+      if (!productId) {
+        console.log('No product_id stored, looking up DTone products for operator:', pending.operator_id);
+        const productsRes = await fetch(
+          `https://dvs-api.dtone.com/v1/products?operator_id=${pending.operator_id}&type=FIXED_VALUE_RECHARGE&per_page=100`,
+          { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
+        );
+        const productsData = await productsRes.json();
+        const products = Array.isArray(productsData) ? productsData : (productsData.data || []);
 
-    if (!topupRes.ok) {
-      const errMsg = topupData.message || topupData.description || `DTone error ${topupRes.status}`;
-      await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'failed', error_message: errMsg });
-      if (isJsonRequest) return Response.json({ error: errMsg }, { status: 400 });
-      return new Response(null, { status: 302, headers: { 'Location': `${APP_URL}/MoncashReturn?failed=1` } });
+        if (products.length === 0) throw new Error(`No DTone products found for operator ${pending.operator_id}`);
+
+        const targetAmount = parseFloat(pending.amount);
+        const best = products.reduce((prev, curr) => {
+          const prevAmt = parseFloat(prev.prices?.retail?.amount ?? prev.suggested_amounts?.[0] ?? prev.face_value ?? 0);
+          const currAmt = parseFloat(curr.prices?.retail?.amount ?? curr.suggested_amounts?.[0] ?? curr.face_value ?? 0);
+          return Math.abs(currAmt - targetAmount) < Math.abs(prevAmt - targetAmount) ? curr : prev;
+        });
+        productId = best.id;
+        console.log('Selected closest product:', productId);
+      }
+
+      const payload = {
+        product_id: parseInt(productId),
+        auto_confirm: true,
+        credit_party_identifier: { mobile_number: pending.phone_number },
+        external_id: externalId,
+      };
+
+      console.log('Sending DTone top-up:', JSON.stringify(payload));
+
+      const topupRes = await fetch('https://dvs-api.dtone.com/v1/sync/transactions', {
+        method: 'POST',
+        headers: { Authorization: dtoneAuth, Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const topupData = await topupRes.json();
+      console.log('DTone result:', JSON.stringify(topupData).substring(0, 500));
+
+      if (!topupRes.ok) {
+        const errMsg = topupData.message || topupData.description || `DTone error ${topupRes.status}`;
+        await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'failed', error_message: errMsg });
+        if (isJsonRequest) return Response.json({ error: errMsg }, { status: 400 });
+        return new Response(null, { status: 302, headers: { 'Location': `${APP_URL}/MoncashReturn?failed=1` } });
+      }
     }
 
     await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'completed' });

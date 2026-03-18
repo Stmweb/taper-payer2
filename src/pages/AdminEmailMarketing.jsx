@@ -50,6 +50,7 @@ export default function AdminEmailMarketing() {
   // Bulk import
   const [bulkEmails, setBulkEmails] = useState('');
   const [importing, setImporting] = useState(false);
+  const [deduplicating, setDeduplicating] = useState(false);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });

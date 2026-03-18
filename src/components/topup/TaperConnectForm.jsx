@@ -498,8 +498,9 @@ export default function TaperConnectForm({ initialCountry }) {
                 </div>
                 {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
               </div>
-              {selectedProduct && (() => {
-                const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+              {(selectedCountry?.iso === 'HT' ? customAmount : selectedProduct) && (() => {
+                const isHaiti = selectedCountry?.iso === 'HT';
+                const topupAmt = isHaiti ? customAmount : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
                 const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : null;
                 return (
                   <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-600 space-y-1">

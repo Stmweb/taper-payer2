@@ -98,16 +98,33 @@ export default function AdminEmailMarketing() {
   const bulkImport = async () => {
     if (!bulkEmails.trim()) return;
     const lines = bulkEmails.split('\n').map(l => l.trim()).filter(Boolean);
-    let count = 0;
+    const records = [];
     for (const line of lines) {
-      const [email, name] = line.split(',');
+      const parts = line.split('\t').length > 1 ? line.split('\t') : line.split(',');
+      // Support: email, name format OR First Last Email (tab-separated from spreadsheet)
+      let email, name;
+      if (parts.length >= 3) {
+        // Spreadsheet format: First Name, Last Name, Email
+        const possibleEmail = parts.find(p => p.trim().includes('@'));
+        email = possibleEmail ? possibleEmail.trim() : null;
+        const nonEmailParts = parts.filter(p => !p.trim().includes('@') && p.trim());
+        name = nonEmailParts.join(' ').trim();
+      } else {
+        [email, name] = parts;
+        email = email ? email.trim() : null;
+        name = name ? name.trim() : '';
+      }
       if (email && email.includes('@')) {
-        await base44.entities.Subscriber.create({ email: email.trim(), name: name ? name.trim() : '', status: 'active', source: 'import' });
-        count++;
+        records.push({ email, name: name || '', status: 'active', source: 'import' });
       }
     }
+    if (records.length === 0) {
+      showToast('No valid email addresses found.', 'error');
+      return;
+    }
+    await base44.entities.Subscriber.bulkCreate(records);
     setBulkEmails('');
-    showToast(`${count} subscribers imported!`);
+    showToast(`${records.length} subscribers imported!`);
     fetchData();
   };
 

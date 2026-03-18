@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
       phone_number: phoneNumber,
       country_code: countryCode,
       operator_id: String(operatorId),
-      operator_name: operatorId === '00C45BPA' ? 'Natcom Haiti' : 'Unknown',
+      operator_name: 'Natcom Haiti',
       product_id: productId ? String(productId) : undefined,
       amount: parseFloat(amount),
       status: 'pending',

@@ -10,6 +10,16 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action } = body;
 
+    // Detect operator for Haiti (Natcom)
+    if (action === "detectOperator") {
+      const { phoneNumber } = body;
+      // Haiti Natcom always returns this code
+      return Response.json({
+        id: "00C45BPA",
+        name: "Natcom Haiti"
+      });
+    }
+
     // Get operators/products for a country
     if (action === "getProducts") {
       const { countryIso } = body;

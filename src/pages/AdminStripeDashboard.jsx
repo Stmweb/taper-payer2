@@ -73,7 +73,7 @@ export default function AdminStripeDashboard() {
     </div>
   );
 
-  const { stats, transactions, subscriptions } = data;
+  const { stats, transactions, subscriptions, moncash_topups = [] } = data;
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">

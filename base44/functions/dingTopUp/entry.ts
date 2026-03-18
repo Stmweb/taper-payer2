@@ -3,6 +3,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 const DING_API_KEY = Deno.env.get("DING_API_KEY");
 
 const BASE_URL = "https://api.dingconnect.com/api/V1";
+const AUTH = "Basic " + btoa(DING_API_KEY + ":");
 
 Deno.serve(async (req) => {
   try {
@@ -10,21 +11,11 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action } = body;
 
-    // Detect operator for Haiti (Natcom)
-    if (action === "detectOperator") {
-      const { phoneNumber } = body;
-      // Haiti Natcom always returns this code
-      return Response.json({
-        id: "00C45BPA",
-        name: "Natcom Haiti"
-      });
-    }
-
     // Get operators/products for a country
     if (action === "getProducts") {
       const { countryIso } = body;
       const res = await fetch(`${BASE_URL}/GetProducts?countryIso=${countryIso}`, {
-        headers: { "api_key": DING_API_KEY, "Content-Type": "application/json" }
+        headers: { Authorization: AUTH, "Content-Type": "application/json" }
       });
       const data = await res.json();
       return Response.json(data);
@@ -46,7 +37,7 @@ Deno.serve(async (req) => {
 
       const res = await fetch(`${BASE_URL}/SendTransfer`, {
         method: "POST",
-        headers: { "api_key": DING_API_KEY, "Content-Type": "application/json" },
+        headers: { Authorization: AUTH, "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 

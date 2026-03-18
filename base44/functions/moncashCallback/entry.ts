@@ -80,56 +80,26 @@ Deno.serve(async (req) => {
       console.log('Selected closest product:', productId);
     }
 
-    // Helper: attempt a DTone top-up with a given productId
-    const attemptTopup = async (pid) => {
-      const payload = {
-        product_id: parseInt(pid),
-        auto_confirm: true,
-        credit_party_identifier: { mobile_number: pending.phone_number },
-        external_id: externalId,
-      };
-      console.log('Sending DTone top-up:', JSON.stringify(payload));
-      const res = await fetch('https://dvs-api.dtone.com/v1/sync/transactions', {
-        method: 'POST',
-        headers: { Authorization: dtoneAuth, Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      console.log('DTone result:', JSON.stringify(data).substring(0, 500));
-      return { ok: res.ok, data, status: res.status };
+    const payload = {
+      product_id: parseInt(productId),
+      auto_confirm: true,
+      credit_party_identifier: { mobile_number: pending.phone_number },
+      external_id: externalId,
     };
 
-    let result = await attemptTopup(productId);
+    console.log('Sending DTone top-up:', JSON.stringify(payload));
 
-    // If product not available in account (error 1003001), look up operator products and retry with best match
-    if (!result.ok) {
-      const isUnavailable = result.data?.errors?.some(e => e.code === 1003001);
-      if (isUnavailable) {
-        console.log('Product not available, looking up operator products for:', pending.operator_id);
-        const productsRes = await fetch(
-          `https://dvs-api.dtone.com/v1/products?operator_id=${pending.operator_id}&type=FIXED_VALUE_RECHARGE&per_page=100`,
-          { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
-        );
-        const productsData = await productsRes.json();
-        const products = Array.isArray(productsData) ? productsData : (productsData.data || []);
-        console.log(`Found ${products.length} fallback products for operator ${pending.operator_id}`);
+    const topupRes = await fetch('https://dvs-api.dtone.com/v1/sync/transactions', {
+      method: 'POST',
+      headers: { Authorization: dtoneAuth, Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
 
-        if (products.length > 0) {
-          const targetAmount = parseFloat(pending.amount);
-          const best = products.reduce((prev, curr) => {
-            const prevAmt = parseFloat(prev.prices?.retail?.amount ?? prev.suggested_amounts?.[0] ?? prev.face_value ?? 0);
-            const currAmt = parseFloat(curr.prices?.retail?.amount ?? curr.suggested_amounts?.[0] ?? curr.face_value ?? 0);
-            return Math.abs(currAmt - targetAmount) < Math.abs(prevAmt - targetAmount) ? curr : prev;
-          });
-          console.log('Retrying with fallback product:', best.id);
-          result = await attemptTopup(best.id);
-        }
-      }
-    }
+    const topupData = await topupRes.json();
+    console.log('DTone result:', JSON.stringify(topupData).substring(0, 500));
 
-    const topupData = result.data;
-    if (!result.ok) {
-      const errMsg = topupData?.errors?.[0]?.message || topupData?.message || topupData?.description || `DTone error ${result.status}`;
+    if (!topupRes.ok) {
+      const errMsg = topupData.message || topupData.description || `DTone error ${topupRes.status}`;
       await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'failed', error_message: errMsg });
       if (isJsonRequest) return Response.json({ error: errMsg }, { status: 400 });
       return new Response(null, { status: 302, headers: { 'Location': `${APP_URL}/MoncashReturn?failed=1` } });

@@ -580,8 +580,8 @@ export default function AdminEmailMarketing() {
                 placeholder={"john@example.com, John Doe\njane@example.com\nbob@example.com, Bob Smith"}
                 className="min-h-48 font-mono text-sm mb-4"
               />
-              <Button onClick={bulkImport} className="bg-blue-600 hover:bg-blue-700 text-white">
-                <Upload className="w-4 h-4 mr-2" /> Import Subscribers
+              <Button onClick={bulkImport} disabled={importing} className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Upload className="w-4 h-4 mr-2" /> {importing ? 'Importing...' : 'Import Subscribers'}
               </Button>
             </Card>
           </TabsContent>

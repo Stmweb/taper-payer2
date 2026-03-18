@@ -151,6 +151,12 @@ export default function AdminStripeDashboard() {
           >
             Subscriptions ({subscriptions.length})
           </button>
+          <button
+            onClick={() => setActiveTab('moncash')}
+            className={`px-5 py-2 rounded-lg font-medium text-sm transition-colors ${activeTab === 'moncash' ? 'bg-orange-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border'}`}
+          >
+            Moncash Top-Ups ({moncash_topups.length})
+          </button>
         </div>
 
         {/* Transactions Table */}

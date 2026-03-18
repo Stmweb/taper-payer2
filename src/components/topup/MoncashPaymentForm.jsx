@@ -10,23 +10,9 @@ export default function MoncashPaymentForm({ phoneNumber, amount, operatorId, co
   const [exchangeRate, setExchangeRate] = useState(130);
   const [loadingRate, setLoadingRate] = useState(true);
 
-  // Fetch exchange rate on component mount
+  // Use DTone for Haiti (no separate exchange rate needed)
   useEffect(() => {
-    const fetchExchangeRate = async () => {
-      try {
-        setLoadingRate(true);
-        const res = await base44.functions.invoke('getExchangeRate', { from: 'USD', to: 'HTG' });
-        if (res.data?.rate && res.data.rate > 0) {
-          setExchangeRate(res.data.rate);
-        }
-      } catch (e) {
-        // Silently fall back to default rate
-      } finally {
-        setLoadingRate(false);
-      }
-    };
-
-    fetchExchangeRate();
+    setLoadingRate(false);
   }, []);
 
 

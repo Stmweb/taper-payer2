@@ -29,27 +29,43 @@ Deno.serve(async (req) => {
     }
     const campaign = campaigns[0];
 
-    // Fetch active subscribers
-    let subscribers = await base44.asServiceRole.entities.Subscriber.filter({ status: 'active' });
+    // Build recipient list
+    let subscribers = [];
 
-    // Filter by contact list if specified
-    if (campaign.contact_list_id) {
-      const lists = await base44.asServiceRole.entities.ContactList.filter({ id: campaign.contact_list_id });
-      if (lists && lists.length > 0 && lists[0].subscriber_ids && lists[0].subscriber_ids.length > 0) {
-        const listIds = new Set(lists[0].subscriber_ids);
-        subscribers = subscribers.filter(sub => listIds.has(sub.id));
+    if (campaign.manual_emails && campaign.manual_emails.trim()) {
+      // Parse manually entered emails
+      const lines = campaign.manual_emails.split('\n').map(l => l.trim()).filter(Boolean);
+      for (const line of lines) {
+        const parts = line.split(',');
+        const email = parts[0]?.trim();
+        const name = parts[1]?.trim() || '';
+        if (email && email.includes('@')) {
+          subscribers.push({ email, name });
+        }
+      }
+    } else {
+      // Fetch active subscribers from DB
+      subscribers = await base44.asServiceRole.entities.Subscriber.filter({ status: 'active' });
+
+      // Filter by contact list if specified
+      if (campaign.contact_list_id) {
+        const lists = await base44.asServiceRole.entities.ContactList.filter({ id: campaign.contact_list_id });
+        if (lists && lists.length > 0 && lists[0].subscriber_ids && lists[0].subscriber_ids.length > 0) {
+          const listIds = new Set(lists[0].subscriber_ids);
+          subscribers = subscribers.filter(sub => listIds.has(sub.id));
+        }
+      }
+
+      // Filter by tags if specified
+      if (campaign.target_tags && campaign.target_tags.length > 0) {
+        subscribers = subscribers.filter(sub =>
+          sub.tags && sub.tags.some(tag => campaign.target_tags.includes(tag))
+        );
       }
     }
 
-    // Filter by tags if specified
-    if (campaign.target_tags && campaign.target_tags.length > 0) {
-      subscribers = subscribers.filter(sub =>
-        sub.tags && sub.tags.some(tag => campaign.target_tags.includes(tag))
-      );
-    }
-
     if (subscribers.length === 0) {
-      return Response.json({ success: false, error: 'No active subscribers found' });
+      return Response.json({ success: false, error: 'No recipients found' });
     }
 
     // Send emails via Mailgun

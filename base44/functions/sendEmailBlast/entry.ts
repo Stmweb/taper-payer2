@@ -82,7 +82,7 @@ Deno.serve(async (req) => {
       const signature = `
 <div style="margin-top:40px;padding-top:24px;border-top:2px solid #e2e8f0;font-family:Arial,sans-serif;padding:24px;border-radius:8px;background:transparent;">
   <div style="text-align:center;margin-bottom:16px;background:transparent;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="height:120px;width:auto;max-width:320px;display:block;margin:0 auto;object-fit:contain;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png" alt="Taper Payer" style="width:200px;height:auto;display:block;margin:0 auto;" />
   </div>
   <div style="text-align:center;margin-bottom:20px;">
     <h3 style="color:#1e293b;margin:0 0 4px 0;font-size:16px;font-weight:bold;">Taper Payer</h3>

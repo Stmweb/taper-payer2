@@ -32,6 +32,15 @@ Deno.serve(async (req) => {
     // Fetch active subscribers
     let subscribers = await base44.asServiceRole.entities.Subscriber.filter({ status: 'active' });
 
+    // Filter by contact list if specified
+    if (campaign.contact_list_id) {
+      const lists = await base44.asServiceRole.entities.ContactList.filter({ id: campaign.contact_list_id });
+      if (lists && lists.length > 0 && lists[0].subscriber_ids && lists[0].subscriber_ids.length > 0) {
+        const listIds = new Set(lists[0].subscriber_ids);
+        subscribers = subscribers.filter(sub => listIds.has(sub.id));
+      }
+    }
+
     // Filter by tags if specified
     if (campaign.target_tags && campaign.target_tags.length > 0) {
       subscribers = subscribers.filter(sub =>
@@ -49,7 +58,9 @@ Deno.serve(async (req) => {
 
     for (const subscriber of subscribers) {
       const formData = new FormData();
-      formData.append('from', `Taper Payer <noreply@${MAILGUN_DOMAIN}>`);
+      const senderName = campaign.sender_name || 'Taper Payer';
+      const senderEmail = campaign.sender_email || `noreply@${MAILGUN_DOMAIN}`;
+      formData.append('from', `${senderName} <${senderEmail}>`);
       formData.append('to', subscriber.email);
       formData.append('subject', campaign.subject);
       const signature = `

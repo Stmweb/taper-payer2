@@ -466,6 +466,7 @@ export default function TaperConnectForm({ initialCountry }) {
                 phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
                 amount={retailAmount?.toString() || ''}
                 operatorId={opId}
+                productId={selectedProduct?.id}
                 countryCode={selectedCountry.iso}
                 onSuccess={() => setSuccess(true)}
               />

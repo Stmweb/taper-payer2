@@ -386,15 +386,11 @@ export default function TaperConnectForm({ initialCountry }) {
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {products
                   .filter(p => {
-                    // For Haiti (Ding), only show Natcom products
-                    if (selectedCountry?.iso === 'HT') {
-                      const operatorStr = (p.Operator || p.OperatorName || p.operator || '').toString();
-                      return operatorStr.includes('Natcom');
-                    }
-                    // For DTone, filter by operator ID if detected
+                    // For DTone countries, filter by detected operator
                     if (detectedOperator && selectedCountry?.iso !== 'HT') {
                       return p.operator?.id === detectedOperator.id;
                     }
+                    // For Haiti (Ding), show all products (they're all Natcom)
                     return true;
                   })
                 .map((p, idx) => {

@@ -201,19 +201,38 @@ export default function TaperConnectForm({ initialCountry }) {
 
       const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
       const fullPhone = selectedCountry.dial + localDigits;
-      const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
 
-      const paymentRes = await base44.functions.invoke('processDtonePayment', {
-        paymentMethodId: pm.id,
-        fullPhone,
-        amount: retailAmount,
-        productId: selectedProduct?.id,
-      });
+      // Handle Ding for Haiti
+      if (selectedCountry.iso === 'HT') {
+        const sendAmount = selectedProduct?.Maximum?.SendValue;
+        const paymentRes = await base44.functions.invoke('processDingPayment', {
+          paymentMethodId: pm.id,
+          fullPhone,
+          amount: sendAmount,
+          skuCode: selectedProduct?.SkuCode,
+          countryCode: selectedCountry.iso,
+        });
 
-      if (paymentRes.data?.success) {
-        setSuccess(true);
+        if (paymentRes.data?.success) {
+          setSuccess(true);
+        } else {
+          setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
+        }
       } else {
-        setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
+        // DTone for other countries
+        const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+        const paymentRes = await base44.functions.invoke('processDtonePayment', {
+          paymentMethodId: pm.id,
+          fullPhone,
+          amount: retailAmount,
+          productId: selectedProduct?.id,
+        });
+
+        if (paymentRes.data?.success) {
+          setSuccess(true);
+        } else {
+          setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
+        }
       }
     } catch (e) {
       setError('Payment or top-up failed. Please try again.');

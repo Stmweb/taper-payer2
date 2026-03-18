@@ -552,8 +552,11 @@ export default function TaperConnectForm({ initialCountry }) {
 
           {/* MonCash (Haiti only) */}
           {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && customAmount && (() => {
-            // Use detected operator or default to Natcom (1703)
-            const opId = detectedOperator?.id || 1703;
+            // Use detected operator or default to Natcom (1703); validate for Haiti
+            let opId = detectedOperator?.id || 1703;
+            if (![1701, 1703].includes(Number(opId))) {
+              opId = 1703; // Fallback to Natcom if invalid
+            }
             return (
               <MoncashPaymentForm
                 phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}

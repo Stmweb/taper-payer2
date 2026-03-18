@@ -31,8 +31,15 @@ export default function AdminEmailMarketing() {
   const [newName, setNewName] = useState('');
   const [newTags, setNewTags] = useState('');
 
+  // Contact lists
+  const [contactLists, setContactLists] = useState([]);
+  const [newListName, setNewListName] = useState('');
+  const [newListDesc, setNewListDesc] = useState('');
+  const [editingList, setEditingList] = useState(null);
+  const [listSubscriberSearch, setListSubscriberSearch] = useState('');
+
   // Compose form
-  const [campaign, setCampaign] = useState({ name: '', subject: '', body_html: '', category: '' });
+  const [campaign, setCampaign] = useState({ name: '', subject: '', body_html: '', category: '', sender_email: '', sender_name: '', contact_list_id: '' });
   const [savingCampaign, setSavingCampaign] = useState(false);
   const [scheduledAt, setScheduledAt] = useState('');
 

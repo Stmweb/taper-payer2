@@ -65,7 +65,7 @@ export default function MoncashReturn() {
         <img
           src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f3100c512_TPGT.png"
           alt="Taper Payer"
-          className="h-16 w-auto mx-auto mb-6 object-contain"
+          className="h-28 w-auto mx-auto mb-6 object-contain"
         />
 
         {(status === 'loading' || status === 'processing') && (

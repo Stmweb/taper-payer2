@@ -371,6 +371,30 @@ export default function AdminEmailMarketing() {
                     <Input value={campaign.category} onChange={e => setCampaign({...campaign, category: e.target.value})} placeholder="e.g. Money Transfer, Mobile Top-Up" />
                   </div>
                 </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Sender Name</label>
+                    <Input value={campaign.sender_name} onChange={e => setCampaign({...campaign, sender_name: e.target.value})} placeholder="e.g. Taper Payer" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Sender Email</label>
+                    <Input type="email" value={campaign.sender_email} onChange={e => setCampaign({...campaign, sender_email: e.target.value})} placeholder="e.g. marketing@taperpayer.com" />
+                    <p className="text-xs text-gray-400 mt-1">Leave blank to use default noreply address.</p>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Send To (Contact List)</label>
+                  <select
+                    value={campaign.contact_list_id}
+                    onChange={e => setCampaign({...campaign, contact_list_id: e.target.value})}
+                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
+                  >
+                    <option value="">All Active Subscribers</option>
+                    {contactLists.map(l => (
+                      <option key={l.id} value={l.id}>{l.name} ({(l.subscriber_ids || []).length} contacts)</option>
+                    ))}
+                  </select>
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email Subject</label>
                   <Input value={campaign.subject} onChange={e => setCampaign({...campaign, subject: e.target.value})} placeholder="e.g. 🚀 New Features from Taper Payer!" required />

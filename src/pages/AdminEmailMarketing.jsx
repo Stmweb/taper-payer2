@@ -262,6 +262,7 @@ export default function AdminEmailMarketing() {
             <TabsTrigger value="templates" className="gap-1"><Sparkles className="w-3.5 h-3.5" /> Templates</TabsTrigger>
             <TabsTrigger value="compose">Compose</TabsTrigger>
             <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
+            <TabsTrigger value="lists" className="gap-1"><List className="w-3.5 h-3.5" /> Contact Lists</TabsTrigger>
             <TabsTrigger value="import">Bulk Import</TabsTrigger>
           </TabsList>
 

@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
 
       const res = await fetch(`${BASE_URL}/SendTransfer`, {
         method: "POST",
-        headers: { Authorization: AUTH, "Content-Type": "application/json" },
+        headers: { "api_key": DING_API_KEY, "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 

@@ -494,7 +494,8 @@ export default function TaperConnectForm({ initialCountry }) {
 
           {/* MonCash (Haiti only) */}
           {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && customAmount && (() => {
-            const opId = detectedOperator?.id || '00C45BPA';
+            // Use DTone operator ID for Natcom Haiti (1703)
+            const opId = detectedOperator?.id || 1703;
             return (
               <MoncashPaymentForm
                 phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
@@ -502,7 +503,6 @@ export default function TaperConnectForm({ initialCountry }) {
                 operatorId={opId}
                 productId={null}
                 countryCode={selectedCountry.iso}
-                isFromDing={true}
                 onSuccess={() => setSuccess(true)}
               />
             );

@@ -473,6 +473,79 @@ export default function AdminEmailMarketing() {
             </Card>
           </TabsContent>
 
+          {/* CONTACT LISTS TAB */}
+          <TabsContent value="lists">
+            <Card className="p-6 mb-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Create Contact List</h2>
+              <form onSubmit={createContactList} className="flex gap-3 flex-wrap">
+                <Input value={newListName} onChange={e => setNewListName(e.target.value)} placeholder="List name *" className="flex-1 min-w-48" required />
+                <Input value={newListDesc} onChange={e => setNewListDesc(e.target.value)} placeholder="Description (optional)" className="flex-1 min-w-48" />
+                <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Plus className="w-4 h-4 mr-1" /> Create List
+                </Button>
+              </form>
+            </Card>
+            <div className="space-y-4">
+              {contactLists.length === 0 && <Card className="p-10 text-center text-gray-400">No contact lists yet. Create one above.</Card>}
+              {contactLists.map(list => (
+                <Card key={list.id} className="p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="font-bold text-gray-900">{list.name}</h3>
+                      {list.description && <p className="text-sm text-gray-500">{list.description}</p>}
+                      <p className="text-xs text-blue-600 mt-1">{(list.subscriber_ids || []).length} contacts</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={() => setEditingList(editingList?.id === list.id ? null : list)} className="gap-1 text-xs">
+                        <Pencil className="w-3.5 h-3.5" /> {editingList?.id === list.id ? 'Close' : 'Manage'}
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => deleteContactList(list.id)} className="text-red-400 hover:text-red-600">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  {editingList?.id === list.id && (
+                    <div className="border-t pt-4">
+                      <Input
+                        value={listSubscriberSearch}
+                        onChange={e => setListSubscriberSearch(e.target.value)}
+                        placeholder="Search subscribers..."
+                        className="mb-3"
+                      />
+                      <div className="max-h-64 overflow-y-auto divide-y">
+                        {subscribers
+                          .filter(s => s.status === 'active' && (
+                            !listSubscriberSearch ||
+                            s.email.toLowerCase().includes(listSubscriberSearch.toLowerCase()) ||
+                            (s.name && s.name.toLowerCase().includes(listSubscriberSearch.toLowerCase()))
+                          ))
+                          .map(sub => {
+                            const inList = (list.subscriber_ids || []).includes(sub.id);
+                            return (
+                              <div key={sub.id} className="flex items-center justify-between py-2 gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <span className="text-sm font-medium text-gray-900">{sub.email}</span>
+                                  {sub.name && <span className="text-xs text-gray-400 ml-2">{sub.name}</span>}
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant={inList ? 'default' : 'outline'}
+                                  onClick={() => toggleSubscriberInList(list, sub.id)}
+                                  className={`text-xs flex-shrink-0 ${inList ? 'bg-green-600 hover:bg-green-700 text-white' : ''}`}
+                                >
+                                  {inList ? <><CheckCircle2 className="w-3 h-3 mr-1" /> Added</> : <><Plus className="w-3 h-3 mr-1" /> Add</>}
+                                </Button>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
           {/* BULK IMPORT TAB */}
           <TabsContent value="import">
             <Card className="p-6">

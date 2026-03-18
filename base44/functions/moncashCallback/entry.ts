@@ -153,7 +153,7 @@ Deno.serve(async (req) => {
 
       return new Response(null, {
         status: 302,
-        headers: { 'Location': '/TaperPayerTopUp?moncash=paid_but_topup_failed' }
+        headers: { 'Location': `${APP_URL}/TaperPayerTopUp?moncash=paid_but_topup_failed` }
       });
     }
 

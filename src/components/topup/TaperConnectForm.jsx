@@ -386,11 +386,17 @@ export default function TaperConnectForm({ initialCountry }) {
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {products
                   .filter(p => {
+                    // For Haiti (Ding), only show Natcom products
+                    if (selectedCountry?.iso === 'HT') {
+                      // Filter by Natcom operator code or include bundles/flexible plans
+                      return p.ProviderCode === '00C45BPA' || 
+                             (p.Description && (p.Description.includes('Natcom') || p.Description.includes('Bundle'))) ||
+                             (p.Operator && p.Operator.includes('Natcom'));
+                    }
                     // For DTone countries, filter by detected operator
-                    if (detectedOperator && selectedCountry?.iso !== 'HT') {
+                    if (detectedOperator) {
                       return p.operator?.id === detectedOperator.id;
                     }
-                    // For Haiti (Ding), show all products (they're all Natcom)
                     return true;
                   })
                 .map((p, idx) => {

@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
       console.log('Topup already completed for orderId:', orderId);
       return new Response(null, {
         status: 302,
-        headers: { 'Location': `/TaperPayerTopUp?moncash=success&phone=${encodeURIComponent(pending.phone_number)}` }
+        headers: { 'Location': `${APP_URL}/TaperPayerTopUp?moncash=success&phone=${encodeURIComponent(pending.phone_number)}` }
       });
     }
 

@@ -175,8 +175,16 @@ export default function TaperConnectForm({ initialCountry }) {
   };
 
   const handleCardPayment = async () => {
-    if (!phoneNumber || !selectedProduct) {
-      setError('Please enter a phone number and select a product.');
+    const isHaiti = selectedCountry?.iso === 'HT';
+    const amt = isHaiti ? customAmount : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
+    
+    if (!phoneNumber || !amt) {
+      setError('Please enter a phone number and select/enter an amount.');
+      return;
+    }
+    
+    if (isHaiti && (parseFloat(customAmount) < 2 || parseFloat(customAmount) > 81.10)) {
+      setError('Amount must be between USD 2.00 and USD 81.10.');
       return;
     }
     if (!stripe || !elements) {

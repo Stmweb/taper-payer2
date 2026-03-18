@@ -375,60 +375,73 @@ export default function TaperConnectForm({ initialCountry }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
-            </label>
-            {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-5 h-5 animate-spin text-cyan-500" />
-              </div>
-            ) : products.length === 0 ? (
-              <p className="text-sm text-slate-500">No products available for this country.</p>
+            {selectedCountry?.iso === 'HT' ? (
+              <>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Select Amount</label>
+                <p className="text-xs text-slate-500 mb-2">USD 2.00 - USD 81.10</p>
+                <Input
+                  type="number"
+                  min="2"
+                  max="81.10"
+                  step="0.01"
+                  placeholder="Enter amount"
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  className="mb-2"
+                />
+                {customAmount && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-slate-700">
+                    <p>HTG {(parseFloat(customAmount) * exchangeRate).toFixed(2)} will be received</p>
+                    <p className="text-xs text-slate-500 mt-1">*including bonus if applicable</p>
+                    <p className="text-xs text-slate-500">*T&C's apply to bonus credit</p>
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                {products
-                  .filter(p => {
-                    // For Haiti (Ding), only show Natcom products
-                    if (selectedCountry?.iso === 'HT') {
-                      // Filter by Natcom operator code or include bundles/flexible plans
-                      return p.ProviderCode === '00C45BPA' || 
-                             (p.Description && (p.Description.includes('Natcom') || p.Description.includes('Bundle'))) ||
-                             (p.Operator && p.Operator.includes('Natcom'));
-                    }
-                    // For DTone countries, filter by detected operator
-                    if (detectedOperator) {
-                      return p.operator?.id === detectedOperator.id;
-                    }
-                    return true;
-                  })
-                .map((p, idx) => {
-                  // Handle both Ding and DTone product formats
-                  const isFromDing = p.SkuCode !== undefined;
-                  const name = isFromDing 
-                    ? p.DefaultDisplayText || `${p.Description || p.Operator || 'Plan'}`
-                    : (p.name || p.description || String(p.id));
-                  const amount = isFromDing
-                    ? p.SendValue ?? p.Maximum?.SendValue
-                    : (p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value);
-                  const currency = isFromDing ? 'USD' : (p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD');
-                  return (
-                    <button
-                       key={idx}
-                       onClick={() => setSelectedProduct(p)}
-                       className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
-                         selectedProduct === p
-                           ? 'border-cyan-500 bg-cyan-50'
-                           : 'border-slate-200 hover:border-cyan-300'
-                       }`}
-                     >
-                       <div className="flex justify-between items-center">
-                         <span className="text-sm font-medium text-slate-800">{name}</span>
-                         {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
-                       </div>
-                     </button>
-                  );
-                })}
-              </div>
+              <>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
+                </label>
+                {loading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="w-5 h-5 animate-spin text-cyan-500" />
+                  </div>
+                ) : products.length === 0 ? (
+                  <p className="text-sm text-slate-500">No products available for this country.</p>
+                ) : (
+                  <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                    {products
+                      .filter(p => {
+                        // For DTone countries, filter by detected operator
+                        if (detectedOperator) {
+                          return p.operator?.id === detectedOperator.id;
+                        }
+                        return true;
+                      })
+                      .map((p, idx) => {
+                        const name = p.name || p.description || String(p.id);
+                        const amount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
+                        const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';
+                        return (
+                          <button
+                             key={idx}
+                             onClick={() => setSelectedProduct(p)}
+                             className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
+                               selectedProduct === p
+                                 ? 'border-cyan-500 bg-cyan-50'
+                                 : 'border-slate-200 hover:border-cyan-300'
+                             }`}
+                           >
+                             <div className="flex justify-between items-center">
+                               <span className="text-sm font-medium text-slate-800">{name}</span>
+                               {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
+                             </div>
+                           </button>
+                        );
+                      })}
+                  </div>
+                )}
+              </>
             )}
           </div>
 

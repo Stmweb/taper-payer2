@@ -505,17 +505,21 @@ export default function TaperConnectForm({ initialCountry }) {
 
           {/* MonCash (Haiti only) */}
           {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && (() => {
-            const retailAmount = selectedProduct?.prices?.retail?.amount
-              || selectedProduct?.suggested_amounts?.[0]
-              || selectedProduct?.face_value;
-            const opId = detectedOperator?.id || selectedProduct?.operator?.id || selectedProduct?.operatorId;
+            const isFromDing = selectedProduct?.SkuCode !== undefined;
+            const amount = isFromDing
+              ? selectedProduct?.Maximum?.SendValue
+              : (selectedProduct?.prices?.retail?.amount
+                || selectedProduct?.suggested_amounts?.[0]
+                || selectedProduct?.face_value);
+            const opId = detectedOperator?.id || (isFromDing ? '00C45BPA' : selectedProduct?.operator?.id) || selectedProduct?.operatorId;
             return (
               <MoncashPaymentForm
                 phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
-                amount={retailAmount?.toString() || ''}
+                amount={amount?.toString() || ''}
                 operatorId={opId}
-                productId={selectedProduct?.id}
+                productId={selectedProduct?.SkuCode || selectedProduct?.id}
                 countryCode={selectedCountry.iso}
+                isFromDing={isFromDing}
                 onSuccess={() => setSuccess(true)}
               />
             );

@@ -366,14 +366,25 @@ export default function TaperConnectForm({ initialCountry }) {
             ) : (
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {(detectedOperator
-                  ? products.filter(p => p.operator?.id === detectedOperator.id)
+                  ? products.filter(p => {
+                      // For Ding (Haiti), filter by Natcom provider code
+                      if (detectedOperator.provider === 'ding') {
+                        return p.ProviderCode === '00C45BPA'; // Natcom Haiti
+                      }
+                      // For DTone, filter by operator ID
+                      return p.operator?.id === detectedOperator.id;
+                    })
                   : products
                 ).map((p, idx) => {
-                  const name = p.name || p.description || String(p.id);
-                  const amount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
-                  const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';
-                  const destAmount = p.destination?.amount;
-                  const destUnit = p.destination?.unit;
+                  // Handle both Ding and DTone product formats
+                  const isFromDing = p.SkuCode !== undefined;
+                  const name = isFromDing 
+                    ? p.DefaultDisplayText || `${p.Maximum?.ReceiveValue} ${p.Maximum?.ReceiveCurrencyIso}`
+                    : (p.name || p.description || String(p.id));
+                  const amount = isFromDing
+                    ? p.Maximum?.SendValue
+                    : (p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value);
+                  const currency = isFromDing ? 'USD' : (p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD');
                   const isTooSmall = amount != null && Number(amount) < 0.50;
                   return (
                     <button
@@ -392,7 +403,6 @@ export default function TaperConnectForm({ initialCountry }) {
                         <span className="text-sm font-medium text-slate-800">{name}</span>
                         {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
                       </div>
-                      {destAmount && <p className="text-xs text-slate-500 mt-0.5">Delivers: {destAmount} {destUnit}</p>}
                       {isTooSmall && <p className="text-xs text-red-400 mt-0.5">Min. $0.50 required</p>}
                     </button>
                   );

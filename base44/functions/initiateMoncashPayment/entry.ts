@@ -20,6 +20,20 @@ Deno.serve(async (req) => {
     const rate = exchangeRate || 130;
     const amountInHTG = (parseFloat(amount) * rate).toFixed(2);
 
+    // Step 3: Save pending topup details so callback can process it
+    await base44.asServiceRole.entities.PendingTopup.create({
+      order_id: orderId,
+      phone_number: phoneNumber,
+      country_code: countryCode,
+      operator_id: String(operatorId),
+      operator_name: operatorId === '00C45BPA' ? 'Natcom Haiti' : 'Unknown',
+      product_id: productId ? String(productId) : undefined,
+      amount: parseFloat(amount),
+      status: 'pending',
+    });
+
+    console.log('Saved pending topup for orderId:', orderId);
+
     // Step 1: Get OAuth token from Moncash (production)
     const authUrl = 'https://moncashbutton.digicelgroup.com/Api/oauth/token';
     const credentials = `${moncashClientId}:${moncashClientSecret}`;

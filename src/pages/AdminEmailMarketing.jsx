@@ -146,6 +146,7 @@ export default function AdminEmailMarketing() {
       ...campaign,
       status: scheduledAt ? 'scheduled' : 'draft',
       scheduled_at: scheduledAt || undefined,
+      contact_list_id: campaign.contact_list_id || undefined,
     });
     showToast(scheduledAt ? 'Campaign scheduled!' : 'Campaign saved as draft!');
     setCampaign({ name: '', subject: '', body_html: '', category: '' });

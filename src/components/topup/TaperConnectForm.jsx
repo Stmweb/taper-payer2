@@ -546,7 +546,7 @@ export default function TaperConnectForm({ initialCountry }) {
 
           {/* MonCash (Haiti only) */}
           {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && customAmount && (() => {
-            // Use DTone operator ID for Natcom Haiti (1703)
+            // Use detected operator or default to Natcom (1703)
             const opId = detectedOperator?.id || 1703;
             return (
               <MoncashPaymentForm

@@ -143,7 +143,7 @@ Deno.serve(async (req) => {
       return new Response(null, {
         status: 302,
         headers: {
-          'Location': `/TaperPayerTopUp?moncash=success&phone=${encodeURIComponent(pending.phone_number)}&amount=${pending.amount}`
+          'Location': `${APP_URL}/TaperPayerTopUp?moncash=success&phone=${encodeURIComponent(pending.phone_number)}&amount=${pending.amount}`
         }
       });
 

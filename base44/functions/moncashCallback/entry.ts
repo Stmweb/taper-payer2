@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
       console.error('No pending topup found for orderId:', orderId);
       return new Response(null, {
         status: 302,
-        headers: { 'Location': '/TaperPayerTopUp?moncash=error&reason=not_found' }
+        headers: { 'Location': `${APP_URL}/TaperPayerTopUp?moncash=error&reason=not_found` }
       });
     }
 

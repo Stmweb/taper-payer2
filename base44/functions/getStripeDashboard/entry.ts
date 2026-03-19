@@ -18,14 +18,13 @@ Deno.serve(async (req) => {
 
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
 
-    // Fetch last 50 payment intents
-    const paymentIntents = await stripe.paymentIntents.list({ limit: 50 });
-
-    // Fetch subscriptions
-    const subscriptions = await stripe.subscriptions.list({ limit: 10, status: 'all' });
-
-    // Fetch recent charges for volume calculation
-    const charges = await stripe.charges.list({ limit: 100 });
+    // Fetch all data in parallel
+    const [paymentIntents, subscriptions, charges, moncashTopups] = await Promise.all([
+      stripe.paymentIntents.list({ limit: 50 }),
+      stripe.subscriptions.list({ limit: 10, status: 'all' }),
+      stripe.charges.list({ limit: 100 }),
+      base44.asServiceRole.entities.PendingTopup.list('-created_date', 200),
+    ]);
 
     // Calculate total volume (succeeded charges)
     const succeededCharges = charges.data.filter(c => c.status === 'succeeded');

@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
 
 Deno.serve(async (req) => {
   try {
@@ -19,28 +19,28 @@ Deno.serve(async (req) => {
     const orderId = `TPAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const rate = exchangeRate || 130;
     const amountInHTG = (parseFloat(amount) * rate).toFixed(2);
+    const encodedCredentials = btoa(`${moncashClientId}:${moncashClientSecret}`);
 
-    // Step 3: Save pending topup details so callback can process it
-    await base44.asServiceRole.entities.PendingTopup.create({
-      order_id: orderId,
-      phone_number: phoneNumber,
-      country_code: countryCode,
-      operator_id: String(operatorId),
-      operator_name: 'Natcom Haiti',
-      product_id: productId ? String(productId) : undefined,
-      amount: parseFloat(amount),
-      status: 'pending',
-    });
+    // Validate Haiti operator IDs — only 1701 (Digicel) or 1703 (Natcom) are valid
+    let validatedOperatorId = String(operatorId);
+    if (countryCode === 'HT' && ![1701, 1703].includes(Number(operatorId))) {
+      console.warn(`Invalid Haiti operator ID ${operatorId}, defaulting to 1703`);
+      validatedOperatorId = '1703';
+    }
 
-    console.log('Saved pending topup for orderId:', orderId);
-
-    // Step 1: Get OAuth token from Moncash (production)
-    const authUrl = 'https://moncashbutton.digicelgroup.com/Api/oauth/token';
-    const credentials = `${moncashClientId}:${moncashClientSecret}`;
-    const encodedCredentials = btoa(credentials);
-
-    const authRes = await Promise.race([
-      fetch(authUrl, {
+    // Run entity save and Moncash auth in parallel to save time
+    const [, authRes] = await Promise.all([
+      base44.asServiceRole.entities.PendingTopup.create({
+        order_id: orderId,
+        phone_number: phoneNumber,
+        country_code: countryCode,
+        operator_id: validatedOperatorId,
+        operator_name: Number(validatedOperatorId) === 1701 ? 'Digicel Haiti' : 'Natcom Haiti',
+        product_id: productId ? String(productId) : undefined,
+        amount: parseFloat(amount),
+        status: 'pending',
+      }),
+      fetch('https://moncashbutton.digicelgroup.com/Api/oauth/token', {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${encodedCredentials}`,
@@ -49,12 +49,12 @@ Deno.serve(async (req) => {
         },
         body: 'scope=read,write&grant_type=client_credentials',
       }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Auth timeout')), 15000))
     ]);
 
-    const authText = await authRes.text();
+    console.log('Saved pending topup for orderId:', orderId, 'operatorId:', validatedOperatorId);
     console.log('Moncash auth status:', authRes.status);
 
+    const authText = await authRes.text();
     let authData;
     try {
       authData = JSON.parse(authText);
@@ -67,23 +67,16 @@ Deno.serve(async (req) => {
       throw new Error(`No access token. Response: ${JSON.stringify(authData)}`);
     }
 
-    // Step 2: Create payment (production)
-    const createPaymentUrl = 'https://moncashbutton.digicelgroup.com/Api/v1/CreatePayment';
-    const paymentRes = await Promise.race([
-      fetch(createPaymentUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: amountInHTG,
-          orderId: orderId,
-        }),
-      }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Payment creation timeout')), 15000))
-    ]);
+    // Create payment
+    const paymentRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/CreatePayment', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ amount: amountInHTG, orderId }),
+    });
 
     const paymentData = await paymentRes.json();
     console.log('Moncash payment response:', JSON.stringify(paymentData));
@@ -92,16 +85,9 @@ Deno.serve(async (req) => {
       throw new Error(`Failed to create payment token: ${JSON.stringify(paymentData)}`);
     }
 
-    // Step 4: Build redirect URL to Moncash payment gateway (production)
-    const gatewayBaseUrl = 'https://moncashbutton.digicelgroup.com/Moncash-middleware';
-    const redirectUrl = `${gatewayBaseUrl}/Payment/Redirect?token=${paymentData.payment_token.token}`;
+    const redirectUrl = `https://moncashbutton.digicelgroup.com/Moncash-middleware/Payment/Redirect?token=${paymentData.payment_token.token}`;
 
-    return Response.json({
-      success: true,
-      redirectUrl,
-      orderId,
-      amountInHTG,
-    });
+    return Response.json({ success: true, redirectUrl, orderId, amountInHTG });
   } catch (error) {
     console.error('Moncash payment initiation error:', error.message);
     return Response.json({ error: `Payment initiation failed: ${error.message}` }, { status: 500 });

@@ -48,6 +48,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   // Customer & accounts
   const [customerGuid, setCustomerGuid] = useState(null);
   const [kycStatus, setKycStatus] = useState(null);
+  const [kycLoading, setKycLoading] = useState(false);
+  const [personaUrl, setPersonaUrl] = useState(null);
   const [fiatAccount, setFiatAccount] = useState(null);
   const [tradingAccount, setTradingAccount] = useState(null);
   const [externalBankAccount, setExternalBankAccount] = useState(null);

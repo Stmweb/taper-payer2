@@ -289,7 +289,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                   <Button onClick={onClose} variant="outline" className="w-full mt-1">Close</Button>
                 </>
               ) : (
-                <Button
+                <>
+                  <Button
                     onClick={async () => {
                       setKycLoading(true);
                       try {
@@ -320,6 +321,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Check Verification Status
                   </Button>
+                </>
               )}
             </>
           )}

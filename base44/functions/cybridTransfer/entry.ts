@@ -62,11 +62,8 @@ Deno.serve(async (req) => {
       if (found) return Response.json({ customer: found });
 
       const customer = await cybridApi(token, 'POST', '/api/customers', {
-        type: 'individual',
-        name: {
-          first: name?.split(' ')[0] || 'User',
-          last: name?.split(' ').slice(1).join(' ') || 'Account',
-        },
+        type: 'business',
+        name: name || 'User Account',
         email_address: email,
       });
       return Response.json({ customer });

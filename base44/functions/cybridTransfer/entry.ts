@@ -6,6 +6,8 @@ const CYBRID_BASE = 'https://bank.sandbox.cybrid.app';
 const CYBRID_ID_BASE = 'https://id.sandbox.cybrid.app';
 
 async function getBankToken() {
+  console.log('CLIENT_ID length:', CYBRID_CLIENT_ID?.length, '| starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
+  console.log('CLIENT_SECRET length:', CYBRID_CLIENT_SECRET?.length);
   const credentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
   const scope = 'banks:read banks:write accounts:read accounts:execute customers:read customers:write transfers:read transfers:execute quotes:read quotes:execute counterparties:read counterparties:write external_bank_accounts:read external_bank_accounts:write workflows:read workflows:execute remittances:read remittances:execute';
   const res = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {

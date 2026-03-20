@@ -44,6 +44,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   const [step, setStep] = useState('init');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [kycRefreshKey, setKycRefreshKey] = useState(0);
 
   // Customer & accounts
   const [customerGuid, setCustomerGuid] = useState(null);
@@ -122,7 +123,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       }
     };
     init();
-  }, []);
+  }, [kycRefreshKey]);
 
   // ── Step 2: Create recipient counterparty + their bank account ─────────────
   const handleAddRecipient = async () => {
@@ -289,28 +290,36 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                 </>
               ) : (
                 <Button
-                  onClick={async () => {
-                    setKycLoading(true);
-                    try {
-                      const res = await invoke('startKYC', { customerGuid });
-                      if (res.data?.personaUrl) {
-                        setPersonaUrl(res.data.personaUrl);
-                      } else if (res.data?.outcome === 'passed' || res.data?.state === 'completed') {
-                        // Auto-passed in sandbox, reload
-                        window.location.reload();
+                    onClick={async () => {
+                      setKycLoading(true);
+                      try {
+                        const res = await invoke('startKYC', { customerGuid });
+                        if (res.data?.personaUrl) {
+                          setPersonaUrl(res.data.personaUrl);
+                        } else if (res.data?.outcome === 'passed' || res.data?.state === 'approved') {
+                          // Auto-passed in sandbox, refresh KYC status
+                          setTimeout(() => setKycRefreshKey(k => k + 1), 500);
+                        }
+                      } catch (e) {
+                        setError(e.message || 'Could not start verification.');
+                      } finally {
+                        setKycLoading(false);
                       }
-                    } catch (e) {
-                      setError(e.message || 'Could not start verification.');
-                    } finally {
-                      setKycLoading(false);
-                    }
-                  }}
-                  disabled={kycLoading}
-                  className="w-full"
-                  style={{ backgroundColor: '#3D7BB7' }}
-                >
-                  {kycLoading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Starting...</> : 'Start Identity Verification'}
-                </Button>
+                    }}
+                    disabled={kycLoading}
+                    className="w-full"
+                    style={{ backgroundColor: '#3D7BB7' }}
+                  >
+                    {kycLoading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Starting...</> : 'Start Identity Verification'}
+                  </Button>
+                  <Button 
+                    onClick={() => setKycRefreshKey(k => k + 1)} 
+                    variant="outline" 
+                    className="w-full mt-2"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Check Verification Status
+                  </Button>
               )}
             </>
           )}

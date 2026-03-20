@@ -268,12 +268,45 @@ export default function CybridTransferModal({ amount, country, onClose }) {
           ) : (
             <>
               <AlertCircle className="w-16 h-16 text-amber-500" />
-              <p className="font-semibold text-slate-800">KYC Required</p>
-              <p className="text-sm text-slate-600">
-                Status: <strong className="capitalize">{kycStatus || 'unverified'}</strong>
-                <br />Please complete identity verification to continue.
+              <p className="font-semibold text-slate-800">Identity Verification Required</p>
+              <p className="text-sm text-slate-600 mb-2">
+                Your account needs to be verified before you can send money.
               </p>
-              <Button onClick={onClose} variant="outline" className="w-full">Close</Button>
+              {personaUrl ? (
+                <>
+                  <a href={personaUrl} target="_blank" rel="noopener noreferrer" className="w-full">
+                    <Button className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
+                      Open Verification →
+                    </Button>
+                  </a>
+                  <p className="text-xs text-slate-400 mt-1">After completing verification, come back and try again.</p>
+                  <Button onClick={onClose} variant="outline" className="w-full mt-1">Close</Button>
+                </>
+              ) : (
+                <Button
+                  onClick={async () => {
+                    setKycLoading(true);
+                    try {
+                      const res = await invoke('startKYC', { customerGuid });
+                      if (res.data?.personaUrl) {
+                        setPersonaUrl(res.data.personaUrl);
+                      } else if (res.data?.outcome === 'passed' || res.data?.state === 'completed') {
+                        // Auto-passed in sandbox, reload
+                        window.location.reload();
+                      }
+                    } catch (e) {
+                      setError(e.message || 'Could not start verification.');
+                    } finally {
+                      setKycLoading(false);
+                    }
+                  }}
+                  disabled={kycLoading}
+                  className="w-full"
+                  style={{ backgroundColor: '#3D7BB7' }}
+                >
+                  {kycLoading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Starting...</> : 'Start Identity Verification'}
+                </Button>
+              )}
             </>
           )}
         </div>

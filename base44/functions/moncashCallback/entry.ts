@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     if (pending.status === 'completed') {
       console.log('Topup already completed for orderId:', orderId);
       if (isPost) return Response.json({ success: true, already_completed: true, phone: pending.phone_number, amount: pending.amount });
-      return Response.redirect(`${APP_URL}/MoncashReturn?success=1&phone=${encodeURIComponent(pending.phone_number)}&amount=${pending.amount}`, 302);
+      return Response.redirect(`${APP_URL}/ThankYou?phone=${encodeURIComponent(pending.phone_number)}&amount=${pending.amount}&method=moncash`, 302);
     }
 
     if (pending.status === 'failed') {
@@ -120,7 +120,7 @@ Deno.serve(async (req) => {
     console.log('Topup completed for phone:', pending.phone_number);
 
     if (isPost) return Response.json({ success: true, phone: pending.phone_number, amount: pending.amount });
-    return Response.redirect(`${APP_URL}/MoncashReturn?success=1&phone=${encodeURIComponent(pending.phone_number)}&amount=${pending.amount}`, 302);
+    return Response.redirect(`${APP_URL}/ThankYou?phone=${encodeURIComponent(pending.phone_number)}&amount=${pending.amount}&method=moncash`, 302);
 
   } catch (error) {
     console.error('Moncash Callback Error:', error.message);

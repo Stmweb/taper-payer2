@@ -104,7 +104,12 @@ Deno.serve(async (req) => {
     const topupData = await topupRes.json();
     console.log('DTone result:', JSON.stringify(topupData).substring(0, 500));
 
-    if (!topupRes.ok) {
+    // DTone returns 200/201 for success; treat any 2xx or COMPLETED/CONFIRMING as success
+    const dtoneStatus = topupData.status;
+    const isSuccess = topupRes.ok || [200, 201, 202].includes(topupRes.status);
+    const isFailed = !isSuccess && dtoneStatus !== 'COMPLETED' && dtoneStatus !== 'CONFIRMING';
+
+    if (isFailed) {
       const errMsg = topupData.message || topupData.errors?.[0]?.message || `DTone error ${topupRes.status}`;
       await base44.asServiceRole.entities.PendingTopup.update(pending.id, { status: 'failed', error_message: errMsg });
       if (isPost) return Response.json({ error: errMsg }, { status: 400 });

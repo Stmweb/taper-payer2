@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SiteHeader from '@/components/SiteHeader';
 import { motion } from 'framer-motion';
 import { Users, Target, Heart, Award, Globe, TrendingUp, Shield, Zap, Menu, X, Smartphone, MapPin } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';

@@ -41,17 +41,9 @@ export default function MoncashReturn() {
     }
 
     setStatus('processing');
-    // Use plain fetch (no auth required) to call the callback endpoint
-    fetch(`/api/apps/695c31d62d68bbb4ef8cc5b3/functions/moncashCallback`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ orderId, token }),
-    })
+    base44.functions.invoke('moncashCallback', { orderId, token })
       .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
+        const data = res.data;
         if (data?.success || data?.already_completed) {
           setPhone(data.phone || '');
           setAmount(data.amount || '');

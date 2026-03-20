@@ -4,6 +4,7 @@ const CYBRID_CLIENT_ID = Deno.env.get('CYBRID_CLIENT_ID');
 const CYBRID_CLIENT_SECRET = Deno.env.get('CYBRID_CLIENT_SECRET');
 const CYBRID_BASE = 'https://bank.sandbox.cybrid.app';
 const CYBRID_ID_BASE = 'https://id.sandbox.cybrid.app';
+const CYBRID_BANK_GUID = 'a49147be13c4dbc77b16fbd26470788f';
 
 async function getBankToken() {
   console.log('CLIENT_ID length:', CYBRID_CLIENT_ID?.length, '| starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
@@ -16,10 +17,12 @@ async function getBankToken() {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': `Basic ${credentials}`,
     },
-    body: `grant_type=client_credentials&scope=${encodeURIComponent(scope)}`,
+    body: `grant_type=client_credentials&scope=${encodeURIComponent(scope)}&bank_guid=${CYBRID_BANK_GUID}`,
   });
-  if (!res.ok) throw new Error(`Token error: ${await res.text()}`);
-  const data = await res.json();
+  const text = await res.text();
+  console.log('Token response status:', res.status, '| body:', text.substring(0, 200));
+  if (!res.ok) throw new Error(`Token error: ${text}`);
+  const data = JSON.parse(text);
   return data.access_token;
 }
 

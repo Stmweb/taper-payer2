@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
 
 const CYBRID_CLIENT_ID = Deno.env.get('CYBRID_CLIENT_ID');
 const CYBRID_CLIENT_SECRET = Deno.env.get('CYBRID_CLIENT_SECRET');
@@ -13,13 +13,10 @@ async function getBankToken() {
       grant_type: 'client_credentials',
       client_id: CYBRID_CLIENT_ID,
       client_secret: CYBRID_CLIENT_SECRET,
-      scope: 'banks:read banks:write accounts:read accounts:execute customers:read customers:write transfers:read transfers:execute quotes:read quotes:execute',
+      scope: 'banks:read banks:write accounts:read accounts:execute customers:read customers:write transfers:read transfers:execute quotes:read quotes:execute counterparties:read counterparties:write external_bank_accounts:read external_bank_accounts:write workflows:read workflows:execute remittances:read remittances:execute',
     }),
   });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Token error: ${err}`);
-  }
+  if (!res.ok) throw new Error(`Token error: ${await res.text()}`);
   const data = await res.json();
   return data.access_token;
 }
@@ -49,29 +46,39 @@ Deno.serve(async (req) => {
     const { action, ...params } = await req.json();
     const token = await getBankToken();
 
-    if (action === 'getBank') {
-      const banks = await cybridApi(token, 'GET', '/api/banks');
-      return Response.json({ bank: banks.objects?.[0] || null });
-    }
-
+    // ── Step 2: Create or find customer ──────────────────────────────────────
     if (action === 'createCustomer') {
       const { name, email } = params;
+      // Check if customer already exists by listing customers
+      const existing = await cybridApi(token, 'GET', `/api/customers?per_page=50`);
+      const found = existing.objects?.find(c => c.email_address === email);
+      if (found) return Response.json({ customer: found });
+
       const customer = await cybridApi(token, 'POST', '/api/customers', {
         type: 'individual',
-        name: { first: name?.split(' ')[0] || 'User', last: name?.split(' ').slice(1).join(' ') || 'Account' },
+        name: {
+          first: name?.split(' ')[0] || 'User',
+          last: name?.split(' ').slice(1).join(' ') || 'Account',
+        },
         email_address: email,
       });
       return Response.json({ customer });
     }
 
+    // ── Step 3: Get customer KYC status ───────────────────────────────────────
+    if (action === 'getCustomerStatus') {
+      const { customerGuid } = params;
+      const customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
+      return Response.json({ customer });
+    }
+
+    // ── Step 4 & 5: Get or create fiat/trading account ────────────────────────
     if (action === 'getOrCreateAccount') {
       const { customerGuid, asset, accountType } = params;
-      // List existing accounts for this customer (type: fiat or trading)
-      const existing = await cybridApi(token, 'GET', `/api/accounts?customer_guid=${customerGuid}&asset=${asset}&type=${accountType || 'fiat'}`);
-      if (existing.objects?.length > 0) {
-        return Response.json({ account: existing.objects[0] });
-      }
-      // Create new account
+      const existing = await cybridApi(token, 'GET', `/api/accounts?customer_guid=${customerGuid}&type=${accountType || 'fiat'}`);
+      const match = existing.objects?.find(a => a.asset === asset);
+      if (match) return Response.json({ account: match });
+
       const account = await cybridApi(token, 'POST', '/api/accounts', {
         type: accountType || 'fiat',
         customer_guid: customerGuid,
@@ -80,35 +87,146 @@ Deno.serve(async (req) => {
       return Response.json({ account });
     }
 
-    if (action === 'getCustomerStatus') {
+    // ── Step 6: Create Plaid workflow to link bank ────────────────────────────
+    if (action === 'createPlaidWorkflow') {
       const { customerGuid } = params;
-      const customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
-      return Response.json({ customer });
+      const workflow = await cybridApi(token, 'POST', '/api/workflows', {
+        type: 'plaid',
+        kind: 'link',
+        customer_guid: customerGuid,
+      });
+      return Response.json({ workflow });
     }
 
-    if (action === 'createQuote') {
-      const { customerGuid, asset, deliverAmount } = params;
+    // ── Step 6: Get Plaid workflow (to get link_token) ────────────────────────
+    if (action === 'getWorkflow') {
+      const { workflowGuid } = params;
+      const workflow = await cybridApi(token, 'GET', `/api/workflows/${workflowGuid}`);
+      return Response.json({ workflow });
+    }
+
+    // ── Step 7: Create external bank account from Plaid token ─────────────────
+    if (action === 'createExternalBankAccount') {
+      const { customerGuid, plaidPublicToken, accountId } = params;
+      const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
+        name: 'My Bank Account',
+        account_kind: 'plaid',
+        customer_guid: customerGuid,
+        plaid_public_token: plaidPublicToken,
+        plaid_account_id: accountId,
+      });
+      return Response.json({ externalBankAccount: account });
+    }
+
+    // ── List external bank accounts ───────────────────────────────────────────
+    if (action === 'listExternalBankAccounts') {
+      const { customerGuid } = params;
+      const result = await cybridApi(token, 'GET', `/api/external_bank_accounts?customer_guid=${customerGuid}`);
+      return Response.json({ accounts: result.objects || [] });
+    }
+
+    // ── Step 8 & 9: Create counterparty (recipient) ───────────────────────────
+    if (action === 'createCounterparty') {
+      const { customerGuid, firstName, lastName, country } = params;
+      const counterparty = await cybridApi(token, 'POST', '/api/counterparties', {
+        type: 'individual',
+        customer_guid: customerGuid,
+        name: { first: firstName, last: lastName },
+        address: { country_code: country === 'Mexico' ? 'MX' : 'NG' },
+      });
+      return Response.json({ counterparty });
+    }
+
+    // ── Step 9: Get counterparty status ──────────────────────────────────────
+    if (action === 'getCounterpartyStatus') {
+      const { counterpartyGuid } = params;
+      const counterparty = await cybridApi(token, 'GET', `/api/counterparties/${counterpartyGuid}`);
+      return Response.json({ counterparty });
+    }
+
+    // ── Step 10: Add foreign bank account for counterparty ───────────────────
+    if (action === 'createCounterpartyExternalBankAccount') {
+      const { counterpartyGuid, accountNumber, routingNumber, country } = params;
+      const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
+        name: 'Recipient Bank Account',
+        account_kind: 'routing_number',
+        counterparty_guid: counterpartyGuid,
+        account_details: [
+          { account_detail_type: 'routing_number', account_detail_value: routingNumber },
+          { account_detail_type: 'account_number', account_detail_value: accountNumber },
+        ],
+        bank_address: { country_code: country === 'Mexico' ? 'MX' : 'NG' },
+      });
+      return Response.json({ externalBankAccount: account });
+    }
+
+    // ── Step 11: Fund fiat account via ACH (funding quote + transfer) ─────────
+    if (action === 'fundViaACH') {
+      const { customerGuid, fiatAccountGuid, externalBankAccountGuid, amountUSD } = params;
+      const amountCents = Math.round(parseFloat(amountUSD) * 100);
+
       const quote = await cybridApi(token, 'POST', '/api/quotes', {
         product_type: 'funding',
         customer_guid: customerGuid,
-        asset,
+        asset: 'USD',
         side: 'deposit',
-        deliver_amount: Math.round(deliverAmount * 100), // cents
+        deliver_amount: amountCents,
       });
-      return Response.json({ quote });
-    }
 
-    if (action === 'createTransfer') {
-      const { quoteGuid, sourceAccountGuid, destinationAccountGuid } = params;
       const transfer = await cybridApi(token, 'POST', '/api/transfers', {
-        quote_guid: quoteGuid,
+        quote_guid: quote.guid,
         transfer_type: 'funding',
-        source_account_guid: sourceAccountGuid,
-        destination_account_guid: destinationAccountGuid,
+        external_bank_account_guid: externalBankAccountGuid,
+        destination_account_guid: fiatAccountGuid,
       });
-      return Response.json({ transfer });
+      return Response.json({ quote, transfer });
     }
 
+    // ── Step 12: Trade USD → USDC_SOL ────────────────────────────────────────
+    if (action === 'tradeUSDtoUSDC') {
+      const { customerGuid, fiatAccountGuid, tradingAccountGuid, amountUSD } = params;
+      const amountCents = Math.round(parseFloat(amountUSD) * 100);
+
+      const quote = await cybridApi(token, 'POST', '/api/quotes', {
+        product_type: 'trading',
+        customer_guid: customerGuid,
+        symbol: 'USDC_SOL-USD',
+        side: 'buy',
+        deliver_amount: amountCents,
+      });
+
+      const transfer = await cybridApi(token, 'POST', '/api/transfers', {
+        quote_guid: quote.guid,
+        transfer_type: 'trading',
+        source_account_guid: fiatAccountGuid,
+        destination_account_guid: tradingAccountGuid,
+      });
+      return Response.json({ quote, transfer });
+    }
+
+    // ── Step 13 & 14: Create + Execute remittance plan ───────────────────────
+    if (action === 'executeRemittance') {
+      const { customerGuid, tradingAccountGuid, counterpartyExternalBankAccountGuid, amountUSD, country } = params;
+      const amountCents = Math.round(parseFloat(amountUSD) * 100);
+
+      const quote = await cybridApi(token, 'POST', '/api/quotes', {
+        product_type: 'remittance',
+        customer_guid: customerGuid,
+        symbol: 'USDC_SOL-USD',
+        side: 'remittance',
+        deliver_amount: amountCents,
+      });
+
+      const remittance = await cybridApi(token, 'POST', '/api/transfers', {
+        quote_guid: quote.guid,
+        transfer_type: 'remittance',
+        source_account_guid: tradingAccountGuid,
+        destination_external_bank_account_guid: counterpartyExternalBankAccountGuid,
+      });
+      return Response.json({ quote, remittance });
+    }
+
+    // ── Poll transfer status ──────────────────────────────────────────────────
     if (action === 'getTransfer') {
       const { transferGuid } = params;
       const transfer = await cybridApi(token, 'GET', `/api/transfers/${transferGuid}`);
@@ -117,6 +235,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
+    console.error('cybridTransfer error:', error.message);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });

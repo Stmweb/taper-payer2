@@ -1,317 +1,426 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
-import { Loader2, CheckCircle, AlertCircle, ArrowRight, Building2 } from 'lucide-react';
+import {
+  Loader2, CheckCircle, AlertCircle, ArrowRight, Building2,
+  User, CreditCard, RefreshCw, ChevronRight
+} from 'lucide-react';
 
-const TRANSFER_METHODS = [
-  { id: 'ach', label: 'ACH Transfer', description: '1-3 business days · No fee', icon: '🏦' },
-  { id: 'wire', label: 'Wire Transfer', description: 'Same day · $15 fee', icon: '⚡' },
-  { id: 'rtp', label: 'RTP (Real-Time)', description: 'Instant · $1 fee', icon: '🚀' },
+const STEPS = [
+  { id: 'init',        label: 'Verify Identity'    },
+  { id: 'recipient',   label: 'Add Recipient'       },
+  { id: 'fund',        label: 'Fund Account'        },
+  { id: 'trade',       label: 'Convert to USDC'     },
+  { id: 'remittance',  label: 'Send Remittance'     },
+  { id: 'done',        label: 'Complete'            },
 ];
 
+function StepIndicator({ currentStep }) {
+  const idx = STEPS.findIndex(s => s.id === currentStep);
+  return (
+    <div className="flex items-center gap-1 mb-5 overflow-x-auto pb-1">
+      {STEPS.map((s, i) => (
+        <React.Fragment key={s.id}>
+          <div className={`flex flex-col items-center min-w-0 ${i <= idx ? 'opacity-100' : 'opacity-40'}`}>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+              i < idx ? 'bg-green-500 text-white' :
+              i === idx ? 'bg-blue-600 text-white' :
+              'bg-slate-200 text-slate-500'
+            }`}>
+              {i < idx ? '✓' : i + 1}
+            </div>
+          </div>
+          {i < STEPS.length - 1 && (
+            <div className={`flex-1 h-0.5 min-w-[8px] ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
 export default function CybridTransferModal({ amount, country, onClose }) {
-  const [step, setStep] = useState('kyc-check'); // kyc-check → account → method → details → processing → done
-  const [accountType, setAccountType] = useState('fiat'); // fiat or trading
-  const [method, setMethod] = useState('ach');
-  const [routingNumber, setRoutingNumber] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [accountName, setAccountName] = useState('');
+  const [step, setStep] = useState('init');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [transferResult, setTransferResult] = useState(null);
-  const [kycStatus, setKycStatus] = useState(null); // KYC/verification info from Cybrid
-  const [customerGuid, setCustomerGuid] = useState(null); // Store for later use
 
-  const invoke = (action, params = {}) =>
-    base44.functions.invoke('cybridTransfer', { action, ...params });
+  // Customer & accounts
+  const [customerGuid, setCustomerGuid] = useState(null);
+  const [kycStatus, setKycStatus] = useState(null);
+  const [fiatAccount, setFiatAccount] = useState(null);
+  const [tradingAccount, setTradingAccount] = useState(null);
+  const [externalBankAccount, setExternalBankAccount] = useState(null);
 
-  // Check KYC status on mount
+  // Recipient info
+  const [recipientFirst, setRecipientFirst] = useState('');
+  const [recipientLast, setRecipientLast]   = useState('');
+  const [counterpartyGuid, setCounterpartyGuid] = useState(null);
+  const [recipientRouting, setRecipientRouting] = useState('');
+  const [recipientAccount, setRecipientAccount] = useState('');
+  const [counterpartyBankAccountGuid, setCounterpartyBankAccountGuid] = useState(null);
+
+  // Results
+  const [fundTransfer, setFundTransfer] = useState(null);
+  const [tradeTransfer, setTradeTransfer] = useState(null);
+  const [remittanceResult, setRemittanceResult] = useState(null);
+
+  const invoke = (action, p = {}) =>
+    base44.functions.invoke('cybridTransfer', { action, ...p });
+
+  // ── Step 1: Init — create customer + check KYC + create accounts ───────────
   useEffect(() => {
-    const checkKYC = async () => {
+    const init = async () => {
       setLoading(true);
+      setError('');
       try {
         const user = await base44.auth.me();
-        const custRes = await invoke('createCustomer', {
-          name: user.full_name,
-          email: user.email,
-        });
+
+        // Create/find customer
+        const custRes = await invoke('createCustomer', { name: user.full_name, email: user.email });
         const guid = custRes.data?.customer?.guid;
         if (!guid) throw new Error('Could not create customer profile.');
         setCustomerGuid(guid);
 
+        // Check KYC
         const statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-        const customer = statusRes.data?.customer;
-        setKycStatus(customer?.state);
+        const kyc = statusRes.data?.customer?.state;
+        setKycStatus(kyc);
 
-        if (customer?.state === 'approved') {
-          setStep('account');
+        if (kyc !== 'approved') {
+          // Not approved yet — stay on init step to show status
+          setLoading(false);
+          return;
         }
+
+        // Create fiat & trading accounts in parallel
+        const [fiatRes, tradingRes] = await Promise.all([
+          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USD', accountType: 'fiat' }),
+          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USDC', accountType: 'trading' }),
+        ]);
+
+        setFiatAccount(fiatRes.data?.account);
+        setTradingAccount(tradingRes.data?.account);
+
+        // Check for existing linked bank account
+        const banksRes = await invoke('listExternalBankAccounts', { customerGuid: guid });
+        const linked = banksRes.data?.accounts?.[0];
+        if (linked) setExternalBankAccount(linked);
+
+        setStep('recipient');
       } catch (e) {
-        setError(e.message || 'Failed to check KYC status.');
+        setError(e.message || 'Initialization failed.');
       } finally {
         setLoading(false);
       }
     };
-    checkKYC();
+    init();
   }, []);
 
-  const handleSubmit = async () => {
-    if (!routingNumber || !accountNumber || !accountName) {
-      setError('Please fill in all bank details.');
+  // ── Step 2: Create recipient counterparty + their bank account ─────────────
+  const handleAddRecipient = async () => {
+    if (!recipientFirst || !recipientLast || !recipientRouting || !recipientAccount) {
+      setError('Please fill in all recipient details.');
       return;
     }
     setLoading(true);
     setError('');
-    setStep('processing');
-
     try {
-      const user = await base44.auth.me();
-
-      // Get or create account (fiat or trading based on selection)
-      const accRes = await invoke('getOrCreateAccount', {
+      const cpRes = await invoke('createCounterparty', {
         customerGuid,
-        asset: 'USD',
-        accountType,
+        firstName: recipientFirst,
+        lastName: recipientLast,
+        country,
       });
-      const accountGuid = accRes.data?.account?.guid;
-      if (!accountGuid) throw new Error('Could not create account.');
+      const cpGuid = cpRes.data?.counterparty?.guid;
+      if (!cpGuid) throw new Error('Could not create recipient.');
+      setCounterpartyGuid(cpGuid);
 
-      // Create quote
-      const quoteRes = await invoke('createQuote', {
-        customerGuid,
-        asset: 'USD',
-        deliverAmount: parseFloat(amount),
+      const bankRes = await invoke('createCounterpartyExternalBankAccount', {
+        counterpartyGuid: cpGuid,
+        accountNumber: recipientAccount,
+        routingNumber: recipientRouting,
+        country,
       });
-      const quoteGuid = quoteRes.data?.quote?.guid;
-      if (!quoteGuid) throw new Error('Could not get quote.');
+      const cpBankGuid = bankRes.data?.externalBankAccount?.guid;
+      if (!cpBankGuid) throw new Error('Could not add recipient bank account.');
+      setCounterpartyBankAccountGuid(cpBankGuid);
 
-      // Execute transfer
-      const transferRes = await invoke('createTransfer', {
-        quoteGuid,
-        sourceAccountGuid: accountGuid,
-        destinationAccountGuid: accountGuid,
-      });
-      const transfer = transferRes.data?.transfer;
-      if (!transfer) throw new Error('Transfer failed.');
-
-      setTransferResult(transfer);
-      setStep('done');
+      setStep('fund');
     } catch (e) {
-      setError(e.message || 'Transfer failed. Please try again.');
-      setStep('details');
+      setError(e.message || 'Failed to add recipient.');
     } finally {
       setLoading(false);
     }
   };
 
+  // ── Step 3: Fund fiat account via ACH ─────────────────────────────────────
+  const handleFund = async () => {
+    if (!externalBankAccount) {
+      setError('No linked bank account found. Please link your bank first.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const res = await invoke('fundViaACH', {
+        customerGuid,
+        fiatAccountGuid: fiatAccount.guid,
+        externalBankAccountGuid: externalBankAccount.guid,
+        amountUSD: amount,
+      });
+      setFundTransfer(res.data?.transfer);
+      setStep('trade');
+    } catch (e) {
+      setError(e.message || 'Funding failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ── Step 4: Trade USD → USDC_SOL ─────────────────────────────────────────
+  const handleTrade = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await invoke('tradeUSDtoUSDC', {
+        customerGuid,
+        fiatAccountGuid: fiatAccount.guid,
+        tradingAccountGuid: tradingAccount.guid,
+        amountUSD: amount,
+      });
+      setTradeTransfer(res.data?.transfer);
+      setStep('remittance');
+    } catch (e) {
+      setError(e.message || 'Trade failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ── Step 5: Execute remittance ────────────────────────────────────────────
+  const handleRemittance = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await invoke('executeRemittance', {
+        customerGuid,
+        tradingAccountGuid: tradingAccount.guid,
+        counterpartyExternalBankAccountGuid: counterpartyBankAccountGuid,
+        amountUSD: amount,
+        country,
+      });
+      setRemittanceResult(res.data?.remittance);
+      setStep('done');
+    } catch (e) {
+      setError(e.message || 'Remittance failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fmtAmt = (v) => `$${parseFloat(v || amount).toFixed(2)}`;
+
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-6 space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3 border-b pb-4">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center shrink-0">
           <Building2 className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-slate-900">Bank Transfer</h3>
-          <p className="text-sm text-slate-500">Sending <strong>${parseFloat(amount).toFixed(2)} USD</strong> → {country}</p>
+          <h3 className="text-lg font-bold text-slate-900">Send Money via Cybrid</h3>
+          <p className="text-sm text-slate-500">
+            <strong>{fmtAmt(amount)} USD</strong> → {country} via USDC on Solana
+          </p>
         </div>
       </div>
 
+      <StepIndicator currentStep={step} />
+
       {error && (
         <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
-          <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           {error}
         </div>
       )}
 
-      {/* Step: KYC Check */}
-      {step === 'kyc-check' && (
-        <div className="flex flex-col items-center py-12 gap-4">
+      {/* ── init ── */}
+      {step === 'init' && (
+        <div className="flex flex-col items-center py-10 gap-4 text-center">
           {loading ? (
             <>
               <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
-              <p className="font-semibold text-slate-800">Checking verification status…</p>
+              <p className="font-semibold text-slate-800">Setting up your account…</p>
+              <p className="text-sm text-slate-500">Creating customer profile & accounts</p>
             </>
           ) : kycStatus === 'approved' ? (
             <>
               <CheckCircle className="w-16 h-16 text-green-500" />
-              <p className="font-semibold text-slate-800">Verified & Ready</p>
-              <p className="text-sm text-slate-600 text-center">Your account is approved. Let's proceed with your transfer.</p>
-              <Button onClick={() => setStep('account')} className="mt-2 w-full" style={{ backgroundColor: '#3D7BB7' }}>
+              <p className="font-semibold text-slate-800">Identity Verified</p>
+              <p className="text-sm text-slate-600">Your accounts are ready.</p>
+              <Button onClick={() => setStep('recipient')} className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
                 Continue <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </>
           ) : (
             <>
               <AlertCircle className="w-16 h-16 text-amber-500" />
-              <p className="font-semibold text-slate-800">Verification Required</p>
-              <p className="text-sm text-slate-600 text-center">
-                {kycStatus === 'pending'
-                  ? 'Your verification is pending. Please wait for approval or contact support.'
-                  : 'Your account needs verification before you can transfer funds.'}
+              <p className="font-semibold text-slate-800">KYC Required</p>
+              <p className="text-sm text-slate-600">
+                Status: <strong className="capitalize">{kycStatus || 'unverified'}</strong>
+                <br />Please complete identity verification to continue.
               </p>
-              <Button onClick={onClose} variant="outline" className="mt-2 w-full">
-                Close
-              </Button>
+              <Button onClick={onClose} variant="outline" className="w-full">Close</Button>
             </>
           )}
         </div>
       )}
 
-      {/* Step: Select Account Type */}
-      {step === 'account' && (
+      {/* ── recipient ── */}
+      {step === 'recipient' && (
         <div className="space-y-3">
-          <p className="text-sm font-medium text-slate-700">Choose Funding Source</p>
-          <button
-            onClick={() => setAccountType('fiat')}
-            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${
-              accountType === 'fiat' ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-300'
-            }`}
-          >
-            <span className="text-2xl">🏦</span>
+          <p className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+            <User className="w-4 h-4" /> Recipient Details
+          </p>
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="font-semibold text-slate-900 text-sm">Virtual Bank Account</p>
-              <p className="text-xs text-slate-500">ACH/Wire/RTP via Cybrid virtual account</p>
+              <label className="block text-xs font-medium text-slate-600 mb-1">First Name</label>
+              <Input placeholder="Maria" value={recipientFirst} onChange={e => setRecipientFirst(e.target.value)} />
             </div>
-          </button>
-          <button
-            onClick={() => setAccountType('trading')}
-            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${
-              accountType === 'trading' ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-300'
-            }`}
-          >
-            <span className="text-2xl">💱</span>
             <div>
-              <p className="font-semibold text-slate-900 text-sm">Trading Account</p>
-              <p className="text-xs text-slate-500">USDC/USDT conversion before delivery</p>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Last Name</label>
+              <Input placeholder="Garcia" value={recipientLast} onChange={e => setRecipientLast(e.target.value)} />
             </div>
-          </button>
+          </div>
+          <p className="text-xs font-semibold text-slate-600 pt-1">Recipient's Bank Account ({country})</p>
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Routing / SWIFT</label>
+            <Input placeholder="Routing or SWIFT number" value={recipientRouting} onChange={e => setRecipientRouting(e.target.value)} />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Account Number</label>
+            <Input placeholder="Account number" value={recipientAccount} onChange={e => setRecipientAccount(e.target.value)} />
+          </div>
           <Button
-            onClick={() => setStep('method')}
+            onClick={handleAddRecipient}
+            disabled={loading}
             className="w-full mt-2"
             style={{ backgroundColor: '#3D7BB7' }}
           >
-            Continue <ArrowRight className="ml-2 w-4 h-4" />
+            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+            Save Recipient <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </div>
       )}
 
-      {/* Step: Select Method */}
-      {step === 'method' && (
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-slate-700">Choose Transfer Method</p>
-          {TRANSFER_METHODS.map((m) => (
-            <button
-              key={m.id}
-              onClick={() => setMethod(m.id)}
-              className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${
-                method === m.id ? 'border-blue-500 bg-blue-50' : 'border-slate-200 hover:border-blue-300'
-              }`}
-            >
-              <span className="text-2xl">{m.icon}</span>
-              <div>
-                <p className="font-semibold text-slate-900 text-sm">{m.label}</p>
-                <p className="text-xs text-slate-500">{m.description}</p>
-              </div>
-            </button>
-          ))}
-          <div className="flex gap-3 pt-1">
-            <Button variant="outline" onClick={() => setStep('account')} className="flex-1">Back</Button>
-            <Button
-              onClick={() => setStep('details')}
-              className="flex-1"
-              style={{ backgroundColor: '#3D7BB7' }}
-            >
-              Continue <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {/* Step: Bank Details */}
-      {step === 'details' && (
+      {/* ── fund ── */}
+      {step === 'fund' && (
         <div className="space-y-4">
-          <p className="text-sm font-medium text-slate-700">Recipient Bank Details</p>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Account Holder Name</label>
-            <Input
-              placeholder="Full name on account"
-              value={accountName}
-              onChange={(e) => setAccountName(e.target.value)}
-            />
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2 text-sm">
+            <p className="font-semibold text-slate-800 flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-blue-500" /> Fund via ACH Pull
+            </p>
+            <p className="text-slate-600">
+              We'll pull <strong>{fmtAmt(amount)}</strong> from your linked US bank account into your Cybrid USD wallet.
+            </p>
+            {externalBankAccount ? (
+              <div className="bg-white rounded-lg px-3 py-2 border border-blue-100 text-xs text-slate-700">
+                ✅ Linked bank: <strong>{externalBankAccount.name || externalBankAccount.guid}</strong>
+              </div>
+            ) : (
+              <div className="bg-amber-50 rounded-lg px-3 py-2 border border-amber-200 text-xs text-amber-700">
+                ⚠️ No bank linked yet. Please link your US bank via Plaid first.
+              </div>
+            )}
           </div>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Routing Number (ABA)</label>
-            <Input
-              placeholder="9-digit routing number"
-              value={routingNumber}
-              onChange={(e) => setRoutingNumber(e.target.value.replace(/\D/g, '').slice(0, 9))}
-              maxLength={9}
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Account Number</label>
-            <Input
-              placeholder="Bank account number"
-              value={accountNumber}
-              onChange={(e) => setAccountNumber(e.target.value.replace(/\D/g, ''))}
-            />
-          </div>
-          <div className="flex gap-3 pt-1">
-            <Button variant="outline" onClick={() => setStep('method')} className="flex-1">Back</Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={loading}
-              className="flex-1"
-              style={{ backgroundColor: '#3D7BB7' }}
-            >
-              Send ${parseFloat(amount).toFixed(2)}
-            </Button>
-          </div>
+          <Button
+            onClick={handleFund}
+            disabled={loading || !externalBankAccount}
+            className="w-full"
+            style={{ backgroundColor: '#3D7BB7' }}
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+            Pull {fmtAmt(amount)} via ACH <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
         </div>
       )}
 
-      {/* Step: Processing */}
-      {step === 'processing' && (
-        <div className="flex flex-col items-center py-8 gap-4">
-          <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
-          <p className="font-semibold text-slate-800">Processing your transfer…</p>
-          <p className="text-sm text-slate-500 text-center">Verifying identity & routing details through Cybrid.</p>
-          {kycStatus && (
-            <div className="text-xs bg-slate-50 px-3 py-2 rounded text-slate-600">
-              KYC Status: <strong className="capitalize">{kycStatus}</strong>
-            </div>
-          )}
+      {/* ── trade ── */}
+      {step === 'trade' && (
+        <div className="space-y-4">
+          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 space-y-2 text-sm">
+            <p className="font-semibold text-slate-800">💱 Convert USD → USDC on Solana</p>
+            <p className="text-slate-600">
+              Your USD wallet has been funded. Now we'll trade <strong>{fmtAmt(amount)} USD</strong> for USDC_SOL to power the remittance.
+            </p>
+            {fundTransfer && (
+              <div className="text-xs text-slate-500 font-mono bg-white rounded px-2 py-1 border">
+                ACH Ref: {fundTransfer.guid} · Status: {fundTransfer.state}
+              </div>
+            )}
+          </div>
+          <Button
+            onClick={handleTrade}
+            disabled={loading}
+            className="w-full"
+            style={{ backgroundColor: '#7C3AED' }}
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+            Trade USD → USDC_SOL <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
         </div>
       )}
 
-      {/* Step: Done */}
+      {/* ── remittance ── */}
+      {step === 'remittance' && (
+        <div className="space-y-4">
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-2 text-sm">
+            <p className="font-semibold text-slate-800">🚀 Execute Remittance</p>
+            <p className="text-slate-600">
+              USDC is ready. Send <strong>{fmtAmt(amount)}</strong> to <strong>{recipientFirst} {recipientLast}</strong> in <strong>{country}</strong> via Solana rails.
+            </p>
+            {tradeTransfer && (
+              <div className="text-xs text-slate-500 font-mono bg-white rounded px-2 py-1 border">
+                Trade Ref: {tradeTransfer.guid} · Status: {tradeTransfer.state}
+              </div>
+            )}
+          </div>
+          <Button
+            onClick={handleRemittance}
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700"
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+            Send {fmtAmt(amount)} to {country} <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        </div>
+      )}
+
+      {/* ── done ── */}
       {step === 'done' && (
-        <div className="flex flex-col items-center py-6 gap-4 text-center">
-          <CheckCircle className="w-16 h-16 text-green-500" />
-          <h4 className="text-xl font-bold text-slate-900">Transfer Initiated!</h4>
-          <p className="text-slate-600 text-sm">
-            Your transfer of <strong>${parseFloat(amount).toFixed(2)} USD</strong> to <strong>{country}</strong> has been submitted via Cybrid.
-          </p>
-          <div className="space-y-2 text-xs w-full">
-            {transferResult?.guid && (
-              <div className="bg-slate-50 px-3 py-2 rounded text-slate-600 font-mono">
-                Ref: {transferResult.guid}
-              </div>
-            )}
-            <div className="bg-blue-50 px-3 py-2 rounded text-blue-700">
-              <p className="font-medium">Account: <span className="capitalize">{accountType}</span></p>
-              <p className="text-xs">Method: {method.toUpperCase()}</p>
+        <div className="flex flex-col items-center py-4 gap-4 text-center">
+          <div className="relative w-20 h-20">
+            <div className="absolute inset-0 bg-green-100 rounded-full animate-ping opacity-30"></div>
+            <div className="relative flex items-center justify-center w-20 h-20 bg-green-50 rounded-full border-4 border-green-200">
+              <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
-            {kycStatus && (
-              <div className="bg-green-50 px-3 py-2 rounded text-green-700">
-                <p className="font-medium">KYC: <span className="capitalize">{kycStatus}</span></p>
-              </div>
-            )}
           </div>
-          <p className="text-xs text-slate-500 capitalize">Transfer Status: {transferResult?.state || 'pending'}</p>
+          <h4 className="text-xl font-bold text-slate-900">Remittance Sent! 🎉</h4>
+          <p className="text-slate-600 text-sm">
+            <strong>{fmtAmt(amount)} USD</strong> is on its way to <strong>{recipientFirst} {recipientLast}</strong> in <strong>{country}</strong>.
+          </p>
+
+          <div className="w-full space-y-2 text-xs text-left">
+            <div className="bg-slate-50 border rounded-lg px-3 py-2 space-y-1">
+              <p className="text-slate-500 font-semibold uppercase tracking-wide text-xs">Transaction Summary</p>
+              {fundTransfer?.guid   && <p className="text-slate-600 font-mono">ACH:  {fundTransfer.guid}</p>}
+              {tradeTransfer?.guid  && <p className="text-slate-600 font-mono">Trade: {tradeTransfer.guid}</p>}
+              {remittanceResult?.guid && <p className="text-slate-600 font-mono">Remit: {remittanceResult.guid}</p>}
+              <p className="text-slate-600">Status: <span className="font-semibold capitalize text-green-700">{remittanceResult?.state || 'submitted'}</span></p>
+            </div>
+          </div>
+
           <Button onClick={onClose} className="mt-2 w-full" style={{ backgroundColor: '#3D7BB7' }}>
             Done
           </Button>

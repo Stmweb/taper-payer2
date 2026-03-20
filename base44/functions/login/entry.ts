@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Generate JWT
+    // Generate JWT (Note: using demo signature for now)
     const jwtHeader = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
     const jwtPayload = btoa(JSON.stringify({
       user_id: user.id,
@@ -42,6 +42,7 @@ Deno.serve(async (req) => {
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 86400 * 7,
     }));
+    // TODO: Replace with actual HMAC signature
     const signature = btoa('demo-signature');
     const jwt = `${jwtHeader}.${jwtPayload}.${signature}`;
 

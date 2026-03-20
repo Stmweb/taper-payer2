@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users, Menu, X } from 'lucide-react';
+import SiteHeader from '@/components/SiteHeader';
+import { ChevronDown, Smartphone, DollarSign, Lock, Zap, Globe, CreditCard, Users } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
 import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
@@ -45,7 +46,6 @@ export default function TaperPayerTopUp() {
     }
   }, []);
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showTopUpForm, setShowTopUpForm] = useState(false);
   const [showTaperConnect, setShowTaperConnect] = useState(false);
   const [showReloadForm, setShowReloadForm] = useState(false);
@@ -156,64 +156,7 @@ export default function TaperPayerTopUp() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="relative flex items-center justify-between h-16 md:h-20">
-            <button
-              className="md:hidden text-slate-700 p-2 z-10"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-
-            <a href="/TaperPayerHome" className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
-              <img 
-                src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
-                alt="Taper Payer"
-                className="h-36 md:h-36 w-auto"
-              />
-            </a>
-            
-            <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <a href="/TaperPayerHome" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Home</a>
-              <a href="/TaperPayerAbout" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">About</a>
-              <a href="/TaperPayerHowItWorks" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">How It Works</a>
-              <a href="/TaperPayerRates" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Exchange Rates</a>
-              <a href="/TaperPayerTopUp" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Taper Mobile</a>
-              <a href="/TaperPayerContact" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Contact</a>
-              <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
-              </a>
-              <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
-              </a>
-            </div>
-
-            <div className="md:hidden w-10"></div>
-          </div>
-
-          {mobileMenuOpen && (
-            <div className="md:hidden bg-gradient-to-br from-blue-600 to-green-600 -mx-4 px-4 py-6 space-y-3 rounded-b-2xl">
-              <a href="/TaperPayerHome" className="block text-white font-semibold hover:text-white transition-colors py-2">Home</a>
-              <a href="/TaperPayerAbout" className="block text-white/90 font-medium hover:text-white transition-colors py-2">About</a>
-              <a href="/TaperPayerHowItWorks" className="block text-white/90 font-medium hover:text-white transition-colors py-2">How It Works</a>
-              <a href="/TaperPayerRates" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Exchange Rates</a>
-              <a href="/TaperPayerTopUp" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Taper Mobile</a>
-              <a href="/TaperPayerContact" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</a>
-              <div className="pt-3 space-y-3">
-                <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20">Login</Button>
-                </a>
-                <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full bg-white text-blue-600 hover:bg-gray-100">Sign up</Button>
-                </a>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
+      <SiteHeader />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden" style={{

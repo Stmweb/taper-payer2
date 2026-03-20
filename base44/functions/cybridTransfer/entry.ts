@@ -9,18 +9,20 @@ const CYBRID_BANK_GUID = 'a49147be13c4dbc77b16fbd26470788f';
 async function getBankToken() {
   console.log('CLIENT_ID length:', CYBRID_CLIENT_ID?.length, '| starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
   console.log('CLIENT_SECRET length:', CYBRID_CLIENT_SECRET?.length);
-  const credentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
   const scope = 'banks:read banks:write accounts:read accounts:execute customers:read customers:write transfers:read transfers:execute quotes:read quotes:execute counterparties:read counterparties:write external_bank_accounts:read external_bank_accounts:write workflows:read workflows:execute remittances:read remittances:execute';
+  const body = new URLSearchParams({
+    grant_type: 'client_credentials',
+    client_id: CYBRID_CLIENT_ID,
+    client_secret: CYBRID_CLIENT_SECRET,
+    scope,
+  });
   const res = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Basic ${credentials}`,
-    },
-    body: `grant_type=client_credentials&scope=${encodeURIComponent(scope)}&bank_guid=${CYBRID_BANK_GUID}`,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
   });
   const text = await res.text();
-  console.log('Token response status:', res.status, '| body:', text.substring(0, 200));
+  console.log('Token response status:', res.status, '| body:', text.substring(0, 300));
   if (!res.ok) throw new Error(`Token error: ${text}`);
   const data = JSON.parse(text);
   return data.access_token;

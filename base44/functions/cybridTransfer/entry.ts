@@ -69,6 +69,38 @@ Deno.serve(async (req) => {
       return Response.json({ customer });
     }
 
+    // ── KYC: Create identity verification & get Persona inquiry ID ───────────
+    if (action === 'startKYC') {
+      const { customerGuid } = params;
+
+      // Create identity verification
+      const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
+        type: 'kyc',
+        method: 'business_registration',
+        customer_guid: customerGuid,
+        expected_behaviours: ['passed_immediately'], // sandbox: auto-pass
+      });
+
+      // Poll up to 10 times for persona_inquiry_id
+      let verificationGuid = iv.guid;
+      let inquiry = iv;
+      for (let i = 0; i < 10; i++) {
+        if (inquiry.persona_inquiry_id || inquiry.state === 'completed' || inquiry.outcome === 'passed') break;
+        await new Promise(r => setTimeout(r, 1500));
+        inquiry = await cybridApi(token, 'GET', `/api/identity_verifications/${verificationGuid}`);
+      }
+
+      return Response.json({
+        verificationGuid: inquiry.guid,
+        personaInquiryId: inquiry.persona_inquiry_id,
+        state: inquiry.state,
+        outcome: inquiry.outcome,
+        personaUrl: inquiry.persona_inquiry_id
+          ? `https://withpersona.com/verify?inquiry-id=${inquiry.persona_inquiry_id}`
+          : null,
+      });
+    }
+
     // ── Step 3: Get customer KYC status ───────────────────────────────────────
     if (action === 'getCustomerStatus') {
       const { customerGuid } = params;

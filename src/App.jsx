@@ -108,9 +108,12 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Allow MoncashReturn to render without auth (user returns from Moncash unauthenticated)
+  // Allow MoncashReturn / ThankYou to render without auth (user returns from payment unauthenticated)
   if (location.pathname === '/MoncashReturn') {
     return <MoncashReturn />;
+  }
+  if (location.pathname === '/ThankYou') {
+    return <ThankYou />;
   }
 
   // Handle authentication errors

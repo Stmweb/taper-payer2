@@ -50,7 +50,9 @@ export default function ThankYou() {
           )}
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-600">Payment Method</span>
-            <span className="text-sm font-bold text-blue-600">💳 {method}</span>
+            <span className="text-sm font-bold text-blue-600">
+              {method.toLowerCase() === 'moncash' ? '🇭🇹 MonCash' : `💳 ${method}`}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-600">Status</span>

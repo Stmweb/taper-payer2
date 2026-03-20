@@ -57,9 +57,9 @@ export default function TaperPayerContact() {
             {/* Logo - Centered on Mobile, Left on Desktop */}
             <Link to={createPageUrl('TaperPayerHome')} className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
               <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
+                src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
                 alt="Taper Payer"
-                className="h-40 md:h-24 w-auto"
+                className="h-16 md:h-20 w-auto"
               />
             </Link>
             

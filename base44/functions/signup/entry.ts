@@ -31,34 +31,44 @@ Deno.serve(async (req) => {
     const password_hash = await hashPassword(password);
 
     // Create Cybrid customer
-    const cybridKey = Deno.env.get('CYBRID_CLIENT_ID');
-    const cybridSecret = Deno.env.get('CYBRID_CLIENT_SECRET');
-    const cybridAuth = 'Basic ' + btoa(`${cybridKey}:${cybridSecret}`);
+    let cybrid_customer_id = null;
+    try {
+      const cybridKey = Deno.env.get('CYBRID_CLIENT_ID');
+      const cybridSecret = Deno.env.get('CYBRID_CLIENT_SECRET');
+      const cybridAuth = 'Basic ' + btoa(`${cybridKey}:${cybridSecret}`);
 
-    // Get Cybrid access token
-    const tokenRes = await fetch('https://sandbox.cybrid.io/oauth/token', {
-      method: 'POST',
-      headers: { Authorization: cybridAuth, 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'grant_type=client_credentials&scope=customers:execute',
-    });
-    
-    const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
+      // Get Cybrid access token
+      const tokenRes = await fetch('https://api.cybrid.io/oauth/token', {
+        method: 'POST',
+        headers: { Authorization: cybridAuth, 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'grant_type=client_credentials&scope=customers:execute',
+      });
+      
+      if (!tokenRes.ok) {
+        throw new Error(`Cybrid auth failed: ${tokenRes.status}`);
+      }
 
-    // Create customer in Cybrid
-    const customerRes = await fetch('https://sandbox.cybrid.io/api/customers', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'individual',
-        email: email,
-        first_name: full_name.split(' ')[0],
-        last_name: full_name.split(' ').slice(1).join(' ') || 'User',
-      }),
-    });
+      const tokenData = await tokenRes.json();
+      const accessToken = tokenData.access_token;
 
-    const customerData = await customerRes.json();
-    const cybrid_customer_id = customerData.guid;
+      // Create customer in Cybrid
+      const customerRes = await fetch('https://api.cybrid.io/api/customers', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'individual',
+          email: email,
+          first_name: full_name.split(' ')[0],
+          last_name: full_name.split(' ').slice(1).join(' ') || 'User',
+        }),
+      });
+
+      const customerData = await customerRes.json();
+      cybrid_customer_id = customerData.guid;
+    } catch (cybridError) {
+      console.warn('Cybrid customer creation failed:', cybridError.message);
+      // Continue without Cybrid customer for now
+    }
 
     // Create user in AppUser
     const user = await base44.asServiceRole.entities.AppUser.create({

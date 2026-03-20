@@ -111,7 +111,12 @@ export default function CybridTransferModal({ amount, country, onClose }) {
 
         setStep('recipient');
       } catch (e) {
-        setError(e.message || 'Initialization failed.');
+        const msg = e.message || '';
+        if (msg.toLowerCase().includes('authentication') || msg.toLowerCase().includes('logged in')) {
+          setError('You must be logged in to send money. Please log in and try again.');
+        } else {
+          setError(msg || 'Initialization failed.');
+        }
       } finally {
         setLoading(false);
       }

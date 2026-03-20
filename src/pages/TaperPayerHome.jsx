@@ -20,7 +20,9 @@ import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
 import { useAuth } from '@/lib/AuthContext';
+import { useAppAuth } from '@/lib/AppAuthContext';
 import { loadStripe } from '@stripe/stripe-js';
+import SignupModal from '@/components/SignupModal';
 
 let stripePromise;
 
@@ -63,6 +65,7 @@ export default function TaperPayerHome() {
 
    const { config, isElementHidden, isSectionHidden, getContentOverride } = usePageConfig('TaperPayerHome');
    const { isAuthenticated, navigateToLogin } = useAuth();
+   const { user, login } = useAppAuth();
 
    const [amount, setAmount] = useState('100');
    const [sendTo, setSendTo] = useState('');
@@ -75,6 +78,7 @@ export default function TaperPayerHome() {
    const [showTaperConnect, setShowTaperConnect] = useState(false);
    const [showTransferModal, setShowTransferModal] = useState(false);
    const [showComingSoon, setShowComingSoon] = useState(false);
+   const [showSignupModal, setShowSignupModal] = useState(false);
 
    const toggleDarkMode = () => {
      setIsDark(!isDark);
@@ -341,7 +345,7 @@ export default function TaperPayerHome() {
                   <Button
                     style={{ backgroundColor: '#3D7BB7' }}
                     className="w-full hover:opacity-90 text-lg py-6"
-                    onClick={() => { if (sendTo && amount) { if (!isAuthenticated) { navigateToLogin(); } else { setShowTransferModal(true); } } }}
+                    onClick={() => { if (sendTo && amount) { if (!user) { setShowSignupModal(true); } else { setShowTransferModal(true); } } }}
                     disabled={!sendTo || !amount}
                   >
                     Continue <ArrowRight className="ml-2 w-5 h-5" />
@@ -646,6 +650,17 @@ export default function TaperPayerHome() {
 
       {/* Coming Soon Modal */}
       <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
+
+      {/* Signup Modal */}
+      <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+        onSignupSuccess={(userData) => {
+          login(userData, userData.jwt, userData.cybrid_customer_id);
+          setShowSignupModal(false);
+          setShowTransferModal(true);
+        }}
+      />
 
       {/* Taper Connect Form Modal */}
       {showTaperConnect && createPortal(

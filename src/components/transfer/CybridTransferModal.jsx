@@ -229,9 +229,9 @@ export default function CybridTransferModal({ amount, country, onClose }) {
           <Building2 className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h3 className="text-lg font-bold text-slate-900">Send Money via Cybrid</h3>
+          <h3 className="text-lg font-bold text-slate-900">Send Money</h3>
           <p className="text-sm text-slate-500">
-            <strong>{fmtAmt(amount)} USD</strong> → {country} via USDC on Solana
+            <strong>{fmtAmt(amount)} USD</strong> → {country}
           </p>
         </div>
       </div>

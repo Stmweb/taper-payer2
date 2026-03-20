@@ -350,6 +350,10 @@ export default function TaperPayerHome() {
                       View All Exchange Rates →
                     </Link>
                   </div>
+
+                  <div className="text-center text-sm text-slate-500 italic mt-1">
+                    ✨ Something new is coming soon — stay tuned!
+                  </div>
                 </div>
               </Card>
             </motion.div>

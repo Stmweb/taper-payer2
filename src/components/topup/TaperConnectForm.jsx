@@ -487,7 +487,7 @@ export default function TaperConnectForm({ initialCountry }) {
               >
                 💳 Credit/Debit Card
               </button>
-              {selectedCountry?.iso === 'HT' && (
+              {selectedCountry?.iso === 'HT' && detectedOperator?.id === 1701 && (
                 <button
                   onClick={() => setPaymentMethod('moncash')}
                   className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
@@ -496,6 +496,11 @@ export default function TaperConnectForm({ initialCountry }) {
                 >
                   🇭🇹 MonCash
                 </button>
+              )}
+              {selectedCountry?.iso === 'HT' && detectedOperator?.id === 1703 && (
+                <div className="flex-1 p-3 rounded-lg border-2 border-slate-200 bg-slate-50 text-slate-500 text-sm font-medium text-center">
+                  MonCash unavailable for Natcom
+                </div>
               )}
             </div>
           </div>

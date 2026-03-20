@@ -6,15 +6,15 @@ const CYBRID_BASE = 'https://bank.sandbox.cybrid.app';
 const CYBRID_ID_BASE = 'https://id.sandbox.cybrid.app';
 
 async function getBankToken() {
+  const credentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
+  const scope = 'banks:read banks:write accounts:read accounts:execute customers:read customers:write transfers:read transfers:execute quotes:read quotes:execute counterparties:read counterparties:write external_bank_accounts:read external_bank_accounts:write workflows:read workflows:execute remittances:read remittances:execute';
   const res = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      grant_type: 'client_credentials',
-      client_id: CYBRID_CLIENT_ID,
-      client_secret: CYBRID_CLIENT_SECRET,
-      scope: 'banks:read banks:write accounts:read accounts:execute customers:read customers:write transfers:read transfers:execute quotes:read quotes:execute counterparties:read counterparties:write external_bank_accounts:read external_bank_accounts:write workflows:read workflows:execute remittances:read remittances:execute',
-    }),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Basic ${credentials}`,
+    },
+    body: `grant_type=client_credentials&scope=${encodeURIComponent(scope)}`,
   });
   if (!res.ok) throw new Error(`Token error: ${await res.text()}`);
   const data = await res.json();

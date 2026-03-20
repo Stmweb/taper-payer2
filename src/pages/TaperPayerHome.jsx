@@ -62,6 +62,7 @@ export default function TaperPayerHome() {
    });
 
    const { config, isElementHidden, isSectionHidden, getContentOverride } = usePageConfig('TaperPayerHome');
+   const { isAuthenticated, navigateToLogin } = useAuth();
 
    const [amount, setAmount] = useState('100');
    const [sendTo, setSendTo] = useState('');

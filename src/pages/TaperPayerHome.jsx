@@ -19,6 +19,7 @@ import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper'
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
+import { useAuth } from '@/lib/AuthContext';
 import { loadStripe } from '@stripe/stripe-js';
 
 let stripePromise;

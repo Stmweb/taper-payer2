@@ -138,7 +138,7 @@ export default function TaperPayerHome() {
               <img 
                 src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
                 alt="Taper Payer"
-                className="h-36 md:h-28 w-auto"
+                className="h-36 md:h-36 w-auto"
               />
             </Link>
             

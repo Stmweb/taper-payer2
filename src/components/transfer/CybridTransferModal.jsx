@@ -71,9 +71,14 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   const [remittanceResult, setRemittanceResult] = useState(null);
 
   const invoke = async (action, p = {}) => {
-    const res = await base44.functions.invoke('cybridTransfer', { action, _jwt: jwt || '', ...p });
-    if (res.data?.error) throw new Error(res.data.error);
-    return res;
+    try {
+      const res = await base44.functions.invoke('cybridTransfer', { action, _jwt: jwt || '', ...p });
+      if (res.data?.error) throw new Error(res.data.error);
+      return res;
+    } catch (e) {
+      const msg = e?.response?.data?.error || e?.message || 'Request failed';
+      throw new Error(msg);
+    }
   };
 
   // ── Step 1: Init — create customer + check KYC + create accounts ───────────

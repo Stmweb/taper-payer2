@@ -6,18 +6,17 @@ const CYBRID_ORG_BASE = 'https://organization.sandbox.cybrid.app';
 const CYBRID_BANK_GUID = '5cd17cbb7d655214316d2b278acebd59';
 
 async function getBankToken() {
-  console.log('CLIENT_ID length:', CYBRID_CLIENT_ID?.length, '| starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
-  console.log('CLIENT_SECRET length:', CYBRID_CLIENT_SECRET?.length, '| starts with:', CYBRID_CLIENT_SECRET?.substring(0, 6));
+  console.log('CLIENT_ID starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
+  const credentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
   const body = new URLSearchParams({
     grant_type: 'client_credentials',
-    client_id: CYBRID_CLIENT_ID,
-    client_secret: CYBRID_CLIENT_SECRET,
-    // No scope = use whatever is granted to this client by default
-
   });
   const res = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Basic ${credentials}`,
+    },
     body: body.toString(),
   });
   const text = await res.text();

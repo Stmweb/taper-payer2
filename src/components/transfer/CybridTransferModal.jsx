@@ -116,8 +116,6 @@ export default function CybridTransferModal({ amount, country, onClose }) {
           }
         }
 
-        setKycStatus(kyc);
-
         if (!isVerified(kyc)) {
           setLoading(false);
           return;

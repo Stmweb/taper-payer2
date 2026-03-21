@@ -120,6 +120,17 @@ Deno.serve(async (req) => {
       const match = existing.objects?.find(a => a.asset === asset);
       if (match) return Response.json({ account: match });
 
+      // Poll until customer is verified before creating account
+      let customer;
+      for (let i = 0; i < 15; i++) {
+        customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
+        if (customer.state === 'verified' || customer.state === 'approved') break;
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      if (customer.state !== 'verified' && customer.state !== 'approved') {
+        throw new Error(`Customer not yet verified (state: ${customer.state}). Please complete identity verification first.`);
+      }
+
       const account = await cybridApi(token, 'POST', '/api/accounts', {
         type: accountType || 'fiat',
         customer_guid: customerGuid,

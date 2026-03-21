@@ -174,16 +174,8 @@ export default function TaperConnectForm({ initialCountry }) {
   };
 
   const handleCardPayment = async () => {
-    const isHaiti = selectedCountry?.iso === 'HT';
-    const amt = isHaiti ? customAmount : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
-    
-    if (!phoneNumber || !amt) {
-      setError('Please enter a phone number and select/enter an amount.');
-      return;
-    }
-    
-    if (isHaiti && parseFloat(customAmount) > 81.10) {
-      setError('Amount must not exceed USD 81.10.');
+    if (!phoneNumber || !selectedProduct) {
+      setError('Please enter a phone number and select a plan.');
       return;
     }
     if (!stripe || !elements) {
@@ -210,26 +202,13 @@ export default function TaperConnectForm({ initialCountry }) {
 
       const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
       const fullPhone = selectedCountry.dial + localDigits;
-
-      // Use DTone for all countries
-      const isHaiti = selectedCountry.iso === 'HT';
-      const retailAmount = isHaiti ? parseFloat(customAmount) : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
-      
-      // For Haiti, find a product matching the amount from available products
-      let productIdToUse = selectedProduct?.id;
-      if (isHaiti && products.length > 0) {
-        const matchingProduct = products.find(p => {
-          const pAmount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
-          return Math.abs(parseFloat(pAmount) - parseFloat(customAmount)) < 0.01;
-        });
-        productIdToUse = matchingProduct?.id || products[0]?.id;
-      }
+      const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
       
       const paymentRes = await base44.functions.invoke('processDtonePayment', {
         paymentMethodId: pm.id,
         fullPhone,
         amount: retailAmount,
-        productId: productIdToUse,
+        productId: selectedProduct?.id,
       });
 
       if (paymentRes.data?.success) {
@@ -376,114 +355,57 @@ export default function TaperConnectForm({ initialCountry }) {
           </div>
 
           <div>
-            {selectedCountry?.iso === 'HT' ? (
-              <>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
-                </label>
-                {loading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <Loader2 className="w-5 h-5 animate-spin text-cyan-500" />
-                  </div>
-                ) : products.length === 0 ? (
-                  <>
-                    <p className="text-sm text-slate-500 mb-3">No preset plans available. Enter custom amount:</p>
-                    <Input
-                      type="number"
-                      min="0.01"
-                      max="81.10"
-                      step="0.01"
-                      placeholder="Enter amount (USD 0.01 - 81.10)"
-                      value={customAmount}
-                      onChange={(e) => setCustomAmount(e.target.value)}
-                      className="mb-2"
-                    />
-                  </>
-                ) : (
-                  <div className="space-y-2 max-h-40 overflow-y-auto pr-1 mb-3">
-                    {products
-                      .filter(p => {
-                        if (detectedOperator) {
-                          return p.operator?.id === detectedOperator.id;
-                        }
-                        return true;
-                      })
-                      .map((p, idx) => {
-                        const name = p.name || p.description || String(p.id);
-                        const amount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
-                        const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';
-                        return (
-                          <button
-                            key={idx}
-                            onClick={() => setCustomAmount(String(amount))}
-                            className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
-                              customAmount === String(amount)
-                                ? 'border-cyan-500 bg-cyan-50'
-                                : 'border-slate-200 hover:border-cyan-300'
-                            }`}
-                          >
-                            <div className="flex justify-between items-center">
-                              <span className="text-sm font-medium text-slate-800">{name}</span>
-                              {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
-                            </div>
-                          </button>
-                        );
-                      })}
-                  </div>
-                )}
-                {customAmount && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-slate-700">
-                    <p>HTG {(parseFloat(customAmount) * exchangeRate).toFixed(2)} will be received</p>
-                    <p className="text-xs text-slate-500 mt-1">*including bonus if applicable</p>
-                    <p className="text-xs text-slate-500">*T&C's apply to bonus credit</p>
-                  </div>
-                )}
-              </>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
+            </label>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-5 h-5 animate-spin text-cyan-500" />
+              </div>
+            ) : products.length === 0 ? (
+              <p className="text-sm text-slate-500">No products available for this operator.</p>
             ) : (
-              <>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
-                </label>
-                {loading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <Loader2 className="w-5 h-5 animate-spin text-cyan-500" />
-                  </div>
-                ) : products.length === 0 ? (
-                  <p className="text-sm text-slate-500">No products available for this country.</p>
-                ) : (
-                  <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                    {products
-                      .filter(p => {
-                        // For DTone countries, filter by detected operator
-                        if (detectedOperator) {
-                          return p.operator?.id === detectedOperator.id;
-                        }
-                        return true;
-                      })
-                      .map((p, idx) => {
-                        const name = p.name || p.description || String(p.id);
-                        const amount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
-                        const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';
-                        return (
-                          <button
-                             key={idx}
-                             onClick={() => setSelectedProduct(p)}
-                             className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
-                               selectedProduct === p
-                                 ? 'border-cyan-500 bg-cyan-50'
-                                 : 'border-slate-200 hover:border-cyan-300'
-                             }`}
-                           >
-                             <div className="flex justify-between items-center">
-                               <span className="text-sm font-medium text-slate-800">{name}</span>
-                               {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
-                             </div>
-                           </button>
-                        );
-                      })}
-                  </div>
-                )}
-              </>
+              <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                {products
+                  .filter(p => {
+                    // Filter by detected operator
+                    if (detectedOperator) {
+                      return p.operator?.id === detectedOperator.id;
+                    }
+                    return true;
+                  })
+                  .map((p, idx) => {
+                    const name = p.name || p.description || String(p.id);
+                    const amount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
+                    const currency = p.prices?.retail?.currency_iso_code || p.send_currency_iso || 'USD';
+                    return (
+                      <button
+                         key={idx}
+                         onClick={() => setSelectedProduct(p)}
+                         className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
+                           selectedProduct === p
+                             ? 'border-cyan-500 bg-cyan-50'
+                             : 'border-slate-200 hover:border-cyan-300'
+                         }`}
+                       >
+                         <div className="flex justify-between items-center">
+                           <span className="text-sm font-medium text-slate-800">{name}</span>
+                           {amount != null && <span className="text-sm font-bold text-cyan-600">{currency} {Number(amount).toFixed(2)}</span>}
+                         </div>
+                       </button>
+                    );
+                  })}
+              </div>
+            )}
+            {selectedProduct && selectedCountry?.iso === 'HT' && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-slate-700 mt-3">
+                <p>HTG {((selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value) * exchangeRate).toFixed(2)} will be received</p>
+                <p className="text-xs text-slate-500 mt-1">*including bonus if applicable</p>
+                <p className="text-xs text-slate-500">*T&C's apply to bonus credit</p>
+              </div>
+            )}
+            {selectedProduct && selectedCountry?.iso !== 'HT' && (
+            )}
             )}
           </div>
 
@@ -533,28 +455,26 @@ export default function TaperConnectForm({ initialCountry }) {
                 </div>
                 {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
               </div>
-              {(selectedCountry?.iso === 'HT' ? customAmount : selectedProduct) && (() => {
-                const isHaiti = selectedCountry?.iso === 'HT';
-                const topupAmt = isHaiti ? customAmount : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
-                const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : null;
-                return (
-                  <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-600 space-y-1">
-                    <div className="flex justify-between"><span>Top-up amount</span><span>${parseFloat(topupAmt).toFixed(2)}</span></div>
-                    <div className="flex justify-between"><span>Service fee</span><span>$1.00</span></div>
-                    <div className="flex justify-between font-bold text-slate-800 border-t border-slate-200 pt-1 mt-1"><span>Total charged</span><span>${total}</span></div>
-                  </div>
-                );
-              })()}
+              {selectedProduct && (() => {
+                    const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+                    const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : null;
+                    return (
+                      <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-600 space-y-1">
+                        <div className="flex justify-between"><span>Top-up amount</span><span>${parseFloat(topupAmt).toFixed(2)}</span></div>
+                        <div className="flex justify-between"><span>Service fee</span><span>$1.00</span></div>
+                        <div className="flex justify-between font-bold text-slate-800 border-t border-slate-200 pt-1 mt-1"><span>Total charged</span><span>${total}</span></div>
+                      </div>
+                    );
+                  })()}
               <Button
                 onClick={handleCardPayment}
-                disabled={loading || !phoneNumber || !(selectedCountry?.iso === 'HT' ? customAmount : selectedProduct) || !stripe}
+                disabled={loading || !phoneNumber || !selectedProduct || !stripe}
                 className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
               >
                 {loading ? (
                   <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
                 ) : (() => {
-                  const isHaiti = selectedCountry?.iso === 'HT';
-                  const topupAmt = isHaiti ? customAmount : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
+                  const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
                   const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : '—';
                   return <><Lock className="w-4 h-4 mr-2" /> Pay ${total} & Send Airtime</>;
                 })()}
@@ -563,18 +483,19 @@ export default function TaperConnectForm({ initialCountry }) {
           )}
 
           {/* MonCash (Haiti only) */}
-          {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && customAmount && (() => {
+          {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && selectedProduct && (() => {
             // Use detected operator or default to Natcom (1703); validate for Haiti
             let opId = detectedOperator?.id || 1703;
             if (![1701, 1703].includes(Number(opId))) {
               opId = 1703; // Fallback to Natcom if invalid
             }
+            const amount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
             return (
               <MoncashPaymentForm
                 phoneNumber={selectedCountry.dial + phoneNumber.replace(/^0/, '')}
-                amount={customAmount?.toString() || ''}
+                amount={amount?.toString() || ''}
                 operatorId={opId}
-                productId={null}
+                productId={selectedProduct?.id}
                 countryCode={selectedCountry.iso}
                 onSuccess={() => setSuccess(true)}
               />

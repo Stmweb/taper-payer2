@@ -65,12 +65,8 @@ Deno.serve(async (req) => {
     // ── Step 2: Create or find customer ──────────────────────────────────────
     if (action === 'createCustomer') {
       const { name, email } = params;
-      // Check if customer already exists by listing customers
-      const existing = await cybridApi(token, 'GET', `/api/customers?per_page=50`);
-      const found = existing.objects?.find(c => c.email_address === email);
-      if (found) return Response.json({ customer: found });
 
-      // Fallback: derive name from email if full_name is empty
+      // Always derive a valid name first
       let cleanName = (name || '').trim();
       if (!cleanName && email) {
         cleanName = email.split('@')[0].replace(/[._\-]/g, ' ');
@@ -79,6 +75,11 @@ Deno.serve(async (req) => {
       const nameParts = cleanName.split(' ').filter(Boolean);
       const firstName = nameParts[0] || 'User';
       const lastName = nameParts.slice(1).join(' ') || 'Account';
+
+      // Check if customer already exists
+      const existing = await cybridApi(token, 'GET', `/api/customers?per_page=100`);
+      const found = existing.objects?.find(c => c.email_address === email);
+      if (found) return Response.json({ customer: found });
 
       const customer = await cybridApi(token, 'POST', '/api/customers', {
         type: 'individual',

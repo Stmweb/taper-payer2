@@ -61,9 +61,13 @@ Deno.serve(async (req) => {
       const found = existing.objects?.find(c => c.email_address === email);
       if (found) return Response.json({ customer: found });
 
+      const nameParts = (name || 'User Account').split(' ');
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ') || firstName;
+
       const customer = await cybridApi(token, 'POST', '/api/customers', {
         type: 'individual',
-        name: { full: name || 'User Account' },
+        name: { first: firstName, last: lastName },
         email_address: email,
       });
       return Response.json({ customer });

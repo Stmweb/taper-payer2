@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
-import PromotionalBanner from '@/components/topup/PromotionalBanner';
 import { usePageConfig } from '@/hooks/usePageConfig';
 import SEOHead from '@/components/SEOHead';
 
@@ -198,9 +197,6 @@ export default function TaperPayerTopUp() {
       </section>
 
 
-
-      {/* Promotional Banner Section */}
-      <PromotionalBanner />
 
       {/* Moncash Return Banner */}
       {moncashStatus && (

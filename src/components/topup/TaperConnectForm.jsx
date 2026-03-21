@@ -182,8 +182,8 @@ export default function TaperConnectForm({ initialCountry }) {
       return;
     }
     
-    if (isHaiti && (parseFloat(customAmount) < 2 || parseFloat(customAmount) > 81.10)) {
-      setError('Amount must be between USD 2.00 and USD 81.10.');
+    if (isHaiti && parseFloat(customAmount) > 81.10) {
+      setError('Amount must not exceed USD 81.10.');
       return;
     }
     if (!stripe || !elements) {
@@ -390,10 +390,10 @@ export default function TaperConnectForm({ initialCountry }) {
                     <p className="text-sm text-slate-500 mb-3">No preset plans available. Enter custom amount:</p>
                     <Input
                       type="number"
-                      min="2"
+                      min="0.01"
                       max="81.10"
                       step="0.01"
-                      placeholder="Enter amount (USD 2.00 - 81.10)"
+                      placeholder="Enter amount (USD 0.01 - 81.10)"
                       value={customAmount}
                       onChange={(e) => setCustomAmount(e.target.value)}
                       className="mb-2"

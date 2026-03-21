@@ -276,7 +276,7 @@ Generate a catchy, professional caption that's 1-2 sentences, followed by releva
 
         {platform && (
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">2. Select Size</label>
+            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">3. Select Size</label>
             <div className="flex flex-wrap gap-2">
               {sizesForPlatform.map(s => (
                 <button
@@ -295,7 +295,7 @@ Generate a catchy, professional caption that's 1-2 sentences, followed by releva
         )}
 
         <div>
-          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">3. Describe your flyer</label>
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">4. Describe your flyer</label>
           <textarea
             value={prompt}
             onChange={e => setPrompt(e.target.value)}

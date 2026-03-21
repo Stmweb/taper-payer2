@@ -12,7 +12,7 @@ async function getBankToken() {
     grant_type: 'client_credentials',
     client_id: CYBRID_CLIENT_ID,
     client_secret: CYBRID_CLIENT_SECRET,
-    scope: 'banks:read customers:read customers:write accounts:read accounts:write transfers:read transfers:write quotes:read quotes:write counterparties:read counterparties:write external_bank_accounts:read external_bank_accounts:write identity_verifications:read identity_verifications:write workflows:read workflows:write',
+    scope: 'banks:read:bank customers:read:bank customers:write:bank accounts:read:bank accounts:write:bank transfers:read:bank transfers:write:bank quotes:read:bank quotes:write:bank counterparties:read:bank counterparties:write:bank external_bank_accounts:read:bank external_bank_accounts:write:bank identity_verifications:read:bank identity_verifications:write:bank workflows:read:bank workflows:write:bank',
   });
   const res = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
     method: 'POST',

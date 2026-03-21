@@ -6,7 +6,8 @@ const CYBRID_ORG_BASE = 'https://organization.sandbox.cybrid.app';
 const CYBRID_BANK_GUID = 'a49147be13c4dbc77b16fbd26470788f';
 
 async function getBankToken() {
-  console.log('CLIENT_ID starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
+  console.log('CLIENT_ID:', CYBRID_CLIENT_ID);
+  console.log('CLIENT_SECRET:', CYBRID_CLIENT_SECRET);
   const credentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
   const body = new URLSearchParams({
     grant_type: 'client_credentials',

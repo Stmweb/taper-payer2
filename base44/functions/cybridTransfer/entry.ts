@@ -42,15 +42,12 @@ async function cybridApi(token, method, path, body) {
   return data;
 }
 
-function decodeCustomJwt(req) {
+function decodeCustomJwt(token) {
   try {
-    const authHeader = req.headers.get('Authorization') || req.headers.get('X-App-Token');
-    if (!authHeader) return null;
-    const token = authHeader.replace('Bearer ', '');
+    if (!token) return null;
     const parts = token.split('.');
     if (parts.length < 2) return null;
     const payload = JSON.parse(atob(parts[1]));
-    // Check not expired
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return null;
     return payload;
   } catch {
@@ -60,10 +57,9 @@ function decodeCustomJwt(req) {
 
 Deno.serve(async (req) => {
   try {
-    const appUser = decodeCustomJwt(req);
+    const { action, jwt, ...params } = await req.json();
+    const appUser = decodeCustomJwt(jwt);
     if (!appUser) return Response.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const { action, ...params } = await req.json();
     const token = await getBankToken();
 
     // ── Step 2: Create or find customer ──────────────────────────────────────

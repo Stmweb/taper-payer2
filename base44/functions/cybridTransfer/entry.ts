@@ -44,11 +44,26 @@ async function cybridApi(token, method, path, body) {
   return data;
 }
 
+function decodeCustomJwt(req) {
+  try {
+    const authHeader = req.headers.get('Authorization') || req.headers.get('X-App-Token');
+    if (!authHeader) return null;
+    const token = authHeader.replace('Bearer ', '');
+    const parts = token.split('.');
+    if (parts.length < 2) return null;
+    const payload = JSON.parse(atob(parts[1]));
+    // Check not expired
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    const appUser = decodeCustomJwt(req);
+    if (!appUser) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { action, ...params } = await req.json();
     const token = await getBankToken();

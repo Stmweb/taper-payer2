@@ -42,6 +42,7 @@ function StepIndicator({ currentStep }) {
 }
 
 export default function CybridTransferModal({ amount, country, onClose }) {
+  const { user: appUser, jwt } = useAppAuth();
   const [step, setStep] = useState('init');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

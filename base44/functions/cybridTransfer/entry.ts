@@ -7,7 +7,7 @@ const CYBRID_BANK_GUID = '5cd17cbb7d655214316d2b278acebd59';
 async function getBankToken() {
   console.log('CLIENT_ID length:', CYBRID_CLIENT_ID?.length, '| starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
   console.log('CLIENT_SECRET length:', CYBRID_CLIENT_SECRET?.length);
-  const scope = 'customers:read customers:write accounts:read accounts:execute quotes:read quotes:execute transfers:read transfers:execute counterparties:read counterparties:write external_bank_accounts:read external_bank_accounts:write workflows:read workflows:execute identity_verifications:read identity_verifications:write';
+  const scope = 'customers:read customers:write accounts:read accounts:execute quotes:read quotes:execute transfers:read transfers:execute';
   const body = new URLSearchParams({
     grant_type: 'client_credentials',
     client_id: CYBRID_CLIENT_ID,

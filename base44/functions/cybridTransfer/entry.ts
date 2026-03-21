@@ -59,7 +59,8 @@ Deno.serve(async (req) => {
   try {
     const { action, _jwt, ...params } = await req.json();
     const appUser = decodeCustomJwt(_jwt);
-    if (!appUser) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    console.log('JWT present:', !!_jwt, '| decoded user:', appUser?.email || 'none');
+    if (!appUser) return Response.json({ error: 'You must be logged in to send money. Please log in and try again.' }, { status: 401 });
     const token = await getBankToken();
 
     // ── Step 2: Create or find customer ──────────────────────────────────────

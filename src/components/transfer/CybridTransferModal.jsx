@@ -107,6 +107,18 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         setKycStatus(kyc);
 
         if (!isVerified(kyc)) {
+          // Poll a few more times with delay in case verification is processing
+          for (let i = 0; i < 5; i++) {
+            await new Promise(r => setTimeout(r, 2000));
+            statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+            kyc = statusRes.data?.customer?.state;
+            if (isVerified(kyc)) break;
+          }
+        }
+
+        setKycStatus(kyc);
+
+        if (!isVerified(kyc)) {
           setLoading(false);
           return;
         }

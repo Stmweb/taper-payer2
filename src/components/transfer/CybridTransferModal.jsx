@@ -71,7 +71,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   const [remittanceResult, setRemittanceResult] = useState(null);
 
   const invoke = async (action, p = {}) => {
-    const res = await base44.functions.invoke('cybridTransfer', { action, jwt, ...p });
+    const res = await base44.functions.invoke('cybridTransfer', { action, _jwt: jwt || '', ...p });
+    if (res.data?.error) throw new Error(res.data.error);
     return res;
   };
 

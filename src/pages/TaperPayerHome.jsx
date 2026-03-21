@@ -541,40 +541,63 @@ export default function TaperPayerHome() {
 
         {/* Download App Section */}
         {!isSectionHidden('app-download-section') && (
-        <section className="py-16 bg-white border-t border-slate-100">
+        <section style={{ background: 'linear-gradient(to right, #3D7BB7, #61AF39)' }} className="py-20">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            {/* Phone mockup */}
-            <div className="flex-shrink-0 flex justify-center">
-              <div className="relative w-52 h-[400px] bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-slate-900 rounded-b-xl z-10"></div>
-                <div className="w-full h-full rounded-[2rem] overflow-hidden bg-white">
-                  <img
-                    src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/b4fc304ab_Image3-20-26at447PM.jpg"
-                    alt="Taper Payer App"
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-white/40 rounded-full"></div>
-              </div>
-            </div>
-
-            {/* Text + QR */}
-            <div className="flex-1 max-w-lg">
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Get the app</h2>
-              <div className="w-12 h-1 mb-5" style={{ backgroundColor: '#61AF39' }}></div>
-              <p className="text-slate-600 text-lg mb-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <h2 className="text-4xl font-bold mb-6">Get the App</h2>
+              <p className="text-xl text-blue-100 mb-8">
                 Download our app for free to send money online in minutes. Track your payments and view your transfer history from anywhere.
               </p>
-              <div className="flex items-center gap-6">
-                <img
-                  src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://taperpayer.com"
-                  alt="QR Code"
-                  className="w-28 h-28 border border-slate-200 rounded-lg"
-                />
-                <p className="text-slate-700 text-lg font-medium max-w-xs">
-                  Scan this QR code with your phone to download our app!
-                </p>
+              <div className="flex flex-wrap gap-4">
+                <Button className="bg-white hover:opacity-90 px-8 py-6 text-lg" style={{ color: '#3D7BB7' }}>App Store</Button>
+                <Button className="px-8 py-6 text-lg text-white hover:opacity-90" style={{ backgroundColor: '#61AF39' }}>Google Play</Button>
+              </div>
+            </div>
+            
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="relative w-80 h-[600px] bg-slate-900 rounded-[3rem] p-4 shadow-2xl">
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-slate-900 rounded-b-2xl z-10"></div>
+                  <div className="w-full h-full rounded-[2.5rem] overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #3D7BB7, #61AF39)' }}>
+                    <div className="p-6 text-white">
+                      <div className="flex items-center justify-between mb-8">
+                        <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" className="h-24 w-auto" />
+                        <div className="w-10 h-10 bg-white/20 rounded-full"></div>
+                      </div>
+                      <div className="bg-white/20 backdrop-blur-lg rounded-3xl p-6 mb-6">
+                        <p className="text-sm text-white/80 mb-2">Available Balance</p>
+                        <p className="text-4xl font-bold mb-4">$1,250.00</p>
+                        <button className="bg-white px-6 py-3 rounded-full font-semibold w-full" style={{ color: '#3D7BB7' }}>Send Money</button>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-4 text-center"><div className="text-2xl mb-2">💸</div><p className="text-xs">Send</p></div>
+                        <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-4 text-center"><div className="text-2xl mb-2">📱</div><p className="text-xs">Wallet</p></div>
+                        <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-4 text-center"><div className="text-2xl mb-2">🏦</div><p className="text-xs">Bank</p></div>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold mb-3">Recent</h3>
+                        <div className="space-y-2">
+                          <div className="bg-white/20 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+                              <div><p className="text-sm font-semibold">To Maria</p><p className="text-xs text-white/70">Jan 4</p></div>
+                            </div>
+                            <p className="font-semibold">$150</p>
+                          </div>
+                          <div className="bg-white/20 backdrop-blur-lg rounded-xl p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+                              <div><p className="text-sm font-semibold">To John</p><p className="text-xs text-white/70">Jan 3</p></div>
+                            </div>
+                            <p className="font-semibold">$200</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-white rounded-full"></div>
+                </div>
               </div>
             </div>
           </div>

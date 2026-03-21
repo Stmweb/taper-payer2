@@ -78,6 +78,21 @@ Deno.serve(async (req) => {
     if (action === 'startKYC') {
       const { customerGuid } = params;
 
+      // Wait for customer to leave 'storing' state (must be 'unverified' before KYC)
+      let customerState = 'storing';
+      for (let i = 0; i < 15; i++) {
+        const c = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
+        customerState = c.state;
+        if (customerState !== 'storing') break;
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      if (customerState === 'storing') throw new Error('Customer still initializing, please try again in a moment.');
+
+      // If already verified, no need to run KYC again
+      if (customerState === 'verified' || customerState === 'approved') {
+        return Response.json({ state: 'completed', outcome: 'passed', alreadyVerified: true });
+      }
+
       // Create identity verification
       const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
         type: 'kyc',

@@ -212,12 +212,24 @@ export default function TaperConnectForm({ initialCountry }) {
       const fullPhone = selectedCountry.dial + localDigits;
 
       // Use DTone for all countries
-      const retailAmount = selectedCountry.iso === 'HT' ? parseFloat(customAmount) : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
+      const isHaiti = selectedCountry.iso === 'HT';
+      const retailAmount = isHaiti ? parseFloat(customAmount) : (selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value);
+      
+      // For Haiti, find a product matching the amount from available products
+      let productIdToUse = selectedProduct?.id;
+      if (isHaiti && products.length > 0) {
+        const matchingProduct = products.find(p => {
+          const pAmount = p.prices?.retail?.amount ?? p.suggested_amounts?.[0] ?? p.face_value;
+          return Math.abs(parseFloat(pAmount) - parseFloat(customAmount)) < 0.01;
+        });
+        productIdToUse = matchingProduct?.id || products[0]?.id;
+      }
+      
       const paymentRes = await base44.functions.invoke('processDtonePayment', {
         paymentMethodId: pm.id,
         fullPhone,
         amount: retailAmount,
-        productId: selectedProduct?.id,
+        productId: productIdToUse,
       });
 
       if (paymentRes.data?.success) {

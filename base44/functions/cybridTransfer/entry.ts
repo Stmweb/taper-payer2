@@ -57,8 +57,8 @@ function decodeCustomJwt(token) {
 
 Deno.serve(async (req) => {
   try {
-    const { action, jwt, ...params } = await req.json();
-    const appUser = decodeCustomJwt(jwt);
+    const { action, _jwt, ...params } = await req.json();
+    const appUser = decodeCustomJwt(_jwt);
     if (!appUser) return Response.json({ error: 'Unauthorized' }, { status: 401 });
     const token = await getBankToken();
 

@@ -206,7 +206,9 @@ function FlyerGenerator() {
     setImageUrl(null);
     setCaption(null);
 
-    const fullPrompt = `Create a professional marketing flyer for "Taper Payer", a modern fintech money transfer brand. 
+    const selectedFocus = focusPages.find(f => f.id === focusPage);
+    const fullPrompt = `Create a professional marketing flyer for "Taper Payer", a modern fintech brand.
+Page focus: ${selectedFocus?.label} — ${selectedFocus?.context}.
 Format: ${platform} ${sizeLabel} (${selectedSize?.ratio} aspect ratio).
 Brand colors: primary blue #2479C2, green #61AF39, orange #F88F2B, white background or dark navy.
 Include the Taper Payer logo prominently (wordmark: "Taper" in blue and "Payer" in green, bold modern font).

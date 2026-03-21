@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
       if (found) return Response.json({ customer: found });
 
       const customer = await cybridApi(token, 'POST', '/api/customers', {
-        type: 'business',
+        type: 'individual',
         name: { full: name || 'User Account' },
         email_address: email,
       });
@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
       // Create identity verification
       const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
         type: 'kyc',
-        method: 'business_registration',
+        method: 'id_and_selfie',
         customer_guid: customerGuid,
         expected_behaviours: ['passed_immediately'], // sandbox: auto-pass
       });

@@ -90,23 +90,23 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         let kyc = statusRes.data?.customer?.state;
 
         // If not approved, try to run KYC (sandbox auto-passes)
-        if (kyc !== 'approved') {
+        const isVerified = (s) => s === 'approved' || s === 'verified';
+
+        if (!isVerified(kyc)) {
           try {
             const kycRes = await invoke('startKYC', { customerGuid: guid });
-            // If sandbox auto-passed, re-fetch status
             if (kycRes.data?.outcome === 'passed' || kycRes.data?.state === 'completed') {
               statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
               kyc = statusRes.data?.customer?.state;
             }
           } catch (_) {
-            // ignore KYC errors here, will show manual button below
+            // ignore, will show manual button below
           }
         }
 
         setKycStatus(kyc);
 
-        if (kyc !== 'approved') {
-          // Still not approved — show manual verification UI
+        if (!isVerified(kyc)) {
           setLoading(false);
           return;
         }

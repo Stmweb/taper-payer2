@@ -4,7 +4,7 @@ const CYBRID_CLIENT_ID = Deno.env.get('CYBRID_CLIENT_ID');
 const CYBRID_CLIENT_SECRET = Deno.env.get('CYBRID_CLIENT_SECRET');
 const CYBRID_BASE = 'https://bank.sandbox.cybrid.app';
 const CYBRID_ID_BASE = 'https://id.sandbox.cybrid.app';
-const CYBRID_BANK_GUID = 'a49147be13c4dbc77b16fbd26470788f';
+const CYBRID_BANK_GUID = '5cd17cbb7d655214316d2b278acebd59';
 
 async function getBankToken() {
   console.log('CLIENT_ID length:', CYBRID_CLIENT_ID?.length, '| starts with:', CYBRID_CLIENT_ID?.substring(0, 10));

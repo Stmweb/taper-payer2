@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Download, Copy, Check, Image, FileText, Smartphone, Monitor, Instagram, Facebook, Twitter, Youtube, Linkedin, Wand2, Loader2, Video } from 'lucide-react';
+import { Download, Copy, Check, Image, FileText, Smartphone, Monitor, Instagram, Facebook, Twitter, Youtube, Linkedin, Wand2, Loader2, Video, ImagePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { base44 } from '@/api/base44Client';
 import AIVideoGenerator from '@/components/marketing/AIVideoGenerator';
+import BannerManager from '@/components/marketing/BannerManager';
 
 const BRAND = {
   blue: '#2479C2',
@@ -363,6 +364,7 @@ export default function TaperPayerMarketing() {
   const [activeTab, setActiveTab] = useState('flyer');
 
   const tabs = [
+    { id: 'banners', label: 'Promotional Banners', icon: ImagePlus },
     { id: 'flyer', label: 'AI Flyer Generator', icon: Wand2 },
     { id: 'video', label: 'AI Video Creator', icon: Video },
     { id: 'social', label: 'Social Media Sizes', icon: Smartphone },
@@ -409,6 +411,9 @@ export default function TaperPayerMarketing() {
       </div>
 
       <div className="container mx-auto px-6 py-10">
+
+        {/* Promotional Banners */}
+        {activeTab === 'banners' && <BannerManager />}
 
         {/* AI Flyer Generator */}
         {activeTab === 'flyer' && <FlyerGenerator />}

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import TopUpForm from '@/components/topup/TopUpForm';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
+import PromoCarousel from '@/components/topup/PromoCarousel';
 import { usePageConfig } from '@/hooks/usePageConfig';
 import SEOHead from '@/components/SEOHead';
 
@@ -233,6 +234,9 @@ export default function TaperPayerTopUp() {
           <button onClick={() => setMoncashStatus(null)} className="mt-4 text-sm underline opacity-60 hover:opacity-100">Dismiss</button>
         </div>
       )}
+
+      {/* Promotional Carousel */}
+      <PromoCarousel />
 
       {/* How It Works */}
       <section className="py-20 md:py-28 bg-slate-50">

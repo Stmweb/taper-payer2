@@ -404,9 +404,6 @@ export default function TaperConnectForm({ initialCountry }) {
                 <p className="text-xs text-slate-500">*T&C's apply to bonus credit</p>
               </div>
             )}
-            {selectedProduct && selectedCountry?.iso !== 'HT' && (
-            )}
-            )}
           </div>
 
           {/* Payment Method */}

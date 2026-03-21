@@ -7,7 +7,7 @@ const CYBRID_BANK_GUID = '5cd17cbb7d655214316d2b278acebd59';
 
 async function getBankToken() {
   console.log('CLIENT_ID length:', CYBRID_CLIENT_ID?.length, '| starts with:', CYBRID_CLIENT_ID?.substring(0, 10));
-  console.log('CLIENT_SECRET length:', CYBRID_CLIENT_SECRET?.length);
+  console.log('CLIENT_SECRET length:', CYBRID_CLIENT_SECRET?.length, '| starts with:', CYBRID_CLIENT_SECRET?.substring(0, 6));
   const body = new URLSearchParams({
     grant_type: 'client_credentials',
     client_id: CYBRID_CLIENT_ID,

@@ -71,18 +71,23 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   const [remittanceResult, setRemittanceResult] = useState(null);
 
   const invoke = (action, p = {}) =>
-    base44.functions.invoke('cybridTransfer', { action, ...p });
+    base44.functions.invoke('cybridTransfer', { action, ...p }, {
+      headers: { 'Authorization': `Bearer ${jwt}` }
+    });
 
   // ── Step 1: Init — create customer + check KYC + create accounts ───────────
   useEffect(() => {
     const init = async () => {
+      if (!appUser || !jwt) {
+        setError('You must be logged in to send money. Please log in and try again.');
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       setError('');
       try {
-        const user = await base44.auth.me();
-
         // Create/find customer
-        const custRes = await invoke('createCustomer', { name: user.full_name, email: user.email });
+        const custRes = await invoke('createCustomer', { name: appUser.full_name, email: appUser.email });
         const guid = custRes.data?.customer?.guid;
         if (!guid) throw new Error('Could not create customer profile.');
         setCustomerGuid(guid);

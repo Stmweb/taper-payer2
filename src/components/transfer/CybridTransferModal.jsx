@@ -85,13 +85,28 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         if (!guid) throw new Error('Could not create customer profile.');
         setCustomerGuid(guid);
 
-        // Check KYC
-        const statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-        const kyc = statusRes.data?.customer?.state;
+        // Check KYC — auto-trigger in sandbox if not yet approved
+        let statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+        let kyc = statusRes.data?.customer?.state;
+
+        // If not approved, try to run KYC (sandbox auto-passes)
+        if (kyc !== 'approved') {
+          try {
+            const kycRes = await invoke('startKYC', { customerGuid: guid });
+            // If sandbox auto-passed, re-fetch status
+            if (kycRes.data?.outcome === 'passed' || kycRes.data?.state === 'completed') {
+              statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+              kyc = statusRes.data?.customer?.state;
+            }
+          } catch (_) {
+            // ignore KYC errors here, will show manual button below
+          }
+        }
+
         setKycStatus(kyc);
 
         if (kyc !== 'approved') {
-          // Not approved yet — stay on init step to show status
+          // Still not approved — show manual verification UI
           setLoading(false);
           return;
         }

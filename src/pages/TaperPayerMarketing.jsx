@@ -169,9 +169,25 @@ const allSizes = [
   { platform: 'YouTube', label: 'Channel Banner', size: '2560 × 1440 px', ratio: '16:9' },
 ];
 
+const focusPages = [
+  {
+    id: 'home',
+    label: 'Home Page',
+    description: 'Money transfers, exchange rates, global remittance',
+    context: 'international money transfers, same-day remittances, live exchange rates, send money to Africa, Caribbean, and Latin America',
+  },
+  {
+    id: 'topup',
+    label: 'Top-Up Page',
+    description: 'Mobile airtime & data recharges worldwide',
+    context: 'mobile top-up and airtime recharge service, instantly recharge any phone worldwide, Taper Mobile top-up, send airtime to family abroad',
+  },
+];
+
 function FlyerGenerator() {
   const [platform, setPlatform] = useState('');
   const [sizeLabel, setSizeLabel] = useState('');
+  const [focusPage, setFocusPage] = useState('home');
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);

@@ -74,7 +74,12 @@ Deno.serve(async (req) => {
       const found = existing.objects?.find(c => c.email_address === email);
       if (found) return Response.json({ customer: found });
 
-      const cleanName = (name || '').trim() || 'User Account';
+      // Fallback: derive name from email if full_name is empty
+      let cleanName = (name || '').trim();
+      if (!cleanName && email) {
+        cleanName = email.split('@')[0].replace(/[._\-]/g, ' ');
+      }
+      if (!cleanName) cleanName = 'User Account';
       const nameParts = cleanName.split(' ').filter(Boolean);
       const firstName = nameParts[0] || 'User';
       const lastName = nameParts.slice(1).join(' ') || 'Account';

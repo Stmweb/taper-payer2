@@ -75,7 +75,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`,
+        'X-App-Token': jwt || '',
       },
       body: JSON.stringify({ action, ...p }),
     });

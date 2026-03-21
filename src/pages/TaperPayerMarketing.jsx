@@ -238,7 +238,26 @@ Generate a catchy, professional caption that's 1-2 sentences, followed by releva
     <div className="max-w-3xl mx-auto space-y-6">
       <Card className="p-6 space-y-5">
         <div>
-          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">1. Select Platform</label>
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">1. Focus Page</label>
+          <div className="flex flex-wrap gap-3">
+            {focusPages.map(fp => (
+              <button
+                key={fp.id}
+                onClick={() => setFocusPage(fp.id)}
+                className={`px-4 py-3 rounded-xl text-sm font-medium border transition-colors text-left ${
+                  focusPage === fp.id ? 'text-white border-transparent' : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 hover:border-orange-400'
+                }`}
+                style={focusPage === fp.id ? { backgroundColor: '#F88F2B' } : {}}
+              >
+                <div className="font-semibold">{fp.label}</div>
+                <div className={`text-xs mt-0.5 ${focusPage === fp.id ? 'text-white/80' : 'text-slate-400'}`}>{fp.description}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">2. Select Platform</label>
           <div className="flex flex-wrap gap-2">
             {platforms.map(p => (
               <button

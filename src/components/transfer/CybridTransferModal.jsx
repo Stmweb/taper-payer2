@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
+import { useAppAuth } from '@/lib/AppAuthContext';
 import {
   Loader2, CheckCircle, AlertCircle, ArrowRight, Building2,
   User, CreditCard, RefreshCw, ChevronRight

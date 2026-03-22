@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
       if (accessToken) {
         // Try token-based lookup first (MonCash standard redirect)
         if (token) {
-          const verifyRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/RetrievePayment', {
+          const verifyRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/RetrieveOrderPayment', {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: JSON.stringify({ token }),

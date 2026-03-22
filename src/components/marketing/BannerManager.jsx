@@ -68,23 +68,18 @@ export default function BannerManager() {
 
     setLoading(true);
     try {
-      if (editing) {
-        await base44.entities.PromotionalBanner.update(editing.id, formData);
-        setBanners(banners.map(b => b.id === editing.id ? { ...b, ...formData } : b));
-      } else {
-        const newBanner = await base44.entities.PromotionalBanner.create({
-          ...formData,
-          display_order: banners.length,
-          is_active: true,
-        });
-        setBanners([...banners, newBanner]);
-      }
+      const newBanner = await base44.entities.PromotionalBanner.create({
+        ...formData,
+        display_order: banners.length,
+        is_active: true,
+      });
+      setBanners(prev => [...prev.filter(b => b.id !== editing?.id), newBanner]);
       setShowForm(false);
       setEditing(null);
       setFormData({ title: '', cta_text: '', cta_link: '', target_size: 'desktop', image_url: '' });
       setError(null);
     } catch (err) {
-      setError('Failed to save banner');
+      setError('Failed to save banner: ' + (err?.message || err));
     } finally {
       setLoading(false);
     }

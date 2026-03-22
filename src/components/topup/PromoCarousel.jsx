@@ -1,169 +1,168 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
 
-const BANNER_SIZES = {
-  mobile: { width: '540px', height: '960px', display: '540 × 960 px' },
-  tablet: { width: '864px', height: '1080px', display: '864 × 1080 px' },
-  desktop: { width: '1600px', height: '900px', display: '1600 × 900 px' },
-  wide: { width: '1500px', height: '500px', display: '1500 × 500 px' },
-};
+const DEFAULT_SLIDES = [
+  {
+    id: 'default-1',
+    image_url: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=500&fit=crop',
+    title: 'Send Money Instantly',
+    subtitle: 'Transfer funds to 150+ countries with the best rates',
+    cta_text: 'Start Now',
+    cta_link: '/TaperPayerTopUp',
+    gradient: 'from-blue-900/80 to-cyan-700/60',
+  },
+  {
+    id: 'default-2',
+    image_url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1600&h=500&fit=crop',
+    title: 'Top Up Any Phone',
+    subtitle: 'Instant airtime recharge for any carrier, anywhere in the world',
+    cta_text: 'Top Up Now',
+    cta_link: '/TaperPayerTopUp',
+    gradient: 'from-slate-900/80 to-orange-600/60',
+  },
+  {
+    id: 'default-3',
+    image_url: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1600&h=500&fit=crop',
+    title: 'Safe & Secure Payments',
+    subtitle: 'Your transactions are protected by enterprise-grade security',
+    cta_text: 'Learn More',
+    cta_link: '/TaperPayerCompliance',
+    gradient: 'from-green-900/80 to-teal-600/60',
+  },
+];
 
 export default function PromoCarousel() {
-  const [banners, setBanners] = useState([]);
+  const [slides, setSlides] = useState(DEFAULT_SLIDES);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [direction, setDirection] = useState(1);
 
   useEffect(() => {
-    const loadBanners = async () => {
-      try {
-        const result = await base44.entities.PromotionalBanner.filter({ is_active: true });
+    base44.entities.PromotionalBanner.filter({ is_active: true })
+      .then((result) => {
         if (result && result.length > 0) {
-          setBanners(result.sort((a, b) => (a.display_order || 0) - (b.display_order || 0)));
+          const mapped = result
+            .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+            .map((b) => ({
+              id: b.id,
+              image_url: b.image_url,
+              title: b.title,
+              subtitle: '',
+              cta_text: b.cta_text || '',
+              cta_link: b.cta_link || '',
+              gradient: 'from-black/50 to-black/20',
+            }));
+          setSlides(mapped);
         }
-      } catch (e) {
-        console.error('Failed to load banners:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadBanners();
+      })
+      .catch(() => {});
   }, []);
 
-  if (loading) {
-    return (
-      <section className="py-16 md:py-24 bg-gradient-to-r from-slate-50 to-blue-50">
-        <div className="container mx-auto px-4 flex justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
-        </div>
-      </section>
-    );
-  }
+  const goTo = useCallback((idx, dir) => {
+    setDirection(dir);
+    setCurrentIndex(idx);
+  }, []);
 
-  if (!banners || banners.length === 0) return null;
+  const prev = () => goTo((currentIndex - 1 + slides.length) % slides.length, -1);
+  const next = useCallback(() => goTo((currentIndex + 1) % slides.length, 1), [currentIndex, slides.length, goTo]);
 
-  const currentBanner = banners[currentIndex];
-  const sizeKey = currentBanner.target_size || 'desktop';
-  const sizeConfig = BANNER_SIZES[sizeKey];
+  // Auto-advance every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [next]);
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
-  };
+  const slide = slides[currentIndex];
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % banners.length);
-  };
-
-  const downloadBanner = () => {
-    const link = document.createElement('a');
-    link.href = currentBanner.image_url;
-    link.download = `taper-banner-${sizeKey}.png`;
-    link.click();
+  const variants = {
+    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
   };
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-r from-slate-50 to-blue-50">
-      <div className="container mx-auto px-4">
+    <section className="relative w-full overflow-hidden" style={{ height: '340px' }}>
+      <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          key={slide.id}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+          className="absolute inset-0"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-            Promotional Campaigns
-          </h2>
-          <p className="text-slate-600 text-lg">Check out our latest offers and promotions</p>
-        </motion.div>
+          {/* Background image */}
+          <img
+            src={slide.image_url}
+            alt={slide.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Gradient overlay */}
+          <div className={`absolute inset-0 bg-gradient-to-r ${slide.gradient}`} />
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white rounded-2xl shadow-xl p-6 space-y-6 max-w-4xl mx-auto"
-        >
-          {/* Banner Preview */}
-          <div className="flex flex-col items-center gap-4">
-            <div
-              className="relative overflow-hidden rounded-xl border-2 border-slate-200 shadow-lg bg-slate-100 flex items-center justify-center"
-              style={{
-                width: sizeConfig.width,
-                height: sizeConfig.height,
-                maxWidth: '100%',
-              }}
+          {/* Text content */}
+          <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 max-w-3xl">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-3xl md:text-5xl font-bold text-white mb-3 leading-tight"
             >
-              <motion.img
-                key={currentIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                src={currentBanner.image_url}
-                alt={currentBanner.title}
-                className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform"
-                onClick={() => currentBanner.cta_link && window.open(currentBanner.cta_link, '_blank')}
-              />
-            </div>
-
-            {/* Banner Info */}
-            <div className="text-center">
-              <h3 className="text-lg font-bold text-slate-900">{currentBanner.title}</h3>
-              <p className="text-slate-500 text-sm mt-1">{sizeConfig.display}</p>
-            </div>
-          </div>
-
-          {/* Carousel Controls */}
-          {banners.length > 1 && (
-            <div className="flex items-center justify-center gap-4">
-              <button
-                onClick={handlePrev}
-                className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+              {slide.title}
+            </motion.h2>
+            {slide.subtitle && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.5 }}
+                className="text-white/90 text-lg md:text-xl mb-6"
               >
-                <ChevronLeft className="w-6 h-6 text-slate-600" />
-              </button>
-
-              <div className="flex gap-2">
-                {banners.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentIndex(idx)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all ${
-                      idx === currentIndex ? 'bg-blue-500 w-8' : 'bg-slate-300'
-                    }`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={handleNext}
-                className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                {slide.subtitle}
+              </motion.p>
+            )}
+            {slide.cta_text && slide.cta_link && (
+              <motion.a
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                href={slide.cta_link}
+                className="inline-block self-start bg-white text-slate-900 font-bold px-6 py-3 rounded-full hover:bg-slate-100 transition-colors text-sm md:text-base"
               >
-                <ChevronRight className="w-6 h-6 text-slate-600" />
-              </button>
-            </div>
-          )}
-
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button
-              onClick={downloadBanner}
-              className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Download className="w-4 h-4" />
-              Download Banner
-            </Button>
-            {currentBanner.cta_link && (
-              <Button
-                onClick={() => window.open(currentBanner.cta_link, '_blank')}
-                className="gap-2 bg-orange-500 hover:bg-orange-600 text-white"
-              >
-                {currentBanner.cta_text || 'Learn More'}
-              </Button>
+                {slide.cta_text} →
+              </motion.a>
             )}
           </div>
         </motion.div>
+      </AnimatePresence>
+
+      {/* Prev / Next buttons */}
+      <button
+        onClick={prev}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white rounded-full p-2 transition-colors"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goTo(idx, idx > currentIndex ? 1 : -1)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              idx === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/50'
+            }`}
+          />
+        ))}
       </div>
     </section>
   );

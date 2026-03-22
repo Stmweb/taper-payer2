@@ -61,8 +61,8 @@ export default function BannerManager() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.image_url) {
-      setError('Title and image are required');
+    if (!formData.image_url) {
+      setError('Image is required');
       return;
     }
 

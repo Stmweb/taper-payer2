@@ -326,20 +326,7 @@ export default function TaperPayerTopUp() {
 
 
 
-      {/* Get Started CTA */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-500 via-blue-500 to-slate-900">
-        <div className="container mx-auto px-4 text-center">
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }}>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Get Started with Taper Mobile Today</h2>
-            <div className="space-y-4 mb-8 text-white text-lg">
-              <p>✓ Log in to your TaperPayer account</p>
-              <p>✓ Open the Taper Mobile section</p>
-              <p>✓ Follow the quick steps to recharge your mobile</p>
-            </div>
-            <Button className="bg-white text-cyan-600 hover:bg-cyan-50 px-10 py-3 text-lg font-bold">Get Started</Button>
-          </motion.div>
-        </div>
-      </section>
+
 
       {/* Taper Connect Sheet */}
       {showTaperConnect && createPortal(

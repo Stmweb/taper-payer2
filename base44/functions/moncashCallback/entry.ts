@@ -111,13 +111,27 @@ Deno.serve(async (req) => {
     let productId = pending.product_id;
 
     if (!productId) {
-      console.log('No product_id, looking up DTone products for operator:', pending.operator_id);
-      const productsRes = await fetch(
-        `https://dvs-api.dtone.com/v1/products?operator_id=${pending.operator_id}&per_page=100`,
+      // For Haiti, DTone products are only available under Natcom (1703); fall back if Digicel (1701) has none
+      let operatorIdToUse = pending.operator_id;
+      console.log('No product_id, looking up DTone products for operator:', operatorIdToUse);
+      let productsRes = await fetch(
+        `https://dvs-api.dtone.com/v1/products?operator_id=${operatorIdToUse}&per_page=100`,
         { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
       );
-      const productsData = await productsRes.json();
-      const products = Array.isArray(productsData) ? productsData : (productsData.data || []);
+      let productsData = await productsRes.json();
+      let products = Array.isArray(productsData) ? productsData : (productsData.data || []);
+
+      // Fallback: if no products found and country is HT, try Natcom (1703)
+      if (products.length === 0 && pending.country_code === 'HT' && String(operatorIdToUse) !== '1703') {
+        console.log('No products for operator', operatorIdToUse, '— falling back to Natcom (1703)');
+        operatorIdToUse = '1703';
+        productsRes = await fetch(
+          `https://dvs-api.dtone.com/v1/products?operator_id=1703&per_page=100`,
+          { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
+        );
+        productsData = await productsRes.json();
+        products = Array.isArray(productsData) ? productsData : (productsData.data || []);
+      }
 
       if (products.length === 0) throw new Error(`No DTone products found for operator ${pending.operator_id}`);
 

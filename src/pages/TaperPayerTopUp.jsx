@@ -324,22 +324,8 @@ export default function TaperPayerTopUp() {
         </div>
       </section>
 
-      {/* Testimonial */}
-      <section className="py-20 md:py-28 bg-gradient-to-r from-cyan-50 to-blue-50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-2xl mx-auto bg-white p-12 rounded-2xl shadow-lg border-l-4 border-cyan-500 text-center"
-          >
-            <p className="text-xl text-slate-700 mb-6 italic">
-              "TPAY Mobile makes topping up my phone easier than ever — it's instant and reliable!"
-            </p>
-            <p className="text-slate-600 font-semibold">— Happy User</p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Promotional Banners Slider */}
+      <PromoCarousel />
 
 
 

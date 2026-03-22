@@ -29,6 +29,7 @@ export default function BannerManager() {
   });
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+  const [editingImage, setEditingImage] = useState(null); // raw uploaded URL pending editor
 
   // Load banners
   useEffect(() => {

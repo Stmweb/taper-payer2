@@ -249,12 +249,37 @@ export default function BannerManager() {
                   )}
                 </div>
 
-                {formData.image_url && (
-                  <div className="relative rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-700 h-48">
+                {formData.image_url && !editingImage && (
+                  <div className="relative rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-700 h-48 group">
                     <img
                       src={formData.image_url}
                       alt="Preview"
                       className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setEditingImage(formData.image_url)}
+                      className="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium"
+                    >
+                      <SlidersHorizontal className="w-4 h-4" /> Adjust Image
+                    </button>
+                  </div>
+                )}
+
+                {/* Inline Image Editor */}
+                {editingImage && (
+                  <div className="border border-blue-300 dark:border-blue-600 rounded-xl p-4 bg-white dark:bg-slate-900">
+                    <ImageEditor
+                      imageUrl={editingImage}
+                      onSave={handleEditorSave}
+                      onCancel={() => {
+                        // If there's already a saved image_url, just close editor; else clear
+                        if (formData.image_url) {
+                          setEditingImage(null);
+                        } else {
+                          setEditingImage(null);
+                        }
+                      }}
                     />
                   </div>
                 )}

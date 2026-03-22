@@ -153,7 +153,8 @@ export default function TaperConnectForm({ initialCountry }) {
     setError('');
     setProducts([]);
     setSelectedProduct(null);
-    setPaymentMethod('card');
+    // Default to moncash for Haiti, card for others
+    setPaymentMethod(country.iso === 'HT' ? 'moncash' : 'card');
     setStep(2); // Move to step 2 immediately
 
     try {
@@ -409,26 +410,41 @@ export default function TaperConnectForm({ initialCountry }) {
           {/* Payment Method */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setPaymentMethod('card')}
-                className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                  paymentMethod === 'card' ? 'border-cyan-500 bg-cyan-50 text-cyan-700' : 'border-slate-200 text-slate-700 hover:border-cyan-300'
-                }`}
-              >
-                💳 Credit/Debit Card
-              </button>
-              {selectedCountry?.iso === 'HT' && (
+            {selectedCountry?.iso === 'HT' ? (
+              <div className="space-y-2">
+                {/* For Haiti: MonCash is primary (for Natcom), Card is alternative */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800 flex items-center gap-2">
+                  🇭🇹 <span>MonCash is the recommended payment method for Haiti top-ups.</span>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPaymentMethod('moncash')}
+                    className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                      paymentMethod === 'moncash' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700 hover:border-blue-300'
+                    }`}
+                  >
+                    🇭🇹 Pay with MonCash
+                  </button>
+                  <button
+                    onClick={() => setPaymentMethod('card')}
+                    className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                      paymentMethod === 'card' ? 'border-cyan-500 bg-cyan-50 text-cyan-700' : 'border-slate-200 text-slate-700 hover:border-cyan-300'
+                    }`}
+                  >
+                    💳 Credit/Debit Card
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex gap-2">
                 <button
-                  onClick={() => setPaymentMethod('moncash')}
-                  className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                    paymentMethod === 'moncash' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700 hover:border-blue-300'
-                  }`}
+                  onClick={() => setPaymentMethod('card')}
+                  className="flex-1 p-3 rounded-lg border-2 border-cyan-500 bg-cyan-50 text-cyan-700 text-sm font-medium"
                 >
-                  🇭🇹 MonCash
+                  💳 Credit/Debit Card
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
           {/* Card Payment */}
@@ -481,10 +497,10 @@ export default function TaperConnectForm({ initialCountry }) {
 
           {/* MonCash (Haiti only) */}
           {paymentMethod === 'moncash' && selectedCountry?.iso === 'HT' && selectedProduct && (() => {
-            // Use detected operator or default to Natcom (1703); validate for Haiti
+            // Use detected operator; for Haiti, Natcom (1703) is served via MonCash
             let opId = detectedOperator?.id || 1703;
             if (![1701, 1703].includes(Number(opId))) {
-              opId = 1703; // Fallback to Natcom if invalid
+              opId = 1703;
             }
             const amount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
             return (

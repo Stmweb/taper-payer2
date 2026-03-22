@@ -68,6 +68,7 @@ Deno.serve(async (req) => {
     }
 
     // Create payment
+    const returnUrl = `https://taperpayer.com/MoncashReturn`;
     const paymentRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/CreatePayment', {
       method: 'POST',
       headers: {
@@ -75,7 +76,7 @@ Deno.serve(async (req) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ amount: amountInHTG, orderId }),
+      body: JSON.stringify({ amount: amountInHTG, orderId, returnUrl }),
     });
 
     const paymentData = await paymentRes.json();

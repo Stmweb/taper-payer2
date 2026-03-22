@@ -235,9 +235,6 @@ export default function TaperPayerTopUp() {
         </div>
       )}
 
-      {/* Promotional Carousel */}
-      <PromoCarousel />
-
       {/* How It Works */}
       <section className="py-20 md:py-28 bg-slate-50">
         <div className="container mx-auto px-4">

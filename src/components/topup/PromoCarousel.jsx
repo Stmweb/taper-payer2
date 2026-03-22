@@ -167,7 +167,7 @@ export default function PromoCarousel() {
         ))}
       </div>
     </div>
-    </div>
+      </div>
     </section>
   );
 }

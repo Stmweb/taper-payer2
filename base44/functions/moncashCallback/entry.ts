@@ -8,14 +8,19 @@ Deno.serve(async (req) => {
   const url = new URL(req.url);
   const isPost = req.method === 'POST';
 
+  let transactionId;
   if (isPost) {
     const body = await req.json();
     orderId = body.orderId;
     token = body.token;
+    transactionId = body.transactionId;
   } else {
     orderId = url.searchParams.get('orderId');
     token = url.searchParams.get('token');
+    transactionId = url.searchParams.get('transactionId');
   }
+
+  console.log('Moncash callback params:', { orderId, transactionId, method: req.method });
 
   console.log('Moncash callback received:', { orderId, method: req.method });
 

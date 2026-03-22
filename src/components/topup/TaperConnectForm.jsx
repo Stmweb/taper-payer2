@@ -412,6 +412,14 @@ export default function TaperConnectForm({ initialCountry }) {
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
             <div className="flex gap-2">
+              <button
+                onClick={() => setPaymentMethod('card')}
+                className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                  paymentMethod === 'card' ? 'border-cyan-500 bg-cyan-50 text-cyan-700' : 'border-slate-200 text-slate-700 hover:border-cyan-300'
+                }`}
+              >
+                💳 Credit/Debit Card
+              </button>
               {selectedCountry?.iso === 'HT' && (
                 <button
                   onClick={() => setPaymentMethod('moncash')}
@@ -422,14 +430,6 @@ export default function TaperConnectForm({ initialCountry }) {
                   🇭🇹 MonCash
                 </button>
               )}
-              <button
-                onClick={() => setPaymentMethod('card')}
-                className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                  paymentMethod === 'card' ? 'border-cyan-500 bg-cyan-50 text-cyan-700' : 'border-slate-200 text-slate-700 hover:border-cyan-300'
-                }`}
-              >
-                💳 Credit/Debit Card
-              </button>
             </div>
           </div>
 

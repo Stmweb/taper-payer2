@@ -45,7 +45,7 @@ export default function MoncashReturn() {
     }
 
     setStatus('processing');
-    base44.functions.invoke('moncashCallback', { orderId, token })
+    base44.functions.invoke('moncashCallback', { orderId, token, transactionId })
       .then(res => {
         const data = res.data;
         if (data?.success || data?.already_completed) {

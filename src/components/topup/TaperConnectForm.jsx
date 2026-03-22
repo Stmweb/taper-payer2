@@ -155,6 +155,7 @@ export default function TaperConnectForm({ initialCountry }) {
     setSelectedProduct(null);
     // Default to moncash for Haiti, card for others
     setPaymentMethod(country.iso === 'HT' ? 'moncash' : 'card');
+
     setStep(2); // Move to step 2 immediately
 
     try {
@@ -410,41 +411,26 @@ export default function TaperConnectForm({ initialCountry }) {
           {/* Payment Method */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
-            {selectedCountry?.iso === 'HT' ? (
-              <div className="space-y-2">
-                {/* For Haiti: MonCash is primary (for Natcom), Card is alternative */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800 flex items-center gap-2">
-                  🇭🇹 <span>MonCash is the recommended payment method for Haiti top-ups.</span>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setPaymentMethod('moncash')}
-                    className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                      paymentMethod === 'moncash' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700 hover:border-blue-300'
-                    }`}
-                  >
-                    🇭🇹 Pay with MonCash
-                  </button>
-                  <button
-                    onClick={() => setPaymentMethod('card')}
-                    className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                      paymentMethod === 'card' ? 'border-cyan-500 bg-cyan-50 text-cyan-700' : 'border-slate-200 text-slate-700 hover:border-cyan-300'
-                    }`}
-                  >
-                    💳 Credit/Debit Card
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex gap-2">
+            <div className="flex gap-2">
+              {selectedCountry?.iso === 'HT' && (
                 <button
-                  onClick={() => setPaymentMethod('card')}
-                  className="flex-1 p-3 rounded-lg border-2 border-cyan-500 bg-cyan-50 text-cyan-700 text-sm font-medium"
+                  onClick={() => setPaymentMethod('moncash')}
+                  className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                    paymentMethod === 'moncash' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700 hover:border-blue-300'
+                  }`}
                 >
-                  💳 Credit/Debit Card
+                  🇭🇹 MonCash
                 </button>
-              </div>
-            )}
+              )}
+              <button
+                onClick={() => setPaymentMethod('card')}
+                className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                  paymentMethod === 'card' ? 'border-cyan-500 bg-cyan-50 text-cyan-700' : 'border-slate-200 text-slate-700 hover:border-cyan-300'
+                }`}
+              >
+                💳 Credit/Debit Card
+              </button>
+            </div>
           </div>
 
           {/* Card Payment */}

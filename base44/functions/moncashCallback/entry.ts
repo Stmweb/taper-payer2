@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
     transactionId = url.searchParams.get('transactionId');
   }
 
-  console.log('Moncash callback params:', { orderId, transactionId, method: req.method });
+  console.log('Moncash callback params:', { orderId, transactionId, hasToken: !!token, method: req.method });
 
   if (!orderId && !transactionId && !token) {
     if (isPost) return Response.json({ error: 'Missing orderId, transactionId, or token' }, { status: 400 });

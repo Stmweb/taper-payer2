@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Loader2, Trash2, Eye, Edit2, Plus } from 'lucide-react';
+import { Upload, Loader2, Trash2, Edit2, Plus, SlidersHorizontal } from 'lucide-react';
 import { motion } from 'framer-motion';
+import ImageEditor from './ImageEditor';
 
 const BANNER_SIZES = [
   { id: 'mobile', label: 'Mobile (540 × 960)', ratio: '9:16' },

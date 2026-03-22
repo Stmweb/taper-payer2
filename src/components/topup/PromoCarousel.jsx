@@ -82,9 +82,7 @@ export default function PromoCarousel() {
   };
 
   return (
-    <section className="w-full bg-slate-100 py-4 md:py-0">
-      <div className="max-w-5xl mx-auto px-4 md:px-6">
-    <div className="relative overflow-hidden rounded-xl" style={{ height: '220px', maxHeight: '340px' }}>
+    <section className="relative w-full overflow-hidden" style={{ height: '340px' }}>
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={slide.id}
@@ -111,7 +109,7 @@ export default function PromoCarousel() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-lg md:text-5xl font-bold text-white mb-1 md:mb-3 leading-tight"
+              className="text-3xl md:text-5xl font-bold text-white mb-3 leading-tight"
             >
               {slide.title}
             </motion.h2>
@@ -120,7 +118,7 @@ export default function PromoCarousel() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.5 }}
-                className="text-white/90 text-xs md:text-xl mb-3 md:mb-6"
+                className="text-white/90 text-lg md:text-xl mb-6"
               >
                 {slide.subtitle}
               </motion.p>
@@ -165,8 +163,6 @@ export default function PromoCarousel() {
             }`}
           />
         ))}
-      </div>
-    </div>
       </div>
     </section>
   );

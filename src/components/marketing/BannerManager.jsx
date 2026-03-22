@@ -4,9 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Loader2, Trash2, Edit2, Plus, SlidersHorizontal } from 'lucide-react';
+import { Upload, Loader2, Trash2, Eye, Edit2, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
-import ImageEditor from './ImageEditor';
 
 const BANNER_SIZES = [
   { id: 'mobile', label: 'Mobile (540 × 960)', ratio: '9:16' },
@@ -29,7 +28,6 @@ export default function BannerManager() {
   });
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
-  const [editingImage, setEditingImage] = useState(null); // raw uploaded URL pending editor
 
   // Load banners
   useEffect(() => {
@@ -53,24 +51,9 @@ export default function BannerManager() {
     setUploading(true);
     try {
       const response = await base44.integrations.Core.UploadFile({ file });
-      // Open editor with the raw uploaded URL
-      setEditingImage(response.file_url);
+      setFormData(prev => ({ ...prev, image_url: response.file_url }));
     } catch (err) {
       setError('Image upload failed');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleEditorSave = async (blob) => {
-    setUploading(true);
-    try {
-      const file = new File([blob], 'banner.jpg', { type: 'image/jpeg' });
-      const response = await base44.integrations.Core.UploadFile({ file });
-      setFormData(prev => ({ ...prev, image_url: response.file_url }));
-      setEditingImage(null);
-    } catch (err) {
-      setError('Failed to save adjusted image');
     } finally {
       setUploading(false);
     }
@@ -249,37 +232,12 @@ export default function BannerManager() {
                   )}
                 </div>
 
-                {formData.image_url && !editingImage && (
-                  <div className="relative rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-700 h-48 group">
+                {formData.image_url && (
+                  <div className="relative rounded-lg overflow-hidden border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-700 h-48">
                     <img
                       src={formData.image_url}
                       alt="Preview"
                       className="w-full h-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setEditingImage(formData.image_url)}
-                      className="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm font-medium"
-                    >
-                      <SlidersHorizontal className="w-4 h-4" /> Adjust Image
-                    </button>
-                  </div>
-                )}
-
-                {/* Inline Image Editor */}
-                {editingImage && (
-                  <div className="border border-blue-300 dark:border-blue-600 rounded-xl p-4 bg-white dark:bg-slate-900">
-                    <ImageEditor
-                      imageUrl={editingImage}
-                      onSave={handleEditorSave}
-                      onCancel={() => {
-                        // If there's already a saved image_url, just close editor; else clear
-                        if (formData.image_url) {
-                          setEditingImage(null);
-                        } else {
-                          setEditingImage(null);
-                        }
-                      }}
                     />
                   </div>
                 )}

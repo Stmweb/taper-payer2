@@ -369,6 +369,9 @@ export default function TaperPayerHome() {
       </section>
 
 
+      {/* Promo Carousel */}
+      <PromoCarousel />
+
       {/* Why Choose Us */}
       {!isSectionHidden('why-choose-section') && (
         <section className="container mx-auto px-6 py-20">

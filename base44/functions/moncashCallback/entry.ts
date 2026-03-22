@@ -22,16 +22,47 @@ Deno.serve(async (req) => {
 
   console.log('Moncash callback params:', { orderId, transactionId, method: req.method });
 
-  console.log('Moncash callback received:', { orderId, method: req.method });
-
-  if (!orderId) {
-    if (isPost) return Response.json({ error: 'Missing orderId' }, { status: 400 });
+  if (!orderId && !transactionId) {
+    if (isPost) return Response.json({ error: 'Missing orderId or transactionId' }, { status: 400 });
     return Response.redirect(`${APP_URL}/MoncashReturn?error=missing_order`, 302);
   }
 
   try {
     // Use service role — no user auth needed for this webhook/callback
     const base44 = createClientFromRequest(req);
+
+    // If we have a transactionId but no orderId, verify with Moncash to get the orderId
+    if (!orderId && transactionId) {
+      const moncashClientId = Deno.env.get('MONCASH_API_KEY');
+      const moncashClientSecret = Deno.env.get('MONCASH_API_SECRET');
+      const encodedCredentials = btoa(`${moncashClientId}:${moncashClientSecret}`);
+
+      const authRes = await fetch('https://moncashbutton.digicelgroup.com/Api/oauth/token', {
+        method: 'POST',
+        headers: { 'Authorization': `Basic ${encodedCredentials}`, 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'scope=read,write&grant_type=client_credentials',
+      });
+      const authData = await authRes.json();
+      const accessToken = authData.access_token;
+
+      if (accessToken) {
+        const verifyRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ transactionId }),
+        });
+        const verifyData = await verifyRes.json();
+        console.log('MonCash verify by transactionId:', JSON.stringify(verifyData).substring(0, 300));
+        orderId = verifyData?.payment?.reference || verifyData?.reference;
+      }
+    }
+
+    if (!orderId) {
+      if (isPost) return Response.json({ error: 'Could not resolve orderId' }, { status: 400 });
+      return Response.redirect(`${APP_URL}/MoncashReturn?error=missing_order`, 302);
+    }
+
+    console.log('Moncash callback processing orderId:', orderId);
 
     const pendingTopups = await base44.asServiceRole.entities.PendingTopup.filter({ order_id: orderId });
 

@@ -120,7 +120,7 @@ export default function PromoCarousel() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.5 }}
-                className="text-white/90 text-lg md:text-xl mb-6"
+                className="text-white/90 text-xs md:text-xl mb-3 md:mb-6"
               >
                 {slide.subtitle}
               </motion.p>

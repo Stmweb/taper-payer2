@@ -111,7 +111,7 @@ export default function PromoCarousel() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-3xl md:text-5xl font-bold text-white mb-3 leading-tight"
+              className="text-lg md:text-5xl font-bold text-white mb-1 md:mb-3 leading-tight"
             >
               {slide.title}
             </motion.h2>

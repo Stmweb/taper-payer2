@@ -31,11 +31,14 @@ export default function MoncashReturn() {
       return;
     }
 
-    // Case 2: Moncash redirected user directly here with orderId/token — process via API
+    // Case 2: Moncash redirected user directly here with orderId/token/transactionId
     const orderId = params.get('orderId');
     const token = params.get('token');
+    const transactionId = params.get('transactionId');
 
-    if (!orderId && !token) {
+    console.log('MoncashReturn params:', Object.fromEntries(params.entries()));
+
+    if (!orderId && !token && !transactionId) {
       setErrorMsg('No order information received.');
       setStatus('error');
       return;

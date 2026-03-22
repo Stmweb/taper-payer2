@@ -82,7 +82,9 @@ export default function PromoCarousel() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: '340px' }}>
+    <section className="w-full bg-slate-100 py-4 md:py-0">
+      <div className="max-w-5xl mx-auto px-4 md:px-6">
+    <div className="relative overflow-hidden rounded-xl" style={{ height: '220px', maxHeight: '340px' }}>
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={slide.id}

@@ -53,9 +53,24 @@ export default function BannerManager() {
     setUploading(true);
     try {
       const response = await base44.integrations.Core.UploadFile({ file });
-      setFormData(prev => ({ ...prev, image_url: response.file_url }));
+      // Open editor with the raw uploaded URL
+      setEditingImage(response.file_url);
     } catch (err) {
       setError('Image upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleEditorSave = async (blob) => {
+    setUploading(true);
+    try {
+      const file = new File([blob], 'banner.jpg', { type: 'image/jpeg' });
+      const response = await base44.integrations.Core.UploadFile({ file });
+      setFormData(prev => ({ ...prev, image_url: response.file_url }));
+      setEditingImage(null);
+    } catch (err) {
+      setError('Failed to save adjusted image');
     } finally {
       setUploading(false);
     }

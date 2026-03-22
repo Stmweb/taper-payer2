@@ -22,8 +22,8 @@ Deno.serve(async (req) => {
 
   console.log('Moncash callback params:', { orderId, transactionId, method: req.method });
 
-  if (!orderId && !transactionId) {
-    if (isPost) return Response.json({ error: 'Missing orderId or transactionId' }, { status: 400 });
+  if (!orderId && !transactionId && !token) {
+    if (isPost) return Response.json({ error: 'Missing orderId, transactionId, or token' }, { status: 400 });
     return Response.redirect(`${APP_URL}/MoncashReturn?error=missing_order`, 302);
   }
 
@@ -31,8 +31,8 @@ Deno.serve(async (req) => {
     // Use service role — no user auth needed for this webhook/callback
     const base44 = createClientFromRequest(req);
 
-    // If we have a transactionId but no orderId, verify with Moncash to get the orderId
-    if (!orderId && transactionId) {
+    // Authenticate with MonCash if we need to look up orderId from token or transactionId
+    if (!orderId && (token || transactionId)) {
       const moncashClientId = Deno.env.get('MONCASH_API_KEY');
       const moncashClientSecret = Deno.env.get('MONCASH_API_SECRET');
       const encodedCredentials = btoa(`${moncashClientId}:${moncashClientSecret}`);
@@ -44,21 +44,37 @@ Deno.serve(async (req) => {
       });
       const authData = await authRes.json();
       const accessToken = authData.access_token;
+      console.log('MonCash auth status:', authRes.status, 'has token:', !!accessToken);
 
       if (accessToken) {
-        const verifyRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ transactionId }),
-        });
-        const verifyData = await verifyRes.json();
-        console.log('MonCash verify by transactionId:', JSON.stringify(verifyData).substring(0, 300));
-        orderId = verifyData?.payment?.reference || verifyData?.reference;
+        // Try token-based lookup first (MonCash standard redirect)
+        if (token) {
+          const verifyRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/RetrievePayment', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token }),
+          });
+          const verifyData = await verifyRes.json();
+          console.log('MonCash verify by token:', JSON.stringify(verifyData).substring(0, 400));
+          orderId = verifyData?.payment?.reference || verifyData?.reference || verifyData?.orderId;
+        }
+
+        // Fall back to transactionId lookup
+        if (!orderId && transactionId) {
+          const verifyRes = await fetch('https://moncashbutton.digicelgroup.com/Api/v1/RetrieveTransactionPayment', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${accessToken}`, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ transactionId }),
+          });
+          const verifyData = await verifyRes.json();
+          console.log('MonCash verify by transactionId:', JSON.stringify(verifyData).substring(0, 400));
+          orderId = verifyData?.payment?.reference || verifyData?.reference;
+        }
       }
     }
 
     if (!orderId) {
-      if (isPost) return Response.json({ error: 'Could not resolve orderId' }, { status: 400 });
+      if (isPost) return Response.json({ error: 'Could not resolve orderId from MonCash' }, { status: 400 });
       return Response.redirect(`${APP_URL}/MoncashReturn?error=missing_order`, 302);
     }
 

@@ -386,6 +386,16 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               <Input placeholder="Garcia" value={recipientLast} onChange={e => setRecipientLast(e.target.value)} />
             </div>
           </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">City *</label>
+              <Input placeholder="Lagos" value={recipientCity} onChange={e => setRecipientCity(e.target.value)} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Street</label>
+              <Input placeholder="1 Main Street" value={recipientStreet} onChange={e => setRecipientStreet(e.target.value)} />
+            </div>
+          </div>
           <p className="text-xs font-semibold text-slate-600 pt-1">Recipient's Bank Account ({country})</p>
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Routing / SWIFT</label>

@@ -327,11 +327,19 @@ Deno.serve(async (req) => {
     // ── Step 8 & 9: Create counterparty (recipient) ───────────────────────────
     if (action === 'createCounterparty') {
       const { customerGuid, firstName, lastName, country } = params;
+      const { city, state, postalCode, street } = params;
+      const countryCode = country === 'Mexico' ? 'MX' : 'NG';
       const counterparty = await cybridApi(token, 'POST', '/api/counterparties', {
         type: 'individual',
         customer_guid: customerGuid,
         name: { first: firstName, last: lastName },
-        address: { country_code: country === 'Mexico' ? 'MX' : 'NG' },
+        address: {
+          country_code: countryCode,
+          city: city || 'Lagos',
+          street: street || '1 Main Street',
+          postal_code: postalCode || '100001',
+          ...(state ? { subdivision: state } : {}),
+        },
       });
       return Response.json({ counterparty });
     }

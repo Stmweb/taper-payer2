@@ -343,6 +343,12 @@ Deno.serve(async (req) => {
       return Response.json({ transfer });
     }
 
+    // ── DEBUG: Get bank info to inspect configuration ─────────────────────────
+    if (action === 'getBankInfo') {
+      const bank = await cybridApi(token, 'GET', `/api/banks/${CYBRID_BANK_GUID}`);
+      return Response.json({ bank });
+    }
+
     return Response.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
     console.error('cybridTransfer error:', error.message);

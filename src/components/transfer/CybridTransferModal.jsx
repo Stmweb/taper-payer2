@@ -167,8 +167,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
 
   // ── Step 2: Create recipient counterparty + their bank account ─────────────
   const handleAddRecipient = async () => {
-    if (!recipientFirst || !recipientLast || !recipientRouting || !recipientAccount) {
-      setError('Please fill in all recipient details.');
+    if (!recipientFirst || !recipientLast || !recipientCity || !recipientRouting || !recipientAccount) {
+      setError('Please fill in all recipient details including city.');
       return;
     }
     setLoading(true);
@@ -179,6 +179,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         firstName: recipientFirst,
         lastName: recipientLast,
         country,
+        city: recipientCity,
+        street: recipientStreet,
       });
       const cpGuid = cpRes.data?.counterparty?.guid;
       if (!cpGuid) throw new Error('Could not create recipient.');

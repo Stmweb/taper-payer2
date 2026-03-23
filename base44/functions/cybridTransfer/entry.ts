@@ -356,7 +356,7 @@ Deno.serve(async (req) => {
       const { counterpartyGuid, accountNumber, routingNumber, country } = params;
       const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
         name: 'Recipient Bank Account',
-        account_kind: 'routing_number',
+        account_kind: 'raw_routing_details',
         counterparty_guid: counterpartyGuid,
         account_details: [
           { account_detail_type: 'routing_number', account_detail_value: routingNumber },

@@ -90,9 +90,6 @@ Deno.serve(async (req) => {
 
       const customer = await cybridApi(token, 'POST', '/api/customers', {
         type: 'individual',
-        bank_guid: CYBRID_BANK_GUID,
-        name: { first: firstName, last: lastName },
-        email_address: email,
       });
       return Response.json({ customer });
     }

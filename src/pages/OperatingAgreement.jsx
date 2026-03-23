@@ -204,6 +204,50 @@ export default function OperatingAgreement() {
           </Button>
         </div>
 
+        {/* Letter of Authorization */}
+        <div className="bg-white shadow-lg rounded-2xl p-12 text-slate-800 font-serif leading-relaxed mb-8">
+          <div className="text-center mb-10">
+            <h1 className="text-2xl font-bold tracking-wide uppercase mb-6">TAPER PAYER INC.</h1>
+            <p className="text-sm text-slate-600">254 Chapman Rd, Ste 208 #26415</p>
+            <p className="text-sm text-slate-600">Newark, Delaware 19702</p>
+          </div>
+
+          <p className="text-sm font-bold text-slate-900 mb-8">Subject: Letter of Authorization to Open Business Account</p>
+
+          <p className="text-sm text-slate-700 mb-4">To Whom It May Concern,</p>
+
+          <p className="text-sm text-slate-700 mb-4">
+            I, Katy Lucas, acting in my capacity as Founder, majority shareholder, and Authorized Representative of Taper Payer Inc., hereby confirm that I am fully authorized to open and manage a business account with Kraken on behalf of the company.
+          </p>
+
+          <p className="text-sm text-slate-700 mb-4">
+            This request is submitted as part of our efforts to establish secure, compliant, and efficient financial infrastructure to support our digital payment and cross-border service operations.
+          </p>
+
+          <p className="text-sm text-slate-700 mb-4">
+            As Founder and majority owner, I possess full authority to act on behalf of the company in all matters related to the account opening process. This includes, but is not limited to, the submission of required documentation, execution of agreements, and communication with Kraken.
+          </p>
+
+          <p className="text-sm text-slate-700 mb-4">
+            This authorization is effective immediately and shall remain in full force until revoked or amended in writing.
+          </p>
+
+          <p className="text-sm text-slate-700 mb-8">
+            Should you require any additional information or verification, please feel free to contact me directly.
+          </p>
+
+          <p className="text-sm text-slate-700 mb-6">Sincerely,</p>
+
+          <div className="mt-8">
+            <div className="border-b-2 border-slate-800 w-48 mb-2"></div>
+            <p className="text-sm font-bold text-slate-900">Katy Lucas</p>
+            <p className="text-sm text-slate-600">Founder &amp; Authorized Representative</p>
+            <p className="text-sm text-slate-600">Taper Payer Inc.</p>
+            <p className="text-sm text-slate-600 mt-3">Email: support@taperpayer.com</p>
+            <p className="text-sm text-slate-600">Phone: (404) 994-9648</p>
+          </div>
+        </div>
+
         {/* Document */}
         <div className="bg-white shadow-lg rounded-2xl p-12 text-slate-800 font-serif leading-relaxed">
           {/* Header */}

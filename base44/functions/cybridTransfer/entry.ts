@@ -358,7 +358,7 @@ Deno.serve(async (req) => {
       const orgCredentials = btoa(`${orgClientId}:${orgClientSecret}`);
       const orgBody = new URLSearchParams({
         grant_type: 'client_credentials',
-        scope: 'banks:read banks:write',
+        scope: 'organizations:read banks:read banks:write',
       });
       const orgTokenRes = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
         method: 'POST',

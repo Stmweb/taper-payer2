@@ -60,6 +60,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   // Recipient info
   const [recipientFirst, setRecipientFirst] = useState('');
   const [recipientLast, setRecipientLast]   = useState('');
+  const [recipientCity, setRecipientCity]   = useState('');
+  const [recipientStreet, setRecipientStreet] = useState('');
   const [counterpartyGuid, setCounterpartyGuid] = useState(null);
   const [recipientRouting, setRecipientRouting] = useState('');
   const [recipientAccount, setRecipientAccount] = useState('');

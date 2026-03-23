@@ -67,6 +67,49 @@ Deno.serve(async (req) => {
     const appUser = decodeCustomJwt(_jwt);
     console.log('JWT present:', !!_jwt, '| decoded user:', appUser?.email || 'none');
     if (!appUser) return Response.json({ error: 'You must be logged in to send money. Please log in and try again.' }, { status: 401 });
+
+    // ── ADMIN: Enable individual_customers feature on the bank ────────────────
+    if (action === 'enableIndividualCustomers') {
+      const orgClientId = Deno.env.get('CYBRID_ORG_CLIENT_ID');
+      const orgClientSecret = Deno.env.get('CYBRID_ORG_CLIENT_SECRET');
+      console.log('Org client ID:', orgClientId ? orgClientId.substring(0, 8) + '...' : 'NOT SET');
+      const orgCredentials = btoa(`${orgClientId}:${orgClientSecret}`);
+      const orgBody = new URLSearchParams({
+        grant_type: 'client_credentials',
+        scope: 'organizations:read banks:read banks:write',
+      });
+      const orgTokenRes = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${orgCredentials}`,
+        },
+        body: orgBody.toString(),
+      });
+      const orgTokenText = await orgTokenRes.text();
+      console.log('Org token response:', orgTokenRes.status, orgTokenText.substring(0, 300));
+      if (!orgTokenRes.ok) throw new Error(`Org token error: ${orgTokenText}`);
+      const orgToken = JSON.parse(orgTokenText).access_token;
+
+      // PATCH via bank base URL (org token)
+      const patchRes = await fetch(`${CYBRID_BASE}/api/banks/${CYBRID_BANK_GUID}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${orgToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts'],
+        }),
+      });
+      const patchText = await patchRes.text();
+      console.log('PATCH bank response:', patchRes.status, patchText.substring(0, 600));
+      let patchData;
+      try { patchData = JSON.parse(patchText); } catch { patchData = { raw: patchText }; }
+      if (!patchRes.ok) throw new Error(patchData?.message || patchText);
+      return Response.json({ bank: patchData });
+    }
+
     const token = await getBankToken();
 
     // ── Step 2: Create or find customer ──────────────────────────────────────

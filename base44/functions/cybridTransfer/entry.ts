@@ -147,9 +147,9 @@ Deno.serve(async (req) => {
           supported_country_codes: ['US'],
           features: [
             'kyc_identity_verifications',
-            'individual_customers',
             'business_customers',
             'raw_routing_details',
+            'counterparty_external_accounts',
           ],
         }),
       });

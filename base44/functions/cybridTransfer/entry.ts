@@ -324,24 +324,62 @@ Deno.serve(async (req) => {
       return Response.json({ verification: result });
     }
 
-    // ── Step 8 & 9: Create counterparty (recipient) ───────────────────────────
+    // ── Step 8 & 9: Create counterparty (recipient) + verify via watchlists ──
     if (action === 'createCounterparty') {
       const { customerGuid, firstName, lastName, country } = params;
       const { city, state, postalCode, street } = params;
-      const countryCode = country === 'Mexico' ? 'MX' : 'NG';
+
+      // Map country name to ISO code
+      const countryCodeMap = { 'Mexico': 'MX', 'Nigeria': 'NG', 'Haiti': 'HT', 'Kenya': 'KE', 'Ghana': 'GH', 'Senegal': 'SN' };
+      const countryCode = countryCodeMap[country] || 'US';
+
       const counterparty = await cybridApi(token, 'POST', '/api/counterparties', {
         type: 'individual',
         customer_guid: customerGuid,
         name: { first: firstName, last: lastName },
         address: {
           country_code: countryCode,
-          city: city || 'Lagos',
+          city: city || 'N/A',
           street: street || '1 Main Street',
-          postal_code: postalCode || '100001',
+          postal_code: postalCode || '00000',
           ...(state ? { subdivision: state } : {}),
         },
       });
-      return Response.json({ counterparty });
+
+      const cpGuid = counterparty.guid;
+
+      // Wait for counterparty to leave 'storing' state
+      let cpState = counterparty.state;
+      for (let i = 0; i < 10; i++) {
+        if (cpState !== 'storing') break;
+        await new Promise(r => setTimeout(r, 1500));
+        const cp = await cybridApi(token, 'GET', `/api/counterparties/${cpGuid}`);
+        cpState = cp.state;
+      }
+
+      // Run watchlist verification (sandbox: auto-pass with expected_behaviours)
+      const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
+        type: 'counterparty',
+        method: 'watchlists',
+        counterparty_guid: cpGuid,
+        expected_behaviours: ['passed_immediately'],
+      });
+
+      // Poll until completed
+      let ivResult = iv;
+      for (let i = 0; i < 15; i++) {
+        if (ivResult.state === 'completed' || ivResult.state === 'expired') break;
+        await new Promise(r => setTimeout(r, 1500));
+        ivResult = await cybridApi(token, 'GET', `/api/identity_verifications/${iv.guid}`);
+      }
+
+      // Get updated counterparty state
+      const updatedCp = await cybridApi(token, 'GET', `/api/counterparties/${cpGuid}`);
+      if (updatedCp.state !== 'verified') {
+        throw new Error(`Counterparty verification failed (state: ${updatedCp.state}, outcome: ${ivResult.outcome})`);
+      }
+
+      return Response.json({ counterparty: updatedCp });
     }
 
     // ── Step 9: Get counterparty status ──────────────────────────────────────

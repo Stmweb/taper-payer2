@@ -352,10 +352,8 @@ export default function OperatingAgreement() {
                 { name: 'David Jeanty', title: 'Treasurer' },
               ].map(({ name, title }) => (
                 <div key={name} className="flex flex-col gap-2">
-                  <div className="border-b-2 border-slate-800 pb-1 h-10"></div>
                   <p className="font-bold">{name}</p>
                   <p className="text-slate-500">{title}</p>
-                  <p className="text-slate-400 mt-2">Date: _______________</p>
                 </div>
               ))}
             </div>

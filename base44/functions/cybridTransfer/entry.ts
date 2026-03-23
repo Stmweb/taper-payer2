@@ -261,14 +261,14 @@ Deno.serve(async (req) => {
         customer_guid: customerGuid,
         asset: 'USD',
         side: 'deposit',
-        deliver_amount: amountCents,
+        receive_amount: amountCents,
       });
 
       const transfer = await cybridApi(token, 'POST', '/api/transfers', {
         quote_guid: quote.guid,
         transfer_type: 'funding',
         external_bank_account_guid: externalBankAccountGuid,
-        destination_account_guid: fiatAccountGuid,
+        payment_rail: 'ach',
       });
       return Response.json({ quote, transfer });
     }

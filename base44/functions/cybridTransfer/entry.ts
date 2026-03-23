@@ -392,65 +392,6 @@ Deno.serve(async (req) => {
       return Response.json({ bank });
     }
 
-    // ── ADMIN: Enable individual_customers feature on the bank ────────────────
-    if (action === 'enableIndividualCustomers') {
-      // Needs org-level token
-      const orgClientId = Deno.env.get('CYBRID_ORG_CLIENT_ID');
-      const orgClientSecret = Deno.env.get('CYBRID_ORG_CLIENT_SECRET');
-      console.log('Org client ID:', orgClientId ? orgClientId.substring(0, 8) + '...' : 'NOT SET');
-      const orgCredentials = btoa(`${orgClientId}:${orgClientSecret}`);
-      const orgBody = new URLSearchParams({
-        grant_type: 'client_credentials',
-        scope: 'organizations:read banks:read banks:write',
-      });
-      const orgTokenRes = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': `Basic ${orgCredentials}`,
-        },
-        body: orgBody.toString(),
-      });
-      const orgTokenText = await orgTokenRes.text();
-      console.log('Org token response:', orgTokenRes.status, orgTokenText.substring(0, 200));
-      if (!orgTokenRes.ok) throw new Error(`Org token error: ${orgTokenText}`);
-      const orgToken = JSON.parse(orgTokenText).access_token;
-
-      // PATCH the bank - try both bank base and org base URLs
-      let patchRes = await fetch(`${CYBRID_BASE}/api/banks/${CYBRID_BANK_GUID}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${orgToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts'],
-        }),
-      });
-      let patchText = await patchRes.text();
-      console.log('PATCH bank (bank base) response:', patchRes.status, patchText.substring(0, 400));
-
-      // Also try org base
-      const patchRes2 = await fetch(`https://organization.sandbox.cybrid.app/api/banks/${CYBRID_BANK_GUID}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${orgToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts'],
-        }),
-      });
-      const patchText2 = await patchRes2.text();
-      console.log('PATCH bank (org base) response:', patchRes2.status, patchText2.substring(0, 400));
-
-      if (patchRes2.ok) { patchRes = patchRes2; patchText = patchText2; }
-      let patchData;
-      try { patchData = JSON.parse(patchText); } catch { patchData = { raw: patchText }; }
-      if (!patchRes.ok) throw new Error(patchData?.message || patchText);
-      return Response.json({ bank: patchData });
-    }
-
     return Response.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
     console.error('cybridTransfer error:', error.message);

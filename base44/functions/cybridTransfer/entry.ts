@@ -145,12 +145,7 @@ Deno.serve(async (req) => {
           supported_trading_symbols: ['USDC-USD', 'USDC_SOL-USD'],
           supported_fiat_account_assets: ['USD'],
           supported_country_codes: ['US'],
-          features: [
-            'kyc_identity_verifications',
-            'business_customers',
-            'raw_routing_details',
-            'counterparty_external_accounts',
-          ],
+          features: [],
         }),
       });
       const createText = await createRes.text();

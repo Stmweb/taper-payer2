@@ -354,6 +354,7 @@ Deno.serve(async (req) => {
       // Needs org-level token
       const orgClientId = Deno.env.get('CYBRID_ORG_CLIENT_ID');
       const orgClientSecret = Deno.env.get('CYBRID_ORG_CLIENT_SECRET');
+      console.log('Org client ID:', orgClientId ? orgClientId.substring(0, 8) + '...' : 'NOT SET');
       const orgCredentials = btoa(`${orgClientId}:${orgClientSecret}`);
       const orgBody = new URLSearchParams({
         grant_type: 'client_credentials',

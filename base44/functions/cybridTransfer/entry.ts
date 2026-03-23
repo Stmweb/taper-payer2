@@ -179,7 +179,9 @@ Deno.serve(async (req) => {
       const { customerGuid } = params;
       const workflow = await cybridApi(token, 'POST', '/api/workflows', {
         type: 'plaid',
-        kind: 'link',
+        kind: 'link_token_create',
+        language: 'en',
+        link_customization_name: 'default',
         customer_guid: customerGuid,
       });
       return Response.json({ workflow });

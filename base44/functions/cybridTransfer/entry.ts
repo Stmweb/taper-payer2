@@ -349,6 +349,46 @@ Deno.serve(async (req) => {
       return Response.json({ bank });
     }
 
+    // ── ADMIN: Enable individual_customers feature on the bank ────────────────
+    if (action === 'enableIndividualCustomers') {
+      // Needs org-level token
+      const orgCredentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
+      const orgBody = new URLSearchParams({
+        grant_type: 'client_credentials',
+        scope: 'banks:read banks:write',
+      });
+      const orgTokenRes = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${orgCredentials}`,
+        },
+        body: orgBody.toString(),
+      });
+      const orgTokenText = await orgTokenRes.text();
+      console.log('Org token response:', orgTokenRes.status, orgTokenText.substring(0, 200));
+      if (!orgTokenRes.ok) throw new Error(`Org token error: ${orgTokenText}`);
+      const orgToken = JSON.parse(orgTokenText).access_token;
+
+      // PATCH the bank via org base URL
+      const patchRes = await fetch(`${CYBRID_ORG_BASE}/api/banks/${CYBRID_BANK_GUID}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${orgToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts'],
+        }),
+      });
+      const patchText = await patchRes.text();
+      console.log('PATCH bank response:', patchRes.status, patchText.substring(0, 400));
+      let patchData;
+      try { patchData = JSON.parse(patchText); } catch { patchData = { raw: patchText }; }
+      if (!patchRes.ok) throw new Error(patchData?.message || patchText);
+      return Response.json({ bank: patchData });
+    }
+
     return Response.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
     console.error('cybridTransfer error:', error.message);

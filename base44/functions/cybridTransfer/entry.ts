@@ -168,8 +168,9 @@ Deno.serve(async (req) => {
 
       const account = await cybridApi(token, 'POST', '/api/accounts', {
         type: accountType || 'fiat',
-        customer_guid: customerGuid,
         asset,
+        customer_guid: customerGuid,
+        name: `${asset} ${accountType || 'fiat'} account`,
       });
       return Response.json({ account });
     }

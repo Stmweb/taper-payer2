@@ -341,7 +341,7 @@ Deno.serve(async (req) => {
           country_code: countryCode,
           city: city || 'N/A',
           street: street || '1 Main Street',
-          postal_code: postalCode || '00000',
+          postal_code: postalCode || (countryCode === 'HT' ? '1234' : countryCode === 'NG' ? '100001' : '00000'),
           ...(state ? { subdivision: state } : {}),
         },
       });

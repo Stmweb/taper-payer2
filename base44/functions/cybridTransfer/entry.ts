@@ -360,14 +360,11 @@ Deno.serve(async (req) => {
         account_kind: 'raw_routing_details',
         counterparty_guid: counterpartyGuid,
         asset: 'USD',
-        counterparty_bank_account_details: [
-          {
-            bank_code_type: 'routing_number',
-            bank_code: routingNumber,
-            account_identifier: accountNumber,
-            payment_rail: 'ACH',
-          },
-        ],
+        counterparty_bank_account: {
+          routing_number_type: 'ABA',
+          routing_number: routingNumber,
+          account_number: accountNumber,
+        },
       });
       return Response.json({ externalBankAccount: account });
     }

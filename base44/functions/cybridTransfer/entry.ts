@@ -40,7 +40,11 @@ async function cybridApi(token, method, path, body) {
   const text = await res.text();
   let data;
   try { data = JSON.parse(text); } catch { data = { raw: text }; }
-  if (!res.ok) throw new Error(data?.message || data?.error_message || text);
+  if (!res.ok) {
+    const errMsg = data?.message || data?.error_message || JSON.stringify(data) || text;
+    console.error(`Cybrid API error [${method} ${path}]:`, errMsg);
+    throw new Error(errMsg);
+  }
   return data;
 }
 

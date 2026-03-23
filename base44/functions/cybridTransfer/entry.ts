@@ -352,7 +352,9 @@ Deno.serve(async (req) => {
     // ── ADMIN: Enable individual_customers feature on the bank ────────────────
     if (action === 'enableIndividualCustomers') {
       // Needs org-level token
-      const orgCredentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
+      const orgClientId = Deno.env.get('CYBRID_ORG_CLIENT_ID');
+      const orgClientSecret = Deno.env.get('CYBRID_ORG_CLIENT_SECRET');
+      const orgCredentials = btoa(`${orgClientId}:${orgClientSecret}`);
       const orgBody = new URLSearchParams({
         grant_type: 'client_credentials',
         scope: 'banks:read banks:write',

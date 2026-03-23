@@ -383,14 +383,6 @@ export default function TaperPayerAML() {
       {/* Content */}
       <div className="container mx-auto px-6 py-16 max-w-4xl">
 
-        {/* Download CTA */}
-        <div className="flex justify-end mb-8">
-          <Button onClick={generatePDF} className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white">
-            <Download className="w-4 h-4" />
-            Download Full AML Policy (PDF)
-          </Button>
-        </div>
-
         {/* Compliance Matrix */}
         <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
           <BarChart3 className="w-6 h-6 text-blue-600" /> AML Compliance Matrix

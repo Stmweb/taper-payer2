@@ -370,8 +370,8 @@ Deno.serve(async (req) => {
       if (!orgTokenRes.ok) throw new Error(`Org token error: ${orgTokenText}`);
       const orgToken = JSON.parse(orgTokenText).access_token;
 
-      // PATCH the bank via org base URL
-      const patchRes = await fetch(`${CYBRID_ORG_BASE}/api/banks/${CYBRID_BANK_GUID}`, {
+      // PATCH the bank via bank base URL
+      const patchRes = await fetch(`${CYBRID_BASE}/api/banks/${CYBRID_BANK_GUID}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${orgToken}`,

@@ -11,6 +11,7 @@ import { AppAuthProvider } from '@/lib/AppAuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { AnimatePresence, motion } from 'framer-motion';
 import TaperPayerFAQ from './pages/TaperPayerFAQ';
+import OperatingAgreement from './pages/OperatingAgreement';
 import TaperPayerTerms from './pages/TaperPayerTerms';
 import TaperPayerPrivacy from './pages/TaperPayerPrivacy';
 import TaperPayerCookies from './pages/TaperPayerCookies';

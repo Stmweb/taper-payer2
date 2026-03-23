@@ -216,6 +216,25 @@ Deno.serve(async (req) => {
       return Response.json({ accounts: result.objects || [] });
     }
 
+    // ── Verify external bank account ownership ───────────────────────────────
+    if (action === 'verifyExternalBankAccount') {
+      const { customerGuid, externalBankAccountGuid } = params;
+      const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
+        type: 'bank_account',
+        method: 'account_ownership',
+        customer_guid: customerGuid,
+        external_bank_account_guid: externalBankAccountGuid,
+      });
+      // Poll until completed
+      let result = iv;
+      for (let i = 0; i < 15; i++) {
+        if (result.state === 'completed' || result.state === 'failed' || result.state === 'expired') break;
+        await new Promise(r => setTimeout(r, 2000));
+        result = await cybridApi(token, 'GET', `/api/identity_verifications/${iv.guid}`);
+      }
+      return Response.json({ verification: result });
+    }
+
     // ── Step 8 & 9: Create counterparty (recipient) ───────────────────────────
     if (action === 'createCounterparty') {
       const { customerGuid, firstName, lastName, country } = params;

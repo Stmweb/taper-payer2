@@ -399,7 +399,7 @@ Deno.serve(async (req) => {
         counterparty_guid: counterpartyGuid,
         asset: 'USD',
         counterparty_bank_account: {
-          routing_number_type: (country === 'US' || country === 'Canada') ? 'ABA' : 'SWIFT',
+          routing_number_type: (country === 'US' || country === 'Canada') ? 'ABA' : 'BIC',
           routing_number: routingNumber,
           account_number: accountNumber,
         },

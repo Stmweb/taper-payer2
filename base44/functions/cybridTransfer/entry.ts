@@ -150,7 +150,6 @@ Deno.serve(async (req) => {
             'individual_customers',
             'business_customers',
             'raw_routing_details',
-            'counterparty_external_accounts',
           ],
         }),
       });

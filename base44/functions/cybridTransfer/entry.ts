@@ -398,11 +398,13 @@ Deno.serve(async (req) => {
         account_kind: 'raw_routing_details',
         counterparty_guid: counterpartyGuid,
         asset: 'USD',
-        counterparty_bank_account: {
-          routing_number_type: (country === 'US' || country === 'Canada') ? 'ABA' : 'BIC',
-          routing_number: routingNumber,
-          account_number: accountNumber,
-        },
+        counterparty_bank_account_details: [
+          {
+            routing_number_type: (country === 'US' || country === 'Canada') ? 'ABA' : 'SWIFT',
+            routing_number: routingNumber,
+            account_number: accountNumber,
+          }
+        ],
       });
       return Response.json({ externalBankAccount: account });
     }

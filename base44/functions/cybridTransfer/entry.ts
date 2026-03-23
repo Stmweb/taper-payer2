@@ -354,15 +354,18 @@ Deno.serve(async (req) => {
     // ── Step 10: Add foreign bank account for counterparty ───────────────────
     if (action === 'createCounterpartyExternalBankAccount') {
       const { counterpartyGuid, accountNumber, routingNumber, country } = params;
+      const countryCode = country === 'Mexico' ? 'MX' : 'NG';
+      console.log('createCounterpartyExternalBankAccount params:', { counterpartyGuid, accountNumber, routingNumber, countryCode });
       const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
         name: 'Recipient Bank Account',
         account_kind: 'raw_routing_details',
         counterparty_guid: counterpartyGuid,
-        account_details: [
-          { account_detail_type: 'routing_number', account_detail_value: routingNumber },
-          { account_detail_type: 'account_number', account_detail_value: accountNumber },
-        ],
-        bank_address: { country_code: country === 'Mexico' ? 'MX' : 'NG' },
+        counterparty_bank_account: {
+          routing_number_type: 'aba',
+          routing_number: routingNumber,
+          account_number: accountNumber,
+        },
+        bank_address: { country_code: countryCode },
       });
       return Response.json({ externalBankAccount: account });
     }

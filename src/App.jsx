@@ -167,6 +167,7 @@ const AuthenticatedApp = () => {
         <Route path="/AdminEmailMarketing" element={<AdminEmailMarketing />} />
         <Route path="/AdminStripeDashboard" element={<AdminStripeDashboard />} />
         <Route path="/MoncashReturn" element={<MoncashReturn />} />
+        <Route path="/OperatingAgreement" element={<OperatingAgreement />} />
         <Route path="/ThankYou" element={<ThankYou />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

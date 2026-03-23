@@ -238,8 +238,7 @@ export default function OperatingAgreement() {
 
           <p className="text-sm text-slate-700 mb-6">Sincerely,</p>
 
-          <div className="mt-8">
-            <div className="border-b-2 border-slate-800 w-48 mb-2"></div>
+          <div className="mt-4">
             <p className="text-sm font-bold text-slate-900">Katy Lucas</p>
             <p className="text-sm text-slate-600">Founder &amp; Authorized Representative</p>
             <p className="text-sm text-slate-600">Taper Payer Inc.</p>

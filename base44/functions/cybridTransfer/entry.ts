@@ -202,6 +202,7 @@ Deno.serve(async (req) => {
         name: 'My Bank Account',
         account_kind: 'plaid',
         customer_guid: customerGuid,
+        asset: 'USD',
         plaid_public_token: plaidPublicToken,
         plaid_account_id: accountId,
       });

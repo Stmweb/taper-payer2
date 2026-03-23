@@ -132,8 +132,8 @@ Deno.serve(async (req) => {
       if (!orgTokenRes.ok) throw new Error(`Org token error: ${orgTokenText}`);
       const orgToken = JSON.parse(orgTokenText).access_token;
 
-      // Create new bank via organization endpoint
-      const createRes = await fetch(`${CYBRID_ORG_BASE}/api/banks`, {
+      // Create new bank via bank base endpoint (org token required for this)
+      const createRes = await fetch(`${CYBRID_BASE}/api/banks`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${orgToken}`,

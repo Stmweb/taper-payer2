@@ -110,6 +110,58 @@ Deno.serve(async (req) => {
       return Response.json({ bank: patchData });
     }
 
+    // ── ADMIN: Create a brand-new bank with individual_customers enabled ──────
+    if (action === 'createNewBank') {
+      const orgClientId = Deno.env.get('CYBRID_ORG_CLIENT_ID');
+      const orgClientSecret = Deno.env.get('CYBRID_ORG_CLIENT_SECRET');
+      console.log('Org client ID:', orgClientId ? orgClientId.substring(0, 8) + '...' : 'NOT SET');
+      const orgCredentials = btoa(`${orgClientId}:${orgClientSecret}`);
+      const orgTokenRes = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${orgCredentials}`,
+        },
+        body: new URLSearchParams({
+          grant_type: 'client_credentials',
+          scope: 'organizations:read banks:read banks:write banks:execute',
+        }).toString(),
+      });
+      const orgTokenText = await orgTokenRes.text();
+      console.log('Org token response:', orgTokenRes.status, orgTokenText.substring(0, 300));
+      if (!orgTokenRes.ok) throw new Error(`Org token error: ${orgTokenText}`);
+      const orgToken = JSON.parse(orgTokenText).access_token;
+
+      // Create new bank via organization endpoint
+      const createRes = await fetch(`${CYBRID_ORG_BASE}/api/banks`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${orgToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: 'TaperPayer Bank',
+          type: 'sandbox',
+          supported_trading_symbols: ['USDC-USD', 'USDC_SOL-USD'],
+          supported_fiat_account_assets: ['USD'],
+          supported_country_codes: ['US'],
+          features: [
+            'kyc_identity_verifications',
+            'individual_customers',
+            'business_customers',
+            'raw_routing_details',
+            'counterparty_external_accounts',
+          ],
+        }),
+      });
+      const createText = await createRes.text();
+      console.log('Create bank response:', createRes.status, createText.substring(0, 600));
+      let createData;
+      try { createData = JSON.parse(createText); } catch { createData = { raw: createText }; }
+      if (!createRes.ok) throw new Error(createData?.message || createText);
+      return Response.json({ bank: createData, newBankGuid: createData.guid });
+    }
+
     const token = await getBankToken();
 
     // ── Step 2: Create or find customer ──────────────────────────────────────

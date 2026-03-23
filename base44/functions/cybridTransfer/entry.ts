@@ -370,8 +370,8 @@ Deno.serve(async (req) => {
       if (!orgTokenRes.ok) throw new Error(`Org token error: ${orgTokenText}`);
       const orgToken = JSON.parse(orgTokenText).access_token;
 
-      // PATCH the bank via bank base URL
-      const patchRes = await fetch(`${CYBRID_BASE}/api/banks/${CYBRID_BANK_GUID}`, {
+      // PATCH the bank - try both bank base and org base URLs
+      let patchRes = await fetch(`${CYBRID_BASE}/api/banks/${CYBRID_BANK_GUID}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${orgToken}`,
@@ -381,8 +381,24 @@ Deno.serve(async (req) => {
           features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts'],
         }),
       });
-      const patchText = await patchRes.text();
-      console.log('PATCH bank response:', patchRes.status, patchText.substring(0, 400));
+      let patchText = await patchRes.text();
+      console.log('PATCH bank (bank base) response:', patchRes.status, patchText.substring(0, 400));
+
+      // Also try org base
+      const patchRes2 = await fetch(`https://organization.sandbox.cybrid.app/api/banks/${CYBRID_BANK_GUID}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${orgToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts'],
+        }),
+      });
+      const patchText2 = await patchRes2.text();
+      console.log('PATCH bank (org base) response:', patchRes2.status, patchText2.substring(0, 400));
+
+      if (patchRes2.ok) { patchRes = patchRes2; patchText = patchText2; }
       let patchData;
       try { patchData = JSON.parse(patchText); } catch { patchData = { raw: patchText }; }
       if (!patchRes.ok) throw new Error(patchData?.message || patchText);

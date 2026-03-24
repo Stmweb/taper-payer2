@@ -270,7 +270,7 @@ export default function HaitiTransferModal({ amount, onClose }) {
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">PIN Code</label>
             <Input 
-              type="password"
+              type="text"
               placeholder="Enter PIN"
               value={pin}
               onChange={e => setPin(e.target.value)}

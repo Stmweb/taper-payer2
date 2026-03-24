@@ -100,23 +100,12 @@ export default function HaitiTransferModal({ amount, onClose }) {
         amountUSD: amount 
       });
       if (!res.data?.success) throw new Error('Conversion failed');
-      setStep('pin');
+      setStep('recipient');
     } catch (e) {
       setError(e.message || 'Conversion failed.');
     } finally {
       setLoading(false);
     }
-  };
-
-  // Step 3: Verify PIN
-  const handleVerifyPIN = () => {
-    if (pin !== CORRECT_PIN) {
-      setError('Invalid PIN. Please try again.');
-      return;
-    }
-    setError('');
-    setPin('');
-    setStep('recipient');
   };
 
   // Step 3: Add recipient

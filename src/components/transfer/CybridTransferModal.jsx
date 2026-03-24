@@ -216,30 +216,53 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     }
   };
 
-  // ── Link sender's own bank account ────────────────────────────────────────
-  const handleLinkSenderBank = async () => {
-    if (!senderRouting || !senderAccount) {
-      setError('Please enter your routing and account numbers.');
-      return;
-    }
-    if (!/^\d{9}$/.test(senderRouting)) {
-      setError('Routing number must be exactly 9 digits (ABA format).');
-      return;
-    }
+  // ── Open Plaid Link to connect sender's bank ──────────────────────────────
+  const handleOpenPlaid = async () => {
     setLinkingBank(true);
     setError('');
     try {
-      const res = await invoke('linkSenderBankAccount', {
-        customerGuid,
-        routingNumber: senderRouting,
-        accountNumber: senderAccount,
+      // 1. Get Plaid link token from Cybrid
+      const wfRes = await invoke('createPlaidWorkflow', { customerGuid });
+      const plaidLinkToken = wfRes.data?.plaidLinkToken;
+      if (!plaidLinkToken) throw new Error('Could not get Plaid link token.');
+
+      // 2. Load Plaid Link SDK if not already loaded
+      await new Promise((resolve, reject) => {
+        if (window.Plaid) return resolve();
+        const script = document.createElement('script');
+        script.src = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
+        script.onload = resolve;
+        script.onerror = () => reject(new Error('Failed to load Plaid SDK.'));
+        document.head.appendChild(script);
       });
-      const linked = res.data?.externalBankAccount;
-      if (!linked) throw new Error('Could not link bank account.');
-      setExternalBankAccount(linked);
+
+      // 3. Open Plaid Link
+      const handler = window.Plaid.create({
+        token: plaidLinkToken,
+        onSuccess: async (publicToken, metadata) => {
+          const accountId = metadata?.accounts?.[0]?.id;
+          try {
+            const res = await invoke('createExternalBankAccount', {
+              customerGuid,
+              plaidPublicToken: publicToken,
+              plaidAccountId: accountId,
+            });
+            const linked = res.data?.externalBankAccount;
+            if (!linked) throw new Error('Could not link bank account.');
+            setExternalBankAccount(linked);
+          } catch (e) {
+            setError(e.message || 'Failed to save bank account.');
+          } finally {
+            setLinkingBank(false);
+          }
+        },
+        onExit: () => {
+          setLinkingBank(false);
+        },
+      });
+      handler.open();
     } catch (e) {
-      setError(e.message || 'Failed to link bank account.');
-    } finally {
+      setError(e.message || 'Failed to open Plaid.');
       setLinkingBank(false);
     }
   };

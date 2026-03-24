@@ -537,13 +537,28 @@ Deno.serve(async (req) => {
         receive_amount: amountCents,
       });
 
-      const transfer = await cybridApi(token, 'POST', '/api/transfers', {
+      // Determine if this is a Plaid account (no participants needed) or raw routing (participants required)
+      const ebaInfo = await cybridApi(token, 'GET', `/api/external_bank_accounts/${externalBankAccountGuid}`);
+      const isPlaid = ebaInfo.account_kind === 'plaid' || ebaInfo.account_kind === 'plaid_processor_token';
+
+      const transferBody = {
         quote_guid: quote.guid,
         transfer_type: 'funding',
         external_bank_account_guid: externalBankAccountGuid,
         fiat_account_guid: fiatAccountGuid,
         payment_rail: 'ach',
-      });
+      };
+
+      if (!isPlaid) {
+        transferBody.source_participants = [
+          { type: 'customer', guid: customerGuid, amount: amountCents },
+        ];
+        transferBody.destination_participants = [
+          { type: 'customer', guid: customerGuid, amount: amountCents },
+        ];
+      }
+
+      const transfer = await cybridApi(token, 'POST', '/api/transfers', transferBody);
       return Response.json({ quote, transfer });
     }
 

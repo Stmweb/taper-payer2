@@ -70,6 +70,11 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   // Plaid bank linking
   const [linkingBank, setLinkingBank] = useState(false);
 
+  // Manual bank entry
+  const [senderRouting, setSenderRouting] = useState('');
+  const [senderAccount, setSenderAccount] = useState('');
+  const [linkingManual, setLinkingManual] = useState(false);
+
   // Results
   const [fundTransfer, setFundTransfer] = useState(null);
   const [tradeTransfer, setTradeTransfer] = useState(null);

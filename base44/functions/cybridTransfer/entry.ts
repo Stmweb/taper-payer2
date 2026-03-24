@@ -477,16 +477,38 @@ Deno.serve(async (req) => {
       const { customerGuid, fiatAccountGuid, externalBankAccountGuid, amountUSD } = params;
       const amountCents = Math.round(parseFloat(amountUSD) * 100);
 
-      // Wait for external bank account to reach a ready state before funding
+      // Wait for external bank account to leave 'storing' state
       let eba;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 15; i++) {
         eba = await cybridApi(token, 'GET', `/api/external_bank_accounts/${externalBankAccountGuid}`);
-        console.log(`External bank account state [attempt ${i+1}]:`, eba.state, '| verification state:', eba.verification_state);
-        if (eba.state !== 'storing' && eba.state !== 'unverified') break;
+        console.log(`External bank account state [attempt ${i+1}]:`, eba.state);
+        if (eba.state !== 'storing') break;
         await new Promise(r => setTimeout(r, 2000));
       }
+
+      // If still unverified, auto-run ownership verification
+      if (eba.state === 'unverified') {
+        console.log('Account unverified, running ownership verification...');
+        const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
+          type: 'bank_account',
+          method: 'account_ownership',
+          customer_guid: customerGuid,
+          external_bank_account_guid: eba.guid,
+          expected_behaviours: ['passed_immediately'],
+        });
+        let ivResult = iv;
+        for (let i = 0; i < 15; i++) {
+          if (ivResult.state === 'completed' || ivResult.state === 'failed' || ivResult.state === 'expired') break;
+          await new Promise(r => setTimeout(r, 2000));
+          ivResult = await cybridApi(token, 'GET', `/api/identity_verifications/${iv.guid}`);
+          console.log(`Ownership verification [attempt ${i+1}]:`, ivResult.state, ivResult.outcome);
+        }
+        eba = await cybridApi(token, 'GET', `/api/external_bank_accounts/${externalBankAccountGuid}`);
+        console.log('Bank account state after verification:', eba.state);
+      }
+
       if (!eba || eba.state === 'storing' || eba.state === 'unverified') {
-        throw new Error('External bank account is still being verified. Please try again in a moment.');
+        throw new Error('External bank account could not be verified. Please try again.');
       }
       if (eba.state === 'failed' || eba.state === 'deleted' || eba.state === 'refresh_required') {
         throw new Error(`External bank account is in an invalid state: ${eba.state}. Please re-link your bank account.`);

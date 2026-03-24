@@ -83,6 +83,7 @@ export default function TaperPayerHome() {
    const [showTaperConnect, setShowTaperConnect] = useState(false);
    const [showTransferModal, setShowTransferModal] = useState(false);
    const [showHaitiModal, setShowHaitiModal] = useState(false);
+   const [showPINModal, setShowPINModal] = useState(false);
    const [showComingSoon, setShowComingSoon] = useState(false);
    const [showSignupModal, setShowSignupModal] = useState(false);
 

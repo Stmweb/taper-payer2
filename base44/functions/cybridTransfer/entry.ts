@@ -439,11 +439,34 @@ Deno.serve(async (req) => {
 
       // Poll until account leaves 'storing' state
       let eba = account;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 15; i++) {
         if (eba.state !== 'storing') break;
         await new Promise(r => setTimeout(r, 2000));
         eba = await cybridApi(token, 'GET', `/api/external_bank_accounts/${account.guid}`);
         console.log(`linkSenderBankAccount state [attempt ${i+1}]:`, eba.state);
+      }
+
+      // Run ownership verification (sandbox: auto-pass)
+      if (eba.state === 'unverified') {
+        console.log('Running bank account ownership verification...');
+        const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
+          type: 'bank_account',
+          method: 'account_ownership',
+          customer_guid: customerGuid,
+          external_bank_account_guid: eba.guid,
+          expected_behaviours: ['passed_immediately'],
+        });
+        // Poll until verification completes
+        let ivResult = iv;
+        for (let i = 0; i < 15; i++) {
+          if (ivResult.state === 'completed' || ivResult.state === 'failed' || ivResult.state === 'expired') break;
+          await new Promise(r => setTimeout(r, 2000));
+          ivResult = await cybridApi(token, 'GET', `/api/identity_verifications/${iv.guid}`);
+          console.log(`Ownership verification state [attempt ${i+1}]:`, ivResult.state, ivResult.outcome);
+        }
+        // Re-fetch account after verification
+        eba = await cybridApi(token, 'GET', `/api/external_bank_accounts/${account.guid}`);
+        console.log('Final bank account state after verification:', eba.state);
       }
 
       return Response.json({ externalBankAccount: eba });

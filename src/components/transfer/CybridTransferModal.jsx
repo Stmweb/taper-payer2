@@ -272,6 +272,35 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     }
   };
 
+  // ── Manual bank link ──────────────────────────────────────────────────────
+  const handleLinkManualBank = async () => {
+    if (!/^\d{9}$/.test(senderRouting)) {
+      setError('Routing number must be exactly 9 digits.');
+      return;
+    }
+    if (!senderAccount) {
+      setError('Please enter your account number.');
+      return;
+    }
+    setLinkingManual(true);
+    setError('');
+    try {
+      const res = await invoke('linkSenderBankAccount', {
+        customerGuid,
+        routingNumber: senderRouting,
+        accountNumber: senderAccount,
+        ownerName: appUser?.full_name || 'Account Owner',
+      });
+      const linked = res.data?.externalBankAccount;
+      if (!linked) throw new Error('Could not link bank account.');
+      setExternalBankAccount(linked);
+    } catch (e) {
+      setError(e.message || 'Failed to link bank account.');
+    } finally {
+      setLinkingManual(false);
+    }
+  };
+
   // ── Step 3: Fund fiat account via ACH ─────────────────────────────────────
   const handleFund = async () => {
     if (!externalBankAccount) {

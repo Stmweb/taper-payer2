@@ -54,6 +54,7 @@ const countries = [
   { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
   { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
   { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
+  { name: 'Canada', flag: '🇨🇦', code: 'CAD' },
 ];
 
 export default function TaperPayerHome() {

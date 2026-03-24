@@ -407,6 +407,23 @@ Deno.serve(async (req) => {
       return Response.json({ externalBankAccount: account });
     }
 
+    // ── Link sender's own bank account via raw routing details ───────────────
+    if (action === 'linkSenderBankAccount') {
+      const { customerGuid, accountNumber, routingNumber } = params;
+      const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
+        name: 'My Bank Account',
+        account_kind: 'raw_routing_details',
+        customer_guid: customerGuid,
+        asset: 'USD',
+        counterparty_bank_account: {
+          routing_number_type: 'ABA',
+          routing_number: routingNumber,
+          account_number: accountNumber,
+        },
+      });
+      return Response.json({ externalBankAccount: account });
+    }
+
     // ── Step 11: Fund fiat account via ACH (funding quote + transfer) ─────────
     if (action === 'fundViaACH') {
       const { customerGuid, fiatAccountGuid, externalBankAccountGuid, amountUSD } = params;

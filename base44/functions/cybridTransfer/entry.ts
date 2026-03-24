@@ -571,7 +571,7 @@ Deno.serve(async (req) => {
 
     // ── Step 13 & 14: Withdraw USD from fiat account to counterparty bank ────
     if (action === 'executeRemittance') {
-      const { customerGuid, fiatAccountGuid, counterpartyExternalBankAccountGuid, amountUSD, counterpartyGuid } = params;
+      const { customerGuid, fiatAccountGuid, counterpartyExternalBankAccountGuid, amountUSD } = params;
       const amountCents = Math.round(parseFloat(amountUSD) * 100);
 
       const quote = await cybridApi(token, 'POST', '/api/quotes', {
@@ -582,28 +582,13 @@ Deno.serve(async (req) => {
         deliver_amount: amountCents,
       });
 
-      // Check if recipient's bank account is Plaid or raw routing
-      const ebaInfo = await cybridApi(token, 'GET', `/api/external_bank_accounts/${counterpartyExternalBankAccountGuid}`);
-      const isPlaid = ebaInfo.account_kind === 'plaid' || ebaInfo.account_kind === 'plaid_processor_token';
-
-      const remittanceBody = {
+      const remittance = await cybridApi(token, 'POST', '/api/transfers', {
         quote_guid: quote.guid,
         transfer_type: 'funding',
         external_bank_account_guid: counterpartyExternalBankAccountGuid,
         fiat_account_guid: fiatAccountGuid,
         payment_rail: 'ach',
-      };
-
-      if (!isPlaid && counterpartyGuid) {
-        remittanceBody.source_participants = [
-          { type: 'customer', guid: customerGuid, amount: amountCents },
-        ];
-        remittanceBody.destination_participants = [
-          { type: 'counterparty', guid: counterpartyGuid, amount: amountCents },
-        ];
-      }
-
-      const remittance = await cybridApi(token, 'POST', '/api/transfers', remittanceBody);
+      });
       return Response.json({ quote, remittance });
     }
 

@@ -11,13 +11,10 @@ import {
 const STEPS = [
   { id: 'deposit', label: 'Deposit USD' },
   { id: 'convert', label: 'Get USDC' },
-  { id: 'pin', label: 'Verify PIN' },
   { id: 'recipient', label: 'Add Recipient' },
   { id: 'payout', label: 'Send to MonCash' },
   { id: 'done', label: 'Complete' },
 ];
-
-const CORRECT_PIN = '28272017';
 
 function StepIndicator({ currentStep }) {
   const idx = STEPS.findIndex(s => s.id === currentStep);

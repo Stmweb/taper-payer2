@@ -67,6 +67,11 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   const [recipientAccount, setRecipientAccount] = useState('');
   const [counterpartyBankAccountGuid, setCounterpartyBankAccountGuid] = useState(null);
 
+  // Sender bank linking
+  const [senderRouting, setSenderRouting] = useState('');
+  const [senderAccount, setSenderAccount] = useState('');
+  const [linkingBank, setLinkingBank] = useState(false);
+
   // Results
   const [fundTransfer, setFundTransfer] = useState(null);
   const [tradeTransfer, setTradeTransfer] = useState(null);

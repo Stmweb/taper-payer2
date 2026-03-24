@@ -382,7 +382,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               <p className="font-semibold text-slate-800">Setting up your account…</p>
               <p className="text-sm text-slate-500">Creating customer profile & accounts</p>
             </>
-          ) : error ? null : (kycStatus === 'approved' || kycStatus === 'verified') ? (
+          ) : (kycStatus === 'approved' || kycStatus === 'verified') ? (
             <>
               <CheckCircle className="w-16 h-16 text-green-500" />
               <p className="font-semibold text-slate-800">Identity Verified</p>
@@ -402,7 +402,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                 <>
                   <a href={personaUrl} target="_blank" rel="noopener noreferrer" className="w-full">
                     <Button className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
-                      Open Verification →
+                      Open Persona Verification →
                     </Button>
                   </a>
                   <p className="text-xs text-slate-400 mt-1">After completing verification, come back and try again.</p>
@@ -417,8 +417,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                         const res = await invoke('startKYC', { customerGuid });
                         if (res.data?.personaUrl) {
                           setPersonaUrl(res.data.personaUrl);
-                        } else if (res.data?.outcome === 'passed' || res.data?.state === 'approved') {
-                          // Auto-passed in sandbox, refresh KYC status
+                        } else if (res.data?.outcome === 'passed' || res.data?.state === 'completed') {
+                          // Auto-passed in sandbox, refresh status
                           setTimeout(() => setKycRefreshKey(k => k + 1), 500);
                         }
                       } catch (e) {

@@ -256,12 +256,16 @@ export default function HaitiTransferModal({ amount, onClose }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Phone (+509XXXXXXXX)</label>
-            <Input 
-              placeholder="+50912345678" 
-              value={recipientPhone} 
-              onChange={e => setRecipientPhone(e.target.value)} 
-            />
+            <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number</label>
+            <div className="flex items-center border rounded-md overflow-hidden">
+              <span className="bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600">+509</span>
+              <Input 
+                placeholder="12345678" 
+                value={recipientPhone.replace('+509', '')}
+                onChange={e => setRecipientPhone(`+509${e.target.value}`)}
+                className="border-0 rounded-none focus:ring-0"
+              />
+            </div>
           </div>
           <Button
             onClick={handleAddRecipient}

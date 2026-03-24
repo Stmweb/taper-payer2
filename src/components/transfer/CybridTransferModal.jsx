@@ -462,32 +462,62 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       {/* ── fund ── */}
       {step === 'fund' && (
         <div className="space-y-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2 text-sm">
-            <p className="font-semibold text-slate-800 flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-blue-500" /> Fund via ACH Pull
-            </p>
-            <p className="text-slate-600">
-              We'll pull <strong>{fmtAmt(amount)}</strong> from your linked US bank account into your Cybrid USD wallet.
-            </p>
-            {externalBankAccount ? (
-              <div className="bg-white rounded-lg px-3 py-2 border border-blue-100 text-xs text-slate-700">
-                ✅ Linked bank: <strong>{externalBankAccount.name || externalBankAccount.guid}</strong>
+          {!externalBankAccount ? (
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-blue-500" /> Link Your US Bank Account
+              </p>
+              <p className="text-xs text-slate-500">Enter your bank routing and account numbers to link your account for ACH funding.</p>
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Routing Number (9 digits)</label>
+                <Input
+                  placeholder="e.g. 021000021"
+                  value={senderRouting}
+                  onChange={e => setSenderRouting(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                />
               </div>
-            ) : (
-              <div className="bg-amber-50 rounded-lg px-3 py-2 border border-amber-200 text-xs text-amber-700">
-                ⚠️ No bank linked yet. Please link your US bank via Plaid first.
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Account Number</label>
+                <Input
+                  placeholder="Your checking account number"
+                  value={senderAccount}
+                  onChange={e => setSenderAccount(e.target.value)}
+                />
               </div>
-            )}
-          </div>
-          <Button
-            onClick={handleFund}
-            disabled={loading || !externalBankAccount}
-            className="w-full"
-            style={{ backgroundColor: '#3D7BB7' }}
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            Pull {fmtAmt(amount)} via ACH <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
+              <Button
+                onClick={handleLinkSenderBank}
+                disabled={linkingBank}
+                className="w-full"
+                style={{ backgroundColor: '#3D7BB7' }}
+              >
+                {linkingBank ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                Link Bank Account
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2 text-sm">
+                <p className="font-semibold text-slate-800 flex items-center gap-2">
+                  <CreditCard className="w-4 h-4 text-blue-500" /> Fund via ACH Pull
+                </p>
+                <p className="text-slate-600">
+                  We'll pull <strong>{fmtAmt(amount)}</strong> from your linked US bank account into your Cybrid USD wallet.
+                </p>
+                <div className="bg-white rounded-lg px-3 py-2 border border-blue-100 text-xs text-slate-700">
+                  ✅ Linked bank: <strong>{externalBankAccount.name || externalBankAccount.guid}</strong>
+                </div>
+              </div>
+              <Button
+                onClick={handleFund}
+                disabled={loading}
+                className="w-full"
+                style={{ backgroundColor: '#3D7BB7' }}
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                Pull {fmtAmt(amount)} via ACH <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </div>
+          )}
         </div>
       )}
 

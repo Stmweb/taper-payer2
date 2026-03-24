@@ -91,7 +91,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     }
   };
 
-  // ── Step 1: Init — create customer + create accounts (KYC is separate) ─────
+  // ── Step 1: Init — create customer + check KYC status ─────
   useEffect(() => {
     const init = async () => {
       if (!appUser || !jwt) {
@@ -114,19 +114,21 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         console.log('KYC Status from API:', kyc);
         setKycStatus(kyc);
 
-        // Create fiat & trading accounts in parallel
-        const [fiatRes, tradingRes] = await Promise.all([
-          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USD', accountType: 'fiat' }),
-          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USDC_SOL', accountType: 'trading' }),
-        ]);
+        // Only create accounts if KYC is verified
+        if (kyc === 'verified' || kyc === 'approved' || kyc === 'completed') {
+          const [fiatRes, tradingRes] = await Promise.all([
+            invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USD', accountType: 'fiat' }),
+            invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USDC_SOL', accountType: 'trading' }),
+          ]);
 
-        setFiatAccount(fiatRes.data?.account);
-        setTradingAccount(tradingRes.data?.account);
+          setFiatAccount(fiatRes.data?.account);
+          setTradingAccount(tradingRes.data?.account);
 
-        // Check for existing linked bank account
-        const banksRes = await invoke('listExternalBankAccounts', { customerGuid: guid });
-        const linked = banksRes.data?.accounts?.[0];
-        if (linked) setExternalBankAccount(linked);
+          // Check for existing linked bank account
+          const banksRes = await invoke('listExternalBankAccounts', { customerGuid: guid });
+          const linked = banksRes.data?.accounts?.[0];
+          if (linked) setExternalBankAccount(linked);
+        }
 
         setLoading(false);
       } catch (e) {

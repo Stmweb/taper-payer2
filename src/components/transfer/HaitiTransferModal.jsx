@@ -186,9 +186,9 @@ export default function HaitiTransferModal({ amount, onClose }) {
       {step === 'deposit' && (
         <div className="space-y-4">
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2 text-sm">
-            <p className="font-semibold text-slate-800">💳 Deposit USD via Transak</p>
+            <p className="font-semibold text-slate-800">💳 Deposit USD</p>
             <p className="text-slate-600">
-              We'll use Transak sandbox to deposit {fmtAmt(amount)} USD. This will be converted to USDC on Coinbase.
+              Securely deposit {fmtAmt(amount)} USD to get started with your transfer.
             </p>
           </div>
           <Button

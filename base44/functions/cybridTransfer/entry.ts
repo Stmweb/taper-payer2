@@ -11,7 +11,7 @@ async function getBankToken() {
   const credentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
   const body = new URLSearchParams({
     grant_type: 'client_credentials',
-    scope: 'banks:read customers:read customers:execute accounts:read accounts:execute transfers:read transfers:execute counterparties:read counterparties:execute external_bank_accounts:read external_bank_accounts:execute identity_verifications:read identity_verifications:execute quotes:read quotes:execute workflows:read workflows:execute',
+    scope: 'banks:read customers:read customers:execute accounts:read accounts:execute transfers:read transfers:execute counterparties:read counterparties:execute external_bank_accounts:read external_bank_accounts:execute identity_verifications:read identity_verifications:execute quotes:read quotes:execute trades:read trades:execute workflows:read workflows:execute',
   });
   const res = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
     method: 'POST',

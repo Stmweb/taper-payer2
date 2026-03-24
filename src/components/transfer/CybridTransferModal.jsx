@@ -407,8 +407,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
           </div>
           <p className="text-xs font-semibold text-slate-600 pt-1">Recipient's Bank Account ({country})</p>
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Routing / SWIFT</label>
-            <Input placeholder="Routing or SWIFT number" value={recipientRouting} onChange={e => setRecipientRouting(e.target.value)} />
+            <label className="block text-xs font-medium text-slate-600 mb-1">Routing Number (9 digits)</label>
+                <Input placeholder="e.g. 021000021" value={recipientRouting} onChange={e => setRecipientRouting(e.target.value.replace(/\D/g, '').slice(0, 9))} />
           </div>
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Account Number</label>

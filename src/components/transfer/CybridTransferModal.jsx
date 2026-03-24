@@ -437,11 +437,13 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                         }
                         if (res.data?.personaUrl) {
                           setPersonaUrl(res.data.personaUrl);
-                        } else if (res.data?.outcome === 'passed' || res.data?.state === 'completed') {
-                          // Auto-passed in sandbox, refresh status
-                          console.log('KYC auto-passed, refreshing...');
                           setKycLoading(false);
-                          setTimeout(() => setKycRefreshKey(k => k + 1), 500);
+                        } else if (res.data?.autoPass || res.data?.outcome === 'passed') {
+                          // Auto-passed in sandbox, immediately update KYC status and move forward
+                          console.log('KYC auto-passed, moving forward...');
+                          setKycStatus('verified');
+                          setKycLoading(false);
+                          setStep('recipient');
                         } else {
                           console.log('KYC response unclear:', res.data);
                           setKycLoading(false);

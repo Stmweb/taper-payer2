@@ -81,6 +81,7 @@ export default function TaperPayerHome() {
    const [showReloadForm, setShowReloadForm] = useState(false);
    const [showTaperConnect, setShowTaperConnect] = useState(false);
    const [showTransferModal, setShowTransferModal] = useState(false);
+   const [showHaitiModal, setShowHaitiModal] = useState(false);
    const [showComingSoon, setShowComingSoon] = useState(false);
    const [showSignupModal, setShowSignupModal] = useState(false);
 

@@ -263,7 +263,7 @@ export default function HaitiTransferModal({ amount, onClose }) {
             style={{ backgroundColor: '#3D7BB7' }}
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            Verify Recipient <ArrowRight className="ml-2 w-4 h-4" />
+            Verify Receiver <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </div>
       )}

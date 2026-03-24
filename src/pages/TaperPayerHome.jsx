@@ -357,12 +357,8 @@ export default function TaperPayerHome() {
                         if (!user) { 
                           setShowSignupModal(true); 
                         } else { 
-                          // For Haiti, show PIN first
-                          if (sendTo === 'Haiti') {
-                            setShowPINModal(true);
-                          } else {
-                            setShowTransferModal(true); 
-                          }
+                          // Show PIN first for all countries
+                          setShowPINModal(true);
                         } 
                       } 
                     }}

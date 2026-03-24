@@ -579,7 +579,7 @@ Deno.serve(async (req) => {
 
     // ── Step 13 & 14: Withdraw USD from fiat account to counterparty bank ────
     if (action === 'executeRemittance') {
-      const { customerGuid, fiatAccountGuid, counterpartyExternalBankAccountGuid, amountUSD } = params;
+      const { customerGuid, fiatAccountGuid, counterpartyExternalBankAccountGuid, counterpartyGuid, amountUSD } = params;
       const amountCents = Math.round(parseFloat(amountUSD) * 100);
 
       const quote = await cybridApi(token, 'POST', '/api/quotes', {
@@ -590,13 +590,24 @@ Deno.serve(async (req) => {
         deliver_amount: amountCents,
       });
 
-      const remittance = await cybridApi(token, 'POST', '/api/transfers', {
+      const remittanceBody = {
         quote_guid: quote.guid,
         transfer_type: 'funding',
         external_bank_account_guid: counterpartyExternalBankAccountGuid,
         fiat_account_guid: fiatAccountGuid,
         payment_rail: 'ach',
-      });
+        source_participants: [
+          { type: 'customer', guid: customerGuid, amount: amountCents }
+        ],
+      };
+
+      if (counterpartyGuid) {
+        remittanceBody.destination_participants = [
+          { type: 'counterparty', guid: counterpartyGuid, amount: amountCents }
+        ];
+      }
+
+      const remittance = await cybridApi(token, 'POST', '/api/transfers', remittanceBody);
       return Response.json({ quote, remittance });
     }
 

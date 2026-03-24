@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts'],
+          features: ['kyc_identity_verifications', 'individual_customers', 'business_customers', 'raw_routing_details', 'counterparty_external_accounts', 'individual_customer_raw_routing_details'],
         }),
       });
       const patchText = await patchRes.text();

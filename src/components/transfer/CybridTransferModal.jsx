@@ -519,22 +519,24 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         <div className="space-y-4">
           {!externalBankAccount ? (
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2 text-sm">
-                <p className="font-semibold text-slate-800 flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-blue-500" /> Link Your US Bank Account
-                </p>
-                <p className="text-slate-600">
-                  Securely connect your bank account using Plaid. We'll use it to fund your transfer.
-                </p>
+              <p className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                <CreditCard className="w-4 h-4" /> Link Your US Bank Account
+              </p>
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Routing Number (9 digits)</label>
+                <Input placeholder="e.g. 021000021" value={senderRouting} onChange={e => setSenderRouting(e.target.value.replace(/\D/g, '').slice(0, 9))} />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Account Number</label>
+                <Input placeholder="Your account number" value={senderAccount} onChange={e => setSenderAccount(e.target.value)} />
               </div>
               <Button
-                onClick={handleOpenPlaid}
-                disabled={linkingBank}
+                onClick={handleLinkManualBank}
+                disabled={linkingManual}
                 className="w-full"
                 style={{ backgroundColor: '#3D7BB7' }}
               >
-                {linkingBank ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : '🔗 '}
-                {linkingBank ? 'Opening Plaid…' : 'Connect Bank with Plaid'}
+                {linkingManual ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Linking…</> : 'Link Bank Account'}
               </Button>
             </div>
           ) : (

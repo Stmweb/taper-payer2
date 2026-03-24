@@ -125,7 +125,6 @@ export default function OperatingAgreement() {
       ['David Jeanty', 'Treasurer', 'Managing Member'],
     ];
     const colWidths = [160, 200, 160];
-    const rowHeight = 22;
     const tableX = margin;
 
     // Header row

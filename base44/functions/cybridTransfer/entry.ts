@@ -424,12 +424,27 @@ Deno.serve(async (req) => {
 
     // ── Link sender's own bank account via raw routing details ───────────────
     if (action === 'linkSenderBankAccount') {
-      const { customerGuid, accountNumber, routingNumber } = params;
+      const { customerGuid, accountNumber, routingNumber, ownerName, ownerCity, ownerState } = params;
+
+      // Fetch customer to get name if not provided
+      let nameToUse = ownerName || 'Account Owner';
+      const nameParts = nameToUse.trim().split(' ');
+      const firstName = nameParts[0] || 'Account';
+      const lastName = nameParts.slice(1).join(' ') || 'Owner';
+
       const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
         name: 'My Bank Account',
         account_kind: 'raw_routing_details',
         customer_guid: customerGuid,
         asset: 'USD',
+        counterparty_name: { first: firstName, last: lastName },
+        counterparty_address: {
+          street: '1 Main Street',
+          city: ownerCity || 'New York',
+          subdivision: ownerState || 'NY',
+          postal_code: '10001',
+          country_code: 'US',
+        },
         counterparty_bank_account: {
           routing_number_type: 'ABA',
           routing_number: routingNumber,

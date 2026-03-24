@@ -358,7 +358,19 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         amountUSD: amount,
         country,
       });
-      setRemittanceResult(res.data?.remittance);
+      let remittance = res.data?.remittance;
+      setRemittanceResult(remittance);
+
+      // Poll until transfer leaves 'storing' state
+      for (let i = 0; i < 15; i++) {
+        if (remittance.state !== 'storing') break;
+        await new Promise(r => setTimeout(r, 2000));
+        const statusRes = await invoke('getTransfer', { transferGuid: remittance.guid });
+        remittance = statusRes.data?.transfer;
+        setRemittanceResult(remittance);
+        console.log(`Remittance state [attempt ${i+1}]:`, remittance.state);
+      }
+
       setStep('done');
     } catch (e) {
       setError(e.message || 'Remittance failed.');

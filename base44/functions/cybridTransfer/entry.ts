@@ -264,7 +264,7 @@ Deno.serve(async (req) => {
       return Response.json({ account });
     }
 
-    // ── Step 6: Create Plaid workflow to link bank ────────────────────────────
+    // ── Create Plaid workflow + poll for link_token ───────────────────────────
     if (action === 'createPlaidWorkflow') {
       const { customerGuid } = params;
       const workflow = await cybridApi(token, 'POST', '/api/workflows', {
@@ -274,26 +274,31 @@ Deno.serve(async (req) => {
         link_customization_name: 'default',
         customer_guid: customerGuid,
       });
-      return Response.json({ workflow });
+
+      // Poll until plaid_link_token is available
+      let wf = workflow;
+      for (let i = 0; i < 15; i++) {
+        if (wf.plaid_link_token || wf.state === 'failed') break;
+        await new Promise(r => setTimeout(r, 1500));
+        wf = await cybridApi(token, 'GET', `/api/workflows/${workflow.guid}`);
+      }
+
+      if (wf.state === 'failed') throw new Error(`Plaid workflow failed: ${wf.failure_code}`);
+      if (!wf.plaid_link_token) throw new Error('Timed out waiting for Plaid link token.');
+
+      return Response.json({ workflowGuid: wf.guid, plaidLinkToken: wf.plaid_link_token });
     }
 
-    // ── Step 6: Get Plaid workflow (to get link_token) ────────────────────────
-    if (action === 'getWorkflow') {
-      const { workflowGuid } = params;
-      const workflow = await cybridApi(token, 'GET', `/api/workflows/${workflowGuid}`);
-      return Response.json({ workflow });
-    }
-
-    // ── Step 7: Create external bank account from Plaid token ─────────────────
+    // ── Create external bank account from Plaid public_token ─────────────────
     if (action === 'createExternalBankAccount') {
-      const { customerGuid, plaidPublicToken, accountId } = params;
+      const { customerGuid, plaidPublicToken, plaidAccountId } = params;
       const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
         name: 'My Bank Account',
         account_kind: 'plaid',
         customer_guid: customerGuid,
         asset: 'USD',
         plaid_public_token: plaidPublicToken,
-        plaid_account_id: accountId,
+        plaid_account_id: plaidAccountId,
       });
       return Response.json({ externalBankAccount: account });
     }

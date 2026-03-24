@@ -207,9 +207,9 @@ export default function HaitiTransferModal({ amount, onClose }) {
       {step === 'convert' && (
         <div className="space-y-4">
           <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 space-y-2 text-sm">
-            <p className="font-semibold text-slate-800">💱 Convert to USDC</p>
+            <p className="font-semibold text-slate-800">💱 Ready to Send</p>
             <p className="text-slate-600">
-              Converting {fmtAmt(amount)} USD to USDC on Coinbase sandbox.
+              {fmtAmt(amount)} USD is ready to be sent to Haiti.
             </p>
             {exchangeRate && haitianAmount && (
               <div className="bg-white rounded px-2 py-1 border border-purple-100 text-xs">

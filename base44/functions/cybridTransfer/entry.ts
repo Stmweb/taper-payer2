@@ -192,6 +192,7 @@ Deno.serve(async (req) => {
       for (let i = 0; i < 15; i++) {
         const c = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
         customerState = c.state;
+        console.log(`startKYC customer state [attempt ${i+1}]:`, customerState);
         if (customerState !== 'storing') break;
         await new Promise(r => setTimeout(r, 2000));
       }
@@ -209,14 +210,19 @@ Deno.serve(async (req) => {
         customer_guid: customerGuid,
         expected_behaviours: ['passed_immediately'], // sandbox: auto-pass
       });
+      console.log('Identity verification created:', { guid: iv.guid, state: iv.state, outcome: iv.outcome, personaId: iv.persona_inquiry_id });
 
-      // Poll up to 10 times for persona_inquiry_id
+      // Poll up to 5 times for persona_inquiry_id (short timeout for sandbox)
       let verificationGuid = iv.guid;
       let inquiry = iv;
-      for (let i = 0; i < 10; i++) {
-        if (inquiry.persona_inquiry_id || inquiry.state === 'completed' || inquiry.outcome === 'passed') break;
-        await new Promise(r => setTimeout(r, 1500));
+      for (let i = 0; i < 5; i++) {
+        if (inquiry.persona_inquiry_id || inquiry.state === 'completed' || inquiry.outcome === 'passed') {
+          console.log(`startKYC verification done on attempt ${i+1}:`, { state: inquiry.state, outcome: inquiry.outcome });
+          break;
+        }
+        await new Promise(r => setTimeout(r, 1000));
         inquiry = await cybridApi(token, 'GET', `/api/identity_verifications/${verificationGuid}`);
+        console.log(`startKYC verification poll [attempt ${i+1}]:`, { state: inquiry.state, outcome: inquiry.outcome });
       }
 
       return Response.json({

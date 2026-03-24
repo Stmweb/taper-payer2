@@ -171,6 +171,15 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       setError('Please fill in all recipient details including city.');
       return;
     }
+    // Validate ABA routing number: must be exactly 9 digits
+    if (country !== 'Canada' && !/^\d{9}$/.test(recipientRouting)) {
+      setError('Routing number must be exactly 9 digits (US ABA format, e.g. 021000021).');
+      return;
+    }
+    if (country === 'Canada' && !/^\d{8,9}$/.test(recipientRouting)) {
+      setError('Routing number must be 8-9 digits (Canadian CPA format).');
+      return;
+    }
     setLoading(true);
     setError('');
     try {

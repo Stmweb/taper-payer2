@@ -258,6 +258,38 @@ export default function HaitiTransferModal({ amount, onClose }) {
         </div>
       )}
 
+      {/* Step: PIN Verification */}
+      {step === 'pin' && (
+        <div className="space-y-4">
+          <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-2 text-sm">
+            <p className="font-semibold text-slate-800">🔐 Security Verification</p>
+            <p className="text-slate-600">
+              Enter your PIN code to continue with the transfer.
+            </p>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">PIN Code</label>
+            <Input 
+              type="password"
+              placeholder="Enter PIN"
+              value={pin}
+              onChange={e => setPin(e.target.value)}
+              onKeyPress={e => e.key === 'Enter' && handleVerifyPIN()}
+              maxLength="8"
+            />
+          </div>
+          <Button
+            onClick={handleVerifyPIN}
+            disabled={loading || pin.length === 0}
+            className="w-full"
+            style={{ backgroundColor: '#3D7BB7' }}
+          >
+            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+            Verify PIN <ArrowRight className="ml-2 w-4 h-4" />
+          </Button>
+        </div>
+      )}
+
       {/* Step: Recipient */}
       {step === 'recipient' && (
         <div className="space-y-3">

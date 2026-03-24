@@ -550,9 +550,11 @@ Deno.serve(async (req) => {
         deliver_amount: amountCents,
       });
 
-      // Trades use POST /api/trades, not /api/transfers
+      // Trades use POST /api/trades — pass both account guids so Cybrid knows source/destination
       const trade = await cybridApi(token, 'POST', '/api/trades', {
         quote_guid: quote.guid,
+        fiat_account_guid: fiatAccountGuid,
+        trading_account_guid: tradingAccountGuid,
       });
       return Response.json({ quote, transfer: trade });
     }

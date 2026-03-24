@@ -19,6 +19,7 @@ import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper'
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
+import PINModal from '@/components/PINModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
 import PromoCarousel from '@/components/topup/PromoCarousel';
 import { useAuth } from '@/lib/AuthContext';

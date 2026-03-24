@@ -208,11 +208,24 @@ Deno.serve(async (req) => {
         type: 'kyc',
         method: 'id_and_selfie',
         customer_guid: customerGuid,
-        expected_behaviours: ['passed_immediately'], // sandbox: auto-pass
+        expected_behaviours: ['passed_immediately'], // sandbox: auto-pass (no persona needed)
       });
       console.log('Identity verification created:', { guid: iv.guid, state: iv.state, outcome: iv.outcome, personaId: iv.persona_inquiry_id });
 
-      // Poll up to 5 times for persona_inquiry_id (short timeout for sandbox)
+      // Check if already auto-passed (sandbox behavior with expected_behaviours)
+      if (iv.state === 'completed') {
+        console.log('Identity verification auto-passed (sandbox):', iv.outcome);
+        return Response.json({
+          verificationGuid: iv.guid,
+          personaInquiryId: null,
+          state: iv.state,
+          outcome: iv.outcome,
+          personaUrl: null,
+          autoPass: true,
+        });
+      }
+
+      // Poll up to 5 times for persona_inquiry_id (in case it's not auto-pass)
       let verificationGuid = iv.guid;
       let inquiry = iv;
       for (let i = 0; i < 5; i++) {

@@ -91,7 +91,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     }
   };
 
-  // ── Step 1: Init — create customer + check KYC + create accounts ───────────
+  // ── Step 1: Init — create customer + create accounts (KYC is separate) ─────
   useEffect(() => {
     const init = async () => {
       if (!appUser || !jwt) {
@@ -108,41 +108,10 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         if (!guid) throw new Error('Could not create customer profile.');
         setCustomerGuid(guid);
 
-        // Check KYC — auto-trigger in sandbox if not yet approved
-        let statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-        let kyc = statusRes.data?.customer?.state;
-
-        // If not approved, try to run KYC (sandbox auto-passes)
-        const isVerified = (s) => s === 'approved' || s === 'verified';
-
-        if (!isVerified(kyc)) {
-          try {
-            const kycRes = await invoke('startKYC', { customerGuid: guid });
-            if (kycRes.data?.outcome === 'passed' || kycRes.data?.state === 'completed') {
-              statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-              kyc = statusRes.data?.customer?.state;
-            }
-          } catch (_) {
-            // ignore, will show manual button below
-          }
-        }
-
+        // Check KYC status (don't auto-trigger — let user click button)
+        const statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+        const kyc = statusRes.data?.customer?.state;
         setKycStatus(kyc);
-
-        if (!isVerified(kyc)) {
-          // Poll a few more times with delay in case verification is processing
-          for (let i = 0; i < 5; i++) {
-            await new Promise(r => setTimeout(r, 2000));
-            statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-            kyc = statusRes.data?.customer?.state;
-            if (isVerified(kyc)) break;
-          }
-        }
-
-        if (!isVerified(kyc)) {
-          setLoading(false);
-          return;
-        }
 
         // Create fiat & trading accounts in parallel
         const [fiatRes, tradingRes] = await Promise.all([
@@ -158,7 +127,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         const linked = banksRes.data?.accounts?.[0];
         if (linked) setExternalBankAccount(linked);
 
-        setStep('recipient');
+        setLoading(false);
       } catch (e) {
         const msg = e.message || '';
         if (msg.toLowerCase().includes('authentication') || msg.toLowerCase().includes('logged in')) {
@@ -166,7 +135,6 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         } else {
           setError(msg || 'Initialization failed.');
         }
-      } finally {
         setLoading(false);
       }
     };

@@ -240,20 +240,23 @@ Deno.serve(async (req) => {
     // ── Step 4 & 5: Get or create fiat/trading account ────────────────────────
     if (action === 'getOrCreateAccount') {
       const { customerGuid, asset, accountType } = params;
+      
+      // Poll until customer leaves 'storing' state (can create accounts once out of storing)
+      let customer;
+      for (let i = 0; i < 20; i++) {
+        customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
+        console.log(`getOrCreateAccount customer state [attempt ${i+1}]:`, customer.state);
+        if (customer.state !== 'storing') break;
+        await new Promise(r => setTimeout(r, 1500));
+      }
+      
+      if (customer.state === 'storing') {
+        throw new Error('Customer initialization timed out. Please try again.');
+      }
+      
       const existing = await cybridApi(token, 'GET', `/api/accounts?customer_guid=${customerGuid}&type=${accountType || 'fiat'}`);
       const match = existing.objects?.find(a => a.asset === asset);
       if (match) return Response.json({ account: match });
-
-      // Poll until customer is verified before creating account
-      let customer;
-      for (let i = 0; i < 15; i++) {
-        customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
-        if (customer.state === 'verified' || customer.state === 'approved') break;
-        await new Promise(r => setTimeout(r, 2000));
-      }
-      if (customer.state !== 'verified' && customer.state !== 'approved') {
-        throw new Error(`Customer not yet verified (state: ${customer.state}). Please complete identity verification first.`);
-      }
 
       const account = await cybridApi(token, 'POST', '/api/accounts', {
         type: accountType || 'fiat',

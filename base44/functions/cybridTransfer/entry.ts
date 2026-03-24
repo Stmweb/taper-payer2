@@ -426,7 +426,17 @@ Deno.serve(async (req) => {
           account_number: accountNumber,
         },
       });
-      return Response.json({ externalBankAccount: account });
+
+      // Poll until account leaves 'storing' state
+      let eba = account;
+      for (let i = 0; i < 20; i++) {
+        if (eba.state !== 'storing') break;
+        await new Promise(r => setTimeout(r, 2000));
+        eba = await cybridApi(token, 'GET', `/api/external_bank_accounts/${account.guid}`);
+        console.log(`linkSenderBankAccount state [attempt ${i+1}]:`, eba.state);
+      }
+
+      return Response.json({ externalBankAccount: eba });
     }
 
     // ── Step 11: Fund fiat account via ACH (funding quote + transfer) ─────────

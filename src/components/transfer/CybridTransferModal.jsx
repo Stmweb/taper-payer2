@@ -142,7 +142,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         // Create fiat & trading accounts in parallel
         const [fiatRes, tradingRes] = await Promise.all([
           invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USD', accountType: 'fiat' }),
-          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USDC', accountType: 'trading' }),
+          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USDC_SOL', accountType: 'trading' }),
         ]);
 
         setFiatAccount(fiatRes.data?.account);

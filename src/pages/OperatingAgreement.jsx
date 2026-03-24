@@ -62,6 +62,7 @@ export default function OperatingAgreement() {
     ];
     const shareholderColWidths = [220, 140];
     const shareholderTableX = margin;
+    const rowHeight = 22;
 
     // Header row
     doc.setFillColor(55, 123, 183);

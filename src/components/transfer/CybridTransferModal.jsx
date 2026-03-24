@@ -318,7 +318,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     try {
       const res = await invoke('executeRemittance', {
         customerGuid,
-        tradingAccountGuid: tradingAccount.guid,
+        fiatAccountGuid: fiatAccount.guid,
         counterpartyExternalBankAccountGuid: counterpartyBankAccountGuid,
         amountUSD: amount,
         country,

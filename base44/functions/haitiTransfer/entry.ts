@@ -1,6 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 const TRANSAK_API_KEY = Deno.env.get('TRANSAK_API_KEY');
+const TRANSAK_API_SECRET = Deno.env.get('TRANSAK_API_SECRET');
 const COINBASE_API_KEY = Deno.env.get('COINBASE_API_KEY');
 const COINBASE_API_SECRET = Deno.env.get('COINBASE_API_SECRET');
 const DTONE_API_KEY = Deno.env.get('DTONE_API_KEY');

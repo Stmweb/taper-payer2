@@ -579,7 +579,7 @@ Deno.serve(async (req) => {
           { type: 'customer', guid: customerGuid, amount: amountCents },
         ],
         destination_participants: [
-          { type: 'counterparty', guid: counterpartyExternalBankAccountGuid, amount: amountCents },
+          { type: 'external_bank_account', guid: counterpartyExternalBankAccountGuid, amount: amountCents },
         ],
       });
       return Response.json({ quote, remittance });

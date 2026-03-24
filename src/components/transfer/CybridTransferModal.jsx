@@ -383,6 +383,15 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               <p className="font-semibold text-slate-800">Setting up your account…</p>
               <p className="text-sm text-slate-500">Creating customer profile & accounts</p>
             </>
+          ) : error ? (
+            <>
+              <AlertCircle className="w-16 h-16 text-red-500" />
+              <p className="font-semibold text-slate-800">Error Setting Up Account</p>
+              <p className="text-sm text-slate-600">{error}</p>
+              <Button onClick={() => setKycRefreshKey(k => k + 1)} className="w-full mt-4" style={{ backgroundColor: '#3D7BB7' }}>
+                Try Again
+              </Button>
+            </>
           ) : (kycStatus === 'approved' || kycStatus === 'verified' || kycStatus === 'completed') ? (
             <>
               <CheckCircle className="w-16 h-16 text-green-500" />

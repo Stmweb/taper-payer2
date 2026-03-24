@@ -256,14 +256,19 @@ Deno.serve(async (req) => {
       
       const existing = await cybridApi(token, 'GET', `/api/accounts?customer_guid=${customerGuid}&type=${accountType || 'fiat'}`);
       const match = existing.objects?.find(a => a.asset === asset);
-      if (match) return Response.json({ account: match });
+      if (match) {
+        console.log(`Account already exists for ${asset}: ${match.guid}`);
+        return Response.json({ account: match });
+      }
 
+      console.log(`Creating new ${asset} account for customer ${customerGuid}, state: ${customer.state}`);
       const account = await cybridApi(token, 'POST', '/api/accounts', {
         type: accountType || 'fiat',
         asset,
         customer_guid: customerGuid,
         name: `${asset} ${accountType || 'fiat'} account`,
       });
+      console.log(`Created account: ${account.guid}, state: ${account.state}`);
       return Response.json({ account });
     }
 

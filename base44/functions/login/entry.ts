@@ -1,5 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
-import { crypto } from 'https://deno.land/std@0.208.0/crypto/mod.ts';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 async function hashPassword(password) {
   const encoder = new TextEncoder();
@@ -7,6 +6,18 @@ async function hashPassword(password) {
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function generateJWT(user) {
+  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+  const payload = btoa(JSON.stringify({
+    user_id: user.id,
+    email: user.email,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + 86400 * 7,
+  }));
+  const signature = btoa('demo-signature');
+  return `${header}.${payload}.${signature}`;
 }
 
 Deno.serve(async (req) => {
@@ -20,7 +31,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing email or password' }, { status: 400 });
     }
 
-    // Find user
+    // Find user using service role (no auth required for login)
     const users = await base44.asServiceRole.entities.AppUser.filter({ email });
     if (!users || users.length === 0) {
       return Response.json({ error: 'Invalid credentials' }, { status: 401 });
@@ -34,17 +45,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Generate JWT (Note: using demo signature for now)
-    const jwtHeader = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-    const jwtPayload = btoa(JSON.stringify({
-      user_id: user.id,
-      email: user.email,
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 86400 * 7,
-    }));
-    // TODO: Replace with actual HMAC signature
-    const signature = btoa('demo-signature');
-    const jwt = `${jwtHeader}.${jwtPayload}.${signature}`;
+    // Generate JWT
+    const jwt = await generateJWT(user);
 
     return Response.json({
       success: true,

@@ -557,24 +557,30 @@ Deno.serve(async (req) => {
       return Response.json({ quote, transfer: trade });
     }
 
-    // ── Step 13 & 14: Create + Execute remittance plan ───────────────────────
+    // ── Step 13 & 14: Withdraw USD from fiat account to counterparty bank ────
     if (action === 'executeRemittance') {
-      const { customerGuid, tradingAccountGuid, counterpartyExternalBankAccountGuid, amountUSD, country } = params;
+      const { customerGuid, fiatAccountGuid, counterpartyExternalBankAccountGuid, amountUSD } = params;
       const amountCents = Math.round(parseFloat(amountUSD) * 100);
 
       const quote = await cybridApi(token, 'POST', '/api/quotes', {
-        product_type: 'remittance',
+        product_type: 'funding',
         customer_guid: customerGuid,
-        symbol: 'USDC_SOL-USD',
-        side: 'remittance',
+        asset: 'USD',
+        side: 'withdrawal',
         deliver_amount: amountCents,
       });
 
       const remittance = await cybridApi(token, 'POST', '/api/transfers', {
         quote_guid: quote.guid,
-        transfer_type: 'remittance',
-        source_account_guid: tradingAccountGuid,
-        destination_external_bank_account_guid: counterpartyExternalBankAccountGuid,
+        transfer_type: 'funding',
+        external_bank_account_guid: counterpartyExternalBankAccountGuid,
+        payment_rail: 'ach',
+        source_participants: [
+          { type: 'customer', guid: customerGuid, amount: amountCents },
+        ],
+        destination_participants: [
+          { type: 'counterparty', guid: counterpartyExternalBankAccountGuid, amount: amountCents },
+        ],
       });
       return Response.json({ quote, remittance });
     }

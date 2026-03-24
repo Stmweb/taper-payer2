@@ -22,7 +22,7 @@ function StepIndicator({ currentStep }) {
   return (
     <div className="flex items-center gap-1 mb-5 overflow-x-auto pb-1">
       {STEPS.map((s, i) => (
-        <div key={s.id} className="flex items-center gap-1">
+        <React.Fragment key={s.id}>
           <div className={`flex flex-col items-center min-w-0 ${i <= idx ? 'opacity-100' : 'opacity-40'}`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
               i < idx ? 'bg-green-500 text-white' :
@@ -35,7 +35,7 @@ function StepIndicator({ currentStep }) {
           {i < STEPS.length - 1 && (
             <div className={`flex-1 h-0.5 min-w-[8px] ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
           )}
-        </div>
+        </React.Fragment>
       ))}
     </div>
   );
@@ -91,7 +91,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
     }
   };
 
-  // ── Step 1: Init — create customer + check KYC status ─────
+  // ── Step 1: Init — create customer + check KYC + create accounts ───────────
   useEffect(() => {
     const init = async () => {
       if (!appUser || !jwt) {
@@ -108,29 +108,57 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         if (!guid) throw new Error('Could not create customer profile.');
         setCustomerGuid(guid);
 
-        // Check KYC status (don't auto-trigger — let user click button)
-        const statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-        const kyc = statusRes.data?.customer?.state;
-        console.log('KYC Status from API:', kyc);
-        setKycStatus(kyc);
+        // Check KYC — auto-trigger in sandbox if not yet approved
+        let statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+        let kyc = statusRes.data?.customer?.state;
 
-        // Only create accounts if KYC is verified
-        if (kyc === 'verified' || kyc === 'approved' || kyc === 'completed') {
-          const [fiatRes, tradingRes] = await Promise.all([
-            invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USD', accountType: 'fiat' }),
-            invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USDC_SOL', accountType: 'trading' }),
-          ]);
+        // If not approved, try to run KYC (sandbox auto-passes)
+        const isVerified = (s) => s === 'approved' || s === 'verified';
 
-          setFiatAccount(fiatRes.data?.account);
-          setTradingAccount(tradingRes.data?.account);
-
-          // Check for existing linked bank account
-          const banksRes = await invoke('listExternalBankAccounts', { customerGuid: guid });
-          const linked = banksRes.data?.accounts?.[0];
-          if (linked) setExternalBankAccount(linked);
+        if (!isVerified(kyc)) {
+          try {
+            const kycRes = await invoke('startKYC', { customerGuid: guid });
+            if (kycRes.data?.outcome === 'passed' || kycRes.data?.state === 'completed') {
+              statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+              kyc = statusRes.data?.customer?.state;
+            }
+          } catch (_) {
+            // ignore, will show manual button below
+          }
         }
 
-        setLoading(false);
+        setKycStatus(kyc);
+
+        if (!isVerified(kyc)) {
+          // Poll a few more times with delay in case verification is processing
+          for (let i = 0; i < 5; i++) {
+            await new Promise(r => setTimeout(r, 2000));
+            statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+            kyc = statusRes.data?.customer?.state;
+            if (isVerified(kyc)) break;
+          }
+        }
+
+        if (!isVerified(kyc)) {
+          setLoading(false);
+          return;
+        }
+
+        // Create fiat & trading accounts in parallel
+        const [fiatRes, tradingRes] = await Promise.all([
+          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USD', accountType: 'fiat' }),
+          invoke('getOrCreateAccount', { customerGuid: guid, asset: 'USDC_SOL', accountType: 'trading' }),
+        ]);
+
+        setFiatAccount(fiatRes.data?.account);
+        setTradingAccount(tradingRes.data?.account);
+
+        // Check for existing linked bank account
+        const banksRes = await invoke('listExternalBankAccounts', { customerGuid: guid });
+        const linked = banksRes.data?.accounts?.[0];
+        if (linked) setExternalBankAccount(linked);
+
+        setStep('recipient');
       } catch (e) {
         const msg = e.message || '';
         if (msg.toLowerCase().includes('authentication') || msg.toLowerCase().includes('logged in')) {
@@ -138,6 +166,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         } else {
           setError(msg || 'Initialization failed.');
         }
+      } finally {
         setLoading(false);
       }
     };
@@ -385,16 +414,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               <p className="font-semibold text-slate-800">Setting up your account…</p>
               <p className="text-sm text-slate-500">Creating customer profile & accounts</p>
             </>
-          ) : error ? (
-            <>
-              <AlertCircle className="w-16 h-16 text-red-500" />
-              <p className="font-semibold text-slate-800">Error Setting Up Account</p>
-              <p className="text-sm text-slate-600">{error}</p>
-              <Button onClick={() => setKycRefreshKey(k => k + 1)} className="w-full mt-4" style={{ backgroundColor: '#3D7BB7' }}>
-                Try Again
-              </Button>
-            </>
-          ) : (kycStatus === 'approved' || kycStatus === 'verified' || kycStatus === 'completed') ? (
+          ) : error ? null : (kycStatus === 'approved' || kycStatus === 'verified') ? (
             <>
               <CheckCircle className="w-16 h-16 text-green-500" />
               <p className="font-semibold text-slate-800">Identity Verified</p>
@@ -414,7 +434,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                 <>
                   <a href={personaUrl} target="_blank" rel="noopener noreferrer" className="w-full">
                     <Button className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
-                      Open Persona Verification →
+                      Open Verification →
                     </Button>
                   </a>
                   <p className="text-xs text-slate-400 mt-1">After completing verification, come back and try again.</p>
@@ -425,32 +445,17 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                   <Button
                     onClick={async () => {
                       setKycLoading(true);
-                      setError('');
                       try {
-                        console.log('Starting KYC...');
                         const res = await invoke('startKYC', { customerGuid });
-                        console.log('KYC response:', res.data);
-                        if (res.data?.error) {
-                          setError(res.data.error);
-                          setKycLoading(false);
-                          return;
-                        }
                         if (res.data?.personaUrl) {
                           setPersonaUrl(res.data.personaUrl);
-                          setKycLoading(false);
-                        } else if (res.data?.autoPass || res.data?.outcome === 'passed') {
-                          // Auto-passed in sandbox, immediately update KYC status and move forward
-                          console.log('KYC auto-passed, moving forward...');
-                          setKycStatus('verified');
-                          setKycLoading(false);
-                          setStep('recipient');
-                        } else {
-                          console.log('KYC response unclear:', res.data);
-                          setKycLoading(false);
+                        } else if (res.data?.outcome === 'passed' || res.data?.state === 'approved') {
+                          // Auto-passed in sandbox, refresh KYC status
+                          setTimeout(() => setKycRefreshKey(k => k + 1), 500);
                         }
                       } catch (e) {
-                        console.error('KYC error:', e);
                         setError(e.message || 'Could not start verification.');
+                      } finally {
                         setKycLoading(false);
                       }
                     }}

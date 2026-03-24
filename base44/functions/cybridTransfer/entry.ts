@@ -192,7 +192,6 @@ Deno.serve(async (req) => {
       for (let i = 0; i < 15; i++) {
         const c = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
         customerState = c.state;
-        console.log(`startKYC customer state [attempt ${i+1}]:`, customerState);
         if (customerState !== 'storing') break;
         await new Promise(r => setTimeout(r, 2000));
       }
@@ -208,34 +207,16 @@ Deno.serve(async (req) => {
         type: 'kyc',
         method: 'id_and_selfie',
         customer_guid: customerGuid,
-        expected_behaviours: ['passed_immediately'], // sandbox: auto-pass (no persona needed)
+        expected_behaviours: ['passed_immediately'], // sandbox: auto-pass
       });
-      console.log('Identity verification created:', { guid: iv.guid, state: iv.state, outcome: iv.outcome, personaId: iv.persona_inquiry_id });
 
-      // Check if already auto-passed (sandbox behavior with expected_behaviours)
-      if (iv.state === 'completed') {
-        console.log('Identity verification auto-passed (sandbox):', iv.outcome);
-        return Response.json({
-          verificationGuid: iv.guid,
-          personaInquiryId: null,
-          state: iv.state,
-          outcome: iv.outcome,
-          personaUrl: null,
-          autoPass: true,
-        });
-      }
-
-      // Poll up to 5 times for persona_inquiry_id (in case it's not auto-pass)
+      // Poll up to 10 times for persona_inquiry_id
       let verificationGuid = iv.guid;
       let inquiry = iv;
-      for (let i = 0; i < 5; i++) {
-        if (inquiry.persona_inquiry_id || inquiry.state === 'completed' || inquiry.outcome === 'passed') {
-          console.log(`startKYC verification done on attempt ${i+1}:`, { state: inquiry.state, outcome: inquiry.outcome });
-          break;
-        }
-        await new Promise(r => setTimeout(r, 1000));
+      for (let i = 0; i < 10; i++) {
+        if (inquiry.persona_inquiry_id || inquiry.state === 'completed' || inquiry.outcome === 'passed') break;
+        await new Promise(r => setTimeout(r, 1500));
         inquiry = await cybridApi(token, 'GET', `/api/identity_verifications/${verificationGuid}`);
-        console.log(`startKYC verification poll [attempt ${i+1}]:`, { state: inquiry.state, outcome: inquiry.outcome });
       }
 
       return Response.json({
@@ -259,35 +240,27 @@ Deno.serve(async (req) => {
     // ── Step 4 & 5: Get or create fiat/trading account ────────────────────────
     if (action === 'getOrCreateAccount') {
       const { customerGuid, asset, accountType } = params;
-      
-      // Poll until customer leaves 'storing' state (can create accounts once out of storing)
-      let customer;
-      for (let i = 0; i < 20; i++) {
-        customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
-        console.log(`getOrCreateAccount customer state [attempt ${i+1}]:`, customer.state);
-        if (customer.state !== 'storing') break;
-        await new Promise(r => setTimeout(r, 1500));
-      }
-      
-      if (customer.state === 'storing') {
-        throw new Error('Customer initialization timed out. Please try again.');
-      }
-      
       const existing = await cybridApi(token, 'GET', `/api/accounts?customer_guid=${customerGuid}&type=${accountType || 'fiat'}`);
       const match = existing.objects?.find(a => a.asset === asset);
-      if (match) {
-        console.log(`Account already exists for ${asset}: ${match.guid}`);
-        return Response.json({ account: match });
+      if (match) return Response.json({ account: match });
+
+      // Poll until customer is verified before creating account
+      let customer;
+      for (let i = 0; i < 15; i++) {
+        customer = await cybridApi(token, 'GET', `/api/customers/${customerGuid}`);
+        if (customer.state === 'verified' || customer.state === 'approved') break;
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      if (customer.state !== 'verified' && customer.state !== 'approved') {
+        throw new Error(`Customer not yet verified (state: ${customer.state}). Please complete identity verification first.`);
       }
 
-      console.log(`Creating new ${asset} account for customer ${customerGuid}, state: ${customer.state}`);
       const account = await cybridApi(token, 'POST', '/api/accounts', {
         type: accountType || 'fiat',
         asset,
         customer_guid: customerGuid,
         name: `${asset} ${accountType || 'fiat'} account`,
       });
-      console.log(`Created account: ${account.guid}, state: ${account.state}`);
       return Response.json({ account });
     }
 

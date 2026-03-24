@@ -46,9 +46,6 @@ export default function HaitiTransferModal({ amount, onClose }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // PIN verification
-  const [pin, setPin] = useState('');
-
   // Recipient info
   const [recipientPhone, setRecipientPhone] = useState('');
   const [recipientName, setRecipientName] = useState('');

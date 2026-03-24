@@ -679,7 +679,12 @@ export default function TaperPayerHome() {
         onSignupSuccess={(userData) => {
           login(userData, userData.jwt, userData.cybrid_customer_id);
           setShowSignupModal(false);
-          setShowTransferModal(true);
+          // Route Haiti to new modal, others to Cybrid
+          if (sendTo === 'Haiti') {
+            setShowHaitiModal(true);
+          } else {
+            setShowTransferModal(true);
+          }
         }}
       />
 

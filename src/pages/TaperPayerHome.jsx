@@ -709,6 +709,16 @@ export default function TaperPayerHome() {
         document.body
       )}
 
+      {/* PIN Modal */}
+      <PINModal
+        isOpen={showPINModal}
+        onSuccess={() => {
+          setShowPINModal(false);
+          setShowHaitiModal(true);
+        }}
+        onClose={() => setShowPINModal(false)}
+      />
+
       {/* Haiti Transfer Modal */}
       {showHaitiModal && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

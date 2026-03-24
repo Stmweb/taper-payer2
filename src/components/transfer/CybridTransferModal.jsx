@@ -111,6 +111,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         // Check KYC status (don't auto-trigger — let user click button)
         const statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
         const kyc = statusRes.data?.customer?.state;
+        console.log('KYC Status from API:', kyc);
         setKycStatus(kyc);
 
         // Create fiat & trading accounts in parallel

@@ -447,6 +447,12 @@ Deno.serve(async (req) => {
         transfer_type: 'funding',
         external_bank_account_guid: externalBankAccountGuid,
         payment_rail: 'ach',
+        source_participants: [
+          { type: 'external_bank_account', guid: externalBankAccountGuid, amount: amountCents },
+        ],
+        destination_participants: [
+          { type: 'account', guid: fiatAccountGuid, amount: amountCents },
+        ],
       });
       return Response.json({ quote, transfer });
     }

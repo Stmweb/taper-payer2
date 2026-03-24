@@ -42,6 +42,66 @@ export default function OperatingAgreement() {
     doc.line(margin, y, pageWidth - margin, y);
     addSpace(20);
 
+    addText('SECTION 1 — CORPORATE BYLAWS AND SHAREHOLDER AGREEMENT', 13, true);
+    addSpace(6);
+    addText('Article I – Name: The name of the corporation shall be Taper Payer INC., organized under the laws of the State of Delaware.', 11);
+    addSpace(8);
+    addText('Article II – Principal Office: The principal office shall be located at 254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702.', 11);
+    addSpace(8);
+    addText('Article III – Purpose: The corporation may engage in any lawful activity permitted under Delaware law.', 11);
+    addSpace(8);
+    addText('Article IV – Shareholders: Ownership of the corporation is divided among the shareholders according to their issued shares.', 11);
+    addSpace(10);
+
+    // Shareholder table
+    const shareholderHeaders = ['Shareholder', 'Ownership Percentage'];
+    const shareholderRows = [
+      ['Katy Lucas', '65%'],
+      ['Judith Valcin', '30%'],
+      ['David Jeanty', '5%'],
+    ];
+    const shareholderColWidths = [220, 140];
+    const shareholderTableX = margin;
+
+    // Header row
+    doc.setFillColor(55, 123, 183);
+    doc.rect(shareholderTableX, y, contentWidth, rowHeight, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    let cxsh = shareholderTableX;
+    shareholderHeaders.forEach((h, i) => {
+      doc.text(h, cxsh + 8, y + 15);
+      cxsh += shareholderColWidths[i];
+    });
+    y += rowHeight;
+
+    // Data rows
+    shareholderRows.forEach((row, ri) => {
+      doc.setFillColor(ri % 2 === 0 ? 245 : 255, ri % 2 === 0 ? 247 : 255, ri % 2 === 0 ? 250 : 255);
+      doc.rect(shareholderTableX, y, contentWidth, rowHeight, 'F');
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(0, 0, 0);
+      cxsh = shareholderTableX;
+      row.forEach((cell, i) => {
+        doc.text(cell, cxsh + 8, y + 15);
+        cxsh += shareholderColWidths[i];
+      });
+      y += rowHeight;
+    });
+
+    addSpace(16);
+    addText('Section 2 – Shareholder Agreement: This Shareholder Agreement governs the relationship between the shareholders of Taper Payer INC.', 11);
+    addSpace(8);
+    addText('Voting Rights: Voting power corresponds directly to each shareholder\'s ownership percentage.', 11);
+    addSpace(8);
+    addText('Transfer Restrictions: Shares may not be sold or transferred without approval from the majority of shareholders.', 11);
+    addSpace(8);
+    addText('Profit Distribution: Profits and dividends shall be distributed according to ownership percentages unless otherwise agreed in writing.', 11);
+    addSpace(8);
+    addText('Decision Making: Major corporate decisions require approval by shareholders representing more than 50% ownership.', 11);
+    addSpace(16);
+
     addText('ARTICLE I — ORGANIZATION', 13, true);
     addSpace(6);
     addText('1.1 Formation. Taper Payer LLC (the "Company") is a limited liability company organized pursuant to the laws of the State of Delaware, formed for the purposes set forth herein.', 11);

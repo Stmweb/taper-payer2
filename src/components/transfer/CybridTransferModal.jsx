@@ -383,7 +383,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               <p className="font-semibold text-slate-800">Setting up your account…</p>
               <p className="text-sm text-slate-500">Creating customer profile & accounts</p>
             </>
-          ) : (kycStatus === 'approved' || kycStatus === 'verified') ? (
+          ) : (kycStatus === 'approved' || kycStatus === 'verified' || kycStatus === 'completed') ? (
             <>
               <CheckCircle className="w-16 h-16 text-green-500" />
               <p className="font-semibold text-slate-800">Identity Verified</p>

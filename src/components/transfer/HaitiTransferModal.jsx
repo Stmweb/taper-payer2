@@ -122,15 +122,22 @@ export default function HaitiTransferModal({ amount, onClose }) {
     setLoading(true);
     setError('');
     try {
-      // Validate phone & name with DTone
+      // Detect operator and validate with DTone
       const res = await invoke('validateRecipient', { 
         phone: recipientPhone,
         name: recipientName 
       });
-      if (!res.data?.valid) throw new Error('Recipient validation failed');
+      if (!res.data?.valid) throw new Error('Receiver validation failed');
+      
+      // Check if receiver has MonCash support
+      const operator = res.data?.operator || '';
+      if (!operator.toLowerCase().includes('moncash') && !res.data?.supportsMoneytransfer) {
+        throw new Error(`This receiver's operator (${operator}) does not support MonCash transfers. Please check the phone number.`);
+      }
+      
       setStep('payout');
     } catch (e) {
-      setError(e.message || 'Recipient validation failed.');
+      setError(e.message || 'Receiver validation failed.');
     } finally {
       setLoading(false);
     }

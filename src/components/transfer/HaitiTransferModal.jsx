@@ -229,7 +229,7 @@ export default function HaitiTransferModal({ amount, onClose }) {
             style={{ backgroundColor: '#7C3AED' }}
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            Convert to USDC <ArrowRight className="ml-2 w-4 h-4" />
+            Continue <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </div>
       )}

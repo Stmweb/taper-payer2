@@ -423,17 +423,30 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                   <Button
                     onClick={async () => {
                       setKycLoading(true);
+                      setError('');
                       try {
+                        console.log('Starting KYC...');
                         const res = await invoke('startKYC', { customerGuid });
+                        console.log('KYC response:', res.data);
+                        if (res.data?.error) {
+                          setError(res.data.error);
+                          setKycLoading(false);
+                          return;
+                        }
                         if (res.data?.personaUrl) {
                           setPersonaUrl(res.data.personaUrl);
                         } else if (res.data?.outcome === 'passed' || res.data?.state === 'completed') {
                           // Auto-passed in sandbox, refresh status
+                          console.log('KYC auto-passed, refreshing...');
+                          setKycLoading(false);
                           setTimeout(() => setKycRefreshKey(k => k + 1), 500);
+                        } else {
+                          console.log('KYC response unclear:', res.data);
+                          setKycLoading(false);
                         }
                       } catch (e) {
+                        console.error('KYC error:', e);
                         setError(e.message || 'Could not start verification.');
-                      } finally {
                         setKycLoading(false);
                       }
                     }}

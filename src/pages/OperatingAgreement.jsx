@@ -257,6 +257,41 @@ export default function OperatingAgreement() {
             <p className="text-slate-500 text-sm mt-1">February 2026</p>
           </div>
 
+          {/* Corporate Bylaws & Shareholder Agreement */}
+          <Section title="Section 1 — Corporate Bylaws and Shareholder Agreement">
+            <P><B>Article I – Name:</B> The name of the corporation shall be Taper Payer INC., organized under the laws of the State of Delaware.</P>
+            <P><B>Article II – Principal Office:</B> The principal office shall be located at 254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702.</P>
+            <P><B>Article III – Purpose:</B> The corporation may engage in any lawful activity permitted under Delaware law.</P>
+            <P><B>Article IV – Shareholders:</B> Ownership of the corporation is divided among the shareholders according to their issued shares.</P>
+            <div className="overflow-x-auto my-4 mb-6">
+              <table className="w-full border border-slate-200 text-sm rounded-lg overflow-hidden">
+                <thead>
+                  <tr className="bg-blue-700 text-white">
+                    <th className="px-4 py-3 text-left">Shareholder</th>
+                    <th className="px-4 py-3 text-left">Ownership Percentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['Katy Lucas', '65%'],
+                    ['Judith Valcin', '30%'],
+                    ['David Jeanty', '5%'],
+                  ].map(([name, pct], i) => (
+                    <tr key={name} className={i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}>
+                      <td className="px-4 py-3 font-semibold">{name}</td>
+                      <td className="px-4 py-3">{pct}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <P><B>Section 2 – Shareholder Agreement:</B> This Shareholder Agreement governs the relationship between the shareholders of Taper Payer INC.</P>
+            <P><B>Voting Rights:</B> Voting power corresponds directly to each shareholder's ownership percentage.</P>
+            <P><B>Transfer Restrictions:</B> Shares may not be sold or transferred without approval from the majority of shareholders.</P>
+            <P><B>Profit Distribution:</B> Profits and dividends shall be distributed according to ownership percentages unless otherwise agreed in writing.</P>
+            <P><B>Decision Making:</B> Major corporate decisions require approval by shareholders representing more than 50% ownership.</P>
+          </Section>
+
           {/* Article I */}
           <Section title="Article I — Organization">
             <P><B>1.1 Formation.</B> Taper Payer LLC (the "Company") is a limited liability company organized pursuant to the laws of the State of Delaware, formed for the purposes set forth herein.</P>

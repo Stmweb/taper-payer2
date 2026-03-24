@@ -354,7 +354,6 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         customerGuid,
         fiatAccountGuid: fiatAccount.guid,
         counterpartyExternalBankAccountGuid: counterpartyBankAccountGuid,
-        counterpartyGuid,
         amountUSD: amount,
         country,
       });

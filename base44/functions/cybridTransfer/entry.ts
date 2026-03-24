@@ -550,13 +550,11 @@ Deno.serve(async (req) => {
         deliver_amount: amountCents,
       });
 
-      const transfer = await cybridApi(token, 'POST', '/api/transfers', {
+      // Trades use POST /api/trades, not /api/transfers
+      const trade = await cybridApi(token, 'POST', '/api/trades', {
         quote_guid: quote.guid,
-        transfer_type: 'trading',
-        source_account_guid: fiatAccountGuid,
-        destination_account_guid: tradingAccountGuid,
       });
-      return Response.json({ quote, transfer });
+      return Response.json({ quote, transfer: trade });
     }
 
     // ── Step 13 & 14: Create + Execute remittance plan ───────────────────────

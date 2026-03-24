@@ -434,6 +434,21 @@ Deno.serve(async (req) => {
       const { customerGuid, fiatAccountGuid, externalBankAccountGuid, amountUSD } = params;
       const amountCents = Math.round(parseFloat(amountUSD) * 100);
 
+      // Wait for external bank account to leave 'storing' state before funding
+      let eba;
+      for (let i = 0; i < 20; i++) {
+        eba = await cybridApi(token, 'GET', `/api/external_bank_accounts/${externalBankAccountGuid}`);
+        console.log(`External bank account state [attempt ${i+1}]:`, eba.state);
+        if (eba.state !== 'storing') break;
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      if (!eba || eba.state === 'storing') {
+        throw new Error('External bank account is still initializing. Please try again in a moment.');
+      }
+      if (eba.state === 'failed' || eba.state === 'deleted') {
+        throw new Error(`External bank account is in an invalid state: ${eba.state}. Please re-link your bank account.`);
+      }
+
       const quote = await cybridApi(token, 'POST', '/api/quotes', {
         product_type: 'funding',
         customer_guid: customerGuid,

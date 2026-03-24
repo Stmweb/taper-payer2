@@ -710,7 +710,12 @@ export default function TaperPayerHome() {
         isOpen={showPINModal}
         onSuccess={() => {
           setShowPINModal(false);
-          setShowHaitiModal(true);
+          // Route to appropriate modal based on country
+          if (sendTo === 'Haiti') {
+            setShowHaitiModal(true);
+          } else {
+            setShowTransferModal(true);
+          }
         }}
         onClose={() => setShowPINModal(false)}
       />

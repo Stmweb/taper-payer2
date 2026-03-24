@@ -357,9 +357,9 @@ export default function TaperPayerHome() {
                         if (!user) { 
                           setShowSignupModal(true); 
                         } else { 
-                          // Route Haiti to new modal, others to Cybrid
+                          // For Haiti, show PIN first
                           if (sendTo === 'Haiti') {
-                            setShowHaitiModal(true);
+                            setShowPINModal(true);
                           } else {
                             setShowTransferModal(true); 
                           }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3 } from 'lucide-react';
+import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3, ChevronRight } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
 
 function createPageUrl(page) {
@@ -24,10 +24,11 @@ export default function TaperPayerWhiteLabel() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
-      {/* Header */}
+      {/* Header — matches TaperPayerHome */}
       <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="relative flex items-center justify-between h-16 md:h-20">
+          <div className="relative flex items-center justify-between h-14 md:h-16">
+            {/* Mobile Menu Button */}
             <button
               className="md:hidden text-slate-700 p-2 z-10"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -36,37 +37,42 @@ export default function TaperPayerWhiteLabel() {
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
 
+            {/* Logo */}
             <Link to={createPageUrl('TaperPayerHome')} className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
+              <img
+                src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
                 alt="Taper Payer"
-                className="h-40 md:h-24 w-auto"
+                className="h-36 md:h-36 w-auto"
               />
             </Link>
-            
+
+            {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">How It Works</Link>
-              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Exchange Rates</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#2479C2] transition-colors">Contact</Link>
+              <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Exchange Rates</Link>
+              <Link to={createPageUrl('TaperPayerTopUp')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Taper Mobile</Link>
+              <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Contact</Link>
               <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
               </a>
-              <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                <Button size="sm" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90">Sign up</Button>
+              <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
+                <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
               </a>
             </div>
 
             <div className="md:hidden w-10"></div>
           </div>
 
+          {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden bg-gradient-to-br from-blue-600 to-green-600 -mx-4 px-4 py-6 space-y-3 rounded-b-2xl">
               <Link to={createPageUrl('TaperPayerHome')} className="block text-white font-semibold hover:text-white transition-colors py-2">Home</Link>
               <Link to={createPageUrl('TaperPayerAbout')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">About</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">How It Works</Link>
               <Link to={createPageUrl('TaperPayerRates')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Exchange Rates</Link>
+              <Link to={createPageUrl('TaperPayerTopUp')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Taper Mobile</Link>
               <Link to={createPageUrl('TaperPayerContact')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</Link>
               <div className="pt-3 space-y-3">
                 <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
@@ -100,6 +106,187 @@ export default function TaperPayerWhiteLabel() {
               Start Your Journey
             </Button>
           </motion.div>
+        </div>
+      </section>
+
+      {/* 3-Phone Flow Section */}
+      <section className="py-20 px-6" style={{ background: 'linear-gradient(135deg, #f0f4ff 0%, #f0fdf4 100%)' }}>
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Your App. Powered by Us.</h2>
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+              See exactly how your branded app will work — from identity to payout in seconds.
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-4">
+            {/* Phone 1 — KYC */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0 }}
+              viewport={{ once: true }}
+              className="flex flex-col items-center"
+            >
+              <div className="relative w-52 bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-slate-900 rounded-b-xl z-10"></div>
+                <div className="rounded-[2rem] overflow-hidden bg-white" style={{ minHeight: 380 }}>
+                  {/* Status bar */}
+                  <div className="bg-white px-4 pt-5 pb-2 flex items-center justify-between text-xs text-slate-500 font-medium">
+                    <span>9:41</span>
+                    <span className="text-xs">▲ ◼ ◼</span>
+                  </div>
+                  {/* App Logo */}
+                  <div className="flex justify-center py-3 border-b border-slate-100">
+                    <div className="bg-[#3D7BB7] text-white text-xs font-bold px-3 py-1 rounded-lg">yourapp</div>
+                  </div>
+                  {/* Content */}
+                  <div className="px-4 pt-4 pb-2">
+                    <p className="text-xs font-bold text-slate-800 mb-1">Upload US or Canadian photo ID</p>
+                    <p className="text-[10px] text-slate-500 mb-3 leading-snug">We require a photo of a valid government ID to verify your identity.</p>
+                    <p className="text-[10px] text-slate-600 font-semibold mb-2">Choose 1 of the following options:</p>
+                    {['Driver License', 'State ID', 'Passport'].map((doc) => (
+                      <div key={doc} className="flex items-center justify-between border border-slate-200 rounded-lg px-3 py-2 mb-2 bg-slate-50">
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-[#3D7BB7] flex items-center justify-center">
+                            <span className="text-white text-[8px]">✓</span>
+                          </div>
+                          <span className="text-[10px] font-medium text-slate-700">{doc}</span>
+                        </div>
+                        <ChevronRight className="w-3 h-3 text-slate-400" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* Bottom Banner */}
+                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: '#3D7BB7' }}>
+                  <p className="text-white font-bold text-sm leading-tight">KYC Approval<br />In 60 seconds</p>
+                </div>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-white/30 rounded-full"></div>
+              </div>
+              <div className="mt-4 text-center">
+                <div className="w-8 h-8 rounded-full bg-[#3D7BB7] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">01</div>
+              </div>
+            </motion.div>
+
+            {/* Arrow */}
+            <div className="hidden md:flex items-center text-slate-300 text-4xl mb-16">→</div>
+            <div className="md:hidden text-slate-300 text-3xl rotate-90 my-2">→</div>
+
+            {/* Phone 2 — Plaid */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              viewport={{ once: true }}
+              className="flex flex-col items-center"
+            >
+              <div className="relative w-52 bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-slate-900 rounded-b-xl z-10"></div>
+                <div className="rounded-[2rem] overflow-hidden bg-white" style={{ minHeight: 380 }}>
+                  <div className="bg-white px-4 pt-5 pb-2 flex items-center justify-between text-xs text-slate-500 font-medium">
+                    <span>9:41</span>
+                    <span className="text-xs">▲ ◼ ◼</span>
+                  </div>
+                  <div className="flex justify-center py-3 border-b border-slate-100">
+                    <div className="bg-[#3D7BB7] text-white text-xs font-bold px-3 py-1 rounded-lg">yourapp</div>
+                  </div>
+                  <div className="px-4 pt-4 pb-2">
+                    <p className="text-xs font-bold text-slate-800 mb-3">Select your bank</p>
+                    <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 mb-3 bg-slate-50">
+                      <span className="text-slate-400 text-xs">🔍</span>
+                      <span className="text-[10px] text-slate-400">Search</span>
+                    </div>
+                    {[
+                      { name: 'Chase', url: 'www.chase.com', color: '#117ACA' },
+                      { name: 'Wells Fargo', url: 'www.wellsfargo.com', color: '#CF2A2A' },
+                      { name: 'Bank of America', url: 'www.bankofamerica.com', color: '#E31837' },
+                    ].map((bank) => (
+                      <div key={bank.name} className="flex items-center gap-3 border border-slate-200 rounded-lg px-3 py-2 mb-2 bg-white">
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[8px] font-bold shrink-0" style={{ backgroundColor: bank.color }}>
+                          {bank.name[0]}
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-semibold text-slate-800">{bank.name}</p>
+                          <p className="text-[8px] text-slate-400">{bank.url}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: '#3D7BB7' }}>
+                  <p className="text-white font-bold text-sm leading-tight">Plaid Connect<br />ACH Pull In your app!</p>
+                  <p className="text-white/80 text-[10px] mt-1 underline">Also Utilize:</p>
+                  <p className="text-white text-[10px] font-semibold">RTP, FEDNOW<br />DOMESTIC WIRE</p>
+                </div>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-white/30 rounded-full"></div>
+              </div>
+              <div className="mt-4 text-center">
+                <div className="w-8 h-8 rounded-full bg-[#3D7BB7] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">02</div>
+              </div>
+            </motion.div>
+
+            {/* Arrow */}
+            <div className="hidden md:flex items-center text-slate-300 text-4xl mb-16">→</div>
+            <div className="md:hidden text-slate-300 text-3xl rotate-90 my-2">→</div>
+
+            {/* Phone 3 — Quote & Execute */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              viewport={{ once: true }}
+              className="flex flex-col items-center"
+            >
+              <div className="relative w-52 bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-slate-900 rounded-b-xl z-10"></div>
+                <div className="rounded-[2rem] overflow-hidden bg-white" style={{ minHeight: 380 }}>
+                  <div className="bg-white px-4 pt-5 pb-2 flex items-center justify-between text-xs text-slate-500 font-medium">
+                    <span>9:41</span>
+                    <span className="text-xs">▲ ◼ ◼</span>
+                  </div>
+                  <div className="flex justify-center py-3 border-b border-slate-100">
+                    <div className="bg-[#3D7BB7] text-white text-xs font-bold px-3 py-1 rounded-lg">yourapp</div>
+                  </div>
+                  <div className="px-4 pt-4 pb-2 space-y-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-[10px] text-slate-500">Send using</p>
+                      <div className="flex items-center gap-1 border border-slate-200 rounded px-2 py-0.5">
+                        <span className="text-[9px] font-semibold text-slate-700">Bank transfer ▾</span>
+                        <span className="text-[9px] text-slate-400 ml-1">✕</span>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[9px] text-slate-500 mb-0.5">You send</p>
+                      <div className="flex items-center justify-between border border-slate-200 rounded-lg px-3 py-2">
+                        <span className="text-lg font-bold text-slate-800">1,000</span>
+                        <span className="text-[10px] font-semibold text-slate-600 border border-slate-200 rounded px-2 py-0.5">🇺🇸 USD ▾</span>
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 rounded-lg px-3 py-2 space-y-1 text-[9px]">
+                      <div className="flex justify-between text-slate-600"><span>⊙ Fees*</span><span className="font-semibold">6 USD</span></div>
+                      <div className="flex justify-between text-slate-400 pl-3"><span>Transaction fee</span><span>6 USD</span></div>
+                      <div className="flex justify-between text-slate-400 pl-3"><span>Bank transfer fee</span><span>0 USD</span></div>
+                      <div className="flex justify-between text-slate-600 border-t border-slate-200 pt-1"><span>⊙ Amount to convert</span><span className="font-semibold">994 USD</span></div>
+                      <div className="flex justify-between text-slate-600"><span>⊙ Exchange rate</span><span className="font-semibold">83.266 INR</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: '#3D7BB7' }}>
+                  <p className="text-white font-bold text-sm leading-tight">Pull a Quote,<br />execute, and deliver<br />to offramp Partners<br />via stablecoins all<br />through Cybrid</p>
+                </div>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-white/30 rounded-full"></div>
+              </div>
+              <div className="mt-4 text-center">
+                <div className="w-8 h-8 rounded-full bg-[#3D7BB7] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">03</div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 

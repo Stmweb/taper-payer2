@@ -133,50 +133,50 @@ export default function TaperPayerWhiteLabel() {
               viewport={{ once: true }}
               className="flex flex-col items-center"
             >
-              <div className="relative w-52 bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-slate-900 rounded-b-xl z-10"></div>
+              <div className="relative w-52 rounded-[2.5rem] p-3 shadow-2xl" style={{ background: 'linear-gradient(145deg, #1a3a5c, #2d5f8f)' }}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 rounded-b-xl z-10" style={{ background: '#1a3a5c' }}></div>
                 <div className="rounded-[2rem] overflow-hidden bg-white" style={{ minHeight: 380 }}>
                   {/* Status bar */}
-                  <div className="bg-white px-4 pt-5 pb-2 flex items-center justify-between text-xs text-slate-500 font-medium">
+                  <div className="px-4 pt-5 pb-2 flex items-center justify-between text-xs font-medium" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)', color: 'white' }}>
                     <span>9:41</span>
                     <span className="text-xs">▲ ◼ ◼</span>
                   </div>
-                  {/* App Logo */}
-                  <div className="flex justify-center py-3 border-b border-slate-100">
-                    <div className="bg-[#3D7BB7] text-white text-xs font-bold px-3 py-1 rounded-lg">yourapp</div>
+                  {/* Taper Payer Logo Header */}
+                  <div className="flex justify-center py-2 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
+                    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer" className="h-10 w-auto" />
                   </div>
                   {/* Content */}
                   <div className="px-4 pt-4 pb-2">
                     <p className="text-xs font-bold text-slate-800 mb-1">Upload US or Canadian photo ID</p>
                     <p className="text-[10px] text-slate-500 mb-3 leading-snug">We require a photo of a valid government ID to verify your identity.</p>
-                    <p className="text-[10px] text-slate-600 font-semibold mb-2">Choose 1 of the following options:</p>
+                    <p className="text-[10px] font-semibold mb-2" style={{ color: '#3D7BB7' }}>Choose 1 of the following options:</p>
                     {['Driver License', 'State ID', 'Passport'].map((doc) => (
-                      <div key={doc} className="flex items-center justify-between border border-slate-200 rounded-lg px-3 py-2 mb-2 bg-slate-50">
+                      <div key={doc} className="flex items-center justify-between rounded-lg px-3 py-2 mb-2" style={{ border: '1px solid #3D7BB7', background: '#f0f7ff' }}>
                         <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 rounded-full bg-[#3D7BB7] flex items-center justify-center">
+                          <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
                             <span className="text-white text-[8px]">✓</span>
                           </div>
                           <span className="text-[10px] font-medium text-slate-700">{doc}</span>
                         </div>
-                        <ChevronRight className="w-3 h-3 text-slate-400" />
+                        <ChevronRight className="w-3 h-3" style={{ color: '#3D7BB7' }} />
                       </div>
                     ))}
                   </div>
                 </div>
                 {/* Bottom Banner */}
-                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: '#3D7BB7' }}>
+                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
                   <p className="text-white font-bold text-sm leading-tight">KYC Approval<br />In 60 seconds</p>
                 </div>
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-white/30 rounded-full"></div>
               </div>
               <div className="mt-4 text-center">
-                <div className="w-8 h-8 rounded-full bg-[#3D7BB7] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">01</div>
+                <div className="w-8 h-8 rounded-full text-white font-bold text-sm flex items-center justify-center mx-auto mb-2" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>01</div>
               </div>
             </motion.div>
 
             {/* Arrow */}
-            <div className="hidden md:flex items-center text-slate-300 text-4xl mb-16">→</div>
-            <div className="md:hidden text-slate-300 text-3xl rotate-90 my-2">→</div>
+            <div className="hidden md:flex items-center mb-16 text-3xl" style={{ color: '#3D7BB7' }}>→</div>
+            <div className="md:hidden text-3xl rotate-90 my-2" style={{ color: '#3D7BB7' }}>→</div>
 
             {/* Phone 2 — Plaid */}
             <motion.div
@@ -186,20 +186,20 @@ export default function TaperPayerWhiteLabel() {
               viewport={{ once: true }}
               className="flex flex-col items-center"
             >
-              <div className="relative w-52 bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-slate-900 rounded-b-xl z-10"></div>
+              <div className="relative w-52 rounded-[2.5rem] p-3 shadow-2xl" style={{ background: 'linear-gradient(145deg, #1a3a5c, #2d5f8f)' }}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 rounded-b-xl z-10" style={{ background: '#1a3a5c' }}></div>
                 <div className="rounded-[2rem] overflow-hidden bg-white" style={{ minHeight: 380 }}>
-                  <div className="bg-white px-4 pt-5 pb-2 flex items-center justify-between text-xs text-slate-500 font-medium">
+                  <div className="px-4 pt-5 pb-2 flex items-center justify-between text-xs font-medium" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)', color: 'white' }}>
                     <span>9:41</span>
                     <span className="text-xs">▲ ◼ ◼</span>
                   </div>
-                  <div className="flex justify-center py-3 border-b border-slate-100">
-                    <div className="bg-[#3D7BB7] text-white text-xs font-bold px-3 py-1 rounded-lg">yourapp</div>
+                  <div className="flex justify-center py-2 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
+                    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer" className="h-10 w-auto" />
                   </div>
                   <div className="px-4 pt-4 pb-2">
                     <p className="text-xs font-bold text-slate-800 mb-3">Select your bank</p>
-                    <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 mb-3 bg-slate-50">
-                      <span className="text-slate-400 text-xs">🔍</span>
+                    <div className="flex items-center gap-2 rounded-lg px-3 py-2 mb-3" style={{ border: '1px solid #3D7BB7', background: '#f0f7ff' }}>
+                      <span className="text-xs" style={{ color: '#3D7BB7' }}>🔍</span>
                       <span className="text-[10px] text-slate-400">Search</span>
                     </div>
                     {[
@@ -219,7 +219,7 @@ export default function TaperPayerWhiteLabel() {
                     ))}
                   </div>
                 </div>
-                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: '#3D7BB7' }}>
+                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
                   <p className="text-white font-bold text-sm leading-tight">Plaid Connect<br />ACH Pull In your app!</p>
                   <p className="text-white/80 text-[10px] mt-1 underline">Also Utilize:</p>
                   <p className="text-white text-[10px] font-semibold">RTP, FEDNOW<br />DOMESTIC WIRE</p>
@@ -227,13 +227,13 @@ export default function TaperPayerWhiteLabel() {
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-white/30 rounded-full"></div>
               </div>
               <div className="mt-4 text-center">
-                <div className="w-8 h-8 rounded-full bg-[#3D7BB7] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">02</div>
+                <div className="w-8 h-8 rounded-full text-white font-bold text-sm flex items-center justify-center mx-auto mb-2" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>02</div>
               </div>
             </motion.div>
 
             {/* Arrow */}
-            <div className="hidden md:flex items-center text-slate-300 text-4xl mb-16">→</div>
-            <div className="md:hidden text-slate-300 text-3xl rotate-90 my-2">→</div>
+            <div className="hidden md:flex items-center mb-16 text-3xl" style={{ color: '#3D7BB7' }}>→</div>
+            <div className="md:hidden text-3xl rotate-90 my-2" style={{ color: '#3D7BB7' }}>→</div>
 
             {/* Phone 3 — Quote & Execute */}
             <motion.div
@@ -243,47 +243,47 @@ export default function TaperPayerWhiteLabel() {
               viewport={{ once: true }}
               className="flex flex-col items-center"
             >
-              <div className="relative w-52 bg-slate-900 rounded-[2.5rem] p-3 shadow-2xl">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-slate-900 rounded-b-xl z-10"></div>
+              <div className="relative w-52 rounded-[2.5rem] p-3 shadow-2xl" style={{ background: 'linear-gradient(145deg, #1a3a5c, #2d5f8f)' }}>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 rounded-b-xl z-10" style={{ background: '#1a3a5c' }}></div>
                 <div className="rounded-[2rem] overflow-hidden bg-white" style={{ minHeight: 380 }}>
-                  <div className="bg-white px-4 pt-5 pb-2 flex items-center justify-between text-xs text-slate-500 font-medium">
+                  <div className="px-4 pt-5 pb-2 flex items-center justify-between text-xs font-medium" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)', color: 'white' }}>
                     <span>9:41</span>
                     <span className="text-xs">▲ ◼ ◼</span>
                   </div>
-                  <div className="flex justify-center py-3 border-b border-slate-100">
-                    <div className="bg-[#3D7BB7] text-white text-xs font-bold px-3 py-1 rounded-lg">yourapp</div>
+                  <div className="flex justify-center py-2 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
+                    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer" className="h-10 w-auto" />
                   </div>
                   <div className="px-4 pt-4 pb-2 space-y-2">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-[10px] text-slate-500">Send using</p>
-                      <div className="flex items-center gap-1 border border-slate-200 rounded px-2 py-0.5">
-                        <span className="text-[9px] font-semibold text-slate-700">Bank transfer ▾</span>
+                      <div className="flex items-center gap-1 rounded px-2 py-0.5" style={{ border: '1px solid #3D7BB7', background: '#f0f7ff' }}>
+                        <span className="text-[9px] font-semibold" style={{ color: '#3D7BB7' }}>Bank transfer ▾</span>
                         <span className="text-[9px] text-slate-400 ml-1">✕</span>
                       </div>
                     </div>
                     <div>
                       <p className="text-[9px] text-slate-500 mb-0.5">You send</p>
-                      <div className="flex items-center justify-between border border-slate-200 rounded-lg px-3 py-2">
+                      <div className="flex items-center justify-between rounded-lg px-3 py-2" style={{ border: '1px solid #3D7BB7' }}>
                         <span className="text-lg font-bold text-slate-800">1,000</span>
-                        <span className="text-[10px] font-semibold text-slate-600 border border-slate-200 rounded px-2 py-0.5">🇺🇸 USD ▾</span>
+                        <span className="text-[10px] font-semibold rounded px-2 py-0.5" style={{ border: '1px solid #61AF39', color: '#3D7BB7' }}>🇺🇸 USD ▾</span>
                       </div>
                     </div>
-                    <div className="bg-slate-50 rounded-lg px-3 py-2 space-y-1 text-[9px]">
-                      <div className="flex justify-between text-slate-600"><span>⊙ Fees*</span><span className="font-semibold">6 USD</span></div>
+                    <div className="rounded-lg px-3 py-2 space-y-1 text-[9px]" style={{ background: '#f0f7ff', border: '1px solid #dbeafe' }}>
+                      <div className="flex justify-between" style={{ color: '#3D7BB7' }}><span>⊙ Fees*</span><span className="font-semibold">6 USD</span></div>
                       <div className="flex justify-between text-slate-400 pl-3"><span>Transaction fee</span><span>6 USD</span></div>
                       <div className="flex justify-between text-slate-400 pl-3"><span>Bank transfer fee</span><span>0 USD</span></div>
-                      <div className="flex justify-between text-slate-600 border-t border-slate-200 pt-1"><span>⊙ Amount to convert</span><span className="font-semibold">994 USD</span></div>
-                      <div className="flex justify-between text-slate-600"><span>⊙ Exchange rate</span><span className="font-semibold">83.266 INR</span></div>
+                      <div className="flex justify-between border-t pt-1" style={{ color: '#3D7BB7', borderColor: '#93c5fd' }}><span>⊙ Amount to convert</span><span className="font-semibold">994 USD</span></div>
+                      <div className="flex justify-between" style={{ color: '#61AF39' }}><span>⊙ Exchange rate</span><span className="font-semibold">83.266 INR</span></div>
                     </div>
                   </div>
                 </div>
-                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: '#3D7BB7' }}>
+                <div className="mt-2 rounded-2xl px-4 py-3 text-center" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
                   <p className="text-white font-bold text-sm leading-tight">Pull a Quote,<br />execute, and deliver<br />to offramp Partners<br />via stablecoins all<br />through Cybrid</p>
                 </div>
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-20 h-1 bg-white/30 rounded-full"></div>
               </div>
               <div className="mt-4 text-center">
-                <div className="w-8 h-8 rounded-full bg-[#3D7BB7] text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">03</div>
+                <div className="w-8 h-8 rounded-full text-white font-bold text-sm flex items-center justify-center mx-auto mb-2" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>03</div>
               </div>
             </motion.div>
           </div>

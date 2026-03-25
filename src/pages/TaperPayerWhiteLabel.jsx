@@ -142,8 +142,8 @@ export default function TaperPayerWhiteLabel() {
                     <span className="text-xs">▲ ◼ ◼</span>
                   </div>
                   {/* Taper Payer Logo Header */}
-                  <div className="flex justify-center py-2 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
-                    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer" className="h-10 w-auto" />
+                  <div className="flex justify-center py-3 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
+                    <span className="text-white font-bold text-sm tracking-wide">Your Logo</span>
                   </div>
                   {/* Content */}
                   <div className="px-4 pt-4 pb-2">
@@ -193,8 +193,8 @@ export default function TaperPayerWhiteLabel() {
                     <span>9:41</span>
                     <span className="text-xs">▲ ◼ ◼</span>
                   </div>
-                  <div className="flex justify-center py-2 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
-                    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer" className="h-10 w-auto" />
+                  <div className="flex justify-center py-3 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
+                    <span className="text-white font-bold text-sm tracking-wide">Your Logo</span>
                   </div>
                   <div className="px-4 pt-4 pb-2">
                     <p className="text-xs font-bold text-slate-800 mb-3">Select your bank</p>
@@ -250,8 +250,8 @@ export default function TaperPayerWhiteLabel() {
                     <span>9:41</span>
                     <span className="text-xs">▲ ◼ ◼</span>
                   </div>
-                  <div className="flex justify-center py-2 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
-                    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer" className="h-10 w-auto" />
+                  <div className="flex justify-center py-3 border-b border-slate-100" style={{ background: 'linear-gradient(90deg, #3D7BB7, #61AF39)' }}>
+                    <span className="text-white font-bold text-sm tracking-wide">Your Logo</span>
                   </div>
                   <div className="px-4 pt-4 pb-2 space-y-2">
                     <div className="flex items-center justify-between mb-1">

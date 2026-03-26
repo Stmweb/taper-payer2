@@ -26,10 +26,12 @@ export default function TaperPayerWhiteLabel() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await base44.integrations.Core.SendEmail({
-        to: 'support@taperpayer.com',
-        subject: `White Label Inquiry from ${form.name} — ${form.company || 'N/A'}`,
-        body: `New White Label Inquiry\n\nName: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || 'N/A'}\nPhone: ${form.phone || 'N/A'}\n\nMessage:\n${form.message}`,
+      await base44.functions.invoke('sendInquiryEmail', {
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        phone: form.phone,
+        message: form.message,
       });
       setSubmitted(true);
     } catch (err) {

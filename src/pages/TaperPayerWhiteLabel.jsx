@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3, ChevronRight } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3, ChevronRight, Loader2 } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
+import { base44 } from '@/api/base44Client';
 
 function createPageUrl(page) {
   return `/${page}`;
@@ -12,6 +15,29 @@ function createPageUrl(page) {
 
 export default function TaperPayerWhiteLabel() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showInquiry, setShowInquiry] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', company: '', phone: '', message: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
+  const handleInquirySubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitError('');
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: 'support@taperpayer.com',
+        subject: `White Label Inquiry from ${form.name} — ${form.company || 'N/A'}`,
+        body: `New White Label Inquiry\n\nName: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company || 'N/A'}\nPhone: ${form.phone || 'N/A'}\n\nMessage:\n${form.message}`,
+      });
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError('Failed to send. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const features = [
     { icon: Globe, title: 'Your Brand, Your Business', description: 'Launch under your own brand with full customization. Keep 100% of customer relationships.' },
@@ -102,7 +128,7 @@ export default function TaperPayerWhiteLabel() {
             <p className="text-xl md:text-2xl text-blue-100 mb-8">
               No licenses required. Your app. Your brand. Your business. We handle the rest.
             </p>
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-6 text-lg">
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-6 text-lg" onClick={() => { setShowInquiry(true); setSubmitted(false); setForm({ name: '', email: '', company: '', phone: '', message: '' }); }}>
               Start Your Journey
             </Button>
           </motion.div>
@@ -430,6 +456,80 @@ export default function TaperPayerWhiteLabel() {
       </section>
 
       <SiteFooter />
+
+      {/* Inquiry Modal */}
+      {showInquiry && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/50" onClick={() => setShowInquiry(false)} />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+          >
+            <button onClick={() => setShowInquiry(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="p-6 pt-8">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                  <Globe className="w-7 h-7 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900">Start Your Journey</h2>
+                <p className="text-slate-500 text-sm mt-1">Tell us about your vision and we'll reach out shortly.</p>
+              </div>
+
+              {submitted ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="w-9 h-9 text-green-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Inquiry Sent!</h3>
+                  <p className="text-slate-500 text-sm">We'll be in touch at <strong>{form.email}</strong> soon.</p>
+                  <Button className="mt-6 w-full" style={{ backgroundColor: '#3D7BB7' }} onClick={() => setShowInquiry(false)}>Close</Button>
+                </div>
+              ) : (
+                <form onSubmit={handleInquirySubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Full Name *</label>
+                    <Input required placeholder="John Smith" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Email Address *</label>
+                    <Input required type="email" placeholder="john@company.com" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Company Name</label>
+                    <Input placeholder="Acme Fintech Inc." value={form.company} onChange={e => setForm(f => ({ ...f, company: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number</label>
+                    <Input type="tel" placeholder="+1 (555) 000-0000" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Tell us about your goals *</label>
+                    <textarea
+                      required
+                      rows={4}
+                      placeholder="Describe your business idea, target market, or any questions..."
+                      value={form.message}
+                      onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                      className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
+                    />
+                  </div>
+                  {submitError && <p className="text-red-500 text-sm">{submitError}</p>}
+                  <Button type="submit" disabled={submitting} className="w-full py-6 text-base" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                    {submitting ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Sending...</> : 'Submit Inquiry'}
+                  </Button>
+                </form>
+              )}
+            </div>
+          </motion.div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

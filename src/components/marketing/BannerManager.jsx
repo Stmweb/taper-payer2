@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import NativeSelect from '@/components/ui/NativeSelect';
 import { Upload, Loader2, Trash2, Eye, Edit2, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -87,10 +88,13 @@ export default function BannerManager() {
 
   const handleDelete = async (id) => {
     if (!confirm('Delete this banner?')) return;
+    // Optimistic update
+    const prev = banners;
+    setBanners(banners.filter(b => b.id !== id));
     try {
       await base44.entities.PromotionalBanner.delete(id);
-      setBanners(banners.filter(b => b.id !== id));
     } catch (err) {
+      setBanners(prev); // Rollback on error
       setError('Failed to delete banner');
     }
   };
@@ -160,18 +164,16 @@ export default function BannerManager() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" htmlFor="banner-target-size">
                   Target Size
                 </label>
-                <select
+                <NativeSelect
+                  id="banner-target-size"
                   value={formData.target_size}
-                  onChange={e => setFormData(prev => ({ ...prev, target_size: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                >
-                  {BANNER_SIZES.map(size => (
-                    <option key={size.id} value={size.id}>{size.label}</option>
-                  ))}
-                </select>
+                  onChange={val => setFormData(prev => ({ ...prev, target_size: val }))}
+                  options={BANNER_SIZES.map(s => ({ value: s.id, label: s.label }))}
+                  title="Select Target Size"
+                />
               </div>
 
               <div>
@@ -281,6 +283,8 @@ export default function BannerManager() {
                 <img
                   src={banner.image_url}
                   alt={banner.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-32 h-24 object-cover rounded-lg flex-shrink-0"
                 />
 
@@ -302,15 +306,15 @@ export default function BannerManager() {
                 <div className="flex gap-2 flex-shrink-0">
                   <button
                     onClick={() => handleEdit(banner)}
-                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
-                    title="Edit"
+                    className="p-3 min-w-[44px] min-h-[44px] hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors flex items-center justify-center"
+                    aria-label={`Edit banner: ${banner.title}`}
                   >
                     <Edit2 className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                   </button>
                   <button
                     onClick={() => handleDelete(banner.id)}
-                    className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                    title="Delete"
+                    className="p-3 min-w-[44px] min-h-[44px] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex items-center justify-center"
+                    aria-label={`Delete banner: ${banner.title}`}
                   >
                     <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
                   </button>

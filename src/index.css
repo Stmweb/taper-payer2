@@ -84,5 +84,96 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Minimum readable font size on mobile */
+    font-size: 14px;
+  }
+}
+
+/* ── Mobile / WebView UX Enhancements ── */
+@layer utilities {
+  /* Ensure all interactive elements have minimum 44px tap target */
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent text size inflation on iOS WebView */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Smooth momentum scrolling in WebView */
+  .scroll-smooth-touch {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* ── Global touch-friendly fixes ── */
+@layer base {
+  /* Inputs: min 44px height, 14px font to prevent iOS zoom */
+  input,
+  textarea {
+    font-size: 16px; /* prevents iOS WebView auto-zoom on focus */
+    min-height: 44px;
+  }
+
+  /* All buttons: 44px minimum tap target */
+  button,
+  [role="button"],
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Exception: icon-only inline elements should not stretch layout */
+  button.icon-only {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent double-tap zoom on interactive elements */
+  button,
+  a,
+  [role="button"],
+  select,
+  input[type="submit"],
+  input[type="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Lazy load images by default (hint to browser) */
+  img:not([loading]) {
+    loading: lazy;
+  }
+
+  /* Optimistic skeleton shimmer */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  .dark .skeleton {
+    background: linear-gradient(90deg, #1e293b 25%, #0f172a 50%, #1e293b 75%);
+    background-size: 200% 100%;
+  }
+
+  /* Focus-visible ring for keyboard nav — only shows for keyboard, not touch */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
   }
 }

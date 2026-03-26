@@ -6,7 +6,7 @@ Deno.serve(async (req) => {
 
   const formData = new FormData();
   formData.append('from', `Taper Payer <noreply@${MAILGUN_DOMAIN}>`);
-  formData.append('to', 'Support@taperpayer.com');
+  formData.append('to', 'info@taperpayer.com');
   formData.append('subject', `White Label Inquiry from ${name} — ${company || 'N/A'}`);
   formData.append('html', `
     <h2>New White Label Inquiry</h2>

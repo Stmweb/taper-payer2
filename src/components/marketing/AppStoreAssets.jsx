@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wand2, Loader2, Download, Image, Smartphone, RefreshCw } from 'lucide-react';
+import { Wand2, Loader2, Download, Image, Smartphone, RefreshCw, LayoutGrid } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 const BRAND_CONTEXT = `
@@ -18,6 +18,16 @@ STRICT BRAND REQUIREMENTS — apply to every element:
 - Do NOT use red, purple, pink, yellow, or any off-brand colors
 - Do NOT include real people's faces
 `;
+
+const APP_ICON_PROMPT = `Create a professional mobile app icon for "Taper Payer" fintech app. Perfectly square 1024×1024px.
+${BRAND_CONTEXT}
+Design: Clean, bold, modern app icon suitable for both iOS App Store and Google Play.
+Background: Deep navy (#0F172A) or a strong blue-to-green diagonal gradient (#2479C2 → #61AF39) — one solid look, no noise.
+Center symbol: A stylized bold letter "T" or a globe/arrow icon representing global money transfer, rendered in white or light color on the dark background. Alternatively, show "TP" as a monogram in white bold sans-serif.
+No text other than possibly "TP" monogram — app icons should NOT spell out full names.
+Corners: Rounded for iOS (the OS clips them automatically, but design with slight rounding).
+Style: Premium fintech, minimal, bold — looks great at small sizes (60×60) and large sizes (1024×1024).
+Do NOT add shadows, borders, or outer glows. Keep it flat or very subtly elevated.`;
 
 const FEATURE_GRAPHIC_PROMPT = `Create a stunning Google Play Store feature graphic for "Taper Payer" fintech app. Landscape banner exactly 1024×500px.
 ${BRAND_CONTEXT}
@@ -174,13 +184,13 @@ function AssetCard({ title, subtitle, badge, prompt, filename, aspect }) {
       {/* Preview Area */}
       <div
         className="relative bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden"
-        style={{ aspectRatio: aspect === 'feature' ? '1024/500' : '9/16', maxHeight: aspect === 'feature' ? 260 : 420 }}
+        style={{ aspectRatio: aspect === 'feature' ? '1024/500' : aspect === 'icon' ? '1/1' : '9/16', maxHeight: aspect === 'feature' ? 260 : aspect === 'icon' ? 280 : 420 }}
       >
         {imageUrl ? (
           <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
         ) : (
           <div className="flex flex-col items-center gap-2 text-slate-400 p-6 text-center">
-            {aspect === 'feature' ? <Image className="w-10 h-10" /> : <Smartphone className="w-8 h-8" />}
+            {aspect === 'feature' ? <Image className="w-10 h-10" /> : aspect === 'icon' ? <LayoutGrid className="w-10 h-10" /> : <Smartphone className="w-8 h-8" />}
             <p className="text-sm font-medium">{title}</p>
             <p className="text-xs">{subtitle}</p>
           </div>
@@ -239,8 +249,27 @@ export default function AppStoreAssets() {
           Generate and download required assets for publishing on the App Store and Google Play. Click "Generate with AI" on each asset, then download as PNG.
         </p>
         <div className="flex flex-wrap gap-3 mt-3 text-xs text-slate-500">
+          <span className="flex items-center gap-1"><LayoutGrid className="w-3.5 h-3.5" /> App Icon: 1024 × 1024 px · PNG · iOS & Android</span>
           <span className="flex items-center gap-1"><Image className="w-3.5 h-3.5" /> Feature Graphic: 1024 × 500 px · PNG/JPEG · max 15 MB</span>
           <span className="flex items-center gap-1"><Smartphone className="w-3.5 h-3.5" /> Screenshots: 9:16 · PNG/JPEG · 320–3840 px each side · max 8 MB</span>
+        </div>
+      </div>
+
+      {/* App Icon */}
+      <div>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <LayoutGrid className="w-5 h-5" style={{ color: '#F88F2B' }} /> App Icon
+          <Badge className="ml-2 text-xs" style={{ backgroundColor: '#2479C2' }}>Required · iOS & Android</Badge>
+        </h3>
+        <div className="max-w-xs">
+          <AssetCard
+            title="App Icon"
+            subtitle="1024 × 1024 px · Square · PNG"
+            badge="1024×1024"
+            prompt={APP_ICON_PROMPT}
+            filename="taper-payer-app-icon.png"
+            aspect="icon"
+          />
         </div>
       </div>
 

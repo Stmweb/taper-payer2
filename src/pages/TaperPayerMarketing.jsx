@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { base44 } from '@/api/base44Client';
 import AIVideoGenerator from '@/components/marketing/AIVideoGenerator';
 import BannerManager from '@/components/marketing/BannerManager';
+import AppStoreAssets from '@/components/marketing/AppStoreAssets';
 
 const BRAND = {
   blue: '#2479C2',
@@ -367,6 +368,7 @@ export default function TaperPayerMarketing() {
     { id: 'banners', label: 'Promotional Banners', icon: ImagePlus },
     { id: 'flyer', label: 'AI Flyer Generator', icon: Wand2 },
     { id: 'video', label: 'AI Video Creator', icon: Video },
+    { id: 'appstore', label: 'App Store Assets', icon: Smartphone },
     { id: 'social', label: 'Social Media Sizes', icon: Smartphone },
     { id: 'digital', label: 'Digital & Ads', icon: Monitor },
     { id: 'print', label: 'Print Formats', icon: FileText },
@@ -411,6 +413,9 @@ export default function TaperPayerMarketing() {
       </div>
 
       <div className="container mx-auto px-6 py-10">
+
+        {/* App Store Assets */}
+        {activeTab === 'appstore' && <AppStoreAssets />}
 
         {/* Promotional Banners */}
         {activeTab === 'banners' && <BannerManager />}

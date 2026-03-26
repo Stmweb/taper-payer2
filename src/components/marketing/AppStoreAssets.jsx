@@ -45,20 +45,20 @@ const SCREENSHOT_PROMPTS = [
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
 Screen: Sending money to Nigeria. White background. Urgency theme.
-Top header: Taper Payer logo. Compact notification banner: "⚡ Limited-Time Rate — Expires 00:14:32"
-Center card: "You Send" $300 USD · "Recipient gets" 486,000 NGN in bold green · exchange rate "1 USD = 1,620 NGN"
-Badge: "🔥 Rate valid 15 min only!" in #F88F2B
+Top header: Taper Payer logo. Compact notification banner: "⚡ Send Money to Nigeria — Fast & Secure"
+Center: Nigerian flag 🇳🇬 large and prominent. Bold headline "Send to Nigeria" in slate-900. Subtext "Same-day delivery to your loved ones" in slate-600.
+Badge: "🔥 Limited-Time Offer" in #F88F2B
 Large blue "Send to Nigeria Now" button.
-Footer label: "Don't Miss Today's Best Naira Rate"`,
+Footer label: "Fast · Secure · Affordable"`,
   },
   {
     label: '🇭🇹 Haiti — Same Day',
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
 Screen: Sending money to Haiti. White background. Same-day urgency theme.
-Top header: Taper Payer logo. Compact green banner: "✅ Send Before 3PM — Arrives TODAY via MonCash"
-Center card: "You Send" $200 USD · "Recipient gets" 26,400 HTG in bold green · "Via MonCash · Today by 5PM"
-Badge: "⏰ 2h 14m left for same-day delivery" in #F88F2B
+Top header: Taper Payer logo. Compact green banner: "✅ Same-Day Delivery via MonCash"
+Center: Haitian flag 🇭🇹 large and prominent. Bold headline "Send to Haiti" in slate-900. Subtext "Arrives today via MonCash mobile wallet" in slate-600.
+Badge: "⏰ Same-Day Guarantee" in #F88F2B
 Large blue "Send to Haiti Now" button.
 Footer label: "Your Family Gets It TODAY"`,
   },
@@ -67,19 +67,19 @@ Footer label: "Your Family Gets It TODAY"`,
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
 Screen: Sending money to Ghana. White background. Best-rate urgency.
-Top header: Taper Payer logo. Compact blue banner: "📈 Rate Just Increased — Lock It In!"
-Center card: "You Send" $250 USD · "Recipient gets" 3,850 GHS in bold green · "1 USD = 15.40 GHS"
-Badge: "⭐ Best GHS Rate in 30 Days" in #61AF39
+Top header: Taper Payer logo. Compact blue banner: "📈 Best Rates to Ghana"
+Center: Ghanaian flag 🇬🇭 large and prominent. Bold headline "Send to Ghana" in slate-900. Subtext "Competitive rates, zero hidden fees" in slate-600.
+Badge: "⭐ Best Rate Guarantee" in #61AF39
 Large blue "Send to Ghana Now" button.
-Footer label: "Best Ghana Rate Today — Act Fast"`,
+Footer label: "Best Ghana Rate — Act Fast"`,
   },
   {
     label: '🇰🇪 Kenya — Instant M-Pesa',
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
 Screen: Sending money to Kenya. White background. Instant delivery urgency.
-Top header: Taper Payer logo. Compact green banner: "⚡ Instant M-Pesa — Seconds Not Hours"
-Center card: "You Send" $150 USD · "Recipient gets" 19,500 KES in bold green · "Via M-Pesa · Instant"
+Top header: Taper Payer logo. Compact green banner: "⚡ Instant M-Pesa Delivery"
+Center: Kenyan flag 🇰🇪 large and prominent. Bold headline "Send to Kenya" in slate-900. Subtext "Delivered to M-Pesa in seconds" in slate-600.
 Badge: "🚀 Avg delivery: 8 seconds" in #2479C2
 Large green "Send to Kenya Instantly" button.
 Footer label: "M-Pesa in Seconds — Send Now"`,
@@ -90,21 +90,21 @@ Footer label: "M-Pesa in Seconds — Send Now"`,
 ${BRAND_CONTEXT}
 Screen: Sending money to Senegal. White background. Low-fee urgency.
 Top header: Taper Payer logo. Compact orange banner: "💸 Zero Hidden Fees"
-Center card: "You Send" $200 USD · "Recipient gets" 124,000 XOF in bold green · "Fee: $0.00 · 1 USD = 620 XOF"
-Badge: "You save $8 vs. competitors" in #61AF39
+Center: Senegalese flag 🇸🇳 large and prominent. Bold headline "Send to Senegal" in slate-900. Subtext "No hidden fees — what you see is what you pay" in slate-600.
+Badge: "Save more vs. competitors" in #61AF39
 Large blue "Send to Senegal Now" button.
-Footer label: "Zero Fees to Senegal — Limited Offer"`,
+Footer label: "Zero Fees — Limited Offer"`,
   },
   {
     label: '🇦🇴 Angola — Flash Deal',
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
 Screen: Sending money to Angola. White background. Flash deal urgency.
-Top header: Taper Payer logo. Compact orange banner: "🔥 FLASH DEAL — Extra 2% on AOA"
-Center card: "You Send" $300 USD · "Recipient gets" 255,000 AOA in bold green · "Bonus rate: +2% today"
+Top header: Taper Payer logo. Compact orange banner: "🔥 FLASH DEAL — Bonus Rate Today"
+Center: Angolan flag 🇦🇴 large and prominent. Bold headline "Send to Angola" in slate-900. Subtext "Extra bonus rate — today only" in slate-600.
 Countdown: "Ends in 03:44:12" in red-orange bold
 Large blue "Claim Flash Rate" button.
-Footer label: "Flash Deal — Extra Kwanza Ends Tonight"`,
+Footer label: "Flash Deal Ends Tonight"`,
   },
   {
     label: '🇨🇲 Cameroon — No Fees',
@@ -112,8 +112,8 @@ Footer label: "Flash Deal — Extra Kwanza Ends Tonight"`,
 ${BRAND_CONTEXT}
 Screen: Sending money to Cameroon. White background. No-fee urgency.
 Top header: Taper Payer logo. Compact green banner: "🎁 FREE Transfer to Cameroon — Today Only"
-Center card: "You Send" $200 USD · "Recipient gets" 124,000 XAF in bold green · "Fee: FREE (normally $4.99)"
-Badge: "First transfer FREE — New users" in #F88F2B
+Center: Cameroonian flag 🇨🇲 large and prominent. Bold headline "Send to Cameroon" in slate-900. Subtext "First transfer FREE for new users" in slate-600.
+Badge: "First transfer FREE" in #F88F2B
 Large green "Send Free to Cameroon" button.
 Footer label: "Free Transfer — Today Only"`,
   },
@@ -122,8 +122,8 @@ Footer label: "Free Transfer — Today Only"`,
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
 Screen: Sending money to Morocco. White background. Trust + speed urgency.
-Top header: Taper Payer logo. Compact blue banner: "🛡 Bank-Grade Security · 50,000+ Transfers"
-Center card: "You Send" $400 USD · "Recipient gets" 4,000 MAD in bold green · "Under 1 hour · Encrypted"
+Top header: Taper Payer logo. Compact blue banner: "🛡 Bank-Grade Security"
+Center: Moroccan flag 🇲🇦 large and prominent. Bold headline "Send to Morocco" in slate-900. Subtext "Encrypted · Under 1 hour · 50,000+ transfers secured" in slate-600.
 Badge: "⭐⭐⭐⭐⭐ Rated #1 for Morocco" in #2479C2
 Large blue "Send to Morocco Securely" button.
 Footer label: "Trusted by Thousands"`,
@@ -133,8 +133,8 @@ Footer label: "Trusted by Thousands"`,
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
 Screen: Sending money to Dominican Republic. White background. Celebration urgency.
-Top header: Taper Payer logo. Compact festive banner: "🎉 Arrives Before Friday!"
-Center card: "You Send" $250 USD · "Recipient gets" 14,750 DOP in bold green · "Friday by 6PM"
+Top header: Taper Payer logo. Compact festive banner: "🎉 Arrives Before the Weekend!"
+Center: Dominican Republic flag 🇩🇴 large and prominent. Bold headline "Send to DR" in slate-900. Subtext "Guaranteed delivery before Friday" in slate-600.
 Badge: "⏰ Order by 5PM for Friday delivery" in #F88F2B
 Large blue "Send to DR Now" button.
 Footer label: "Weekend Money Ready — Send Now"`,
@@ -145,8 +145,8 @@ Footer label: "Weekend Money Ready — Send Now"`,
 ${BRAND_CONTEXT}
 Screen: Sending money to Mexico. White background. Instant delivery urgency.
 Top header: Taper Payer logo. Compact green banner: "⚡ Instant SPEI Transfer"
-Center card: "You Send" $500 USD · "Recipient gets" 9,500 MXN in bold green · "Via SPEI · Instant to any Mexican bank"
-Badge: "🚀 Faster than Western Union by 4h" in #2479C2
+Center: Mexican flag 🇲🇽 large and prominent. Bold headline "Send to Mexico" in slate-900. Subtext "Instant delivery to any Mexican bank via SPEI" in slate-600.
+Badge: "🚀 Faster than Western Union" in #2479C2
 Large blue "Send to Mexico Instantly" button.
 Footer label: "Instant SPEI — No Delays"`,
   },

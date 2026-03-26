@@ -1,8 +1,95 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Loader2, Wand2, Play, Pause, RotateCcw, Download, Volume2, VolumeX, MicOff } from 'lucide-react';
+import { Loader2, Wand2, Play, Pause, RotateCcw, Download, Volume2, VolumeX, MicOff, Youtube, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
+
+function extractYouTubeId(url) {
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+function YouTubeEmbed() {
+  const [url, setUrl] = useState('');
+  const [videoId, setVideoId] = useState(null);
+  const [error, setError] = useState('');
+
+  const handleLoad = () => {
+    setError('');
+    const id = extractYouTubeId(url.trim());
+    if (!id) {
+      setError('Invalid YouTube URL. Please enter a valid youtube.com or youtu.be link.');
+      setVideoId(null);
+      return;
+    }
+    setVideoId(id);
+  };
+
+  return (
+    <div className="space-y-5">
+      <Card className="p-6 space-y-4">
+        <div className="flex items-center gap-2 mb-1">
+          <Youtube className="w-5 h-5 text-red-500" />
+          <h3 className="font-semibold text-slate-900">Embed a YouTube Video</h3>
+        </div>
+        <p className="text-sm text-slate-500">
+          Paste a YouTube URL below. The video must be <strong>public or unlisted</strong>, with <strong>ads turned off</strong> and <strong>no age restriction</strong>.
+        </p>
+        <div className="flex gap-2">
+          <Input
+            value={url}
+            onChange={e => { setUrl(e.target.value); setError(''); }}
+            placeholder="https://www.youtube.com/watch?v=..."
+            className="flex-1"
+            onKeyDown={e => e.key === 'Enter' && handleLoad()}
+          />
+          <Button onClick={handleLoad} style={{ backgroundColor: '#2479C2' }} className="flex-shrink-0">
+            Load Video
+          </Button>
+        </div>
+        {error && (
+          <div className="flex items-center gap-2 text-red-500 text-sm bg-red-50 rounded-lg px-3 py-2">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            {error}
+          </div>
+        )}
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-700 space-y-1">
+          <p className="font-semibold">Requirements:</p>
+          <ul className="list-disc ml-4 space-y-0.5">
+            <li>Video must be <strong>Public</strong> or <strong>Unlisted</strong></li>
+            <li>Ads must be <strong>turned off</strong> in YouTube Studio</li>
+            <li>Video must <strong>not be age-restricted</strong></li>
+          </ul>
+        </div>
+      </Card>
+
+      {videoId && (
+        <Card className="overflow-hidden">
+          <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+              title="YouTube video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          <div className="p-4 flex items-center justify-between">
+            <p className="text-sm text-slate-500 font-mono">ID: {videoId}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => { setVideoId(null); setUrl(''); }}
+            >
+              Remove
+            </Button>
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}
 
 const VIDEO_TOPICS = [
   { id: 'remittance', label: '💸 Send Money Home', desc: 'Highlight fast, low-fee international transfers' },
@@ -362,9 +449,31 @@ Generate ${Math.max(3, Math.floor(parseInt(selectedDuration) / 10))} frames that
     setCustomScript('');
   };
 
+  const [activeTab, setActiveTab] = useState('ai'); // 'ai' | 'youtube'
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {step === 'setup' && (
+      {/* Tab switcher */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setActiveTab('ai')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors ${activeTab === 'ai' ? 'text-white border-transparent' : 'bg-white text-slate-600 border-slate-300 hover:border-blue-400'}`}
+          style={activeTab === 'ai' ? { backgroundColor: '#2479C2' } : {}}
+        >
+          <Wand2 className="w-4 h-4" /> AI Video Creator
+        </button>
+        <button
+          onClick={() => setActiveTab('youtube')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium border transition-colors ${activeTab === 'youtube' ? 'text-white border-transparent' : 'bg-white text-slate-600 border-slate-300 hover:border-red-400'}`}
+          style={activeTab === 'youtube' ? { backgroundColor: '#FF0000' } : {}}
+        >
+          <Youtube className="w-4 h-4" /> YouTube Video
+        </button>
+      </div>
+
+      {activeTab === 'youtube' && <YouTubeEmbed />}
+
+      {activeTab === 'ai' && step === 'setup' && (
         <Card className="p-6 space-y-6">
           {/* Topic */}
           <div>
@@ -457,7 +566,7 @@ Generate ${Math.max(3, Math.floor(parseInt(selectedDuration) / 10))} frames that
         </Card>
       )}
 
-      {step === 'preview' && generatedScript && (
+      {activeTab === 'ai' && step === 'preview' && generatedScript && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>

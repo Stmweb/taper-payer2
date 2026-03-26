@@ -14,6 +14,7 @@ const BRAND = {
   orange: '#F88F2B',
   logoLight: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png',
   logoDark: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/50986bd44_ChatGPTImageJan5202603_27_37PM.png',
+  logoRef: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png',
 };
 
 const socialPlatforms = [
@@ -214,7 +215,7 @@ Page focus: ${selectedFocus?.label} — ${selectedFocus?.context}.
 Format: ${platform} ${sizeLabel} (${selectedSize?.ratio} aspect ratio).
 
 STRICT BRAND REQUIREMENTS:
-- Logo wordmark: "Taper" in bold #2479C2 (blue), "Payer" in bold #61AF39 (green) — display prominently
+- LOGO: Reproduce the exact Taper Payer logo from the reference image provided — place it prominently at the top of the design. Do not alter its colors, proportions, or style.
 - Primary color: #2479C2 (Taper Blue) — headers, buttons, key elements
 - Secondary color: #61AF39 (Taper Green) — CTAs, success, accents
 - Accent: #F88F2B (Taper Orange) — highlights only
@@ -226,7 +227,7 @@ STRICT BRAND REQUIREMENTS:
 Design brief: ${prompt.trim()}.`;
 
     try {
-      const response = await base44.functions.invoke('generateFlyer', { prompt: fullPrompt });
+      const response = await base44.functions.invoke('generateFlyer', { prompt: fullPrompt, existing_image_urls: [BRAND.logoRef] });
       setImageUrl(response.data.url);
       
       // Generate caption after image is created

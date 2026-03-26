@@ -5,10 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Wand2, Loader2, Download, Image, Smartphone, RefreshCw, LayoutGrid } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
+const LOGO_URL = 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png';
+
 const BRAND_CONTEXT = `
 STRICT BRAND REQUIREMENTS — apply to every element:
 - Company name: "Taper Payer" — always spelled exactly this way
-- Logo wordmark: "Taper" in bold primary blue (#2479C2), "Payer" in bold green (#61AF39) — render as text wordmark prominently at the top
+- LOGO: Use the EXACT Taper Payer logo from this URL as reference: ${LOGO_URL} — reproduce it faithfully in the design, placed prominently (top-left or top-center). Do not alter the logo colors or proportions.
 - Primary color: #2479C2 (Taper Blue) — use for headers, buttons, key UI elements
 - Secondary color: #61AF39 (Taper Green) — use for success states, CTA buttons, accents
 - Accent color: #F88F2B (Taper Orange) — use sparingly for highlights and badges
@@ -170,7 +172,7 @@ function AssetCard({ title, subtitle, badge, prompt, filename, aspect }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await base44.functions.invoke('generateFlyer', { prompt });
+      const res = await base44.functions.invoke('generateFlyer', { prompt, existing_image_urls: [LOGO_URL] });
       setImageUrl(res.data.url);
     } catch (e) {
       setError('Generation failed. Please try again.');

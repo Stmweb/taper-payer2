@@ -23,20 +23,21 @@ STRICT BRAND REQUIREMENTS — apply to every element:
 
 const APP_ICON_PROMPT = `Create a professional mobile app icon for "Taper Payer" fintech app. Perfectly square 1024×1024px.
 ${BRAND_CONTEXT}
-Design: Clean, bold, modern app icon suitable for both iOS App Store and Google Play.
-Background: Deep navy (#0F172A) or a strong blue-to-green diagonal gradient (#2479C2 → #61AF39) — one solid look, no noise.
-Center symbol: A stylized bold letter "T" or a globe/arrow icon representing global money transfer, rendered in white or light color on the dark background. Alternatively, show "TP" as a monogram in white bold sans-serif.
-No text other than possibly "TP" monogram — app icons should NOT spell out full names.
-Corners: Rounded for iOS (the OS clips them automatically, but design with slight rounding).
-Style: Premium fintech, minimal, bold — looks great at small sizes (60×60) and large sizes (1024×1024).
-Do NOT add shadows, borders, or outer glows. Keep it flat or very subtly elevated.`;
+CRITICAL DESIGN INSTRUCTION: The reference image provided shows the Taper Payer logo which features TWO GREEN DOLLAR BILLS fanned out. Reproduce those exact two dollar bills as the dominant centerpiece of this icon — faithfully copied from the reference image, same angle, same fanned layout, same green color.
+Background: Deep navy (#0F172A) or a strong blue-to-green diagonal gradient (#2479C2 → #61AF39).
+Center: The two fanned dollar bills from the logo, large and prominent, filling most of the icon space.
+Optionally add a subtle globe or arrow element behind the bills to hint at global transfer.
+No full company name text — keep it iconic and bold.
+Corners: Slightly rounded for iOS.
+Style: Premium fintech, clean, minimal. Looks great at all sizes.
+Do NOT add shadows, borders, or outer glows.`;
 
 const FEATURE_GRAPHIC_PROMPT = `Create a stunning Google Play Store feature graphic for "Taper Payer" fintech app. Landscape banner exactly 1024×500px.
 ${BRAND_CONTEXT}
-Layout: Dark navy (#0F172A) background with a subtle blue-to-green gradient overlay on the right side.
-Left side: Large "Taper Payer" wordmark ("Taper" in #2479C2, "Payer" in #61AF39), bold headline "Send Money Home — Fast & Secure" in white, tagline "150+ Countries · Zero Hidden Fees · Same-Day Delivery" in light grey.
-Right side: Stylized globe with money transfer lines connecting continents, colored in brand blue and green. Small mobile phone mockup showing the app UI.
-Bottom strip: three feature icons with labels — ⚡ Instant · 🛡 Secure · 💲 Low Fees — in white on a semi-transparent dark strip.`;
+Layout: Clean WHITE (#FFFFFF) background.
+Left side: Large "Taper Payer" wordmark ("Taper" in bold #2479C2, "Payer" in bold #61AF39), bold headline "Send Money Home — Fast & Secure" in slate-900 (#0F172A), tagline "150+ Countries · Zero Hidden Fees · Same-Day Delivery" in slate-600 (#475569).
+Right side: Stylized globe with money transfer lines connecting continents, colored in brand blue (#2479C2) and green (#61AF39). Small mobile phone mockup showing the app UI.
+Bottom strip: three feature icons with labels — ⚡ Instant · 🛡 Secure · 💲 Low Fees — in white text on a #2479C2 blue strip.`;
 
 const SCREENSHOT_PROMPTS = [
   {
@@ -264,28 +265,14 @@ export default function AppStoreAssets() {
           <Badge className="ml-2 text-xs" style={{ backgroundColor: '#2479C2' }}>Required · iOS & Android</Badge>
         </h3>
         <div className="max-w-xs">
-          <Card className="overflow-hidden">
-            <div className="relative bg-white flex items-center justify-center overflow-hidden" style={{ aspectRatio: '1/1', maxHeight: 280 }}>
-              <img src={LOGO_URL} alt="App Icon" className="w-full h-full object-contain p-4" />
-            </div>
-            <div className="p-4 space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="font-semibold text-slate-900 dark:text-white text-sm">App Icon</p>
-                  <p className="text-xs text-slate-500 mt-0.5">1024 × 1024 px · Square · PNG</p>
-                </div>
-                <Badge variant="outline" className="text-xs flex-shrink-0">1024×1024</Badge>
-              </div>
-              <Button
-                size="sm"
-                variant="outline"
-                className="w-full gap-1.5 text-xs"
-                onClick={() => downloadImage(LOGO_URL, 'taper-payer-app-icon.png')}
-              >
-                <Download className="w-3.5 h-3.5" /> Download Logo as Icon
-              </Button>
-            </div>
-          </Card>
+          <AssetCard
+            title="App Icon"
+            subtitle="1024 × 1024 px · Square · PNG"
+            badge="1024×1024"
+            prompt={APP_ICON_PROMPT}
+            filename="taper-payer-app-icon.png"
+            aspect="icon"
+          />
         </div>
       </div>
 

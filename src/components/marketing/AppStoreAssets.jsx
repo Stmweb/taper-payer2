@@ -35,7 +35,7 @@ Do NOT add shadows, borders, or outer glows.`;
 const FEATURE_GRAPHIC_PROMPT = `Create a stunning Google Play Store feature graphic for "Taper Payer" fintech app. Landscape banner exactly 1024×500px.
 ${BRAND_CONTEXT}
 Layout: Clean WHITE (#FFFFFF) background.
-Left side: Large "Taper Payer" wordmark ("Taper" in bold #2479C2, "Payer" in bold #61AF39), bold headline "Send Money Home — Fast & Secure" in slate-900 (#0F172A), tagline "Zero Hidden Fees · Same-Day Delivery" in slate-600 (#475569).
+Left side: The exact Taper Payer logo from the reference image (do NOT also add a "Taper Payer" text wordmark — the logo is sufficient), bold headline "Send Money Home — Fast & Secure" in slate-900 (#0F172A), tagline "Zero Hidden Fees · Same-Day Delivery" in slate-600 (#475569).
 Right side: A stylized globe centered on Africa and the Americas, with glowing money transfer route lines connecting origin points to destination cities in Nigeria, Ghana, Kenya, Senegal, Angola, Cameroon, Morocco, Dominican Republic, Haiti, and Mexico. The globe and lines are rendered in brand blue (#2479C2) and green (#61AF39) on a white background.
 Bottom strip: three feature icons with labels — ⚡ Instant · 🛡 Secure · 💲 Low Fees — in white text on a #2479C2 blue strip.`;
 

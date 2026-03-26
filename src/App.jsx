@@ -26,6 +26,7 @@ import AdminEmailMarketing from './pages/AdminEmailMarketing.jsx';
 import AdminStripeDashboard from './pages/AdminStripeDashboard';
 import MoncashReturn from './pages/MoncashReturn';
 import ThankYou from './pages/ThankYou';
+import AccountSettings from './pages/AccountSettings';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -169,6 +170,7 @@ const AuthenticatedApp = () => {
         <Route path="/MoncashReturn" element={<MoncashReturn />} />
         <Route path="/OperatingAgreement" element={<OperatingAgreement />} />
         <Route path="/ThankYou" element={<ThankYou />} />
+        <Route path="/AccountSettings" element={<AccountSettings />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

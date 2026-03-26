@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import NativeSelect from '@/components/ui/NativeSelect';
 import { Loader2, Save, Trash2, Plus, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -230,29 +231,25 @@ export default function AdminPageManager() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Position</label>
-                <select
+                <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="bg-position">Position</label>
+                <NativeSelect
+                  id="bg-position"
                   value={config?.background_position || 'center'}
-                  onChange={(e) => setConfig({ ...config, background_position: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
-                >
-                  {BACKGROUND_POSITIONS.map((pos) => (
-                    <option key={pos} value={pos}>{pos}</option>
-                  ))}
-                </select>
+                  onChange={(val) => setConfig({ ...config, background_position: val })}
+                  options={BACKGROUND_POSITIONS.map(p => ({ value: p, label: p }))}
+                  title="Background Position"
+                />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Size</label>
-                <select
+                <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="bg-size">Size</label>
+                <NativeSelect
+                  id="bg-size"
                   value={config?.background_size || 'cover'}
-                  onChange={(e) => setConfig({ ...config, background_size: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
-                >
-                  {BACKGROUND_SIZES.map((size) => (
-                    <option key={size} value={size}>{size}</option>
-                  ))}
-                </select>
+                  onChange={(val) => setConfig({ ...config, background_size: val })}
+                  options={BACKGROUND_SIZES.map(s => ({ value: s, label: s }))}
+                  title="Background Size"
+                />
               </div>
 
               {config?.background_image && (
@@ -314,8 +311,8 @@ export default function AdminPageManager() {
                 {hiddenElements.map((elem) => (
                   <div key={elem} className="flex items-center justify-between bg-red-50 p-2 rounded-lg border border-red-200">
                     <span className="text-xs text-slate-700 font-mono truncate">{elem}</span>
-                    <button onClick={() => handleRemoveElement(elem)} className="text-red-600 hover:text-red-700 flex-shrink-0">
-                      <Trash2 className="w-3 h-3" />
+                    <button onClick={() => handleRemoveElement(elem)} aria-label="Remove element" className="text-red-600 hover:text-red-700 flex-shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center">
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}
@@ -343,8 +340,8 @@ export default function AdminPageManager() {
                 {hiddenSections.map((sec) => (
                   <div key={sec} className="flex items-center justify-between bg-red-50 p-2 rounded-lg border border-red-200">
                     <span className="text-xs text-slate-700 font-mono truncate">{sec}</span>
-                    <button onClick={() => handleRemoveSection(sec)} className="text-red-600 hover:text-red-700 flex-shrink-0">
-                      <Trash2 className="w-3 h-3" />
+                    <button onClick={() => handleRemoveSection(sec)} aria-label="Remove section" className="text-red-600 hover:text-red-700 flex-shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center">
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}
@@ -424,7 +421,7 @@ export default function AdminPageManager() {
                         <span className="text-xs text-slate-600 font-mono">{data.color}</span>
                       </div>
                     </div>
-                    <button onClick={() => handleRemoveButtonOverride(buttonId)} className="text-red-600 hover:text-red-700 flex-shrink-0">
+                    <button onClick={() => handleRemoveButtonOverride(buttonId)} aria-label="Remove button override" className="text-red-600 hover:text-red-700 flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -501,7 +498,7 @@ export default function AdminPageManager() {
                       {data.title && <p className="font-semibold text-slate-800 mt-1">{data.title}</p>}
                       {data.body && <p className="text-sm text-slate-600 mt-1 line-clamp-2">{data.body}</p>}
                     </div>
-                    <button onClick={() => handleRemoveContentBlock(blockId)} className="text-red-600 hover:text-red-700 flex-shrink-0">
+                    <button onClick={() => handleRemoveContentBlock(blockId)} aria-label="Remove content block" className="text-red-600 hover:text-red-700 flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>

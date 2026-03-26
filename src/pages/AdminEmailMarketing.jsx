@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import NativeSelect from '@/components/ui/NativeSelect';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -91,15 +92,28 @@ export default function AdminEmailMarketing() {
   };
 
   const removeSubscriber = async (id) => {
-    await base44.entities.Subscriber.delete(id);
+    // Optimistic update
+    const prev = subscribers;
+    setSubscribers(s => s.filter(x => x.id !== id));
     showToast('Subscriber removed.');
-    fetchData();
+    try {
+      await base44.entities.Subscriber.delete(id);
+    } catch {
+      setSubscribers(prev);
+      showToast('Failed to remove subscriber.', 'error');
+    }
   };
 
   const unsubscribe = async (id) => {
-    await base44.entities.Subscriber.update(id, { status: 'unsubscribed' });
+    // Optimistic update
+    setSubscribers(s => s.map(x => x.id === id ? { ...x, status: 'unsubscribed' } : x));
     showToast('Subscriber unsubscribed.');
-    fetchData();
+    try {
+      await base44.entities.Subscriber.update(id, { status: 'unsubscribed' });
+    } catch {
+      showToast('Failed to unsubscribe.', 'error');
+      fetchData(); // re-sync on error
+    }
   };
 
   const bulkImport = async () => {
@@ -220,9 +234,16 @@ export default function AdminEmailMarketing() {
   };
 
   const deleteCampaign = async (id) => {
-    await base44.entities.EmailCampaign.delete(id);
+    // Optimistic update
+    const prev = campaigns;
+    setCampaigns(c => c.filter(x => x.id !== id));
     showToast('Campaign deleted.');
-    fetchData();
+    try {
+      await base44.entities.EmailCampaign.delete(id);
+    } catch {
+      setCampaigns(prev);
+      showToast('Failed to delete campaign.', 'error');
+    }
   };
 
   const activeCount = subscribers.filter(s => s.status === 'active').length;
@@ -252,7 +273,7 @@ export default function AdminEmailMarketing() {
                 <Button size="sm" onClick={() => useTemplate(previewTemplate)} className="bg-blue-600 hover:bg-blue-700 text-white">
                   Use Template
                 </Button>
-                <button onClick={() => setPreviewTemplate(null)} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
+                <button onClick={() => setPreviewTemplate(null)} aria-label="Close preview" className="p-2.5 min-w-[44px] min-h-[44px] hover:bg-gray-100 rounded-lg flex items-center justify-center"><X className="w-5 h-5" /></button>
               </div>
             </div>
             <div className="overflow-y-auto flex-1 p-4">
@@ -353,7 +374,7 @@ export default function AdminEmailMarketing() {
                         {sendingId === c.id ? 'Sending...' : 'Send Now'}
                       </Button>
                     )}
-                    <Button size="sm" variant="ghost" onClick={() => deleteCampaign(c.id)} className="text-red-400 hover:text-red-600">
+                    <Button size="sm" variant="ghost" onClick={() => deleteCampaign(c.id)} aria-label="Delete campaign" className="text-red-400 hover:text-red-600 min-w-[44px] min-h-[44px]">
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -450,16 +471,15 @@ export default function AdminEmailMarketing() {
                     </button>
                   </div>
                   {(!campaign.recipient_mode || campaign.recipient_mode === 'list') ? (
-                    <select
+                    <NativeSelect
                       value={campaign.contact_list_id}
-                      onChange={e => setCampaign({...campaign, contact_list_id: e.target.value})}
-                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
-                    >
-                      <option value="">All Active Subscribers</option>
-                      {contactLists.map(l => (
-                        <option key={l.id} value={l.id}>{l.name} ({(l.subscriber_ids || []).length} contacts)</option>
-                      ))}
-                    </select>
+                      onChange={val => setCampaign({...campaign, contact_list_id: val})}
+                      options={[
+                        { value: '', label: 'All Active Subscribers' },
+                        ...contactLists.map(l => ({ value: l.id, label: `${l.name} (${(l.subscriber_ids || []).length} contacts)` }))
+                      ]}
+                      title="Select Recipient List"
+                    />
                   ) : (
                     <div>
                       <Textarea

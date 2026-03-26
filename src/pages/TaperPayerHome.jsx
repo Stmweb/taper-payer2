@@ -139,9 +139,11 @@ export default function TaperPayerHome() {
           <div className="relative flex items-center justify-between h-14 md:h-16">
             {/* Mobile Menu Button - Left */}
             <button
-              className="md:hidden text-slate-700 p-2 z-10"
+              className="md:hidden text-slate-700 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center z-10"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -177,13 +179,13 @@ export default function TaperPayerHome() {
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden bg-gradient-to-br from-blue-600 to-green-600 -mx-4 px-4 py-6 space-y-3 rounded-b-2xl">
-              <Link to={createPageUrl('TaperPayerHome')} className="block text-white font-semibold hover:text-white transition-colors py-2">Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">How It Works</Link>
-              <Link to={createPageUrl('TaperPayerRates')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Exchange Rates</Link>
-              <Link to={createPageUrl('TaperPayerTopUp')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Taper Mobile</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</Link>
+            <div className="md:hidden bg-gradient-to-br from-blue-600 to-green-600 -mx-4 px-4 py-4 space-y-1 rounded-b-2xl" role="menu">
+              <Link to={createPageUrl('TaperPayerHome')} role="menuitem" className="flex items-center text-white font-semibold hover:text-white transition-colors min-h-[48px] py-3">Home</Link>
+              <Link to={createPageUrl('TaperPayerAbout')} role="menuitem" className="flex items-center text-white/90 font-medium hover:text-white transition-colors min-h-[48px] py-3">About</Link>
+              <Link to={createPageUrl('TaperPayerHowItWorks')} role="menuitem" className="flex items-center text-white/90 font-medium hover:text-white transition-colors min-h-[48px] py-3">How It Works</Link>
+              <Link to={createPageUrl('TaperPayerRates')} role="menuitem" className="flex items-center text-white/90 font-medium hover:text-white transition-colors min-h-[48px] py-3">Exchange Rates</Link>
+              <Link to={createPageUrl('TaperPayerTopUp')} role="menuitem" className="flex items-center text-white/90 font-medium hover:text-white transition-colors min-h-[48px] py-3">Taper Mobile</Link>
+              <Link to={createPageUrl('TaperPayerContact')} role="menuitem" className="flex items-center text-white/90 font-medium hover:text-white transition-colors min-h-[48px] py-3">Contact</Link>
               <div className="pt-3 space-y-3">
                 <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20">Login</Button>
@@ -202,6 +204,9 @@ export default function TaperPayerHome() {
         <motion.img
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ccf3ce18e_generated_image.png"
           alt=""
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ zIndex: 0, backgroundPosition: 'center' }}
           animate={{ scale: [1, 1.05, 1] }}
@@ -325,7 +330,8 @@ export default function TaperPayerHome() {
                         <button
                           onClick={fetchExchangeRate}
                           disabled={loading}
-                          className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
+                          aria-label="Refresh exchange rate"
+                          className="text-blue-600 hover:text-blue-700 disabled:opacity-50 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         >
                           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                         </button>
@@ -637,7 +643,7 @@ export default function TaperPayerHome() {
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
           >
-            <button onClick={() => setShowTransferModal(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10">✕</button>
+            <button onClick={() => setShowTransferModal(false)} aria-label="Close" className="absolute top-4 right-4 p-2 min-w-[44px] min-h-[44px] hover:bg-gray-100 rounded-full z-10 flex items-center justify-center">✕</button>
             <CybridTransferModal
               amount={amount}
               country={sendTo}

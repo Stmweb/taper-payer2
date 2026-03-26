@@ -150,6 +150,22 @@ Speed badge: "🚀 Faster than Western Union by 4 hours" in #2479C2.
 Large blue "Send to Mexico Instantly →" button.
 Caption bar at bottom: "Instant SPEI to Mexico — No Delays!"`,
   },
+  {
+    label: '🌍 All Countries — Global Coverage',
+    prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer".
+${BRAND_CONTEXT}
+Screen: Global country selector / destination picker screen. White background. Trust + coverage theme.
+Top header: "Taper" (#2479C2) + "Payer" (#61AF39) wordmark. Blue banner: "🌍 Send Money to 150+ Countries"
+Main content: A scrollable grid or list of destination country cards, each showing the country flag and name, arranged in 3 columns:
+Row 1: 🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya
+Row 2: 🇭🇹 Haiti · 🇸🇳 Senegal · 🇦🇴 Angola
+Row 3: 🇨🇲 Cameroon · 🇲🇦 Morocco · 🇩🇴 Dom. Rep.
+Row 4: 🇲🇽 Mexico · 🇯🇲 Jamaica · 🇵🇭 Philippines
+Row 5: 🇮🇳 India · 🇧🇷 Brazil · 🇨🇴 Colombia
+Each card has a subtle border, the flag emoji large and centered, and the country name in small slate-700 text below it. Selected/popular countries have a small green checkmark badge.
+Bottom CTA bar (sticky): Large green (#61AF39) "Choose Your Destination →" button.
+Caption bar at bottom: "150+ Countries — One App, Endless Connections!"`,
+  },
 ];
 
 function downloadImage(url, filename) {

@@ -5,43 +5,71 @@ import { Badge } from '@/components/ui/badge';
 import { Wand2, Loader2, Download, Image, Smartphone, RefreshCw } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-const FEATURE_GRAPHIC_PROMPT = `Create a stunning Google Play Store feature graphic for "Taper Payer" fintech app.
-Dimensions: 1024x500px (landscape banner).
-Design: Show a vibrant, professional banner with the Taper Payer brand name prominently displayed.
-Include imagery suggesting global money transfers — world map, coins, mobile phones, connecting people across borders.
-Brand colors: primary blue #2479C2, green #61AF39, orange accent #F88F2B, white text on dark gradient background.
-Bold headline: "Send Money Home — Fast & Secure"
-Tagline: "150+ Countries · Zero Hidden Fees · Same-Day Delivery"
-Style: Modern, premium fintech aesthetic. No clutter. High contrast. No real people's faces.`;
+const BRAND_CONTEXT = `
+STRICT BRAND REQUIREMENTS — apply to every element:
+- Company name: "Taper Payer" — always spelled exactly this way
+- Logo wordmark: "Taper" in bold primary blue (#2479C2), "Payer" in bold green (#61AF39) — render as text wordmark prominently at the top
+- Primary color: #2479C2 (Taper Blue) — use for headers, buttons, key UI elements
+- Secondary color: #61AF39 (Taper Green) — use for success states, CTA buttons, accents
+- Accent color: #F88F2B (Taper Orange) — use sparingly for highlights and badges
+- Background: white (#FFFFFF) or very dark navy (#0F172A) — no other background colors
+- Text: slate-900 (#0F172A) on light, white (#FFFFFF) on dark
+- Style: clean, modern, premium fintech — no clutter, no cartoon style, no gradients other than blue-to-green
+- Do NOT use red, purple, pink, yellow, or any off-brand colors
+- Do NOT include real people's faces
+`;
+
+const FEATURE_GRAPHIC_PROMPT = `Create a stunning Google Play Store feature graphic for "Taper Payer" fintech app. Landscape banner exactly 1024×500px.
+${BRAND_CONTEXT}
+Layout: Dark navy (#0F172A) background with a subtle blue-to-green gradient overlay on the right side.
+Left side: Large "Taper Payer" wordmark ("Taper" in #2479C2, "Payer" in #61AF39), bold headline "Send Money Home — Fast & Secure" in white, tagline "150+ Countries · Zero Hidden Fees · Same-Day Delivery" in light grey.
+Right side: Stylized globe with money transfer lines connecting continents, colored in brand blue and green. Small mobile phone mockup showing the app UI.
+Bottom strip: three feature icons with labels — ⚡ Instant · 🛡 Secure · 💲 Low Fees — in white on a semi-transparent dark strip.`;
 
 const SCREENSHOT_PROMPTS = [
   {
     label: 'Home / Send Money',
-    prompt: `Create a mobile app screenshot (9:16, portrait) for the Taper Payer app — Home screen.
-Show a clean smartphone UI with: a money transfer form (send $500 USD to Haiti), a live exchange rate display (1 USD = 132 HTG), a green "Continue" button.
-Top shows Taper Payer logo. Bottom shows a tab bar. Brand colors: blue #2479C2, green #61AF39. White background, modern card design.
-Add caption overlay at bottom: "Send Money in Seconds"`,
+    prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer".
+${BRAND_CONTEXT}
+Screen: Home / Send Money. White background.
+Top header: "Taper" (#2479C2) + "Payer" (#61AF39) wordmark logo centered, with a small globe icon.
+Center card (rounded, shadow): "You Send" input showing $500 USD, "Send To" dropdown showing 🇭🇹 Haiti, exchange rate badge "1 USD = 132 HTG" in green.
+Large blue (#2479C2) rounded "Continue →" button below.
+Bottom tab bar: Home (active, blue), Rates, Top-Up, History icons.
+Overlay text at very bottom outside phone: caption "Send Money in Seconds" in white on blue bar.`,
   },
   {
     label: 'Exchange Rates',
-    prompt: `Create a mobile app screenshot (9:16, portrait) for the Taper Payer app — Exchange Rates screen.
-Show a list of live exchange rates: USD to NGN, HTG, GHS, KES, XOF with flag icons and rate values.
-Clean card layout, green/blue accent colors. Brand: Taper Payer (#2479C2, #61AF39).
-Add caption overlay at bottom: "Live Exchange Rates — Always Transparent"`,
+    prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer".
+${BRAND_CONTEXT}
+Screen: Live Exchange Rates. White background.
+Top header: "Taper" (#2479C2) + "Payer" (#61AF39) wordmark, page title "Exchange Rates" in slate-900.
+List of rate cards (rounded, light shadow), each row: country flag + name on left, rate value in bold (#2479C2) on right — show NGN 1,620, HTG 132, GHS 15.4, KES 130, XOF 620.
+A small green "LIVE" badge next to the title. Refresh icon top right in #61AF39.
+Bottom tab bar consistent with brand.
+Overlay caption at bottom: "Live Rates — Always Transparent".`,
   },
   {
     label: 'Mobile Top-Up',
-    prompt: `Create a mobile app screenshot (9:16, portrait) for the Taper Payer app — Mobile Top-Up screen.
-Show a top-up form: phone number field with country flag (+509 Haiti), airtime amount selector ($5, $10, $25), operator logos (Natcom, Digicel).
-Modern UI with brand colors blue #2479C2 and green #61AF39. White background.
-Add caption overlay at bottom: "Instant Airtime Recharge Worldwide"`,
+    prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer".
+${BRAND_CONTEXT}
+Screen: Taper Mobile Top-Up. White background.
+Top header: "Taper" (#2479C2) + "Payer" (#61AF39) wordmark, page title "Taper Mobile" with 📱 icon.
+Form card: phone number field showing "+509 • • • • • • • •" with 🇭🇹 flag, amount selector buttons $5 / $10 / $25 / $50 (active $10 highlighted in #2479C2), operator row showing "Natcom" and "Digicel" logos.
+Large green (#61AF39) "Top-Up Now" button.
+Bottom tab bar consistent with brand.
+Overlay caption at bottom: "Instant Airtime — Any Carrier".`,
   },
   {
     label: 'Transaction Complete',
-    prompt: `Create a mobile app screenshot (9:16, portrait) for the Taper Payer app — Success screen.
-Show a success/confirmation screen with a large green checkmark, "Transfer Complete!" heading, transaction summary: $200 USD → 26,400 HTG, recipient name "Marie Jean", MonCash delivery.
-Brand colors: green #61AF39, blue #2479C2. Confetti or celebration particles in background.
-Add caption overlay at bottom: "Same-Day Money Delivery"`,
+    prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer".
+${BRAND_CONTEXT}
+Screen: Transfer Success. White background.
+Center: Large animated checkmark circle in #61AF39. Bold heading "Transfer Complete! 🎉" in slate-900.
+Summary card: "$200.00 USD sent", "26,400 HTG received", "Recipient: Marie Jean", "Via: MonCash · Est. arrival: Today" — all in clean rows with small icons.
+Small confetti particles in brand colors (#2479C2, #61AF39, #F88F2B) floating around.
+Blue (#2479C2) "Send Again" button at bottom.
+Overlay caption at very bottom: "Same-Day Delivery — Guaranteed".`,
   },
 ];
 

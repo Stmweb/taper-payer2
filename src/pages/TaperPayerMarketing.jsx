@@ -212,10 +212,18 @@ function FlyerGenerator() {
     const fullPrompt = `Create a professional marketing flyer for "Taper Payer", a modern fintech brand.
 Page focus: ${selectedFocus?.label} — ${selectedFocus?.context}.
 Format: ${platform} ${sizeLabel} (${selectedSize?.ratio} aspect ratio).
-Brand colors: primary blue #2479C2, green #61AF39, orange #F88F2B, white background or dark navy.
-Include the Taper Payer logo prominently (wordmark: "Taper" in blue and "Payer" in green, bold modern font).
-Design brief: ${prompt.trim()}.
-Style: clean, modern, professional fintech aesthetic. No low-quality or cluttered design.`;
+
+STRICT BRAND REQUIREMENTS:
+- Logo wordmark: "Taper" in bold #2479C2 (blue), "Payer" in bold #61AF39 (green) — display prominently
+- Primary color: #2479C2 (Taper Blue) — headers, buttons, key elements
+- Secondary color: #61AF39 (Taper Green) — CTAs, success, accents
+- Accent: #F88F2B (Taper Orange) — highlights only
+- Background: white (#FFFFFF) or dark navy (#0F172A) ONLY — no other backgrounds
+- No red, purple, pink, yellow, or off-brand colors
+- No real people's faces
+- Style: clean, modern, premium fintech — no clutter, no cartoon style
+
+Design brief: ${prompt.trim()}.`;
 
     try {
       const response = await base44.functions.invoke('generateFlyer', { prompt: fullPrompt });

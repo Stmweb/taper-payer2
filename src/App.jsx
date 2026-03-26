@@ -27,6 +27,7 @@ import AdminStripeDashboard from './pages/AdminStripeDashboard';
 import MoncashReturn from './pages/MoncashReturn';
 import ThankYou from './pages/ThankYou';
 import AccountSettings from './pages/AccountSettings';
+import DeleteDataAndAccount from './pages/DeleteDataAndAccount';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -171,6 +172,7 @@ const AuthenticatedApp = () => {
         <Route path="/OperatingAgreement" element={<OperatingAgreement />} />
         <Route path="/ThankYou" element={<ThankYou />} />
         <Route path="/AccountSettings" element={<AccountSettings />} />
+        <Route path="/DeleteDataAndAccount" element={<DeleteDataAndAccount />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

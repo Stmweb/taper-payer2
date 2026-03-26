@@ -264,14 +264,28 @@ export default function AppStoreAssets() {
           <Badge className="ml-2 text-xs" style={{ backgroundColor: '#2479C2' }}>Required · iOS & Android</Badge>
         </h3>
         <div className="max-w-xs">
-          <AssetCard
-            title="App Icon"
-            subtitle="1024 × 1024 px · Square · PNG"
-            badge="1024×1024"
-            prompt={APP_ICON_PROMPT}
-            filename="taper-payer-app-icon.png"
-            aspect="icon"
-          />
+          <Card className="overflow-hidden">
+            <div className="relative bg-white flex items-center justify-center overflow-hidden" style={{ aspectRatio: '1/1', maxHeight: 280 }}>
+              <img src={LOGO_URL} alt="App Icon" className="w-full h-full object-contain p-4" />
+            </div>
+            <div className="p-4 space-y-3">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="font-semibold text-slate-900 dark:text-white text-sm">App Icon</p>
+                  <p className="text-xs text-slate-500 mt-0.5">1024 × 1024 px · Square · PNG</p>
+                </div>
+                <Badge variant="outline" className="text-xs flex-shrink-0">1024×1024</Badge>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="w-full gap-1.5 text-xs"
+                onClick={() => downloadImage(LOGO_URL, 'taper-payer-app-icon.png')}
+              >
+                <Download className="w-3.5 h-3.5" /> Download Logo as Icon
+              </Button>
+            </div>
+          </Card>
         </div>
       </div>
 

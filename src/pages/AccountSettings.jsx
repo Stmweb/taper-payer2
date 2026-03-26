@@ -7,6 +7,8 @@ import { User, Mail, Phone, Trash2, Shield, Bell, Moon, Sun } from 'lucide-react
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import MobileHeader from '@/components/mobile/MobileHeader';
+import { base44 } from '@/api/base44Client';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,14 +44,33 @@ export default function AccountSettings() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteStatus, setDeleteStatus] = useState(null);
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     setIsDeleting(true);
     setDeleteStatus(null);
-    // Optimistic: show immediate feedback
-    setTimeout(() => {
-      setIsDeleting(false);
+    try {
+      const user = await base44.auth.me();
+      if (!user) {
+        toast.error('Please log in to delete your account');
+        setIsDeleting(false);
+        return;
+      }
+
+      // Send deletion request email to admin
+      await base44.functions.invoke('sendInquiryEmail', {
+        name: user.full_name || 'User',
+        email: user.email,
+        subject: `Account Deletion Request - ${user.email}`,
+        message: `I request to delete my account and all associated data.\n\nEmail: ${user.email}\nName: ${user.full_name || 'N/A'}\n\nPlease process this deletion request as soon as possible.`
+      });
+
       setDeleteStatus('success');
-    }, 800);
+      toast.success('Deletion request sent. Check your email for confirmation.');
+    } catch (error) {
+      toast.error('Failed to send deletion request');
+      setDeleteStatus('error');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -171,8 +192,13 @@ export default function AccountSettings() {
             </p>
             
             {deleteStatus === 'success' && (
+              <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm">
+                Deletion request sent successfully. You will receive a confirmation email shortly.
+              </div>
+            )}
+            {deleteStatus === 'error' && (
               <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400 text-sm">
-                Account deletion initiated. You will receive a confirmation email.
+                Failed to send deletion request. Please contact support directly.
               </div>
             )}
             <AlertDialog>
@@ -202,9 +228,10 @@ export default function AccountSettings() {
                   <AlertDialogAction 
                     onClick={handleDeleteAccount}
                     className="bg-red-600 hover:bg-red-700"
+                    disabled={isDeleting}
                     style={{ userSelect: 'none' }}
                   >
-                    Yes, delete my account
+                    {isDeleting ? 'Sending Request...' : 'Yes, delete my account'}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

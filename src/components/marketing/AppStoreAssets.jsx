@@ -21,7 +21,7 @@ STRICT BRAND REQUIREMENTS — apply to every element:
 - Do NOT include real people's faces
 `;
 
-const APP_ICON_PROMPT = `Create a professional mobile app icon for "Taper Payer" fintech app. Perfectly square 1024×1024px.
+const APP_ICON_PROMPT = `Create a professional mobile app icon for "Taper Payer" fintech app. Perfectly square 512×512px.
 ${BRAND_CONTEXT}
 CRITICAL DESIGN INSTRUCTION: The reference image provided shows the Taper Payer logo which features TWO GREEN DOLLAR BILLS fanned out. Reproduce those exact two dollar bills as the dominant centerpiece of this icon — faithfully copied from the reference image, same angle, same fanned layout, same green color.
 Background: Deep navy (#0F172A) or a strong blue-to-green diagonal gradient (#2479C2 → #61AF39).
@@ -268,7 +268,7 @@ export default function AppStoreAssets() {
           Generate and download required assets for publishing on the App Store and Google Play. Click "Generate with AI" on each asset, then download as PNG.
         </p>
         <div className="flex flex-wrap gap-3 mt-3 text-xs text-slate-500">
-          <span className="flex items-center gap-1"><LayoutGrid className="w-3.5 h-3.5" /> App Icon: 1024 × 1024 px · PNG · iOS & Android</span>
+          <span className="flex items-center gap-1"><LayoutGrid className="w-3.5 h-3.5" /> App Icon: 512 × 512 px · PNG/JPEG · max 1 MB · Google Play</span>
           <span className="flex items-center gap-1"><Image className="w-3.5 h-3.5" /> Feature Graphic: 1024 × 500 px · PNG/JPEG · max 15 MB</span>
           <span className="flex items-center gap-1"><Smartphone className="w-3.5 h-3.5" /> Screenshots: 9:16 · PNG/JPEG · 320–3840 px each side · max 8 MB</span>
         </div>
@@ -283,8 +283,8 @@ export default function AppStoreAssets() {
         <div className="max-w-xs">
           <AssetCard
             title="App Icon"
-            subtitle="1024 × 1024 px · Square · PNG"
-            badge="1024×1024"
+            subtitle="512 × 512 px · Square · PNG · max 1 MB"
+            badge="512×512"
             prompt={APP_ICON_PROMPT}
             filename="taper-payer-app-icon.png"
             aspect="icon"

@@ -154,14 +154,10 @@ Footer label: "Instant SPEI — No Delays"`,
     label: '🌍 All Countries — Global Coverage',
     prompt: `Create a phone app screenshot in 9:16 portrait for "Taper Payer". All text must be fully visible and contained within the phone screen — no text clipped or cut off at edges. Use compact font sizes that fit comfortably.
 ${BRAND_CONTEXT}
-Screen: Country selector / destination picker. White background.
+Screen: Global coverage showcase. White background.
 Top header: Taper Payer logo. Compact blue banner: "🌍 Send Money Worldwide"
-Main content: A clean 3-column grid of destination country cards — each with a flag and short country name below it:
-🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya
-🇭🇹 Haiti · 🇸🇳 Senegal · 🇦🇴 Angola
-🇨🇲 Cameroon · 🇲🇦 Morocco · 🇩🇴 DR
-🇲🇽 Mexico
-Each card has a subtle border, large flag, small country label in slate-700.
+Main content: A large, beautifully rendered stylized globe centered on the Atlantic, showing Africa and the Americas. Glowing money transfer route lines connect origin cities in the USA to destination cities in Nigeria, Ghana, Kenya, Haiti, Senegal, Angola, Cameroon, Morocco, Dominican Republic, and Mexico. The globe and route lines are rendered in brand blue (#2479C2) and green (#61AF39) on a white background. Small pulsing destination dots at each country.
+Below globe: A compact single row of 5 destination flags: 🇳🇬 🇬🇭 🇰🇪 🇭🇹 🇸🇳 with "+5 more" label.
 Sticky bottom CTA: Large green "Choose Your Destination" button.
 Footer label: "One App — Endless Connections"`,
   },

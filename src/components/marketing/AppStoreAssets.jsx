@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Wand2, Loader2, Download, Image, Smartphone, RefreshCw, LayoutGrid } from 'lucide-react';
+import { Wand2, Loader2, Download, Image, Smartphone, RefreshCw, LayoutGrid, Tablet } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 const LOGO_URL = 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png';
@@ -167,6 +167,143 @@ Footer label: "One App — Endless Connections"`,
   },
 ];
 
+const TABLET_7_PROMPTS = [
+  {
+    label: '🇳🇬 Nigeria — Send Money',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text must be fully visible and contained within the screen — no clipping. Use larger font sizes suited for a tablet display.
+${BRAND_CONTEXT}
+Screen: Sending money to Nigeria. White background.
+Left panel: Taper Payer logo top-left. Transfer form — "You Send" $300 USD · "Recipient gets" 486,000 NGN in bold green · "1 USD = 1,620 NGN". Large blue "Send to Nigeria Now" button.
+Right panel: Map/globe graphic showing USA → Nigeria transfer route in brand blue and green.
+Badge: "🔥 Best Naira Rate Today" in #F88F2B.`,
+  },
+  {
+    label: '🇭🇹 Haiti — MonCash',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Tablet-appropriate font sizes.
+${BRAND_CONTEXT}
+Screen: Sending money to Haiti via MonCash. White background.
+Left panel: Taper Payer logo top-left. Transfer card — "You Send" $200 USD · "Recipient gets" 26,400 HTG in bold green · "Via MonCash · Today by 5PM". Large blue "Send to Haiti Now" button.
+Right panel: MonCash delivery visual with countdown "⏰ 2h 14m left for same-day delivery" in #F88F2B.`,
+  },
+  {
+    label: '🇬🇭 Ghana — Best Rate',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Tablet-appropriate font sizes.
+${BRAND_CONTEXT}
+Screen: Sending money to Ghana. White background.
+Left panel: Taper Payer logo top-left. Transfer card — "You Send" $250 USD · "Recipient gets" 3,850 GHS in bold green · "1 USD = 15.40 GHS". Large blue "Send to Ghana Now" button.
+Right panel: Rate trend chart in brand blue showing GHS rate rising. Badge "⭐ Best Rate in 30 Days" in #61AF39.`,
+  },
+  {
+    label: '🌍 Global Coverage',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Tablet-appropriate font sizes.
+${BRAND_CONTEXT}
+Screen: Destination country selector. White background.
+Left panel: Taper Payer logo top-left. Heading "Where do you want to send?" in slate-900. 3-column country grid: 🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya · 🇭🇹 Haiti · 🇸🇳 Senegal · 🇦🇴 Angola · 🇨🇲 Cameroon · 🇲🇦 Morocco · 🇩🇴 DR · 🇲🇽 Mexico. Large green "Choose Destination" button.
+Right panel: Globe showing transfer routes in brand blue and green.`,
+  },
+  {
+    label: '🇰🇪 Kenya — M-Pesa',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Tablet-appropriate font sizes.
+${BRAND_CONTEXT}
+Screen: Sending money to Kenya. White background.
+Left panel: Taper Payer logo top-left. Transfer card — "You Send" $150 USD · "Recipient gets" 19,500 KES in bold green · "Via M-Pesa · Instant". Large green "Send to Kenya Instantly" button.
+Right panel: Speed visual — "🚀 Avg delivery: 8 seconds" in large bold #2479C2 with lightning bolt graphic.`,
+  },
+  {
+    label: '🇲🇽 Mexico — SPEI',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Tablet-appropriate font sizes.
+${BRAND_CONTEXT}
+Screen: Sending money to Mexico. White background.
+Left panel: Taper Payer logo top-left. Transfer card — "You Send" $500 USD · "Recipient gets" 9,500 MXN in bold green · "Via SPEI · Instant". Large blue "Send to Mexico Instantly" button.
+Right panel: Speed badge "⚡ Instant SPEI Transfer" with Mexico map highlight in brand colors.`,
+  },
+  {
+    label: '🛡 Security & Trust',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Tablet-appropriate font sizes.
+${BRAND_CONTEXT}
+Screen: Trust & security features page. White background.
+Left panel: Taper Payer logo top-left. Three feature rows with icons: 🛡 Bank-Grade Encryption · ⚡ Instant Transfers · 💲 Zero Hidden Fees. Each with a short description. Large blue "Get Started" button.
+Right panel: Shield graphic in #2479C2 with "50,000+ Transfers Secured" stat in bold green.`,
+  },
+  {
+    label: '📱 App Overview',
+    prompt: `Create a 7-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Tablet-appropriate font sizes.
+${BRAND_CONTEXT}
+Screen: App home/dashboard overview. White background.
+Left panel: Taper Payer logo top-left. Welcome message "Send Money Home — Fast & Secure". Quick action buttons: "Send Money" (blue) · "Top-Up Mobile" (green) · "View Rates" (outline).
+Right panel: Transfer summary card showing recent destinations: 🇳🇬 Nigeria · 🇭🇹 Haiti · 🇬🇭 Ghana with status "Delivered" in green.`,
+  },
+];
+
+const TABLET_10_PROMPTS = [
+  {
+    label: '🇳🇬 Nigeria — Send Money',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text must be fully visible and contained within the screen — no clipping. Use large, bold fonts suited for a 10-inch tablet display with generous spacing.
+${BRAND_CONTEXT}
+Screen: Sending money to Nigeria. White background.
+Left panel (40%): Taper Payer logo prominently top-left. Transfer form — "You Send" $300 USD · "Recipient gets" 486,000 NGN in large bold green · "1 USD = 1,620 NGN — Best Rate Today". Large blue "Send to Nigeria Now" button. Badge "🔥 Rate valid 15 min only!" in #F88F2B.
+Right panel (60%): Large globe graphic centered on West Africa with glowing transfer route USA → Nigeria in brand blue (#2479C2) and green (#61AF39). Subtle city labels at destination.`,
+  },
+  {
+    label: '🇭🇹 Haiti — Same Day',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Large tablet fonts with generous spacing.
+${BRAND_CONTEXT}
+Screen: Sending money to Haiti. White background.
+Left panel (40%): Taper Payer logo top-left. Transfer card — "You Send" $200 USD · "Recipient gets" 26,400 HTG in large bold green · "Via MonCash · Today by 5PM". Countdown "⏰ 2h 14m left" in #F88F2B. Large blue "Send to Haiti Now" button.
+Right panel (60%): Illustration of MonCash mobile wallet receipt on a phone, with "✅ Delivered Today" in large bold green.`,
+  },
+  {
+    label: '🌍 Destination Picker',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Large tablet fonts with generous spacing.
+${BRAND_CONTEXT}
+Screen: Country destination picker. White background.
+Top: Taper Payer logo center-top. Heading "Where would you like to send money?" in large slate-900 bold.
+Main: 5-column country grid with large flags and country names below — 🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya · 🇭🇹 Haiti · 🇸🇳 Senegal · 🇦🇴 Angola · 🇨🇲 Cameroon · 🇲🇦 Morocco · 🇩🇴 Dom. Rep. · 🇲🇽 Mexico. Each card with subtle border and hover state in #2479C2.
+Bottom: Large green "Continue" button centered.`,
+  },
+  {
+    label: '🇬🇭 Ghana — Best Rate',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Large tablet fonts with generous spacing.
+${BRAND_CONTEXT}
+Screen: Sending money to Ghana. White background.
+Left panel (40%): Taper Payer logo top-left. Transfer card — "You Send" $250 USD · "Recipient gets" 3,850 GHS in large bold green · "1 USD = 15.40 GHS". Star badge "⭐ Best GHS Rate in 30 Days" in #61AF39. Large blue "Send to Ghana Now" button.
+Right panel (60%): Large rate trend chart in brand blue showing GHS exchange rate climbing upward over 30 days, with today's value highlighted in green.`,
+  },
+  {
+    label: '🇰🇪 Kenya — Instant',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Large tablet fonts with generous spacing.
+${BRAND_CONTEXT}
+Screen: Sending money to Kenya. White background.
+Left panel (40%): Taper Payer logo top-left. Transfer card — "You Send" $150 USD · "Recipient gets" 19,500 KES in large bold green · "Via M-Pesa · Instant". Large green "Send to Kenya Instantly" button.
+Right panel (60%): Large speed stat "🚀 8 Seconds" in massive bold #2479C2 typography, with subtitle "Average M-Pesa delivery time" and a lightning bolt graphic.`,
+  },
+  {
+    label: '🛡 Security Features',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Large tablet fonts with generous spacing.
+${BRAND_CONTEXT}
+Screen: Security & trust features. White background.
+Left panel (40%): Taper Payer logo top-left. Three large feature blocks with icons and descriptions: 🛡 Bank-Grade Encryption · ⚡ Instant Transfers · 💲 Zero Hidden Fees. Large blue "Start Sending Securely" button.
+Right panel (60%): Large shield graphic in gradient blue-to-green with "50,000+ Secure Transfers" in bold and 5-star rating display.`,
+  },
+  {
+    label: '📊 Exchange Rates',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Large tablet fonts with generous spacing.
+${BRAND_CONTEXT}
+Screen: Live exchange rates dashboard. White background.
+Top: Taper Payer logo top-left. Heading "Live Exchange Rates" in slate-900 bold.
+Main: Grid of rate cards for: 🇳🇬 NGN · 🇬🇭 GHS · 🇰🇪 KES · 🇭🇹 HTG · 🇸🇳 XOF · 🇦🇴 AOA · 🇨🇲 XAF · 🇲🇦 MAD · 🇩🇴 DOP · 🇲🇽 MXN. Each card shows flag, currency code, rate from 1 USD, and a small trend arrow in green.
+Bottom: "Rates updated live" label in slate-500 and large blue "Send Money Now" button.`,
+  },
+  {
+    label: '📱 App Dashboard',
+    prompt: `Create a 10-inch tablet app screenshot in 16:9 landscape for "Taper Payer". All text fully visible, no clipping. Large tablet fonts with generous spacing.
+${BRAND_CONTEXT}
+Screen: Main app dashboard. White background.
+Left sidebar (25%): Taper Payer logo at top. Navigation menu items: Home · Send Money · Exchange Rates · Top-Up · History · Settings — each with an icon in #2479C2.
+Main content (75%): Hero welcome card "Welcome back! Ready to send?" with large blue "Send Money" CTA. Below: recent transfers list showing 🇳🇬 Nigeria $300 · 🇭🇹 Haiti $200 · 🇬🇭 Ghana $250 — each with "✅ Delivered" in green.`,
+  },
+];
+
 function downloadImage(url, filename) {
   fetch(url)
     .then(r => r.blob())
@@ -202,7 +339,7 @@ function AssetCard({ title, subtitle, badge, prompt, filename, aspect }) {
       {/* Preview Area */}
       <div
         className="relative bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden"
-        style={{ aspectRatio: aspect === 'feature' ? '1024/500' : aspect === 'icon' ? '1/1' : '9/16', maxHeight: aspect === 'feature' ? 260 : aspect === 'icon' ? 280 : 420 }}
+        style={{ aspectRatio: aspect === 'feature' ? '1024/500' : aspect === 'icon' ? '1/1' : aspect === 'landscape' ? '16/9' : '9/16', maxHeight: aspect === 'feature' ? 260 : aspect === 'icon' ? 280 : aspect === 'landscape' ? 200 : 420 }}
       >
         {imageUrl ? (
           <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
@@ -269,7 +406,9 @@ export default function AppStoreAssets() {
         <div className="flex flex-wrap gap-3 mt-3 text-xs text-slate-500">
           <span className="flex items-center gap-1"><LayoutGrid className="w-3.5 h-3.5" /> App Icon: 512 × 512 px · PNG/JPEG · max 1 MB · Google Play</span>
           <span className="flex items-center gap-1"><Image className="w-3.5 h-3.5" /> Feature Graphic: 1024 × 500 px · PNG/JPEG · max 15 MB</span>
-          <span className="flex items-center gap-1"><Smartphone className="w-3.5 h-3.5" /> Screenshots: 9:16 · PNG/JPEG · 320–3840 px each side · max 8 MB</span>
+          <span className="flex items-center gap-1"><Smartphone className="w-3.5 h-3.5" /> Phone Screenshots: 9:16 · PNG/JPEG · 320–3840 px · max 8 MB</span>
+          <span className="flex items-center gap-1"><Tablet className="w-3.5 h-3.5" /> 7-inch Tablet: 16:9 · PNG/JPEG · 320–3840 px · max 8 MB</span>
+          <span className="flex items-center gap-1"><Tablet className="w-3.5 h-3.5" /> 10-inch Tablet: 16:9 · PNG/JPEG · 1080–7680 px · max 8 MB</span>
         </div>
       </div>
 
@@ -324,6 +463,50 @@ export default function AppStoreAssets() {
               prompt={s.prompt}
               filename={`taper-payer-screenshot-${i + 1}.png`}
               aspect="portrait"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* 7-inch Tablet Screenshots */}
+      <div>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+          <Tablet className="w-5 h-5" style={{ color: '#2479C2' }} /> 7-inch Tablet Screenshots
+          <Badge className="ml-2 text-xs" style={{ backgroundColor: '#2479C2' }}>Up to 8 · Google Play</Badge>
+        </h3>
+        <p className="text-slate-500 text-sm mb-5">16:9 landscape · PNG/JPEG · 320–3840 px each side · max 8 MB each</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {TABLET_7_PROMPTS.map((s, i) => (
+            <AssetCard
+              key={i}
+              title={`7" Tablet ${i + 1}`}
+              subtitle={s.label}
+              badge="16:9"
+              prompt={s.prompt}
+              filename={`taper-payer-tablet7-${i + 1}.png`}
+              aspect="landscape"
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* 10-inch Tablet Screenshots */}
+      <div>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+          <Tablet className="w-5 h-5" style={{ color: '#F88F2B' }} /> 10-inch Tablet Screenshots
+          <Badge className="ml-2 text-xs" style={{ backgroundColor: '#F88F2B' }}>Up to 8 · Google Play</Badge>
+        </h3>
+        <p className="text-slate-500 text-sm mb-5">16:9 landscape · PNG/JPEG · 1080–7680 px each side · max 8 MB each</p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {TABLET_10_PROMPTS.map((s, i) => (
+            <AssetCard
+              key={i}
+              title={`10" Tablet ${i + 1}`}
+              subtitle={s.label}
+              badge="16:9"
+              prompt={s.prompt}
+              filename={`taper-payer-tablet10-${i + 1}.png`}
+              aspect="landscape"
             />
           ))}
         </div>

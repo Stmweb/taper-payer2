@@ -172,7 +172,7 @@ const AuthenticatedApp = () => {
         <Route path="/MoncashReturn" element={<MoncashReturn />} />
         <Route path="/OperatingAgreement" element={<OperatingAgreement />} />
         <Route path="/ThankYou" element={<ThankYou />} />
-        <Route path="/AccountSettings" element={<AccountSettings />} />
+        <Route path="/AccountSettings" element={<LayoutWrapper currentPageName="AccountSettings"><AccountSettings /></LayoutWrapper>} />
         <Route path="/DeleteDataAndAccount" element={<DeleteDataAndAccount />} />
         <Route path="/MobileProfile" element={<LayoutWrapper currentPageName="MobileProfile"><MobileProfile /></LayoutWrapper>} />
         <Route path="*" element={<PageNotFound />} />

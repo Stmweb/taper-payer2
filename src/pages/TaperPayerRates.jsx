@@ -291,7 +291,9 @@ export default function TaperPayerRates() {
         </div>
       </section>
 
-      <SiteFooter />
+      <div className="hidden md:block">
+        <SiteFooter />
+      </div>
     </div>
   );
 }

@@ -416,7 +416,9 @@ export default function TaperPayerHowItWorks() {
         </div>
       </section>
 
-      <SiteFooter />
+      <div className="hidden md:block">
+        <SiteFooter />
+      </div>
     </div>
   );
 }

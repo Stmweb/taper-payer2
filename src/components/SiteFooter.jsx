@@ -8,7 +8,7 @@ export default function SiteFooter() {
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div>
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/50986bd44_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer Logo" className="w-72 h-auto mb-4 brightness-110" />
+            <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer Logo" className="w-72 h-auto mb-4 brightness-110" />
             <p className="text-slate-300 text-lg mb-4">Your trusted partner for secure and efficient global money transfers.</p>
             <div className="flex gap-4">
               <a href="https://www.facebook.com/profile.php?id=61583727643100" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#3D7BB7' }}><span className="text-white text-lg">f</span></a>
@@ -62,7 +62,7 @@ export default function SiteFooter() {
 
         <div className="border-t border-slate-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400">
-            <p>&copy; 2026 Taper Payer LLC. All rights reserved.</p>
+            <p>&copy; 2026 Taper Payer. All rights reserved.</p>
           </div>
         </div>
       </div>

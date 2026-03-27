@@ -86,19 +86,19 @@ export default function MobileHomeScreen() {
   };
 
   return (
-    <div className="min-h-screen pb-24" style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e3a5f 40%, #0f172a 100%)' }}>
+    <div className="min-h-screen pb-24 bg-gray-50">
 
       {/* Header */}
       <div className="px-5 pt-12 pb-6 flex items-center justify-between">
         <div>
-          <p className="text-blue-300 text-sm font-medium">Welcome back 👋</p>
-          <h1 className="text-white text-2xl font-bold mt-0.5">
+          <p className="text-slate-500 text-sm font-medium">Welcome back 👋</p>
+          <h1 className="text-slate-900 text-2xl font-bold mt-0.5">
             {user?.full_name ? user.full_name.split(' ')[0] : 'Taper Payer'}
           </h1>
         </div>
         <div className="flex gap-3">
-          <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-            <Settings className="w-5 h-5 text-white" />
+          <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+            <Settings className="w-5 h-5 text-slate-600" />
           </Link>
         </div>
       </div>
@@ -130,7 +130,7 @@ export default function MobileHomeScreen() {
 
       {/* Quick Actions */}
       <div className="px-5 mb-6">
-        <h2 className="text-white font-semibold text-base mb-3">Quick Actions</h2>
+        <h2 className="text-slate-800 font-semibold text-base mb-3">Quick Actions</h2>
         <div className="grid grid-cols-4 gap-3">
           {quickActions.map((action, i) => {
             const Icon = action.icon;
@@ -146,7 +146,7 @@ export default function MobileHomeScreen() {
                     <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: action.bg }}>
                       <Icon className="w-6 h-6" style={{ color: action.color }} />
                     </div>
-                    <span className="text-white/80 text-xs font-medium text-center leading-tight">{action.label}</span>
+                    <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
                   </motion.div>
                 </Link>
               );
@@ -163,7 +163,7 @@ export default function MobileHomeScreen() {
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: action.bg }}>
                   <Icon className="w-6 h-6" style={{ color: action.color }} />
                 </div>
-                <span className="text-white/80 text-xs font-medium text-center leading-tight">{action.label}</span>
+                <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
               </motion.button>
             );
           })}
@@ -173,7 +173,7 @@ export default function MobileHomeScreen() {
       {/* Send To Section */}
       <div className="px-5 mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-white font-semibold text-base">Send To</h2>
+          <h2 className="text-slate-800 font-semibold text-base">Send To</h2>
           <Link to="/TaperPayerRates" className="text-blue-400 text-xs font-medium flex items-center gap-1">
             View all <ChevronRight className="w-3 h-3" />
           </Link>
@@ -186,10 +186,10 @@ export default function MobileHomeScreen() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + i * 0.05 }}
               onClick={() => handleCountryTap(dest)}
-              className="flex flex-col items-center gap-1.5 bg-white/10 rounded-2xl py-3 px-2 active:bg-white/20 transition-colors"
+              className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 active:bg-slate-100 transition-colors shadow-sm border border-slate-100"
             >
               <span className="text-2xl">{dest.flag}</span>
-              <span className="text-white/80 text-xs font-medium text-center leading-tight">{dest.name}</span>
+              <span className="text-slate-700 text-xs font-medium text-center leading-tight">{dest.name}</span>
             </motion.button>
           ))}
         </div>
@@ -197,7 +197,7 @@ export default function MobileHomeScreen() {
 
       {/* Why Us */}
       <div className="px-5 mb-6">
-        <h2 className="text-white font-semibold text-base mb-3">Why Taper Payer?</h2>
+        <h2 className="text-slate-800 font-semibold text-base mb-3">Why Taper Payer?</h2>
         <div className="space-y-3">
           {[
             { icon: Zap, title: "We're Fast", desc: "From instant to next-day delivery", color: '#F88F2B', bg: '#fff3e0' },
@@ -209,16 +209,16 @@ export default function MobileHomeScreen() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 + i * 0.1 }}
-              className="flex items-center gap-4 bg-white/10 rounded-2xl p-4"
+              className="flex items-center gap-4 bg-white rounded-2xl p-4 shadow-sm border border-slate-100"
             >
               <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: bg }}>
                 <Icon className="w-6 h-6" style={{ color }} />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">{title}</p>
-                <p className="text-white/60 text-xs mt-0.5">{desc}</p>
+                <p className="text-slate-800 font-semibold text-sm">{title}</p>
+                <p className="text-slate-500 text-xs mt-0.5">{desc}</p>
               </div>
-              <ArrowUpRight className="w-4 h-4 text-white/30 ml-auto" />
+              <ArrowUpRight className="w-4 h-4 text-slate-300 ml-auto" />
             </motion.div>
           ))}
         </div>

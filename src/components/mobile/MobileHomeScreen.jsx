@@ -115,9 +115,9 @@ export default function MobileHomeScreen() {
         >
           <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/10" />
           <div className="absolute -bottom-10 -left-6 w-32 h-32 rounded-full bg-white/10" />
-          <p className="text-white/70 text-sm font-medium mb-1 relative z-10">Send Money To Your</p>
+          <p className="text-white text-sm font-medium mb-1 relative z-10">Send Money To Your</p>
           <p className="text-white text-3xl font-bold relative z-10">Loved Ones</p>
-          <p className="text-white/80 text-sm mt-2 relative z-10">Fast · Secure · Low Fees</p>
+          <p className="text-white text-sm mt-2 relative z-10">Fast · Secure · Low Fees</p>
           <div className="flex gap-2 mt-4 relative z-10">
             {features.map(({ icon: Icon, label, color }) => (
               <div key={label} className="flex items-center gap-1 bg-white/20 rounded-full px-3 py-1">

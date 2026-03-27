@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import {
@@ -67,8 +68,28 @@ const features = [
 ];
 
 export default function MobileHomeScreen() {
-  const { user } = useAppAuth();
+  const { user, login } = useAppAuth();
+  const [refreshKey, setRefreshKey] = useState(0);
   const [showTopup, setShowTopup] = useState(false);
+
+  useEffect(() => {
+    // Refresh user data when page becomes visible
+    const handleVisibilityChange = async () => {
+      if (!document.hidden) {
+        try {
+          const freshUser = await base44.auth.me();
+          if (freshUser) {
+            login(freshUser, null, freshUser.cybrid_customer_id);
+            setRefreshKey(k => k + 1);
+          }
+        } catch (e) {
+          console.error('Failed to refresh user:', e);
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [login]);
   const [showHaiti, setShowHaiti] = useState(false);
   const [showTransfer, setShowTransfer] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);

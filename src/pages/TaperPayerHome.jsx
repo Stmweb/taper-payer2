@@ -10,6 +10,8 @@ import {
   RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram
 } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
+import MobileHomeScreen from '@/components/mobile/MobileHomeScreen';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { base44 } from '@/api/base44Client';
 import CountryDrawer from '@/components/mobile/CountryDrawer';
 import SEOHead from '@/components/SEOHead';
@@ -74,6 +76,7 @@ export default function TaperPayerHome() {
    const { config, isElementHidden, isSectionHidden, getContentOverride } = usePageConfig('TaperPayerHome');
    const { isAuthenticated, navigateToLogin } = useAuth();
    const { user, login } = useAppAuth();
+   const isMobile = useIsMobile();
 
    const [amount, setAmount] = useState('100');
    const [sendTo, setSendTo] = useState('');
@@ -132,6 +135,10 @@ export default function TaperPayerHome() {
   useEffect(() => {
     preloadStripe();
   }, []);
+
+  if (isMobile) {
+    return <MobileHomeScreen />;
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900" style={{ background: 'linear-gradient(to bottom right, #f8fafc, #dbeafe)' }}>

@@ -61,7 +61,7 @@ const destinations = [
 ];
 
 const features = [
-  { icon: Shield, label: 'Bank-grade security', color: '#61AF39' },
+  { icon: Shield, label: 'Safe & Secure', color: '#61AF39' },
   { icon: Zap, label: 'Instant transfers', color: '#F88F2B' },
   { icon: Globe, label: 'No Hidden Fees', color: '#3D7BB7' },
 ];

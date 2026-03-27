@@ -110,8 +110,8 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-slate-900 dark:to-slate-800 pb-20 md:pb-0">
-      <MobileHeader title="Account Settings" showBack={true} />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pb-20 md:pb-0">
+      <MobileHeader title="My Account" showBack={true} />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
@@ -120,69 +120,73 @@ export default function AccountSettings() {
           className="space-y-6"
         >
           {/* Profile Section */}
-          <Card className="p-6 dark:bg-slate-800 dark:border-gray-700">
-            <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Profile Information</h2>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
-                <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                <div className="flex-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
+          <Card className="p-4 sm:p-6 dark:bg-slate-800 dark:border-gray-700 border-0 sm:border shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center">
+                <User className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Profile</h2>
+            </div>
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 bg-blue-50 dark:bg-slate-700/50 rounded-xl border border-blue-100 dark:border-slate-600">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Full Name</p>
                   {editingField === 'full_name' ? (
                     <Input
                       value={formData.full_name}
                       onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                      className="font-semibold dark:bg-slate-600 dark:text-white"
+                      className="w-full h-10 sm:h-9 text-base dark:bg-slate-600 dark:text-white border-blue-300"
                       autoFocus
+                      placeholder="Enter your name"
                     />
                   ) : (
-                    <p className="font-semibold dark:text-white">{user?.full_name || 'Not set'}</p>
+                    <p className="text-base sm:text-sm font-semibold dark:text-white truncate">{user?.full_name || 'Not set'}</p>
                   )}
                 </div>
                 {editingField === 'full_name' ? (
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => handleSaveField('full_name')}>Save</Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <Button size="sm" onClick={() => handleSaveField('full_name')} className="flex-1 sm:flex-none">Save</Button>
+                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)} className="flex-1 sm:flex-none">Cancel</Button>
                   </div>
                 ) : (
-                  <Button variant="ghost" size="sm" onClick={() => setEditingField('full_name')} className="dark:text-gray-300">
+                  <Button variant="ghost" size="sm" onClick={() => setEditingField('full_name')} className="w-full sm:w-auto dark:text-gray-300 text-blue-600 font-semibold">
                     Edit
                   </Button>
                 )}
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
-                <Mail className="w-6 h-6 text-green-600 dark:text-green-400" />
-                <div className="flex-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
-                  <p className="font-semibold dark:text-white">{user?.email || 'Not set'}</p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 bg-green-50 dark:bg-slate-700/50 rounded-xl border border-green-100 dark:border-slate-600">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Email Address</p>
+                  <p className="text-base sm:text-sm font-semibold dark:text-white break-all">{user?.email || 'Not set'}</p>
                 </div>
-                <Button variant="ghost" size="sm" disabled className="dark:text-gray-300 opacity-50 cursor-not-allowed">
-                  Cannot edit
+                <Button variant="ghost" size="sm" disabled className="w-full sm:w-auto dark:text-gray-300 opacity-50 cursor-not-allowed text-gray-500">
+                  Read-only
                 </Button>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
-                <Phone className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                <div className="flex-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Phone</p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 bg-orange-50 dark:bg-slate-700/50 rounded-xl border border-orange-100 dark:border-slate-600">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Phone Number</p>
                   {editingField === 'phone' ? (
                     <Input
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="font-semibold dark:bg-slate-600 dark:text-white"
+                      className="w-full h-10 sm:h-9 text-base dark:bg-slate-600 dark:text-white border-orange-300"
                       autoFocus
+                      placeholder="Enter your phone"
                     />
                   ) : (
-                    <p className="font-semibold dark:text-white">{user?.phone || 'Not set'}</p>
+                    <p className="text-base sm:text-sm font-semibold dark:text-white">{user?.phone || 'Not set'}</p>
                   )}
                 </div>
                 {editingField === 'phone' ? (
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => handleSaveField('phone')}>Save</Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <Button size="sm" onClick={() => handleSaveField('phone')} className="flex-1 sm:flex-none">Save</Button>
+                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)} className="flex-1 sm:flex-none">Cancel</Button>
                   </div>
                 ) : (
-                  <Button variant="ghost" size="sm" onClick={() => setEditingField('phone')} className="dark:text-gray-300">
+                  <Button variant="ghost" size="sm" onClick={() => setEditingField('phone')} className="w-full sm:w-auto dark:text-gray-300 text-orange-600 font-semibold">
                     Edit
                   </Button>
                 )}
@@ -191,7 +195,7 @@ export default function AccountSettings() {
           </Card>
 
           {/* Preferences Section */}
-          <Card className="p-6 dark:bg-slate-800 dark:border-gray-700">
+          <Card className="p-4 sm:p-6 dark:bg-slate-800 dark:border-gray-700 border-0 sm:border shadow-sm">
             <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Preferences</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
@@ -234,7 +238,7 @@ export default function AccountSettings() {
           </Card>
 
           {/* Security Section */}
-          <Card className="p-6 dark:bg-slate-800 dark:border-gray-700">
+          <Card className="p-4 sm:p-6 dark:bg-slate-800 dark:border-gray-700 border-0 sm:border shadow-sm">
             <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Security</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
@@ -253,7 +257,7 @@ export default function AccountSettings() {
           </Card>
 
           {/* Danger Zone */}
-          <Card className="p-6 border-red-200 dark:bg-slate-800 dark:border-red-900">
+          <Card className="p-4 sm:p-6 border-red-200 dark:bg-slate-800 dark:border-red-900 border-0 sm:border shadow-sm">
             <h2 className="text-2xl font-bold mb-4 text-red-600 dark:text-red-400">Danger Zone</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               Once you delete your account, there is no going back. Please be certain.
@@ -307,16 +311,16 @@ export default function AccountSettings() {
           </Card>
 
           {/* Logout */}
-          <div className="flex gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button 
               onClick={handleLogout}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+              className="flex-1 h-11 sm:h-10 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-semibold"
             >
-              <LogOut className="w-5 h-5 mr-2" />
+              <LogOut className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Logout
             </Button>
             <Link to={createPageUrl('TaperPayerHome')} className="flex-1">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full h-11 sm:h-10 font-semibold">
                 Back to Home
               </Button>
             </Link>

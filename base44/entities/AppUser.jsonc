@@ -1,0 +1,48 @@
+{
+  "name": "AppUser",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "User email address (unique)"
+    },
+    "password_hash": {
+      "type": "string",
+      "description": "Hashed password"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "User full name"
+    },
+    "phone": {
+      "type": "string",
+      "description": "User phone number"
+    },
+    "country": {
+      "type": "string",
+      "description": "User's country"
+    },
+    "state": {
+      "type": "string",
+      "description": "User's state/province"
+    },
+    "cybrid_customer_id": {
+      "type": "string",
+      "description": "Cybrid customer ID"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "email",
+    "password_hash",
+    "full_name",
+    "phone"
+  ]
+}

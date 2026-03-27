@@ -13,8 +13,11 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    confirm_password: '',
     full_name: '',
     phone: '',
+    country: '',
+    state: '',
     otp: '',
   });
   const [otpSent, setOtpSent] = useState(false);
@@ -25,10 +28,21 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Request OTP - send verification email
+  // Validate password and request OTP
   const handleRequestOTP = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (formData.password !== formData.confirm_password) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -60,6 +74,8 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
         otp: formData.otp,
         full_name: formData.full_name,
         phone: formData.phone,
+        country: formData.country,
+        state: formData.state,
         password: formData.password,
       });
       
@@ -132,9 +148,9 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
           </div>
         )}
 
-        {/* Email Step */}
+        {/* Signup Form Step */}
         {step === 'email' && (
-          <form onSubmit={handleRequestOTP} className="space-y-4">
+          <form onSubmit={handleRequestOTP} className="space-y-4 max-h-[70vh] overflow-y-auto">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
               <Input
@@ -143,55 +159,6 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="you@example.com"
-                required
-                disabled={loading}
-              />
-            </div>
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                'Send Verification Code'
-              )}
-            </Button>
-
-            <div className="mt-4 text-center">
-              <button
-                type="button"
-                onClick={() => setStep('login')}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                Already have an account? Sign in
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* OTP Verification Step */}
-        {step === 'otp' && (
-          <form onSubmit={handleVerifyOTPAndSignup} className="space-y-4">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 flex gap-2">
-              <CheckCircle className="w-5 h-5 flex-shrink-0" />
-              Code sent to {formData.email}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">6-Digit Code</label>
-              <Input
-                type="text"
-                name="otp"
-                value={formData.otp}
-                onChange={handleInputChange}
-                placeholder="000000"
-                maxLength="6"
                 required
                 disabled={loading}
               />
@@ -223,6 +190,34 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
               />
             </div>
 
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Country</label>
+                <Input
+                  type="text"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  placeholder="United States"
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">State</label>
+                <Input
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleInputChange}
+                  placeholder="New York"
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
               <Input
@@ -231,6 +226,69 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="••••••••"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
+              <Input
+                type="password"
+                name="confirm_password"
+                value={formData.confirm_password}
+                onChange={handleInputChange}
+                placeholder="••••••••"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Sending Code...
+                </>
+              ) : (
+                'Send Verification Code'
+              )}
+            </Button>
+
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => setStep('login')}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Already have an account? Sign in
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* OTP Verification Step */}
+        {step === 'otp' && (
+          <form onSubmit={handleVerifyOTPAndSignup} className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 flex gap-2">
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              Verification code sent to {formData.email}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">6-Digit Code</label>
+              <Input
+                type="text"
+                name="otp"
+                value={formData.otp}
+                onChange={handleInputChange}
+                placeholder="000000"
+                maxLength="6"
+                inputMode="numeric"
                 required
                 disabled={loading}
               />
@@ -247,7 +305,7 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
                   Creating Account...
                 </>
               ) : (
-                'Create Account'
+                'Verify & Create Account'
               )}
             </Button>
 

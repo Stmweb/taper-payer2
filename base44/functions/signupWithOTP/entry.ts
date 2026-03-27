@@ -93,7 +93,7 @@ Deno.serve(async (req) => {
 
     // Step 2: Verify OTP and create account
     if (action === 'verify-otp') {
-      if (!email || !otp || !full_name || !phone || !password) {
+      if (!email || !otp || !full_name || !phone || !password || !country || !state) {
         return Response.json({ error: 'Missing required fields' }, { status: 400 });
       }
 
@@ -154,6 +154,8 @@ Deno.serve(async (req) => {
         password_hash,
         full_name,
         phone,
+        country,
+        state,
         cybrid_customer_id,
       });
 

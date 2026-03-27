@@ -54,13 +54,13 @@ export default function OperatingAgreement() {
     addSpace(10);
 
     // Shareholder table
-    const shareholderHeaders = ['Shareholder', 'Ownership Percentage'];
+    const shareholderHeaders = ['Shareholder', 'Ownership %', 'Date of Birth', 'Country of Residence'];
     const shareholderRows = [
-      ['Katy Lucas', '65%'],
-      ['Judith Valcin', '30%'],
-      ['David Jeanty', '5%'],
+      ['Katy Lucas', '70%', '03/28/1985', 'United States'],
+      ['Judith Valcin', '20%', '07/07/1963', 'United States'],
+      ['David Jeanty', '10%', '08/13/1979', 'Haiti'],
     ];
-    const shareholderColWidths = [220, 140];
+    const shareholderColWidths = [140, 80, 100, 148];
     const shareholderTableX = margin;
     const rowHeight = 22;
 
@@ -242,13 +242,13 @@ export default function OperatingAgreement() {
     doc.line(lineStartX, y, lineEndX, y);
 
     // Three member columns
-    const memberBoxW = 130;
-    const memberBoxH = 55;
+    const memberBoxW = 140;
+    const memberBoxH = 75;
     const positions = [lineStartX + 10, centerX - memberBoxW / 2, lineEndX - memberBoxW - 10];
     const members = [
-      { name: 'Katy Lucas', title: 'CEO / Managing Member', pct: '65% Ownership' },
-      { name: 'Judith Valcin', title: 'COO / Managing Member', pct: '30% Ownership' },
-      { name: 'David Jeanty', title: 'Treasurer / Managing Member', pct: '5% Ownership' },
+      { name: 'Katy Lucas', title: 'CEO / Managing Member', pct: '70% Ownership', dob: 'DOB: 03/28/1985', country: 'United States' },
+      { name: 'Judith Valcin', title: 'COO / Managing Member', pct: '20% Ownership', dob: 'DOB: 07/07/1963', country: 'United States' },
+      { name: 'David Jeanty', title: 'Treasurer / Mgmt Member', pct: '10% Ownership', dob: 'DOB: 08/13/1979', country: 'Haiti' },
     ];
 
     positions.forEach((px, idx) => {
@@ -267,6 +267,11 @@ export default function OperatingAgreement() {
       doc.setTextColor(255, 220, 80);
       doc.setFont('helvetica', 'bold');
       doc.text(members[idx].pct, midX, y + 52, { align: 'center' });
+      doc.setTextColor(180, 210, 255);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.text(members[idx].dob, midX, y + 62, { align: 'center' });
+      doc.text(members[idx].country, midX, y + 71, { align: 'center' });
     });
 
     y += 15 + memberBoxH + 20;
@@ -282,7 +287,7 @@ export default function OperatingAgreement() {
     const notes = [
       '• No parent entities: Taper Payer LLC has no parent company or holding entity.',
       '• No subsidiaries: Taper Payer LLC does not currently own or control any subsidiary entities.',
-      '• Ultimate Beneficial Owners: Katy Lucas (65%), Judith Valcin (30%), David Jeanty (5%).',
+      '• Ultimate Beneficial Owners: Katy Lucas (70%), Judith Valcin (20%), David Jeanty (10%).',
       '• Control: Decisions require majority vote (>50%). Katy Lucas holds controlling interest.',
     ];
     notes.forEach((note, i) => {
@@ -415,17 +420,21 @@ export default function OperatingAgreement() {
                   <tr className="bg-blue-700 text-white">
                     <th className="px-4 py-3 text-left">Shareholder</th>
                     <th className="px-4 py-3 text-left">Ownership Percentage</th>
+                    <th className="px-4 py-3 text-left">Date of Birth</th>
+                    <th className="px-4 py-3 text-left">Country of Residence</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    ['Katy Lucas', '65%'],
-                    ['Judith Valcin', '30%'],
-                    ['David Jeanty', '5%'],
-                  ].map(([name, pct], i) => (
+                    ['Katy Lucas', '70%', '03/28/1985', 'United States'],
+                    ['Judith Valcin', '20%', '07/07/1963', 'United States'],
+                    ['David Jeanty', '10%', '08/13/1979', 'Haiti'],
+                  ].map(([name, pct, dob, country], i) => (
                     <tr key={name} className={i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}>
                       <td className="px-4 py-3 font-semibold">{name}</td>
                       <td className="px-4 py-3">{pct}</td>
+                      <td className="px-4 py-3">{dob}</td>
+                      <td className="px-4 py-3">{country}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -540,9 +549,11 @@ export default function OperatingAgreement() {
                 <div className="flex flex-col items-center">
                   <div className="w-px h-6 bg-slate-400"></div>
                   <div className="bg-slate-800 text-white rounded-xl px-5 py-3 text-center shadow w-52">
-                    <p className="font-bold">Katy Lucas</p>
-                    <p className="text-xs text-slate-300 mt-1">CEO / Managing Member</p>
-                    <p className="text-xs font-semibold text-yellow-300 mt-1">65% Ownership</p>
+                   <p className="font-bold">Katy Lucas</p>
+                   <p className="text-xs text-slate-300 mt-1">CEO / Managing Member</p>
+                   <p className="text-xs font-semibold text-yellow-300 mt-1">70% Ownership</p>
+                   <p className="text-xs text-slate-400 mt-1">DOB: 03/28/1985</p>
+                   <p className="text-xs text-slate-400">United States</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center">
@@ -550,7 +561,9 @@ export default function OperatingAgreement() {
                   <div className="bg-slate-700 text-white rounded-xl px-5 py-3 text-center shadow w-52">
                     <p className="font-bold">Judith Valcin</p>
                     <p className="text-xs text-slate-300 mt-1">COO / Managing Member</p>
-                    <p className="text-xs font-semibold text-yellow-300 mt-1">30% Ownership</p>
+                    <p className="text-xs font-semibold text-yellow-300 mt-1">20% Ownership</p>
+                    <p className="text-xs text-slate-400 mt-1">DOB: 07/07/1963</p>
+                    <p className="text-xs text-slate-400">United States</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center">
@@ -558,7 +571,9 @@ export default function OperatingAgreement() {
                   <div className="bg-slate-600 text-white rounded-xl px-5 py-3 text-center shadow w-52">
                     <p className="font-bold">David Jeanty</p>
                     <p className="text-xs text-slate-300 mt-1">Treasurer / Managing Member</p>
-                    <p className="text-xs font-semibold text-yellow-300 mt-1">5% Ownership</p>
+                    <p className="text-xs font-semibold text-yellow-300 mt-1">10% Ownership</p>
+                    <p className="text-xs text-slate-400 mt-1">DOB: 08/13/1979</p>
+                    <p className="text-xs text-slate-400">Haiti</p>
                   </div>
                 </div>
               </div>
@@ -567,8 +582,8 @@ export default function OperatingAgreement() {
               <div className="mt-8 w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600 space-y-1">
                 <p>• <strong>No parent entities:</strong> Taper Payer LLC has no parent company or holding entity.</p>
                 <p>• <strong>No subsidiaries:</strong> Taper Payer LLC does not currently own or control any subsidiary entities.</p>
-                <p>• <strong>Ultimate Beneficial Owners:</strong> Katy Lucas (65%), Judith Valcin (30%), and David Jeanty (5%) are the sole and ultimate beneficial owners of the company.</p>
-                <p>• <strong>Control:</strong> Decisions require majority vote (&gt;50%). Katy Lucas, as 65% owner, holds controlling interest.</p>
+                <p>• <strong>Ultimate Beneficial Owners:</strong> Katy Lucas (70%), Judith Valcin (20%), and David Jeanty (10%) are the sole and ultimate beneficial owners of the company.</p>
+                <p>• <strong>Control:</strong> Decisions require majority vote (&gt;50%). Katy Lucas, as 70% owner, holds controlling interest.</p>
               </div>
             </div>
           </Section>

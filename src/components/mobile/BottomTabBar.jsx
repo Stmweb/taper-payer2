@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Home, DollarSign, HelpCircle, Info } from 'lucide-react';
+import { Home, DollarSign, HelpCircle, UserCircle } from 'lucide-react';
 
 export default function BottomTabBar() {
   const location = useLocation();
@@ -11,7 +11,7 @@ export default function BottomTabBar() {
     { name: 'Home', icon: Home, path: createPageUrl('TaperPayerHome') },
     { name: 'Rates', icon: DollarSign, path: createPageUrl('TaperPayerRates') },
     { name: 'How It Works', icon: HelpCircle, path: createPageUrl('TaperPayerHowItWorks') },
-    { name: 'About', icon: Info, path: createPageUrl('TaperPayerAbout') }
+    { name: 'Profile', icon: UserCircle, path: createPageUrl('AccountSettings') }
   ];
 
   const isActive = (path) => location.pathname === path || location.pathname === path + '.html';

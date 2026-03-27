@@ -204,6 +204,92 @@ export default function OperatingAgreement() {
     addText('8.2 Winding Up. Upon dissolution, the affairs of the Company shall be wound up, its liabilities satisfied, and remaining assets distributed to the Members in proportion to their membership interests.', 11);
     addSpace(16);
 
+    // Organizational Chart Section
+    doc.addPage();
+    y = margin;
+    addText('ORGANIZATIONAL CHART — OWNERSHIP & CONTROL STRUCTURE', 13, true);
+    addSpace(4);
+    addText('Date: March 27, 2026', 11);
+    addSpace(8);
+    addText('The following chart illustrates the full ownership and control structure of Taper Payer LLC, including all individuals who ultimately own or control the company, together with their respective roles and ownership percentages.', 11);
+    addSpace(20);
+
+    // Top box — Company
+    const boxW = 300;
+    const boxH = 50;
+    const centerX = pageWidth / 2;
+    const topBoxX = centerX - boxW / 2;
+    doc.setFillColor(55, 123, 183);
+    doc.roundedRect(topBoxX, y, boxW, boxH, 6, 6, 'F');
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text('TAPER PAYER LLC', centerX, y + 16, { align: 'center' });
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text('A Delaware Limited Liability Company', centerX, y + 28, { align: 'center' });
+    doc.text('254 Chapman Rd, Ste 208 #26415, Newark, DE 19702', centerX, y + 40, { align: 'center' });
+    y += boxH;
+
+    // Vertical line down from company box
+    doc.setDrawColor(150, 150, 150);
+    doc.line(centerX, y, centerX, y + 20);
+    y += 20;
+
+    // Horizontal line
+    const lineStartX = margin + 60;
+    const lineEndX = pageWidth - margin - 60;
+    doc.line(lineStartX, y, lineEndX, y);
+
+    // Three member columns
+    const memberBoxW = 130;
+    const memberBoxH = 55;
+    const positions = [lineStartX + 10, centerX - memberBoxW / 2, lineEndX - memberBoxW - 10];
+    const members = [
+      { name: 'Katy Lucas', title: 'CEO / Managing Member', pct: '65% Ownership' },
+      { name: 'Judith Valcin', title: 'COO / Managing Member', pct: '30% Ownership' },
+      { name: 'David Jeanty', title: 'Treasurer / Managing Member', pct: '5% Ownership' },
+    ];
+
+    positions.forEach((px, idx) => {
+      const midX = px + memberBoxW / 2;
+      doc.setDrawColor(150, 150, 150);
+      doc.line(midX, y, midX, y + 15);
+      doc.setFillColor(50, 65, 85);
+      doc.roundedRect(px, y + 15, memberBoxW, memberBoxH, 5, 5, 'F');
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text(members[idx].name, midX, y + 28, { align: 'center' });
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text(members[idx].title, midX, y + 40, { align: 'center' });
+      doc.setTextColor(255, 220, 80);
+      doc.setFont('helvetica', 'bold');
+      doc.text(members[idx].pct, midX, y + 52, { align: 'center' });
+    });
+
+    y += 15 + memberBoxH + 20;
+
+    // Notes box
+    doc.setFillColor(245, 247, 250);
+    doc.setDrawColor(200, 200, 200);
+    const notesBoxH = 70;
+    doc.roundedRect(margin, y, contentWidth, notesBoxH, 5, 5, 'FD');
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    const notes = [
+      '• No parent entities: Taper Payer LLC has no parent company or holding entity.',
+      '• No subsidiaries: Taper Payer LLC does not currently own or control any subsidiary entities.',
+      '• Ultimate Beneficial Owners: Katy Lucas (65%), Judith Valcin (30%), David Jeanty (5%).',
+      '• Control: Decisions require majority vote (>50%). Katy Lucas holds controlling interest.',
+    ];
+    notes.forEach((note, i) => {
+      doc.text(note, margin + 8, y + 14 + i * 14);
+    });
+    y += notesBoxH + 24;
+
     addText('ARTICLE IX — MISCELLANEOUS', 13, true);
     addSpace(6);
     addText('9.1 Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware.', 11);
@@ -433,6 +519,58 @@ export default function OperatingAgreement() {
             <P><B>9.2 Entire Agreement.</B> This Agreement constitutes the entire agreement among the Members with respect to the subject matter hereof and supersedes all prior agreements and understandings.</P>
             <P><B>9.3 Amendments.</B> This Agreement may be amended only by a written instrument signed by all Members.</P>
             <P><B>9.4 Severability.</B> If any provision of this Agreement is held to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.</P>
+          </Section>
+
+          {/* Organizational Chart */}
+          <Section title="Organizational Chart — Ownership & Control Structure">
+            <P>Date: March 27, 2026</P>
+            <P>The following chart illustrates the full ownership and control structure of Taper Payer LLC, including all individuals who ultimately own or control the company, together with their respective roles and ownership percentages.</P>
+            <div className="mt-6 flex flex-col items-center gap-0 text-sm font-sans">
+              {/* Top Entity */}
+              <div className="bg-blue-700 text-white rounded-xl px-8 py-4 text-center shadow-md w-72">
+                <p className="font-bold text-base">TAPER PAYER LLC</p>
+                <p className="text-xs text-blue-100 mt-1">A Delaware Limited Liability Company</p>
+                <p className="text-xs text-blue-100">254 Chapman Rd, Ste 208 #26415, Newark, DE 19702</p>
+              </div>
+
+              {/* Connector */}
+              <div className="w-px h-8 bg-slate-400"></div>
+              <div className="w-64 h-px bg-slate-400"></div>
+              <div className="flex gap-8">
+                <div className="flex flex-col items-center">
+                  <div className="w-px h-6 bg-slate-400"></div>
+                  <div className="bg-slate-800 text-white rounded-xl px-5 py-3 text-center shadow w-52">
+                    <p className="font-bold">Katy Lucas</p>
+                    <p className="text-xs text-slate-300 mt-1">CEO / Managing Member</p>
+                    <p className="text-xs font-semibold text-yellow-300 mt-1">65% Ownership</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-px h-6 bg-slate-400"></div>
+                  <div className="bg-slate-700 text-white rounded-xl px-5 py-3 text-center shadow w-52">
+                    <p className="font-bold">Judith Valcin</p>
+                    <p className="text-xs text-slate-300 mt-1">COO / Managing Member</p>
+                    <p className="text-xs font-semibold text-yellow-300 mt-1">30% Ownership</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-px h-6 bg-slate-400"></div>
+                  <div className="bg-slate-600 text-white rounded-xl px-5 py-3 text-center shadow w-52">
+                    <p className="font-bold">David Jeanty</p>
+                    <p className="text-xs text-slate-300 mt-1">Treasurer / Managing Member</p>
+                    <p className="text-xs font-semibold text-yellow-300 mt-1">5% Ownership</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div className="mt-8 w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600 space-y-1">
+                <p>• <strong>No parent entities:</strong> Taper Payer LLC has no parent company or holding entity.</p>
+                <p>• <strong>No subsidiaries:</strong> Taper Payer LLC does not currently own or control any subsidiary entities.</p>
+                <p>• <strong>Ultimate Beneficial Owners:</strong> Katy Lucas (65%), Judith Valcin (30%), and David Jeanty (5%) are the sole and ultimate beneficial owners of the company.</p>
+                <p>• <strong>Control:</strong> Decisions require majority vote (&gt;50%). Katy Lucas, as 65% owner, holds controlling interest.</p>
+              </div>
+            </div>
           </Section>
 
           {/* Signature Block */}

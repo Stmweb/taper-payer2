@@ -104,7 +104,8 @@ export default function MobileHomeScreen() {
           <img
             src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
             alt="Taper Payer"
-            className="h-14 w-auto mt-2"
+            className="h-20 w-auto mt-1"
+            style={{ display: 'block' }}
           />
         )}
       </div>

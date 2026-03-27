@@ -181,9 +181,7 @@ export default function TaperPayerHome() {
                 className="text-slate-700 border-slate-300 hover:bg-slate-50"
                 onClick={() => window.open('https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login', '_blank')}
               >Login</Button>
-              <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
-              </a>
+              <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90" onClick={() => setShowSignupModal(true)}>Sign up</Button>
             </div>
 
             {/* Spacer for Mobile to Balance Layout */}
@@ -207,7 +205,7 @@ export default function TaperPayerHome() {
                 >Login</Button>
                 <Button 
                   className="w-full bg-white text-blue-600 hover:bg-gray-100"
-                  onClick={() => window.open('https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register', '_blank')}
+                  onClick={() => setShowSignupModal(true)}
                 >Sign up</Button>
               </div>
             </div>
@@ -564,11 +562,9 @@ export default function TaperPayerHome() {
                 </div>
                 <p className="text-lg text-slate-600 dark:text-gray-300 mb-8">Sign up today and start enjoying member-only benefits</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                    <Button size="lg" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90 px-8 py-6 text-lg w-full sm:w-auto">
-                      Become a Member
-                    </Button>
-                  </a>
+                  <Button size="lg" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90 px-8 py-6 text-lg w-full sm:w-auto" onClick={() => setShowSignupModal(true)}>
+                    Become a Member
+                  </Button>
                   <Button size="lg" variant="outline" className="px-8 py-6 text-lg border-2 w-full sm:w-auto">
                     Learn More
                   </Button>

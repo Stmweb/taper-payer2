@@ -62,7 +62,7 @@ export default function SiteFooter() {
 
         <div className="border-t border-slate-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400">
-            <p>&copy; 2026 Taper Payer. All rights reserved.</p>
+            <p>&copy; 2026 Taper Payer LLC. All rights reserved.</p>
           </div>
         </div>
       </div>

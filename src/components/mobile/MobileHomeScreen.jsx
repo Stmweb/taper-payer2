@@ -233,7 +233,7 @@ export default function MobileHomeScreen() {
           transition={{ delay: 0.5 }}
           onClick={() => setShowTopup(true)}
           className="w-full rounded-3xl p-5 flex items-center justify-between"
-          style={{ background: 'linear-gradient(135deg, #F88F2B, #e67e22)' }}
+          style={{ background: 'linear-gradient(135deg, #3D7BB7, #2e5f8f)' }}
         >
           <div>
             <p className="text-white font-bold text-lg">Taper Mobile</p>

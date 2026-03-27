@@ -160,12 +160,12 @@ export default function AccountSettings() {
                 )}
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 bg-green-50 dark:bg-slate-700/50 rounded-xl border border-green-100 dark:border-slate-600">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 rounded-xl border dark:bg-slate-700/50 dark:border-slate-600" style={{ backgroundColor: '#61AF39' + '15', borderColor: '#61AF39' + '40' }}>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Email Address</p>
                   <p className="text-base sm:text-sm font-semibold dark:text-white break-all">{user?.email || 'Not set'}</p>
                 </div>
-                <Button variant="ghost" size="sm" disabled className="w-full sm:w-auto dark:text-gray-300 opacity-50 cursor-not-allowed text-gray-500">
+                <Button variant="ghost" size="sm" disabled className="w-full sm:w-auto dark:text-gray-300 opacity-50 cursor-not-allowed" style={{ color: '#61AF39' }}>
                   Read-only
                 </Button>
               </div>

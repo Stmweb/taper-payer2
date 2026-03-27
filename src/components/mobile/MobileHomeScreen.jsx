@@ -89,26 +89,24 @@ export default function MobileHomeScreen() {
     <div className="min-h-screen pb-24 bg-gray-50">
 
       {/* Header */}
-      <div className="px-5 pt-12 pb-6 flex items-center justify-between">
-        <div>
+      <div className="px-5 pt-12 pb-6">
+        <div className="flex items-center justify-between mb-2">
           <p className="text-slate-500 text-sm font-medium">Welcome back 👋</p>
-          {user?.full_name ? (
-            <h1 className="text-2xl font-bold mt-0.5" style={{ color: '#3D7BB7' }}>
-              {user.full_name.split(' ')[0]}
-            </h1>
-          ) : (
-            <img
-              src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
-              alt="Taper Payer"
-              className="h-28 w-auto mt-0.5"
-            />
-          )}
-        </div>
-        <div className="flex gap-3">
           <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
             <Settings className="w-5 h-5 text-slate-600" />
           </Link>
         </div>
+        {user?.full_name ? (
+          <h1 className="text-3xl font-bold" style={{ color: '#3D7BB7' }}>
+            {user.full_name.split(' ')[0]}
+          </h1>
+        ) : (
+          <img
+            src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
+            alt="Taper Payer"
+            className="h-36 w-auto"
+          />
+        )}
       </div>
 
       {/* Balance Card */}

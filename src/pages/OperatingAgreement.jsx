@@ -570,7 +570,7 @@ export default function OperatingAgreement() {
                   <div className="w-px h-6 bg-slate-400"></div>
                   <div className="bg-slate-600 text-white rounded-xl px-5 py-3 text-center shadow w-52">
                     <p className="font-bold">David Jeanty</p>
-                    <p className="text-xs text-slate-300 mt-1">Treasurer / Managing Member</p>
+                    <p className="text-xs text-slate-300 mt-1">COO / Managing Member</p>
                     <p className="text-xs font-semibold text-yellow-300 mt-1">10% Ownership</p>
                     <p className="text-xs text-slate-400 mt-1">DOB: 08/13/1979</p>
                     <p className="text-xs text-slate-400">Haiti</p>

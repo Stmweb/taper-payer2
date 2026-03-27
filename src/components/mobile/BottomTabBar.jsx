@@ -11,7 +11,7 @@ export default function BottomTabBar() {
     { name: 'Home', icon: Home, path: createPageUrl('TaperPayerHome') },
     { name: 'Rates', icon: DollarSign, path: createPageUrl('TaperPayerRates') },
     { name: 'How It Works', icon: HelpCircle, path: createPageUrl('TaperPayerHowItWorks') },
-    { name: 'Profile', icon: UserCircle, path: createPageUrl('TaperPayerLogin') }
+    { name: 'Profile', icon: UserCircle, path: '/MobileProfile' }
   ];
 
   const isActive = (path) => location.pathname === path || location.pathname === path + '.html';

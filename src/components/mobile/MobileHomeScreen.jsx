@@ -98,7 +98,7 @@ export default function MobileHomeScreen() {
           </h1>
         </div>
         <div className="flex gap-3">
-          <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+          <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center" style={{ userSelect: 'none' }}>
             <Settings className="w-5 h-5 text-slate-600" />
           </Link>
         </div>

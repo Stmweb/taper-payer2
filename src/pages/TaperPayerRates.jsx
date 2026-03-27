@@ -134,26 +134,20 @@ export default function TaperPayerRates() {
           </div>
         </div>
       )}
-      {/* Navigation */}
-      <nav className="bg-white dark:bg-slate-900 dark:border-gray-800 border-b sticky top-0 z-50 shadow-sm">
+      {/* Navigation - desktop only */}
+      <nav className="hidden md:block bg-white dark:bg-slate-900 dark:border-gray-800 border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 md:px-6">
           <div className="relative flex items-center justify-between h-16 md:h-20">
-            <button
-              className="md:hidden text-slate-700 p-2 z-10"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
 
-            <Link to={createPageUrl('TaperPayerHome')} className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
+            <Link to={createPageUrl('TaperPayerHome')} className="flex-shrink-0">
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
                 alt="Taper Payer"
-                className="h-40 md:h-24 w-auto"
+                className="h-24 w-auto"
               />
             </Link>
             
-            <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            <div className="flex items-center gap-6 lg:gap-8">
               <Link to={createPageUrl('TaperPayerHome')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>Home</Link>
               <Link to={createPageUrl('TaperPayerAbout')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>About</Link>
               <Link to={createPageUrl('TaperPayerHowItWorks')} className="text-slate-700 dark:text-gray-300 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors" style={{ userSelect: 'none' }}>How It Works</Link>
@@ -167,26 +161,7 @@ export default function TaperPayerRates() {
               </a>
             </div>
 
-            <div className="md:hidden w-10"></div>
           </div>
-
-          {isMobileMenuOpen && (
-            <div className="md:hidden bg-gradient-to-br from-blue-600 to-green-600 -mx-4 px-4 py-6 space-y-3 rounded-b-2xl">
-              <Link to={createPageUrl('TaperPayerHome')} className="block text-white/90 font-medium hover:text-white transition-colors py-2" style={{ userSelect: 'none' }}>Home</Link>
-              <Link to={createPageUrl('TaperPayerAbout')} className="block text-white/90 font-medium hover:text-white transition-colors py-2" style={{ userSelect: 'none' }}>About</Link>
-              <Link to={createPageUrl('TaperPayerHowItWorks')} className="block text-white/90 font-medium hover:text-white transition-colors py-2" style={{ userSelect: 'none' }}>How It Works</Link>
-              <Link to={createPageUrl('TaperPayerRates')} className="block text-white font-semibold hover:text-white transition-colors py-2" style={{ userSelect: 'none' }}>Exchange Rates</Link>
-              <Link to={createPageUrl('TaperPayerContact')} className="block text-white/90 font-medium hover:text-white transition-colors py-2" style={{ userSelect: 'none' }}>Contact</Link>
-              <div className="pt-3 space-y-3">
-                <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20" style={{ userSelect: 'none' }}>Login</Button>
-                </a>
-                <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full bg-white text-blue-600 hover:bg-gray-100" style={{ userSelect: 'none' }}>Sign up</Button>
-                </a>
-              </div>
-            </div>
-          )}
         </div>
       </nav>
 

@@ -25,8 +25,8 @@ export default function AccountSettings() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If user navigated directly to root/AccountSettings (default page), redirect to Home
-    if (window.location.pathname === '/' || window.location.pathname === '/AccountSettings') {
+    // Only redirect if landed on root path without intention
+    if (window.location.pathname === '/') {
       navigate('/TaperPayerHome', { replace: true });
     }
   }, []);

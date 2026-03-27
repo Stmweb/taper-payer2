@@ -92,10 +92,17 @@ export default function MobileHomeScreen() {
       <div className="px-5 pt-12 pb-6 flex items-center justify-between">
         <div>
           <p className="text-slate-500 text-sm font-medium">Welcome back 👋</p>
-          <h1 className="text-2xl font-bold mt-0.5">
-            <span style={{ color: '#3D7BB7' }}>{user?.full_name ? user.full_name.split(' ')[0] : 'Taper'}</span>
-            {!user?.full_name && <span style={{ color: '#61AF39' }}> Payer</span>}
-          </h1>
+          {user?.full_name ? (
+            <h1 className="text-2xl font-bold mt-0.5" style={{ color: '#3D7BB7' }}>
+              {user.full_name.split(' ')[0]}
+            </h1>
+          ) : (
+            <img
+              src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
+              alt="Taper Payer"
+              className="h-16 w-auto mt-0.5"
+            />
+          )}
         </div>
         <div className="flex gap-3">
           <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">

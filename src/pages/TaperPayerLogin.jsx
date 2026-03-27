@@ -264,7 +264,7 @@ export default function TaperPayerLogin() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-slate-900 pt-20 md:pt-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-5 py-6 bg-white dark:bg-slate-900 pt-16 pb-28 lg:pt-8 lg:pb-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -299,10 +299,10 @@ export default function TaperPayerLogin() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/6af1701ab_GrokTaperpayer.png"
                 alt="Taper Payer"
-                className="h-48 w-auto mx-auto mb-6"
+                className="h-24 md:h-36 w-auto mx-auto mb-4"
               />
             </Link>
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
+            <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
               Welcome, please login to your account
             </h2>
           </div>

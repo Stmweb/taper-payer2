@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { User, Mail, Phone, Trash2, Shield, Bell, Moon, Sun } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { User, Mail, Phone, Trash2, Shield, Bell, Moon, Sun, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import MobileHeader from '@/components/mobile/MobileHeader';
@@ -23,6 +24,26 @@ import {
 
 export default function AccountSettings() {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [editingField, setEditingField] = useState(null);
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const currentUser = await base44.auth.me();
+        setUser(currentUser);
+        setFormData({
+          full_name: currentUser?.full_name || '',
+          email: currentUser?.email || '',
+          phone: currentUser?.phone || ''
+        });
+      } catch (e) {
+        console.error('Failed to load user:', e);
+      }
+    };
+    loadUser();
+  }, []);
 
   useEffect(() => {
     // Only redirect if landed on root path without intention
@@ -30,6 +51,21 @@ export default function AccountSettings() {
       navigate('/TaperPayerHome', { replace: true });
     }
   }, []);
+
+  const handleLogout = async () => {
+    await base44.auth.logout('/TaperPayerHome');
+  };
+
+  const handleSaveField = async (field) => {
+    try {
+      await base44.auth.updateMe({ [field === 'full_name' ? 'full_name' : field]: formData[field] });
+      setUser({ ...user, [field]: formData[field] });
+      setEditingField(null);
+      toast.success('Profile updated successfully');
+    } catch (e) {
+      toast.error('Failed to update profile');
+    }
+  };
 
   const [darkMode, setDarkMode] = useState(
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -91,21 +127,37 @@ export default function AccountSettings() {
                 <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
-                  <p className="font-semibold dark:text-white">John Doe</p>
+                  {editingField === 'full_name' ? (
+                    <Input
+                      value={formData.full_name}
+                      onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                      className="font-semibold dark:bg-slate-600 dark:text-white"
+                      autoFocus
+                    />
+                  ) : (
+                    <p className="font-semibold dark:text-white">{user?.full_name || 'Not set'}</p>
+                  )}
                 </div>
-                <Button variant="ghost" size="sm" className="dark:text-gray-300" style={{ userSelect: 'none' }}>
-                  Edit
-                </Button>
+                {editingField === 'full_name' ? (
+                  <div className="flex gap-2">
+                    <Button size="sm" onClick={() => handleSaveField('full_name')}>Save</Button>
+                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                  </div>
+                ) : (
+                  <Button variant="ghost" size="sm" onClick={() => setEditingField('full_name')} className="dark:text-gray-300">
+                    Edit
+                  </Button>
+                )}
               </div>
 
               <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg">
                 <Mail className="w-6 h-6 text-green-600 dark:text-green-400" />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
-                  <p className="font-semibold dark:text-white">john.doe@example.com</p>
+                  <p className="font-semibold dark:text-white">{user?.email || 'Not set'}</p>
                 </div>
-                <Button variant="ghost" size="sm" className="dark:text-gray-300" style={{ userSelect: 'none' }}>
-                  Edit
+                <Button variant="ghost" size="sm" disabled className="dark:text-gray-300 opacity-50 cursor-not-allowed">
+                  Cannot edit
                 </Button>
               </div>
 
@@ -113,11 +165,27 @@ export default function AccountSettings() {
                 <Phone className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                 <div className="flex-1">
                   <p className="text-sm text-gray-600 dark:text-gray-400">Phone</p>
-                  <p className="font-semibold dark:text-white">+1 (555) 123-4567</p>
+                  {editingField === 'phone' ? (
+                    <Input
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="font-semibold dark:bg-slate-600 dark:text-white"
+                      autoFocus
+                    />
+                  ) : (
+                    <p className="font-semibold dark:text-white">{user?.phone || 'Not set'}</p>
+                  )}
                 </div>
-                <Button variant="ghost" size="sm" className="dark:text-gray-300" style={{ userSelect: 'none' }}>
-                  Edit
-                </Button>
+                {editingField === 'phone' ? (
+                  <div className="flex gap-2">
+                    <Button size="sm" onClick={() => handleSaveField('phone')}>Save</Button>
+                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                  </div>
+                ) : (
+                  <Button variant="ghost" size="sm" onClick={() => setEditingField('phone')} className="dark:text-gray-300">
+                    Edit
+                  </Button>
+                )}
               </div>
             </div>
           </Card>
@@ -238,13 +306,19 @@ export default function AccountSettings() {
             </AlertDialog>
           </Card>
 
-          {/* Back to Home */}
-          <div className="text-center pt-4">
-            <Link
-              to={createPageUrl('TaperPayerHome')}
-              className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+          {/* Logout */}
+          <div className="flex gap-4 pt-4">
+            <Button 
+              onClick={handleLogout}
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
             >
-              Back to Home
+              <LogOut className="w-5 h-5 mr-2" />
+              Logout
+            </Button>
+            <Link to={createPageUrl('TaperPayerHome')} className="flex-1">
+              <Button variant="outline" className="w-full">
+                Back to Home
+              </Button>
             </Link>
           </div>
         </motion.div>

@@ -113,10 +113,10 @@ export default function MobileHomeScreen() {
       <div className="px-5 pt-12 pb-6 flex items-center justify-between">
         <div>
           <p className="text-slate-500 text-sm font-medium">Welcome back 👋</p>
-          <h1 className="text-2xl font-bold mt-0.5">
-            <span style={{ color: '#3D7BB7' }}>{user?.full_name ? user.full_name.split(' ')[0] : 'Taper'}</span>
-            {!user?.full_name && <span style={{ color: '#61AF39' }}> Payer</span>}
-          </h1>
+           <h1 className="text-2xl font-bold mt-0.5">
+             <span style={{ color: '#000' }}>{user?.full_name ? user.full_name.split(' ')[0] : 'Taper'}</span>
+             {!user?.full_name && <span style={{ color: '#61AF39' }}> Payer</span>}
+           </h1>
         </div>
         <div className="flex gap-3">
           <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center" style={{ userSelect: 'none' }}>

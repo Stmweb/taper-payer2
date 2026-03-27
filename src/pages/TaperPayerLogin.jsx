@@ -276,7 +276,7 @@ export default function TaperPayerLogin() {
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/6af1701ab_GrokTaperpayer.png"
                 alt="Taper Payer"
-                className="h-24 md:h-36 w-auto mx-auto mb-4"
+                className="h-24 md:h-36 w-auto mx-auto mb-4 mix-blend-multiply dark:mix-blend-normal"
               />
             </Link>
             <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">

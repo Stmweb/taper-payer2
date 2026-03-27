@@ -61,9 +61,9 @@ const destinations = [
 ];
 
 const features = [
-  { icon: Shield, label: 'Safe & Secure', color: '#61AF39' },
-  { icon: Zap, label: 'Instant transfers', color: '#F88F2B' },
-  { icon: Globe, label: 'No Hidden Fees', color: '#3D7BB7' },
+  { icon: Shield, label: 'Safe & Secure' },
+  { icon: Zap, label: 'Instant transfers' },
+  { icon: Globe, label: 'No Hidden Fees' },
 ];
 
 export default function MobileHomeScreen() {
@@ -111,7 +111,7 @@ export default function MobileHomeScreen() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="rounded-3xl p-6 relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}
+          style={{ background: 'linear-gradient(135deg, #61AF39, #5FAE2E)' }}
         >
           <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/10" />
           <div className="absolute -bottom-10 -left-6 w-32 h-32 rounded-full bg-white/10" />

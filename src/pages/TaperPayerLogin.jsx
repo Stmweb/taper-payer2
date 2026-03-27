@@ -26,7 +26,7 @@ export default function TaperPayerLogin() {
   };
 
   return (
-    <div className="min-h-screen flex dark:bg-slate-900">
+    <div className="min-h-screen flex flex-col lg:flex-row dark:bg-slate-900">
       <MobileHeader title="Login" showBack={true} />
       {/* Left Side - Promotional Content */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 p-12 flex-col justify-center relative overflow-hidden">
@@ -264,37 +264,14 @@ export default function TaperPayerLogin() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-5 py-6 bg-white dark:bg-slate-900 pt-16 pb-28 lg:pt-8 lg:pb-8">
+      <div className="w-full lg:w-1/2 flex items-start justify-center px-5 pt-4 pb-28 bg-white dark:bg-slate-900 lg:items-center lg:pt-8 lg:pb-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full max-w-md"
         >
-          {/* Mobile Banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.02, y: -5 }}
-            transition={{ delay: 0.2 }}
-            className="mb-8 rounded-2xl overflow-hidden shadow-lg lg:hidden cursor-pointer"
-          >
-            <motion.img 
-              animate={{
-                y: [0, -10, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/adbf945ac_TaperPayerBanner.png"
-              alt="World Cup Raffle 2026"
-              className="w-full h-auto"
-            />
-          </motion.div>
-
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <Link to={createPageUrl('TaperPayerHome')}>
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/6af1701ab_GrokTaperpayer.png"

@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import MobileHeader from '@/components/mobile/MobileHeader';
 import { base44 } from '@/api/base44Client';
+import { useAppAuth } from '@/lib/AppAuthContext';
 import { toast } from 'sonner';
 import {
   AlertDialog,
@@ -24,6 +25,7 @@ import {
 
 export default function AccountSettings() {
   const navigate = useNavigate();
+  const { user: appUser, login } = useAppAuth();
   const [user, setUser] = useState(null);
   const [editingField, setEditingField] = useState(null);
   const [formData, setFormData] = useState({});
@@ -59,7 +61,10 @@ export default function AccountSettings() {
   const handleSaveField = async (field) => {
     try {
       await base44.auth.updateMe({ [field === 'full_name' ? 'full_name' : field]: formData[field] });
-      setUser({ ...user, [field]: formData[field] });
+      const updatedUser = { ...user, [field]: formData[field] };
+      setUser(updatedUser);
+      // Sync to AppAuth context
+      login(updatedUser, appUser?.jwt, appUser?.cybrid_customer_id);
       setEditingField(null);
       toast.success('Profile updated successfully');
     } catch (e) {

@@ -15,7 +15,7 @@ export default function SplashScreen({ onComplete }) {
         <motion.img
           src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
           alt="Taper Payer"
-          className="w-56"
+          className="w-80"
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 18, duration: 0.6 }}

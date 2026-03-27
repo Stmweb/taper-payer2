@@ -4,7 +4,17 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
-import { Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { Loader2, AlertCircle, CheckCircle, ChevronDown } from 'lucide-react';
+
+const US_STATES = [
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
+  'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+  'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+  'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
+  'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
+  'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+];
 
 export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
   const [step, setStep] = useState('email'); // email, otp, signup, login
@@ -193,28 +203,40 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Country</label>
-                <Input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  placeholder="United States"
-                  required
-                  disabled={loading}
-                />
+                <div className="relative">
+                  <select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    required
+                    disabled={loading}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white appearance-none text-slate-900 cursor-pointer disabled:bg-slate-100"
+                  >
+                    <option value="">Select Country</option>
+                    <option value="USA">United States of America</option>
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">State</label>
-                <Input
-                  type="text"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  placeholder="New York"
-                  required
-                  disabled={loading}
-                />
+                <div className="relative">
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    required
+                    disabled={loading || !formData.country}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white appearance-none text-slate-900 cursor-pointer disabled:bg-slate-100"
+                  >
+                    <option value="">Select State</option>
+                    {US_STATES.map(state => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
               </div>
             </div>
 

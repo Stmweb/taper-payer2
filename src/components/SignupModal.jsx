@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 
 export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
-  const [isLogin, setIsLogin] = useState(false);
+  const [step, setStep] = useState('email'); // email, otp, signup, login
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
@@ -15,20 +15,54 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
     password: '',
     full_name: '',
     phone: '',
+    otp: '',
   });
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpExpiry, setOtpExpiry] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSignup = async (e) => {
+  // Request OTP - send verification email
+  const handleRequestOTP = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const res = await base44.functions.invoke('signup', formData);
+      const res = await base44.functions.invoke('signupWithOTP', {
+        action: 'request-otp',
+        email: formData.email,
+      });
+      
+      setOtpSent(true);
+      setOtpExpiry(new Date(res.data.expiresAt));
+      setStep('otp');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to send OTP. Try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Verify OTP and create account
+  const handleVerifyOTPAndSignup = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await base44.functions.invoke('signupWithOTP', {
+        action: 'verify-otp',
+        email: formData.email,
+        otp: formData.otp,
+        full_name: formData.full_name,
+        phone: formData.phone,
+        password: formData.password,
+      });
+      
       const { jwt, user, cybrid_customer_id } = res.data;
       
       localStorage.setItem('auth_token', jwt);
@@ -85,10 +119,10 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
         </button>
 
         <h2 className="text-2xl font-bold mb-2 text-slate-900">
-          {isLogin ? 'Sign In' : 'Create Account'}
+          {step === 'login' ? 'Sign In' : step === 'otp' ? 'Verify Email' : 'Create Account'}
         </h2>
         <p className="text-slate-600 mb-6">
-          {isLogin ? 'Welcome back!' : 'Get started with TaperPayer'}
+          {step === 'login' ? 'Welcome back!' : step === 'otp' ? 'Enter the code sent to your email' : 'Get started with Taper Payer'}
         </p>
 
         {error && (
@@ -98,87 +132,198 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
           </div>
         )}
 
-        <form onSubmit={isLogin ? handleLogin : handleSignup} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-            <Input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="you@example.com"
-              required
-            />
-          </div>
+        {/* Email Step */}
+        {step === 'email' && (
+          <form onSubmit={handleRequestOTP} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="you@example.com"
+                required
+                disabled={loading}
+              />
+            </div>
 
-          {!isLogin && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
-                <Input
-                  type="text"
-                  name="full_name"
-                  value={formData.full_name}
-                  onChange={handleInputChange}
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                'Send Verification Code'
+              )}
+            </Button>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Phone</label>
-                <Input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="+1234567890"
-                  required
-                />
-              </div>
-            </>
-          )}
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => setStep('login')}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Already have an account? Sign in
+              </button>
+            </div>
+          </form>
+        )}
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
-            <Input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="••••••••"
-              required
-            />
-          </div>
+        {/* OTP Verification Step */}
+        {step === 'otp' && (
+          <form onSubmit={handleVerifyOTPAndSignup} className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 flex gap-2">
+              <CheckCircle className="w-5 h-5 flex-shrink-0" />
+              Code sent to {formData.email}
+            </div>
 
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                {isLogin ? 'Signing In...' : 'Creating Account...'}
-              </>
-            ) : (
-              isLogin ? 'Sign In' : 'Create Account'
-            )}
-          </Button>
-        </form>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">6-Digit Code</label>
+              <Input
+                type="text"
+                name="otp"
+                value={formData.otp}
+                onChange={handleInputChange}
+                placeholder="000000"
+                maxLength="6"
+                required
+                disabled={loading}
+              />
+            </div>
 
-        <div className="mt-4 text-center">
-          <button
-            type="button"
-            onClick={() => {
-              setIsLogin(!isLogin);
-              setError('');
-            }}
-            className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-          >
-            {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
-          </button>
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+              <Input
+                type="text"
+                name="full_name"
+                value={formData.full_name}
+                onChange={handleInputChange}
+                placeholder="John Doe"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Phone</label>
+              <Input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="+1234567890"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+              <Input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="••••••••"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                'Create Account'
+              )}
+            </Button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setStep('email');
+                  setError('');
+                }}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Back
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Login Step */}
+        {step === 'login' && (
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="you@example.com"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+              <Input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="••••••••"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Signing In...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
+
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setStep('email');
+                  setError('');
+                }}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Don't have an account? Sign up
+              </button>
+            </div>
+          </form>
+        )}
       </motion.div>
     </div>,
     document.body

@@ -469,8 +469,8 @@ export default function OperatingAgreement() {
                 <tbody>
                   {[
                     ['Katy Lucas', 'Chief Executive Officer (CEO)', 'Managing Member'],
-                    ['Judith Valcin', 'Chief Operating Officer (COO)', 'Managing Member'],
-                    ['David Jeanty', 'Treasurer', 'Managing Member'],
+                    ['Judith Valcin', 'Treasurer', 'Managing Member'],
+                    ['David Jeanty', 'Chief Operating Officer (COO)', 'Managing Member'],
                   ].map(([name, title, role], i) => (
                     <tr key={name} className={i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}>
                       <td className="px-4 py-3 font-semibold">{name}</td>
@@ -560,7 +560,7 @@ export default function OperatingAgreement() {
                   <div className="w-px h-6 bg-slate-400"></div>
                   <div className="bg-slate-700 text-white rounded-xl px-5 py-3 text-center shadow w-52">
                     <p className="font-bold">Judith Valcin</p>
-                    <p className="text-xs text-slate-300 mt-1">COO / Managing Member</p>
+                    <p className="text-xs text-slate-300 mt-1">Treasurer / Managing Member</p>
                     <p className="text-xs font-semibold text-yellow-300 mt-1">20% Ownership</p>
                     <p className="text-xs text-slate-400 mt-1">DOB: 07/07/1963</p>
                     <p className="text-xs text-slate-400">United States</p>

@@ -4,19 +4,31 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { User, Mail, Lock, Phone, MapPin, Eye, EyeOff, ChevronRight } from 'lucide-react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
 import MobileHeader from '@/components/mobile/MobileHeader';
 import CountryDrawer from '@/components/mobile/CountryDrawer';
 import { useIsMobile } from '@/hooks/use-mobile';
+import SignupModal from '@/components/SignupModal';
+import { useAppAuth } from '@/lib/AppAuthContext';
 
 export default function TaperPayerSignup() {
   const isMobile = useIsMobile();
+  const { login } = useAppAuth();
   
-  // Redirect mobile users to home page which has the new SignupModal
+  // On mobile, show the SignupModal instead of the old form
   if (isMobile) {
-    return <Navigate to="/TaperPayerHome" replace />;
+    return (
+      <SignupModal
+        isOpen={true}
+        onClose={() => window.history.back()}
+        onSignupSuccess={(userData) => {
+          login(userData, userData.jwt, userData.cybrid_customer_id);
+          window.location.href = '/TaperPayerHome';
+        }}
+      />
+    );
   }
   const [formData, setFormData] = useState({
     firstName: '',

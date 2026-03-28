@@ -228,7 +228,7 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
   const [requesterPhone, setRequesterPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState('sms');
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -269,7 +269,6 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
           amount,
           note: finalNote,
           topupLink,
-          deliveryMethod,
         });
       } catch {
         // Fallback to SMS if WhatsApp fails
@@ -281,7 +280,6 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
           amount,
           note: finalNote,
           topupLink,
-          deliveryMethod: 'sms',
         });
       }
       setSuccess(true);
@@ -299,7 +297,6 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
     setRequesterPhone('');
     setAmount('');
     setNote('');
-    setDeliveryMethod('sms');
     setSuccess(false);
     setError('');
     setMyCountrySearch('');
@@ -441,34 +438,6 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Send via <span className="text-red-500">*</span></label>
-                  <div className="flex gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setDeliveryMethod('sms')}
-                      className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
-                        deliveryMethod === 'sms'
-                          ? 'bg-blue-500 text-white border-2 border-blue-500'
-                          : 'bg-slate-100 text-slate-700 border-2 border-transparent hover:bg-slate-200'
-                      }`}
-                    >
-                      💬 SMS
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setDeliveryMethod('whatsapp')}
-                      className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
-                        deliveryMethod === 'whatsapp'
-                          ? 'bg-green-500 text-white border-2 border-green-500'
-                          : 'bg-slate-100 text-slate-700 border-2 border-transparent hover:bg-slate-200'
-                      }`}
-                    >
-                      💚 WhatsApp
-                    </button>
-                  </div>
                 </div>
 
                 <div>

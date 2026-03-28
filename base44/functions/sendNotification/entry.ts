@@ -81,12 +81,22 @@ Deno.serve(async (req) => {
       </div>`;
       const text = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` Note: "${note}"` : ''} Visit taperpayer.com`;
       const smsBody = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` "${note}"` : ''} Pay at taperpayer.com`;
+      const deliveryMethod = payload.deliveryMethod || 'sms';
 
-      if (isEmail(recipient)) {
+      if (isEmail(recipient) && deliveryMethod !== 'whatsapp') {
         results.email = await sendEmail({ to: recipient, subject, html, text });
       }
       if (isPhone(recipient)) {
-        results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
+        if (deliveryMethod === 'whatsapp') {
+          const phone = normalizePhone(recipient);
+          try {
+            results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
+          } catch {
+            results.sms = await sendSMS({ to: phone, body: smsBody });
+          }
+        } else {
+          results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
+        }
       }
 
     } else if (type === 'request_topup') {

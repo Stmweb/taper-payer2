@@ -32,7 +32,8 @@ async function sendEmail(opts) {
 async function sendSMS(opts) {
   const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
   const token = Deno.env.get('TWILIO_AUTH_TOKEN');
-  const from = Deno.env.get('TWILIO_PHONE_NUMBER');
+  const isWhatsApp = opts.to && opts.to.startsWith('whatsapp:');
+  const from = isWhatsApp ? 'whatsapp:+14155238886' : Deno.env.get('TWILIO_PHONE_NUMBER');
   console.log('[Twilio] SID prefix:', sid ? sid.substring(0, 6) : 'MISSING');
   console.log('[Twilio] Token length:', token ? token.length : 'MISSING');
   console.log('[Twilio] From:', from || 'MISSING');

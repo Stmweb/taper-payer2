@@ -89,11 +89,15 @@ Deno.serve(async (req) => {
       const text = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` Note: "${note}"` : ''} Visit taperpayer.com`;
       const smsBody = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` "${note}"` : ''} Pay at taperpayer.com`;
 
+      const phone = normalizePhone(recipient);
       if (deliveryMethod === 'whatsapp') {
-        const phone = normalizePhone(recipient);
-        results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
+        try {
+          results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
+        } catch {
+          results.sms = await sendSMS({ to: phone, body: smsBody });
+        }
       } else {
-        results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
+        results.sms = await sendSMS({ to: phone, body: smsBody });
       }
 
     } else if (type === 'request_topup') {

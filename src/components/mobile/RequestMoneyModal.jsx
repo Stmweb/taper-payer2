@@ -51,6 +51,18 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setLoading(true);
     try {
       const senderName = user?.full_name || 'Someone';
+      
+      // Create payment request with unique URL
+      const requestRes = await base44.functions.invoke('createPaymentRequest', {
+        recipient,
+        recipient_country: recipientCountry.name,
+        amount: parseFloat(amount),
+        currency,
+        note,
+        delivery_method: deliveryMethod,
+      });
+
+      // Send notification with share URL
       await base44.functions.invoke('sendNotification', {
         type: 'request_money',
         recipient,
@@ -60,6 +72,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         note,
         recipientCountry: recipientCountry.name,
         deliveryMethod,
+        shareUrl: requestRes.data.share_url,
       });
       setSuccess(true);
     } catch (err) {

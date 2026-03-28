@@ -1,0 +1,67 @@
+{
+  "name": "PaymentRequest",
+  "type": "object",
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "description": "Unique request identifier for URL"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Name of person requesting payment"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email of requester"
+    },
+    "recipient": {
+      "type": "string",
+      "description": "Recipient phone or identifier"
+    },
+    "recipient_country": {
+      "type": "string",
+      "description": "Recipient's country"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount requested"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency code (USD, HTG, etc)"
+    },
+    "note": {
+      "type": "string",
+      "description": "Payment note/message"
+    },
+    "delivery_method": {
+      "type": "string",
+      "enum": [
+        "sms",
+        "whatsapp"
+      ],
+      "description": "SMS or WhatsApp"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "expired"
+      ],
+      "default": "pending",
+      "description": "Request status"
+    },
+    "expires_at": {
+      "type": "string",
+      "description": "Expiration date for request"
+    }
+  },
+  "required": [
+    "request_id",
+    "sender_name",
+    "recipient",
+    "amount",
+    "currency"
+  ]
+}

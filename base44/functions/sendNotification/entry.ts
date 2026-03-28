@@ -73,6 +73,7 @@ Deno.serve(async (req) => {
 
     if (type === 'request_money') {
       const deliveryMethod = payload.deliveryMethod || 'sms';
+      const shareUrl = payload.shareUrl || '';
       
       // Only allow phone numbers for request_money
       if (!isPhone(recipient)) {
@@ -84,10 +85,10 @@ Deno.serve(async (req) => {
         <h2 style="color:#3D7BB7;">Payment Request</h2>
         <p><strong>${senderName}</strong> is requesting <strong>${currency} ${amount}</strong> via Taper Payer.</p>
         ${note ? `<p style="color:#64748b;font-style:italic;">"${note}"</p>` : ''}
-        <a href="https://taperpayer.com" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#3D7BB7;color:white;border-radius:8px;text-decoration:none;">Pay Now on Taper Payer</a>
+        <a href="${shareUrl}" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#3D7BB7;color:white;border-radius:8px;text-decoration:none;">View & Pay Request</a>
       </div>`;
-      const text = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` Note: "${note}"` : ''} Visit taperpayer.com`;
-      const smsBody = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` "${note}"` : ''} Pay at taperpayer.com`;
+      const text = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` Note: "${note}"` : ''} ${shareUrl}`;
+      const smsBody = `${senderName} is requesting ${currency} ${amount}. View request: ${shareUrl}`;
 
       const phone = normalizePhone(recipient);
       if (deliveryMethod === 'whatsapp') {

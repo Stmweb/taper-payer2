@@ -31,6 +31,7 @@ import AccountSettings from './pages/AccountSettings';
 import DeleteDataAndAccount from './pages/DeleteDataAndAccount';
 import MobileProfile from './pages/MobileProfile';
 import TwilioVerification from './pages/TwilioVerification';
+import SMSOptIn from './pages/SMSOptIn';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -178,6 +179,7 @@ const AuthenticatedApp = () => {
         <Route path="/DeleteDataAndAccount" element={<DeleteDataAndAccount />} />
         <Route path="/MobileProfile" element={<LayoutWrapper currentPageName="MobileProfile"><MobileProfile /></LayoutWrapper>} />
         <Route path="/ddb00654a29b6bb256d50d1a8ffa84e1.html" element={<TwilioVerification />} />
+        <Route path="/SMSOptIn" element={<SMSOptIn />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

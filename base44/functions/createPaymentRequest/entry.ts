@@ -39,7 +39,8 @@ Deno.serve(async (req) => {
       expires_at: expires_at.toISOString(),
     });
 
-    const shareUrl = `/PaymentRequest?id=${request_id}`;
+    const appUrl = Deno.env.get('APP_URL') || 'https://taperpayer.com';
+    const shareUrl = `${appUrl}/PaymentRequest?id=${request_id}`;
 
     return Response.json({
       success: true,

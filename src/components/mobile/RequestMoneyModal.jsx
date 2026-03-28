@@ -29,10 +29,13 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setLoading(true);
     try {
       const senderName = user?.full_name || 'Someone';
-      await base44.integrations.Core.SendEmail({
-        to: recipient.includes('@') ? recipient : `${recipient}@taperpayer.com`,
+      const toEmail = recipient.includes('@') ? recipient : `${recipient}@taperpayer.com`;
+      await base44.functions.invoke('sendEmail', {
+        type: 'transactional',
+        to: toEmail,
         subject: `${senderName} is requesting money via Taper Payer`,
-        body: `You've received a payment request from ${senderName} via Taper Payer.\n\nAmount: ${currency} ${amount}${note ? `\nNote: ${note}` : ''}\n\nLog in to Taper Payer to complete this payment.`,
+        html: `<h2>Payment Request from ${senderName}</h2><p>You've received a payment request via <strong>Taper Payer</strong>.</p><p><strong>Amount:</strong> ${currency} ${amount}</p>${note ? `<p><strong>Note:</strong> ${note}</p>` : ''}<br/><p>Log in to Taper Payer to complete this payment.</p>`,
+        text: `You've received a payment request from ${senderName} via Taper Payer.\n\nAmount: ${currency} ${amount}${note ? `\nNote: ${note}` : ''}\n\nLog in to Taper Payer to complete this payment.`,
       });
       setSuccess(true);
     } catch (err) {

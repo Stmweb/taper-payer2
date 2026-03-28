@@ -219,7 +219,7 @@ export default function TaperConnectForm({ initialCountry }) {
         setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
       }
     } catch (e) {
-      setError('Payment or top-up failed. Please try again.');
+      setError("We couldn't complete this top-up. Please try again or use another payment method.");
     } finally {
       setLoading(false);
     }
@@ -242,8 +242,8 @@ export default function TaperConnectForm({ initialCountry }) {
     return (
       <div className="text-center py-8">
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h3 className="text-xl font-bold text-slate-900 mb-2">Top-Up Sent!</h3>
-        <p className="text-slate-600 mb-6">Airtime has been sent to {selectedCountry?.dial}{phoneNumber}.</p>
+        <h3 className="text-xl font-bold text-slate-900 mb-2">Top-up successful!</h3>
+        <p className="text-slate-600 mb-6">The phone has been recharged instantly. Sent to {selectedCountry?.dial}{phoneNumber}.</p>
         <Button onClick={reset} className="bg-cyan-500 hover:bg-cyan-600 text-white">
           Send Another
         </Button>
@@ -257,7 +257,7 @@ export default function TaperConnectForm({ initialCountry }) {
         <div className="bg-gradient-to-br from-cyan-400 to-blue-500 w-10 h-10 rounded-lg flex items-center justify-center">
           <Wifi className="w-5 h-5 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-slate-900">Taper Connect</h3>
+        <h3 className="text-xl font-bold text-slate-900">Mobile Top-Up</h3>
       </div>
 
       {error && (
@@ -329,7 +329,7 @@ export default function TaperConnectForm({ initialCountry }) {
           </button>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Enter phone number</label>
             <div className="flex gap-2">
               <span className="flex items-center px-3 bg-slate-100 border border-slate-200 rounded-lg text-slate-700 text-sm font-medium whitespace-nowrap">
                 {selectedCountry?.dial}
@@ -360,7 +360,7 @@ export default function TaperConnectForm({ initialCountry }) {
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
-              Select Plan {detectedOperator && <span className="text-cyan-600 font-normal">({detectedOperator.name})</span>}
+              Select amount {detectedOperator && <span className="text-cyan-600 font-normal">— {detectedOperator.name}</span>}
             </label>
             {loading ? (
               <div className="flex items-center justify-center py-8">

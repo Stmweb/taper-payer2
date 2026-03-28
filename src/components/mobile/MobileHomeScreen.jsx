@@ -11,6 +11,7 @@ import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper'
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
+import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
 const quickActions = [
@@ -24,29 +25,28 @@ const quickActions = [
   },
   {
     id: 'topup',
-    label: 'Top-Up',
+    label: 'Mobile Top-Up',
     icon: Smartphone,
     color: '#F88F2B',
     bg: '#fff3e0',
-    description: 'Mobile airtime',
+    description: 'Recharge instantly',
+  },
+  {
+    id: 'request',
+    label: 'Request Money',
+    icon: RefreshCw,
+    color: '#61AF39',
+    bg: '#e8f5e9',
+    description: 'Ask to get paid',
   },
   {
     id: 'rates',
     label: 'Rates',
     icon: TrendingUp,
-    color: '#61AF39',
-    bg: '#e8f5e9',
-    description: 'Live exchange',
-    link: '/TaperPayerRates',
-  },
-  {
-    id: 'how',
-    label: 'How It Works',
-    icon: Zap,
     color: '#9c27b0',
     bg: '#f3e5f5',
-    description: 'Learn more',
-    link: '/TaperPayerHowItWorks',
+    description: 'Live exchange',
+    link: '/TaperPayerRates',
   },
 ];
 
@@ -93,10 +93,12 @@ export default function MobileHomeScreen() {
   const [showHaiti, setShowHaiti] = useState(false);
   const [showTransfer, setShowTransfer] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const [showRequestMoney, setShowRequestMoney] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const handleAction = (id) => {
     if (id === 'topup') setShowTopup(true);
+    else if (id === 'request') setShowRequestMoney(true);
     else if (id === 'send') setShowComingSoon(true);
   };
 
@@ -257,8 +259,8 @@ export default function MobileHomeScreen() {
           style={{ background: 'linear-gradient(135deg, #3D7BB7, #2e5f8f)' }}
         >
           <div>
-            <p className="text-white font-bold text-lg">Taper Mobile</p>
-            <p className="text-white/80 text-sm mt-0.5">Instant airtime top-ups worldwide</p>
+            <p className="text-white font-bold text-lg">Mobile Top-Up</p>
+            <p className="text-white/80 text-sm mt-0.5">Recharge any mobile number instantly</p>
           </div>
           <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
             <Smartphone className="w-8 h-8 text-white" />
@@ -322,6 +324,7 @@ export default function MobileHomeScreen() {
       )}
 
       <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
+      <RequestMoneyModal isOpen={showRequestMoney} onClose={() => setShowRequestMoney(false)} />
     </div>
   );
 }

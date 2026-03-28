@@ -1,0 +1,154 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { createPortal } from 'react-dom';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
+import { useAppAuth } from '@/lib/AppAuthContext';
+
+const CURRENCIES = ['USD', 'HTG', 'NGN', 'GHS', 'JMD', 'KES', 'BRL', 'MXN'];
+
+export default function RequestMoneyModal({ isOpen, onClose }) {
+  const { user } = useAppAuth();
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState('USD');
+  const [recipient, setRecipient] = useState('');
+  const [note, setNote] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (!amount || !recipient) {
+      setError('Please fill in the required fields.');
+      return;
+    }
+    setLoading(true);
+    try {
+      const senderName = user?.full_name || 'Someone';
+      await base44.integrations.Core.SendEmail({
+        to: recipient.includes('@') ? recipient : `${recipient}@taperpayer.com`,
+        subject: `${senderName} is requesting money via Taper Payer`,
+        body: `You've received a payment request from ${senderName} via Taper Payer.\n\nAmount: ${currency} ${amount}${note ? `\nNote: ${note}` : ''}\n\nLog in to Taper Payer to complete this payment.`,
+      });
+      setSuccess(true);
+    } catch (err) {
+      setError('Failed to send request. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setAmount('');
+    setCurrency('USD');
+    setRecipient('');
+    setNote('');
+    setSuccess(false);
+    setError('');
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <div className="absolute inset-0 bg-black/60" onClick={handleClose} />
+      <motion.div
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '100%' }}
+        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+        className="relative bg-white rounded-t-3xl w-full max-h-[90vh] overflow-y-auto"
+      >
+        <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2" />
+        <button onClick={handleClose} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">✕</button>
+
+        <div className="p-6 pt-4">
+          {success ? (
+            <div className="text-center py-8">
+              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Request sent!</h3>
+              <p className="text-slate-500 text-sm">We've notified them and you'll be alerted when the payment is completed.</p>
+              <Button onClick={handleClose} className="mt-6 w-full" style={{ backgroundColor: '#3D7BB7' }}>Done</Button>
+            </div>
+          ) : (
+            <>
+              <h2 className="text-xl font-bold text-slate-900 mb-1">Request money in seconds</h2>
+              <p className="text-slate-500 text-sm mb-6">Ask friends, family, or customers to send you money instantly.</p>
+
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex gap-2 text-red-700 text-sm">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Amount</label>
+                    <Input
+                      type="number"
+                      placeholder="0.00"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      required
+                      style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
+                  <div className="w-28">
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Currency</label>
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-full h-11 px-3 border border-slate-300 rounded-lg text-slate-900 bg-white text-sm"
+                    >
+                      {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Who are you requesting from?</label>
+                  <Input
+                    type="text"
+                    placeholder="Phone number or email"
+                    value={recipient}
+                    onChange={(e) => setRecipient(e.target.value)}
+                    required
+                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Note <span className="text-slate-400 font-normal">(optional)</span></label>
+                  <Input
+                    type="text"
+                    placeholder="Add a message so they know what the payment is for."
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 text-white"
+                  style={{ backgroundColor: '#3D7BB7' }}
+                >
+                  {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending...</> : 'Send Request'}
+                </Button>
+              </form>
+            </>
+          )}
+        </div>
+      </motion.div>
+    </div>,
+    document.body
+  );
+}

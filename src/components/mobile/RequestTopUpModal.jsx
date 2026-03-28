@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
@@ -35,6 +36,7 @@ function detectCountry(phone) {
 
 export default function RequestTopUpModal({ isOpen, onClose }) {
   const { user } = useAppAuth();
+  const [myCountry, setMyCountry] = useState(null);
   const [myPhone, setMyPhone] = useState('');
   const [requesterPhone, setRequesterPhone] = useState('');
   const [amount, setAmount] = useState('');
@@ -43,7 +45,6 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const myCountry = detectCountry(myPhone);
   const generatedNote = myCountry ? `Please send Top up my ${myCountry.name} ${myCountry.flag}` : '';
 
   const handleSubmit = async (e) => {
@@ -76,6 +77,7 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
   };
 
   const handleClose = () => {
+    setMyCountry(null);
     setMyPhone('');
     setRequesterPhone('');
     setAmount('');
@@ -122,16 +124,36 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Country <span className="text-red-500">*</span></label>
+                  <Select value={myCountry?.name || ''} onValueChange={(countryName) => {
+                    const country = COUNTRIES.find(c => c.name === countryName);
+                    setMyCountry(country);
+                    setMyPhone('');
+                  }}>
+                    <SelectTrigger style={{ color: '#1e293b', backgroundColor: '#ffffff' }}>
+                      <SelectValue placeholder="Select your country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COUNTRIES.map((country) => (
+                        <SelectItem key={country.name} value={country.name}>
+                          {country.flag} {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Your phone number <span className="text-red-500">*</span></label>
                   <Input
                     type="tel"
-                    placeholder="Enter your phone number"
+                    placeholder={myCountry ? `Enter number for ${myCountry.name}` : 'Select country first'}
                     value={myPhone}
                     onChange={(e) => setMyPhone(e.target.value)}
+                    disabled={!myCountry}
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
-                  {myCountry && <p className="text-xs text-slate-500 mt-1">{myCountry.flag} {myCountry.name}</p>}
                   <p className="text-xs text-slate-400 mt-1">This is the number that will receive the top-up</p>
                 </div>
 

@@ -75,6 +75,11 @@ export default function PaymentRequest() {
             <div>
               <h2 className="text-lg font-bold text-slate-900">Request Error</h2>
               <p className="text-slate-600 text-sm mt-1">{error}</p>
+              {!requestId && (
+                <p className="text-slate-500 text-xs mt-3">
+                  This page requires a valid payment request link. Please use the link sent via SMS or email.
+                </p>
+              )}
             </div>
           </div>
           <Button

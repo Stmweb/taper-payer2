@@ -52,9 +52,20 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     try {
       const senderName = user?.full_name || 'Someone';
       
+      // Normalize phone number with country code if it looks like a phone
+      const formatRecipient = (value, country) => {
+        const isPhone = /^\+?[\d\s\-().]{7,}$/.test(value);
+        if (!isPhone) return value; // It's not a phone, return as-is (email)
+        if (value.startsWith('+')) return value;
+        const dial = country?.dial || '+1';
+        return dial + value;
+      };
+      
+      const normalizedRecipient = formatRecipient(recipient, recipientCountry);
+      
       // Create payment request with unique URL
       const requestRes = await base44.functions.invoke('createPaymentRequest', {
-        recipient,
+        recipient: normalizedRecipient,
         recipient_country: recipientCountry.name,
         amount: parseFloat(amount),
         currency,
@@ -65,7 +76,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
       // Send notification with share URL
       await base44.functions.invoke('sendNotification', {
         type: 'request_money',
-        recipient,
+        recipient: normalizedRecipient,
         senderName,
         amount,
         currency,

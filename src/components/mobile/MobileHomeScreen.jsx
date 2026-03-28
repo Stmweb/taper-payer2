@@ -12,6 +12,7 @@ import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
+import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
 const quickActions = [
@@ -38,6 +39,14 @@ const quickActions = [
     color: '#61AF39',
     bg: '#e8f5e9',
     description: 'Ask to get paid',
+  },
+  {
+    id: 'requesttopup',
+    label: 'Request Top-Up',
+    icon: Smartphone,
+    color: '#e91e8c',
+    bg: '#fce4ec',
+    description: 'Ask someone to top up',
   },
   {
     id: 'rates',
@@ -94,11 +103,13 @@ export default function MobileHomeScreen() {
   const [showTransfer, setShowTransfer] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [showRequestMoney, setShowRequestMoney] = useState(false);
+  const [showRequestTopUp, setShowRequestTopUp] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const handleAction = (id) => {
     if (id === 'topup') setShowTopup(true);
     else if (id === 'request') setShowRequestMoney(true);
+    else if (id === 'requesttopup') setShowRequestTopUp(true);
     else if (id === 'send') setShowComingSoon(true);
   };
 
@@ -155,7 +166,7 @@ export default function MobileHomeScreen() {
       {/* Quick Actions */}
       <div className="px-5 mb-6">
         <h2 className="text-slate-800 font-semibold text-base mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-5 gap-2">
           {quickActions.map((action, i) => {
             const Icon = action.icon;
             if (action.link) {
@@ -167,8 +178,8 @@ export default function MobileHomeScreen() {
                     transition={{ delay: i * 0.08 }}
                     className="flex flex-col items-center gap-2"
                   >
-                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: action.bg }}>
-                      <Icon className="w-6 h-6" style={{ color: action.color }} />
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: action.bg }}>
+                      <Icon className="w-5 h-5" style={{ color: action.color }} />
                     </div>
                     <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
                   </motion.div>
@@ -184,8 +195,8 @@ export default function MobileHomeScreen() {
                 onClick={() => handleAction(action.id)}
                 className="flex flex-col items-center gap-2"
               >
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: action.bg }}>
-                  <Icon className="w-6 h-6" style={{ color: action.color }} />
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: action.bg }}>
+                  <Icon className="w-5 h-5" style={{ color: action.color }} />
                 </div>
                 <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
               </motion.button>
@@ -325,6 +336,7 @@ export default function MobileHomeScreen() {
 
       <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
       <RequestMoneyModal isOpen={showRequestMoney} onClose={() => setShowRequestMoney(false)} />
+      <RequestTopUpModal isOpen={showRequestTopUp} onClose={() => setShowRequestTopUp(false)} />
     </div>
   );
 }

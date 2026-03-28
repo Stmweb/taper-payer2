@@ -105,6 +105,27 @@ Deno.serve(async (req) => {
         results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
       }
 
+    } else if (type === 'request_topup') {
+      const { myPhone, topupLink } = payload;
+      const subject = senderName + ' is requesting a mobile top-up via Taper Payer';
+      const html = '<div style="font-family:sans-serif;max-width:480px;margin:auto;padding:24px;">'
+        + '<h2 style="color:#F88F2B;">Top-Up Request</h2>'
+        + '<p><strong>' + senderName + '</strong> is asking you to top up their phone (<strong>' + myPhone + '</strong>) with <strong>$' + amount + ' USD</strong> via Taper Payer.</p>'
+        + (note ? '<p style="color:#64748b;font-style:italic;">"' + note + '"</p>' : '')
+        + '<a href="' + topupLink + '" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#F88F2B;color:white;border-radius:8px;text-decoration:none;">Top Up Now on Taper Payer</a>'
+        + '</div>';
+      const smsBody = senderName + ' is asking you to top up their phone (' + myPhone + ') with $' + amount + ' USD.'
+        + (note ? ' "' + note + '"' : '')
+        + ' Top up now: ' + topupLink;
+
+      if (isEmail(recipient)) {
+        results.email = await sendEmail({ to: recipient, subject, html, text: smsBody });
+      }
+      if (isPhone(recipient)) {
+        console.log('[sendNotification] Sending top-up request SMS to', normalizePhone(recipient));
+        results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
+      }
+
     } else if (type === 'topup_confirmation') {
       const subject = 'Your Mobile Top-Up is confirmed - Taper Payer';
       const html = '<div style="font-family:sans-serif;max-width:480px;margin:auto;padding:24px;">'

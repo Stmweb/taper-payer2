@@ -259,18 +259,31 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
       const senderName = user?.full_name || 'Someone';
       const topupLink = `https://taperpayer.com/TaperPayerTopUp`;
       const finalNote = note || generatedNote;
-      const phone = requesterPhone.startsWith('+') ? requesterPhone : '+' + requesterPhone.replace(/\D/g, '');
       
-      await base44.functions.invoke('sendNotification', {
-        type: 'request_topup',
-        recipient: phone,
-        myPhone,
-        senderName,
-        amount,
-        note: finalNote,
-        topupLink,
-        deliveryMethod,
-      });
+      try {
+        await base44.functions.invoke('sendNotification', {
+          type: 'request_topup',
+          recipient: requesterPhone,
+          myPhone,
+          senderName,
+          amount,
+          note: finalNote,
+          topupLink,
+          deliveryMethod,
+        });
+      } catch {
+        // Fallback to SMS if WhatsApp fails
+        await base44.functions.invoke('sendNotification', {
+          type: 'request_topup',
+          recipient: requesterPhone,
+          myPhone,
+          senderName,
+          amount,
+          note: finalNote,
+          topupLink,
+          deliveryMethod: 'sms',
+        });
+      }
       setSuccess(true);
     } catch (err) {
       setError('Failed to send request. Please try again.');

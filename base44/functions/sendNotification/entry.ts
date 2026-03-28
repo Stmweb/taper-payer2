@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
-// v2
+// v3
 
 function toBase64(str) {
   const encoder = new TextEncoder();

@@ -19,10 +19,12 @@ const COUNTRIES = [
 ];
 
 function detectCountry(phone) {
+  if (!phone || phone.trim().length < 5) return null;
   const cleaned = phone.replace(/\D/g, '');
-  if (cleaned.startsWith('509')) return { name: 'Haiti', flag: '🇭🇹' };
-  if (cleaned.startsWith('1876')) return { name: 'Jamaica', flag: '🇯🇲' };
-  if (cleaned.startsWith('1')) return { name: 'USA', flag: '🇺🇸' };
+  if (!cleaned) return null;
+  if (cleaned.endsWith('509') || cleaned.startsWith('509')) return { name: 'Haiti', flag: '🇭🇹' };
+  if (cleaned.endsWith('1876') || cleaned.startsWith('1876')) return { name: 'Jamaica', flag: '🇯🇲' };
+  if (cleaned.startsWith('1') && cleaned.length >= 10) return { name: 'USA', flag: '🇺🇸' };
   if (cleaned.startsWith('234')) return { name: 'Nigeria', flag: '🇳🇬' };
   if (cleaned.startsWith('233')) return { name: 'Ghana', flag: '🇬🇭' };
   if (cleaned.startsWith('254')) return { name: 'Kenya', flag: '🇰🇪' };

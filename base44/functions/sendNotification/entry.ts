@@ -72,6 +72,13 @@ Deno.serve(async (req) => {
     const results = {};
 
     if (type === 'request_money') {
+      const deliveryMethod = payload.deliveryMethod || 'sms';
+      
+      // Only allow phone numbers for request_money
+      if (!isPhone(recipient)) {
+        return Response.json({ error: 'Please provide a valid phone number' }, { status: 400 });
+      }
+
       const subject = `${senderName} is requesting money via Taper Payer`;
       const html = `<div style="font-family:sans-serif;max-width:480px;margin:auto;padding:24px;">
         <h2 style="color:#3D7BB7;">Payment Request</h2>
@@ -81,22 +88,12 @@ Deno.serve(async (req) => {
       </div>`;
       const text = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` Note: "${note}"` : ''} Visit taperpayer.com`;
       const smsBody = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` "${note}"` : ''} Pay at taperpayer.com`;
-      const deliveryMethod = payload.deliveryMethod || 'sms';
 
-      if (isEmail(recipient) && deliveryMethod !== 'whatsapp') {
-        results.email = await sendEmail({ to: recipient, subject, html, text });
-      }
-      if (isPhone(recipient)) {
-        if (deliveryMethod === 'whatsapp') {
-          const phone = normalizePhone(recipient);
-          try {
-            results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
-          } catch {
-            results.sms = await sendSMS({ to: phone, body: smsBody });
-          }
-        } else {
-          results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
-        }
+      if (deliveryMethod === 'whatsapp') {
+        const phone = normalizePhone(recipient);
+        results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
+      } else {
+        results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
       }
 
     } else if (type === 'request_topup') {

@@ -203,7 +203,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
                   <label className="block text-sm font-medium text-slate-700 mb-1">Who are you requesting from?</label>
                   <Input
                     type="text"
-                    placeholder="Phone number or email"
+                    placeholder=""
                     value={recipient}
                     onChange={(e) => setRecipient(e.target.value)}
                     required

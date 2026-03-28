@@ -1,29 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
 const CURRENCIES = ['USD', 'HTG', 'NGN', 'GHS', 'JMD', 'KES', 'BRL', 'MXN'];
+
+const COUNTRIES = [
+  { name: 'Haiti', flag: '🇭🇹', dial: '+509' },
+  { name: 'United States', flag: '🇺🇸', dial: '+1' },
+  { name: 'Nigeria', flag: '🇳🇬', dial: '+234' },
+  { name: 'Ghana', flag: '🇬🇭', dial: '+233' },
+  { name: 'Jamaica', flag: '🇯🇲', dial: '+1876' },
+  { name: 'Kenya', flag: '🇰🇪', dial: '+254' },
+  { name: 'Brazil', flag: '🇧🇷', dial: '+55' },
+  { name: 'Mexico', flag: '🇲🇽', dial: '+52' },
+  { name: 'Canada', flag: '🇨🇦', dial: '+1' },
+  { name: 'United Kingdom', flag: '🇬🇧', dial: '+44' },
+];
 
 export default function RequestMoneyModal({ isOpen, onClose }) {
   const { user } = useAppAuth();
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [recipient, setRecipient] = useState('');
+  const [recipientCountry, setRecipientCountry] = useState(null);
+  const [deliveryMethod, setDeliveryMethod] = useState('sms');
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [countrySearch, setCountrySearch] = useState('');
+
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch) return COUNTRIES;
+    return COUNTRIES.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase()));
+  }, [countrySearch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!amount || !recipient) {
-      setError('Please fill in the required fields.');
+    if (!amount || !recipient || !recipientCountry) {
+      setError('Please fill in all required fields.');
       return;
     }
     setLoading(true);
@@ -36,6 +58,8 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         amount,
         currency,
         note,
+        recipientCountry: recipientCountry.name,
+        deliveryMethod,
       });
       setSuccess(true);
     } catch (err) {
@@ -49,9 +73,12 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setAmount('');
     setCurrency('USD');
     setRecipient('');
+    setRecipientCountry(null);
+    setDeliveryMethod('sms');
     setNote('');
     setSuccess(false);
     setError('');
+    setCountrySearch('');
     onClose();
   };
 
@@ -112,6 +139,63 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
                     >
                       {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Select Receiving Country <span className="text-red-500">*</span></label>
+                  <Select value={recipientCountry?.name || ''} onValueChange={(countryName) => {
+                    const country = COUNTRIES.find(c => c.name === countryName);
+                    setRecipientCountry(country);
+                    setCountrySearch('');
+                  }}>
+                    <SelectTrigger style={{ color: '#1e293b', backgroundColor: '#ffffff' }}>
+                      <SelectValue placeholder="Search country..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <div className="p-2">
+                        <Input
+                          placeholder="Search countries..."
+                          value={countrySearch}
+                          onChange={(e) => setCountrySearch(e.target.value)}
+                          style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                          className="mb-2"
+                        />
+                      </div>
+                      {filteredCountries.map((country) => (
+                        <SelectItem key={country.name} value={country.name}>
+                          {country.flag} {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Delivery Method <span className="text-red-500">*</span></label>
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setDeliveryMethod('sms')}
+                      className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
+                        deliveryMethod === 'sms'
+                          ? 'bg-blue-500 text-white border-2 border-blue-500'
+                          : 'bg-slate-100 text-slate-700 border-2 border-transparent hover:bg-slate-200'
+                      }`}
+                    >
+                      💬 SMS
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeliveryMethod('whatsapp')}
+                      className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
+                        deliveryMethod === 'whatsapp'
+                          ? 'bg-green-500 text-white border-2 border-green-500'
+                          : 'bg-slate-100 text-slate-700 border-2 border-transparent hover:bg-slate-200'
+                      }`}
+                    >
+                      💚 WhatsApp
+                    </button>
                   </div>
                 </div>
 

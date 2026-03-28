@@ -279,7 +279,8 @@ export default function TaperConnectForm({ initialCountry }) {
               placeholder="Search countries..."
               value={countrySearch}
               onChange={(e) => setCountrySearch(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-sm"
+              className="w-full pl-10 pr-10 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-sm text-slate-900 bg-white placeholder:text-slate-400"
+              style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
             />
             {countrySearch && (
               <button
@@ -338,7 +339,8 @@ export default function TaperConnectForm({ initialCountry }) {
                 placeholder="Enter number"
                 value={phoneNumber}
                 onChange={(e) => handlePhoneChange(e.target.value)}
-                className="flex-1"
+                className="flex-1 !text-slate-900 !bg-white placeholder:!text-slate-400"
+                style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
               />
             </div>
             {detectingOperator && (

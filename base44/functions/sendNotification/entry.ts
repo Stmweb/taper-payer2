@@ -20,13 +20,16 @@ async function sendEmail(opts) {
   form.append('subject', opts.subject);
   if (opts.html) form.append('html', opts.html);
   if (opts.text) form.append('text', opts.text);
+  console.log('[Mailgun] Domain:', MAILGUN_DOMAIN);
+  console.log('[Mailgun] API key prefix:', MAILGUN_API_KEY ? MAILGUN_API_KEY.substring(0, 8) : 'MISSING');
   const res = await fetch('https://api.mailgun.net/v3/' + MAILGUN_DOMAIN + '/messages', {
     method: 'POST',
     headers: { Authorization: 'Basic ' + toBase64('api:' + MAILGUN_API_KEY) },
     body: form,
   });
   const body = await res.text();
-  if (!res.ok) throw new Error('Mailgun error: ' + body);
+  console.log('[Mailgun] Status:', res.status, 'Body:', body.substring(0, 300));
+  if (!res.ok) throw new Error('Mailgun error ' + res.status + ': ' + body);
   return JSON.parse(body);
 }
 

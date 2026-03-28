@@ -30,6 +30,7 @@ import ThankYou from './pages/ThankYou';
 import AccountSettings from './pages/AccountSettings';
 import DeleteDataAndAccount from './pages/DeleteDataAndAccount';
 import MobileProfile from './pages/MobileProfile';
+import TwilioVerification from './pages/TwilioVerification';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -176,6 +177,7 @@ const AuthenticatedApp = () => {
         <Route path="/AccountSettings" element={<LayoutWrapper currentPageName="AccountSettings"><AccountSettings /></LayoutWrapper>} />
         <Route path="/DeleteDataAndAccount" element={<DeleteDataAndAccount />} />
         <Route path="/MobileProfile" element={<LayoutWrapper currentPageName="MobileProfile"><MobileProfile /></LayoutWrapper>} />
+        <Route path="/ddb00654a29b6bb256d50d1a8ffa84e1.html" element={<TwilioVerification />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

@@ -18,6 +18,19 @@ const COUNTRIES = [
   { name: 'Mexico', flag: '🇲🇽', dial: '+52' },
 ];
 
+function detectCountry(phone) {
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.startsWith('509')) return { name: 'Haiti', flag: '🇭🇹' };
+  if (cleaned.startsWith('1876')) return { name: 'Jamaica', flag: '🇯🇲' };
+  if (cleaned.startsWith('1')) return { name: 'USA', flag: '🇺🇸' };
+  if (cleaned.startsWith('234')) return { name: 'Nigeria', flag: '🇳🇬' };
+  if (cleaned.startsWith('233')) return { name: 'Ghana', flag: '🇬🇭' };
+  if (cleaned.startsWith('254')) return { name: 'Kenya', flag: '🇰🇪' };
+  if (cleaned.startsWith('55')) return { name: 'Brazil', flag: '🇧🇷' };
+  if (cleaned.startsWith('52')) return { name: 'Mexico', flag: '🇲🇽' };
+  return null;
+}
+
 export default function RequestTopUpModal({ isOpen, onClose }) {
   const { user } = useAppAuth();
   const [myPhone, setMyPhone] = useState('');
@@ -27,6 +40,9 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const myCountry = detectCountry(myPhone);
+  const generatedNote = myCountry ? `Please send Top up my ${myCountry.name} ${myCountry.flag}` : '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,13 +55,14 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
     try {
       const senderName = user?.full_name || 'Someone';
       const topupLink = `https://taperpayer.com/TaperPayerTopUp`;
+      const finalNote = note || generatedNote;
       await base44.functions.invoke('sendNotification', {
         type: 'request_topup',
         recipient: requesterPhone,
         myPhone,
         senderName,
         amount,
-        note,
+        note: finalNote,
         topupLink,
       });
       setSuccess(true);
@@ -106,12 +123,13 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                   <label className="block text-sm font-medium text-slate-700 mb-1">Your phone number <span className="text-red-500">*</span></label>
                   <Input
                     type="tel"
-                    placeholder="+509 XXXX XXXX (number to be topped up)"
+                    placeholder="Enter your phone number"
                     value={myPhone}
                     onChange={(e) => setMyPhone(e.target.value)}
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
+                  {myCountry && <p className="text-xs text-slate-500 mt-1">{myCountry.flag} {myCountry.name}</p>}
                   <p className="text-xs text-slate-400 mt-1">This is the number that will receive the top-up</p>
                 </div>
 
@@ -119,7 +137,7 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                   <label className="block text-sm font-medium text-slate-700 mb-1">Who are you requesting from? <span className="text-red-500">*</span></label>
                   <Input
                     type="tel"
-                    placeholder="+1 XXX XXX XXXX (their phone number)"
+                    placeholder="Enter their phone number"
                     value={requesterPhone}
                     onChange={(e) => setRequesterPhone(e.target.value)}
                     required
@@ -144,11 +162,12 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                   <label className="block text-sm font-medium text-slate-700 mb-1">Note <span className="text-slate-400 font-normal">(optional)</span></label>
                   <Input
                     type="text"
-                    placeholder="e.g. Please top up my Digicel Haiti"
+                    placeholder={generatedNote || "Add a message"}
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
+                  {generatedNote && !note && <p className="text-xs text-slate-400 mt-1">Message will auto-generate based on your phone's country</p>}
                 </div>
 
                 <Button

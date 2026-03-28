@@ -37,6 +37,7 @@ function detectCountry(phone) {
 export default function RequestTopUpModal({ isOpen, onClose }) {
   const { user } = useAppAuth();
   const [myCountry, setMyCountry] = useState(null);
+  const [requesterCountry, setRequesterCountry] = useState(null);
   const [myPhone, setMyPhone] = useState('');
   const [requesterPhone, setRequesterPhone] = useState('');
   const [amount, setAmount] = useState('');
@@ -78,6 +79,7 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
 
   const handleClose = () => {
     setMyCountry(null);
+    setRequesterCountry(null);
     setMyPhone('');
     setRequesterPhone('');
     setAmount('');
@@ -158,12 +160,33 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                 </div>
 
                 <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Their country <span className="text-red-500">*</span></label>
+                  <Select value={requesterCountry?.name || ''} onValueChange={(countryName) => {
+                    const country = COUNTRIES.find(c => c.name === countryName);
+                    setRequesterCountry(country);
+                    setRequesterPhone('');
+                  }}>
+                    <SelectTrigger style={{ color: '#1e293b', backgroundColor: '#ffffff' }}>
+                      <SelectValue placeholder="Select their country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COUNTRIES.map((country) => (
+                        <SelectItem key={country.name} value={country.name}>
+                          {country.flag} {country.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Who are you requesting from? <span className="text-red-500">*</span></label>
                   <Input
                     type="tel"
-                    placeholder="Enter their phone number"
+                    placeholder={requesterCountry ? `Enter their number for ${requesterCountry.name}` : 'Select their country first'}
                     value={requesterPhone}
                     onChange={(e) => setRequesterPhone(e.target.value)}
+                    disabled={!requesterCountry}
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />

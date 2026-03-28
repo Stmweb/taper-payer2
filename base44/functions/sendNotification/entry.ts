@@ -1,14 +1,8 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
-// v3
+// v4 - force redeploy
 
 function toBase64(str) {
-  const encoder = new TextEncoder();
-  const bytes = encoder.encode(str);
-  let binary = '';
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
+  return btoa(String.fromCharCode(...new TextEncoder().encode(str)));
 }
 
 async function sendEmail(opts) {

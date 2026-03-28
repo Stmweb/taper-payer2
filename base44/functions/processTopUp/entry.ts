@@ -89,6 +89,19 @@ Deno.serve(async (req) => {
 
     const topupResult = await response.json();
 
+    // Send confirmation notification
+    try {
+      const notifPhone = phoneNumber.startsWith('+') ? phoneNumber : '+' + phoneNumber.replace(/\D/g, '');
+      await base44.asServiceRole.functions.invoke('sendNotification', {
+        type: 'topup_confirmation',
+        recipient: notifPhone,
+        amount: String(amount),
+        currency: 'USD',
+      });
+    } catch (notifErr) {
+      console.log('Notification failed (non-blocking):', notifErr.message);
+    }
+
     return Response.json({
       success: true,
       transaction: {

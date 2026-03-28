@@ -214,6 +214,14 @@ export default function TaperConnectForm({ initialCountry }) {
       });
 
       if (paymentRes.data?.success) {
+        // Send confirmation notification (non-blocking)
+        const fullPhone = selectedCountry.dial + localDigits;
+        base44.functions.invoke('sendNotification', {
+          type: 'topup_confirmation',
+          recipient: fullPhone,
+          amount: String(retailAmount),
+          currency: 'USD',
+        }).catch(() => {});
         setSuccess(true);
       } else {
         setError(paymentRes.data?.error || 'Transaction failed. Please try again.');

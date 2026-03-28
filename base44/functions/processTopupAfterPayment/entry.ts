@@ -71,6 +71,19 @@ Deno.serve(async (req) => {
       timestamp: new Date().toISOString(),
     });
 
+    // Send confirmation notification (SMS if phone is international format)
+    try {
+      const notifPhone = phone.startsWith('+') ? phone : '+' + phone.replace(/\D/g, '');
+      await base44.asServiceRole.functions.invoke('sendNotification', {
+        type: 'topup_confirmation',
+        recipient: notifPhone,
+        amount: String(amount),
+        currency: 'USD',
+      });
+    } catch (notifErr) {
+      console.log('Notification failed (non-blocking):', notifErr.message);
+    }
+
     return Response.json({
       success: true,
       status: 'SUCCESS',

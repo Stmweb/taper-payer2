@@ -82,12 +82,6 @@ Deno.serve(async (req) => {
 
     console.log('[sendNotification] Type:', payload.type, 'Recipient:', payload.recipient);
 
-    const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     const { type, recipient, senderName, amount, currency, note } = payload;
     const results = {};
 

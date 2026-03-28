@@ -124,6 +124,9 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         <div className="p-6 pt-4">
           {success ? (
             <div className="text-center py-8">
+              <div className="flex justify-center mb-4">
+                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/d7d75e226_ChatGPTImageDec29202501_48_52PM.png" alt="Taper Payer" className="w-16 h-16" style={{ imageRendering: 'crisp-edges', imageResolution: '300dpi' }} />
+              </div>
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-slate-900 mb-2">Request sent!</h3>
               <p className="text-slate-500 text-sm">We've notified them and you'll be alerted when the payment is completed.</p>

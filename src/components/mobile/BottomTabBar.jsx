@@ -9,7 +9,6 @@ export default function BottomTabBar() {
   
   const tabs = [
     { name: 'Home', icon: Home, path: createPageUrl('TaperPayerHome') },
-    { name: 'Rates', icon: DollarSign, path: createPageUrl('TaperPayerRates') },
     { name: 'How It Works', icon: HelpCircle, path: createPageUrl('TaperPayerHowItWorks') },
     { name: 'Profile', icon: UserCircle, path: '/MobileProfile' }
   ];

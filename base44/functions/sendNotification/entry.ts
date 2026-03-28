@@ -123,12 +123,18 @@ Deno.serve(async (req) => {
       }
       if (isPhone(recipient)) {
         const phone = normalizePhone(recipient);
-        console.log('[sendNotification] Sending top-up request SMS+WhatsApp to', phone);
-        results.sms = await sendSMS({ to: phone, body: smsBody });
+        console.log('[sendNotification] Sending top-up request via WhatsApp first, SMS fallback');
+        let whatsappSent = false;
         try {
           results.whatsapp = await sendSMS({ to: 'whatsapp:' + phone, body: smsBody });
+          whatsappSent = true;
+          console.log('[sendNotification] WhatsApp sent successfully');
         } catch (waErr) {
-          console.log('[sendNotification] WhatsApp send failed (non-blocking):', waErr.message);
+          console.log('[sendNotification] WhatsApp failed, falling back to SMS:', waErr.message);
+        }
+        if (!whatsappSent) {
+          results.sms = await sendSMS({ to: phone, body: smsBody });
+          console.log('[sendNotification] SMS fallback sent');
         }
       }
 

@@ -260,28 +260,25 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
       const topupLink = `https://taperpayer.com/TaperPayerTopUp`;
       const finalNote = note || generatedNote;
       
-      try {
-        await base44.functions.invoke('sendNotification', {
-          type: 'request_topup',
-          recipient: requesterPhone,
-          myPhone,
-          senderName,
-          amount,
-          note: finalNote,
-          topupLink,
-        });
-      } catch {
-        // Fallback to SMS if WhatsApp fails
-        await base44.functions.invoke('sendNotification', {
-          type: 'request_topup',
-          recipient: requesterPhone,
-          myPhone,
-          senderName,
-          amount,
-          note: finalNote,
-          topupLink,
-        });
-      }
+      // Normalize phone numbers with country codes
+      const formatPhone = (phone, country) => {
+        if (phone.startsWith('+')) return phone;
+        const dial = country?.dial || '+1';
+        return dial + phone;
+      };
+      
+      const normalizedMyPhone = formatPhone(myPhone, myCountry);
+      const normalizedRequesterPhone = formatPhone(requesterPhone, requesterCountry);
+      
+      await base44.functions.invoke('sendNotification', {
+        type: 'request_topup',
+        recipient: normalizedRequesterPhone,
+        myPhone: normalizedMyPhone,
+        senderName,
+        amount,
+        note: finalNote,
+        topupLink,
+      });
       setSuccess(true);
     } catch (err) {
       setError('Failed to send request. Please try again.');

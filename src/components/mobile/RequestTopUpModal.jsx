@@ -86,7 +86,7 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
             <div className="text-center py-8">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-slate-900 mb-2">Request sent!</h3>
-              <p className="text-slate-500 text-sm">We've sent them an SMS with a link to top up your phone. You'll be notified once it's done.</p>
+              <p className="text-slate-500 text-sm">We've sent them an SMS & WhatsApp message with a link to top up your phone. You'll be notified once it's done.</p>
               <Button onClick={handleClose} className="mt-6 w-full" style={{ backgroundColor: '#F88F2B' }}>Done</Button>
             </div>
           ) : (
@@ -125,7 +125,7 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
-                  <p className="text-xs text-slate-400 mt-1">They'll receive an SMS with a link to top you up</p>
+                  <p className="text-xs text-slate-400 mt-1">They'll receive an SMS & WhatsApp message with a link to top you up</p>
                 </div>
 
                 <div>
@@ -157,7 +157,7 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                   className="w-full py-3 text-white"
                   style={{ backgroundColor: '#F88F2B' }}
                 >
-                  {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending...</> : '📲 Send Top-Up Request via SMS'}
+                  {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending...</> : '📲 Send via SMS & WhatsApp'}
                 </Button>
               </form>
             </>

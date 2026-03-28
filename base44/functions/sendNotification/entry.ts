@@ -122,8 +122,14 @@ Deno.serve(async (req) => {
         results.email = await sendEmail({ to: recipient, subject, html, text: smsBody });
       }
       if (isPhone(recipient)) {
-        console.log('[sendNotification] Sending top-up request SMS to', normalizePhone(recipient));
-        results.sms = await sendSMS({ to: normalizePhone(recipient), body: smsBody });
+        const phone = normalizePhone(recipient);
+        console.log('[sendNotification] Sending top-up request SMS+WhatsApp to', phone);
+        results.sms = await sendSMS({ to: phone, body: smsBody });
+        try {
+          results.whatsapp = await sendSMS({ to: 'whatsapp:' + phone, body: smsBody });
+        } catch (waErr) {
+          console.log('[sendNotification] WhatsApp send failed (non-blocking):', waErr.message);
+        }
       }
 
     } else if (type === 'topup_confirmation') {

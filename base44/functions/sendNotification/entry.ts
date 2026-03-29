@@ -30,7 +30,8 @@ async function sendEmail(opts) {
 async function sendSMS(opts) {
   const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
   const token = Deno.env.get('TWILIO_AUTH_TOKEN');
-  const from = opts.to.startsWith('whatsapp:') ? 'whatsapp:+14155238886' : Deno.env.get('TWILIO_PHONE_NUMBER');
+  const whatsappNumber = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || '+14155238886';
+  const from = opts.to.startsWith('whatsapp:') ? `whatsapp:${whatsappNumber}` : Deno.env.get('TWILIO_PHONE_NUMBER');
   
   const params = new URLSearchParams({
     From: from,

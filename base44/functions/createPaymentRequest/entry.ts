@@ -15,14 +15,27 @@ Deno.serve(async (req) => {
     const payload = await req.json();
     const { recipient, recipient_country, amount, currency, note, delivery_method, sender_name, sender_email } = payload;
 
+    // Try to get logged-in user info, but don't require it
+    let resolvedSenderName = sender_name || 'Someone';
+    let resolvedSenderEmail = sender_email || '';
+    try {
+      const user = await base44.auth.me();
+      if (user) {
+        resolvedSenderName = sender_name || user.full_name || 'Someone';
+        resolvedSenderEmail = sender_email || user.email || '';
+      }
+    } catch (_) {
+      // Not logged in, use provided values
+    }
+
     const request_id = generateRequestId();
     const expires_at = new Date();
     expires_at.setDate(expires_at.getDate() + 30); // 30 day expiration
 
     const paymentRequest = await base44.asServiceRole.entities.PaymentRequest.create({
       request_id,
-      sender_name: sender_name || 'Someone',
-      sender_email: sender_email || '',
+      sender_name: resolvedSenderName,
+      sender_email: resolvedSenderEmail,
       recipient,
       recipient_country,
       amount,

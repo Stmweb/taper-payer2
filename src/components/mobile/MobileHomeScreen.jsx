@@ -48,15 +48,6 @@ const quickActions = [
     bg: '#fce4ec',
     description: 'Ask someone to top up',
   },
-  {
-    id: 'rates',
-    label: 'Rates',
-    icon: TrendingUp,
-    color: '#9c27b0',
-    bg: '#f3e5f5',
-    description: 'Live exchange',
-    link: '/TaperPayerRates',
-  },
 ];
 
 const destinations = [
@@ -166,7 +157,7 @@ export default function MobileHomeScreen() {
       {/* Quick Actions */}
       <div className="px-5 mb-6">
         <h2 className="text-slate-800 font-semibold text-base mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-4 gap-2">
           {quickActions.map((action, i) => {
             const Icon = action.icon;
             if (action.link) {

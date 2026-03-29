@@ -71,6 +71,8 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         currency,
         note,
         delivery_method: deliveryMethod,
+        sender_name: user?.full_name || 'Someone',
+        sender_email: user?.email || '',
       });
 
       // Send notification with share URL

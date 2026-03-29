@@ -12,23 +12,17 @@ function generateRequestId() {
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     const payload = await req.json();
-    const { recipient, recipient_country, amount, currency, note, delivery_method } = payload;
+    const { recipient, recipient_country, amount, currency, note, delivery_method, sender_name, sender_email } = payload;
 
     const request_id = generateRequestId();
     const expires_at = new Date();
     expires_at.setDate(expires_at.getDate() + 30); // 30 day expiration
 
-    const paymentRequest = await base44.entities.PaymentRequest.create({
+    const paymentRequest = await base44.asServiceRole.entities.PaymentRequest.create({
       request_id,
-      sender_name: user.full_name,
-      sender_email: user.email,
+      sender_name: sender_name || 'Someone',
+      sender_email: sender_email || '',
       recipient,
       recipient_country,
       amount,

@@ -92,11 +92,7 @@ Deno.serve(async (req) => {
 
       const phone = normalizePhone(recipient);
       if (deliveryMethod === 'whatsapp') {
-        try {
-          results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
-        } catch {
-          results.sms = await sendSMS({ to: phone, body: smsBody });
-        }
+        results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
       } else {
         results.sms = await sendSMS({ to: phone, body: smsBody });
       }
@@ -117,11 +113,7 @@ Deno.serve(async (req) => {
       }
       if (isPhone(recipient)) {
         const phone = normalizePhone(recipient);
-        try {
-          results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
-        } catch {
-          results.sms = await sendSMS({ to: phone, body: smsBody });
-        }
+        results.sms = await sendSMS({ to: phone, body: smsBody });
       }
 
     } else if (type === 'topup_confirmation') {

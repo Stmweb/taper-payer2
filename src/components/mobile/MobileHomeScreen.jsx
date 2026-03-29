@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import {
   Send, Smartphone, Globe, ChevronRight, Bell, Settings,
-  TrendingUp, ArrowUpRight, Zap, Shield, RefreshCw
+  TrendingUp, ArrowUpRight, Zap, Shield, PhoneCall, HandCoins, PhoneOutgoing
 } from 'lucide-react';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
@@ -27,7 +27,7 @@ const quickActions = [
   {
     id: 'topup',
     label: 'Mobile Top-Up',
-    icon: Smartphone,
+    icon: PhoneCall,
     color: '#F88F2B',
     bg: '#fff3e0',
     description: 'Recharge instantly',
@@ -35,7 +35,7 @@ const quickActions = [
   {
     id: 'request',
     label: 'Request Money',
-    icon: RefreshCw,
+    icon: HandCoins,
     color: '#61AF39',
     bg: '#e8f5e9',
     description: 'Ask to get paid',
@@ -43,7 +43,7 @@ const quickActions = [
   {
     id: 'requesttopup',
     label: 'Request Top-Up',
-    icon: Smartphone,
+    icon: PhoneOutgoing,
     color: '#e91e8c',
     bg: '#fce4ec',
     description: 'Ask someone to top up',

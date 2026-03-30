@@ -6,7 +6,7 @@ function getAuthHeader() {
   return 'Basic ' + btoa(`${username}:${password}`);
 }
 
-async function callAPI(path, method = 'GET', body = null, baseUrl = 'https://api.prepaynation.com') {
+async function callAPI(path, method = 'GET', body = null, baseUrl = 'https://sandbox.valuetopup.com/api/v2') {
   const url = `${baseUrl}${path}`;
   
   const options = {
@@ -41,18 +41,18 @@ Deno.serve(async (req) => {
 
     const payload = await req.json();
     const { action, baseUrl: customBaseUrl } = payload;
-    const baseUrl = customBaseUrl || 'https://api.prepaynation.com';
+    const baseUrl = customBaseUrl || 'https://sandbox.valuetopup.com/api/v2';
 
-    // GET /balance - Check account balance
+    // GET /account/balance - Check account balance
     if (action === 'balance') {
-      const result = await callAPI('/api/v1/balance', 'GET', null, baseUrl);
+      const result = await callAPI('/account/balance', 'GET', null, baseUrl);
       return Response.json(result);
     }
 
-    // GET /products - List all products (optionally filter by country)
+    // GET /catalog/getproducts - Full product catalog
     if (action === 'products') {
       const { country, type } = payload;
-      let path = '/api/v1/products';
+      let path = '/catalog/getproducts';
       const params = new URLSearchParams();
       if (country) params.set('country', country);
       if (type) params.set('type', type);
@@ -61,10 +61,11 @@ Deno.serve(async (req) => {
       return Response.json(result);
     }
 
-    // GET /operators - List operators by country
-    if (action === 'operators') {
+    // GET /catalog/skus - Products assigned to this account
+    if (action === 'skus') {
       const { country } = payload;
-      const path = country ? `/api/v1/operators?country=${country}` : '/api/v1/operators';
+      let path = '/catalog/skus';
+      if (country) path += `?country=${country}`;
       const result = await callAPI(path, 'GET', null, baseUrl);
       return Response.json(result);
     }
@@ -78,14 +79,14 @@ Deno.serve(async (req) => {
         amount,
         reference: reference || `TP-${Date.now()}`,
       };
-      const result = await callAPI('/api/v1/transaction/topup', 'POST', body, baseUrl);
+      const result = await callAPI('/transaction/topup', 'POST', body, baseUrl);
       return Response.json(result);
     }
 
     // GET /transaction/:id - Check transaction status
     if (action === 'transaction_status') {
       const { transactionId } = payload;
-      const result = await callAPI(`/api/v1/transaction/${transactionId}`, 'GET', null, baseUrl);
+      const result = await callAPI(`/transaction/${transactionId}`, 'GET', null, baseUrl);
       return Response.json(result);
     }
 

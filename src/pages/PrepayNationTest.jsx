@@ -47,7 +47,7 @@ export default function PrepayNationTest() {
   const [loading, setLoading] = useState({});
 
   // Form state
-  const [baseUrl, setBaseUrl] = useState('https://api.prepaynation.com');
+  const [baseUrl, setBaseUrl] = useState('https://sandbox.valuetopup.com/api/v2');
   const [country, setCountry] = useState('HT');
   const [productType, setProductType] = useState('');
   const [productId, setProductId] = useState('');
@@ -75,25 +75,26 @@ export default function PrepayNationTest() {
         {/* Header */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border">
           <h1 className="text-2xl font-bold text-slate-900">PrepayNation API Test</h1>
-          <p className="text-slate-500 text-sm mt-1">Sandbox environment — test all endpoints before going live</p>
+          <p className="text-slate-500 text-sm mt-1">Sandbox environment — valuetopup.com API v2</p>
           <div className="flex gap-2 mt-3">
             <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Sandbox</Badge>
-            <Badge className="bg-blue-100 text-blue-800 border-blue-200">Valuetopup API</Badge>
+            <Badge className="bg-blue-100 text-blue-800 border-blue-200">v2 API</Badge>
+            <a href="https://sandbox.valuetopup.com/docs-v2/index.html" target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 underline flex items-center">Docs ↗</a>
           </div>
         </div>
 
         {/* Base URL Config */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border space-y-3">
           <h2 className="font-semibold text-slate-800">⚙️ API Configuration</h2>
-          <p className="text-xs text-slate-500">Enter the base URL provided by PrepayNation in your welcome email or dashboard.</p>
+          <p className="text-xs text-slate-500">Sandbox base URL (v2). Switch to production when ready.</p>
           <Input
-            placeholder="e.g. https://api.prepaynation.com or https://uat.prepaynation.com"
+            placeholder="e.g. https://sandbox.valuetopup.com/api/v2"
             value={baseUrl}
             onChange={e => setBaseUrl(e.target.value)}
             style={{ color: '#1e293b', backgroundColor: '#fff' }}
           />
           <div className="flex gap-2 flex-wrap">
-            {['https://api.prepaynation.com', 'https://uat.prepaynation.com', 'https://staging.prepaynation.com', 'https://api.valuetopup.com'].map(url => (
+            {['https://sandbox.valuetopup.com/api/v2', 'https://api.valuetopup.com/api/v2'].map(url => (
               <button key={url} onClick={() => setBaseUrl(url)} className={`text-xs px-3 py-1 rounded-full border transition-all ${baseUrl === url ? 'bg-blue-500 text-white border-blue-500' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'}`}>
                 {url.replace('https://', '')}
               </button>
@@ -131,6 +132,7 @@ export default function PrepayNationTest() {
         {/* Products */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border space-y-3">
           <h2 className="font-semibold text-slate-800">3. Products / Catalog</h2>
+          <p className="text-xs text-slate-500">Full catalog (<code>/catalog/getproducts</code>) or your assigned SKUs (<code>/catalog/skus</code>)</p>
           <div className="flex gap-2">
             <Input
               placeholder="Country code e.g. HT, NG"
@@ -139,16 +141,20 @@ export default function PrepayNationTest() {
               style={{ color: '#1e293b', backgroundColor: '#fff' }}
             />
             <Input
-              placeholder="Type: airtime, data, gift_card..."
+              placeholder="Type: airtime, data..."
               value={productType}
               onChange={e => setProductType(e.target.value)}
               style={{ color: '#1e293b', backgroundColor: '#fff' }}
             />
             <Button onClick={() => call('products', { country, type: productType })} disabled={loading.products} className="whitespace-nowrap">
-              {loading.products ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Get Products'}
+              {loading.products ? <Loader2 className="w-4 h-4 animate-spin" /> : 'All Products'}
+            </Button>
+            <Button onClick={() => call('skus', { country })} disabled={loading.skus} variant="outline" className="whitespace-nowrap">
+              {loading.skus ? <Loader2 className="w-4 h-4 animate-spin" /> : 'My SKUs'}
             </Button>
           </div>
           <ResultBox label="Products Response" result={results.products} loading={loading.products} />
+          <ResultBox label="SKUs Response" result={results.skus} loading={loading.skus} />
         </div>
 
         {/* Top-Up */}

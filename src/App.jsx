@@ -33,6 +33,7 @@ import MobileProfile from './pages/MobileProfile';
 import TwilioVerification from './pages/TwilioVerification';
 import SMSOptIn from './pages/SMSOptIn';
 import PaymentRequest from './pages/PaymentRequest';
+import PrepayNationTest from './pages/PrepayNationTest';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -185,6 +186,7 @@ const AuthenticatedApp = () => {
         <Route path="/ddb00654a29b6bb256d50d1a8ffa84e1.html" element={<TwilioVerification />} />
         <Route path="/SMSOptIn" element={<SMSOptIn />} />
         <Route path="/PaymentRequest" element={<PaymentRequest />} />
+        <Route path="/PrepayNationTest" element={<PrepayNationTest />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

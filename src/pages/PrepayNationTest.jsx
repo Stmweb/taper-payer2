@@ -47,6 +47,7 @@ export default function PrepayNationTest() {
   const [loading, setLoading] = useState({});
 
   // Form state
+  const [baseUrl, setBaseUrl] = useState('https://api.prepaynation.com');
   const [country, setCountry] = useState('HT');
   const [productType, setProductType] = useState('');
   const [productId, setProductId] = useState('');
@@ -58,7 +59,7 @@ export default function PrepayNationTest() {
     setLoading(l => ({ ...l, [action]: true }));
     setResults(r => ({ ...r, [action]: null }));
     try {
-      const res = await base44.functions.invoke('prepayNation', { action, ...params });
+      const res = await base44.functions.invoke('prepayNation', { action, baseUrl, ...params });
       setResults(r => ({ ...r, [action]: res.data }));
     } catch (err) {
       setResults(r => ({ ...r, [action]: { ok: false, status: 'Error', data: { error: err.message } } }));
@@ -78,6 +79,25 @@ export default function PrepayNationTest() {
           <div className="flex gap-2 mt-3">
             <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Sandbox</Badge>
             <Badge className="bg-blue-100 text-blue-800 border-blue-200">Valuetopup API</Badge>
+          </div>
+        </div>
+
+        {/* Base URL Config */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border space-y-3">
+          <h2 className="font-semibold text-slate-800">⚙️ API Configuration</h2>
+          <p className="text-xs text-slate-500">Enter the base URL provided by PrepayNation in your welcome email or dashboard.</p>
+          <Input
+            placeholder="e.g. https://api.prepaynation.com or https://uat.prepaynation.com"
+            value={baseUrl}
+            onChange={e => setBaseUrl(e.target.value)}
+            style={{ color: '#1e293b', backgroundColor: '#fff' }}
+          />
+          <div className="flex gap-2 flex-wrap">
+            {['https://api.prepaynation.com', 'https://uat.prepaynation.com', 'https://staging.prepaynation.com', 'https://api.valuetopup.com'].map(url => (
+              <button key={url} onClick={() => setBaseUrl(url)} className={`text-xs px-3 py-1 rounded-full border transition-all ${baseUrl === url ? 'bg-blue-500 text-white border-blue-500' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'}`}>
+                {url.replace('https://', '')}
+              </button>
+            ))}
           </div>
         </div>
 

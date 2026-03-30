@@ -1,16 +1,12 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
-const BASE_URL = 'https://api.prepaynation.com';
-const SANDBOX_URL = 'https://sandbox.prepaynation.com';
-
 function getAuthHeader() {
   const username = Deno.env.get('PREPAYNATION_USERNAME');
   const password = Deno.env.get('PREPAYNATION_PASSWORD');
   return 'Basic ' + btoa(`${username}:${password}`);
 }
 
-async function callAPI(path, method = 'GET', body = null, useSandbox = true) {
-  const baseUrl = useSandbox ? SANDBOX_URL : BASE_URL;
+async function callAPI(path, method = 'GET', body = null, baseUrl = 'https://api.prepaynation.com') {
   const url = `${baseUrl}${path}`;
   
   const options = {
@@ -44,11 +40,12 @@ Deno.serve(async (req) => {
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
     const payload = await req.json();
-    const { action } = payload;
+    const { action, baseUrl: customBaseUrl } = payload;
+    const baseUrl = customBaseUrl || 'https://api.prepaynation.com';
 
     // GET /balance - Check account balance
     if (action === 'balance') {
-      const result = await callAPI('/api/v1/balance');
+      const result = await callAPI('/api/v1/balance', 'GET', null, baseUrl);
       return Response.json(result);
     }
 
@@ -60,7 +57,7 @@ Deno.serve(async (req) => {
       if (country) params.set('country', country);
       if (type) params.set('type', type);
       if (params.toString()) path += '?' + params.toString();
-      const result = await callAPI(path);
+      const result = await callAPI(path, 'GET', null, baseUrl);
       return Response.json(result);
     }
 
@@ -68,7 +65,7 @@ Deno.serve(async (req) => {
     if (action === 'operators') {
       const { country } = payload;
       const path = country ? `/api/v1/operators?country=${country}` : '/api/v1/operators';
-      const result = await callAPI(path);
+      const result = await callAPI(path, 'GET', null, baseUrl);
       return Response.json(result);
     }
 
@@ -81,14 +78,14 @@ Deno.serve(async (req) => {
         amount,
         reference: reference || `TP-${Date.now()}`,
       };
-      const result = await callAPI('/api/v1/transaction/topup', 'POST', body);
+      const result = await callAPI('/api/v1/transaction/topup', 'POST', body, baseUrl);
       return Response.json(result);
     }
 
     // GET /transaction/:id - Check transaction status
     if (action === 'transaction_status') {
       const { transactionId } = payload;
-      const result = await callAPI(`/api/v1/transaction/${transactionId}`);
+      const result = await callAPI(`/api/v1/transaction/${transactionId}`, 'GET', null, baseUrl);
       return Response.json(result);
     }
 

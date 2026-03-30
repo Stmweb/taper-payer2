@@ -121,12 +121,13 @@ Deno.serve(async (req) => {
       let productsData = await productsRes.json();
       let products = Array.isArray(productsData) ? productsData : (productsData.data || []);
 
-      // Fallback: if no products found and country is HT, try Natcom (1703)
-      if (products.length === 0 && pending.country_code === 'HT' && String(operatorIdToUse) !== '1703') {
-        console.log('No products for operator', operatorIdToUse, '— falling back to Natcom (1703)');
-        operatorIdToUse = '1703';
+      // Fallback: if no products found and country is HT, try the other operator
+      const otherHaitiOp = String(operatorIdToUse) === '1512' ? '1703' : '1512';
+      if (products.length === 0 && pending.country_code === 'HT') {
+        console.log('No products for operator', operatorIdToUse, '— falling back to', otherHaitiOp);
+        operatorIdToUse = otherHaitiOp;
         productsRes = await fetch(
-          `https://dvs-api.dtone.com/v1/products?operator_id=1703&per_page=100`,
+          `https://dvs-api.dtone.com/v1/products?operator_id=${otherHaitiOp}&per_page=100`,
           { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
         );
         productsData = await productsRes.json();

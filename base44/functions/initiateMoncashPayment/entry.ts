@@ -21,11 +21,17 @@ Deno.serve(async (req) => {
     const amountInHTG = (parseFloat(amount) * rate).toFixed(2);
     const encodedCredentials = btoa(`${moncashClientId}:${moncashClientSecret}`);
 
-    // Validate Haiti operator IDs — only 1701 (Digicel) or 1703 (Natcom) are valid
+    // Map operator IDs to DTone IDs for Haiti
+    // DTone uses: 1512 = Digicel Haiti, 1703 = Natcom Haiti
+    // Legacy IDs 1701 (Digicel) are remapped to 1512
     let validatedOperatorId = String(operatorId);
-    if (countryCode === 'HT' && ![1701, 1703].includes(Number(operatorId))) {
-      console.warn(`Invalid Haiti operator ID ${operatorId}, defaulting to 1703`);
-      validatedOperatorId = '1703';
+    if (countryCode === 'HT') {
+      if (Number(operatorId) === 1701 || String(operatorId).toLowerCase().includes('digicel')) {
+        validatedOperatorId = '1512'; // DTone Digicel Haiti
+      } else if (![1512, 1703].includes(Number(operatorId))) {
+        console.warn(`Unknown Haiti operator ID ${operatorId}, defaulting to Natcom (1703)`);
+        validatedOperatorId = '1703';
+      }
     }
 
     // Run entity save and Moncash auth in parallel to save time
@@ -35,7 +41,7 @@ Deno.serve(async (req) => {
         phone_number: phoneNumber,
         country_code: countryCode,
         operator_id: validatedOperatorId,
-        operator_name: Number(validatedOperatorId) === 1701 ? 'Digicel Haiti' : 'Natcom Haiti',
+        operator_name: Number(validatedOperatorId) === 1512 ? 'Digicel Haiti' : 'Natcom Haiti',
         product_id: productId ? String(productId) : undefined,
         amount: parseFloat(amount),
         status: 'pending',

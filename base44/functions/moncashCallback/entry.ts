@@ -111,30 +111,22 @@ Deno.serve(async (req) => {
     let productId = pending.product_id;
 
     if (!productId) {
-      // For Haiti, DTone products are only available under Natcom (1703); fall back if Digicel (1701) has none
-      let operatorIdToUse = pending.operator_id;
+      const operatorIdToUse = String(pending.operator_id);
       console.log('No product_id, looking up DTone products for operator:', operatorIdToUse);
-      let productsRes = await fetch(
+
+      // Fetch all Haiti products, then filter strictly by operator to avoid cross-network assignments
+      const productsRes = await fetch(
         `https://dvs-api.dtone.com/v1/products?operator_id=${operatorIdToUse}&per_page=100`,
         { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
       );
-      let productsData = await productsRes.json();
-      let products = Array.isArray(productsData) ? productsData : (productsData.data || []);
+      const productsData = await productsRes.json();
+      const allProducts = Array.isArray(productsData) ? productsData : (productsData.data || []);
 
-      // Fallback: if no products found and country is HT, try the other operator
-      const otherHaitiOp = String(operatorIdToUse) === '1512' ? '1703' : '1512';
-      if (products.length === 0 && pending.country_code === 'HT') {
-        console.log('No products for operator', operatorIdToUse, '— falling back to', otherHaitiOp);
-        operatorIdToUse = otherHaitiOp;
-        productsRes = await fetch(
-          `https://dvs-api.dtone.com/v1/products?operator_id=${otherHaitiOp}&per_page=100`,
-          { headers: { Authorization: dtoneAuth, Accept: 'application/json' } }
-        );
-        productsData = await productsRes.json();
-        products = Array.isArray(productsData) ? productsData : (productsData.data || []);
-      }
+      // Filter strictly to the correct operator — prevents Natcom products going to Digicel users and vice versa
+      const products = allProducts.filter(p => String(p.operator?.id) === operatorIdToUse);
+      console.log(`Filtered to ${products.length} products for operator ${operatorIdToUse} (total fetched: ${allProducts.length})`);
 
-      if (products.length === 0) throw new Error(`No DTone products found for operator ${pending.operator_id}`);
+      if (products.length === 0) throw new Error(`No DTone products found for operator ${operatorIdToUse}`);
 
       const targetAmount = parseFloat(pending.amount);
       let best = products[0];
@@ -150,7 +142,7 @@ Deno.serve(async (req) => {
       }
 
       productId = best.id;
-      console.log(`Selected product ${productId} (~${best.prices?.retail?.amount || best.face_value}) for target $${targetAmount}`);
+      console.log(`Selected product ${productId} (operator: ${best.operator?.name}, ~$${best.prices?.retail?.amount || best.face_value}) for target $${targetAmount}`);
     }
 
     const payload = {

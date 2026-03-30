@@ -89,6 +89,13 @@ Deno.serve(async (req) => {
       return Response.json(result);
     }
 
+    // Raw path probe — for debugging exact endpoint paths
+    if (action === 'probe') {
+      const { path, method: probeMethod } = payload;
+      const result = await callAPI(path, probeMethod || 'GET', null, baseUrl);
+      return Response.json(result);
+    }
+
     return Response.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

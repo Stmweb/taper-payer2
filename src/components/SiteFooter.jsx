@@ -30,16 +30,18 @@ export default function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-xl">Resources</h4>
+            <h4 className="font-bold mb-4 text-xl invisible">.</h4>
             <ul className="space-y-3 text-slate-300">
-              <li><Link to="/TaperPayerFAQ" className="hover:text-white transition-colors">FAQs</Link></li>
-              <li><Link to="/TaperPayerTerms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
-              <li><Link to="/TaperPayerPrivacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/TaperPayerCookies" className="hover:text-white transition-colors">Cookies Policy</Link></li>
-              <li><Link to="/TaperPayerWhiteLabel" className="hover:text-white transition-colors">White Label</Link></li>
-              <li><Link to="/TaperPayerAML" className="hover:text-white transition-colors">AML Policy</Link></li>
+              <li><Link to="/TaperPayerFAQ" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> FAQs</Link></li>
+              <li><Link to="/TaperPayerTerms" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Terms & Conditions</Link></li>
+              <li><Link to="/TaperPayerPrivacy" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Privacy Policy</Link></li>
+              <li><Link to="/TaperPayerCookies" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Cookies Policy</Link></li>
+              <li><Link to="/TaperPayerWhiteLabel" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> White Label</Link></li>
+              <li><Link to="/TaperPayerAML" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> AML Policy</Link></li>
             </ul>
           </div>
+
+
 
           <div>
             <h4 className="font-bold mb-4 text-xl">Contact Us</h4>

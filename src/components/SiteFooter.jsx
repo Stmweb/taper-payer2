@@ -6,9 +6,11 @@ export default function SiteFooter() {
   return (
     <footer id="contact" className="bg-slate-900 text-white py-16">
       <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer Logo" className="w-72 h-auto mb-4 brightness-110" />
+            <div className="bg-white rounded-xl p-2 inline-block mb-4">
+              <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png" alt="Taper Payer Logo" className="w-56 h-auto" />
+            </div>
             <p className="text-slate-300 text-lg mb-4">Your trusted partner for secure and efficient global money transfers.</p>
             <div className="flex gap-4">
               <a href="https://www.facebook.com/profile.php?id=61583727643100" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity" style={{ backgroundColor: '#3D7BB7' }}><span className="text-white text-lg">f</span></a>
@@ -18,7 +20,7 @@ export default function SiteFooter() {
             </div>
           </div>
 
-          <div>
+          <div className="md:col-start-2">
             <h4 className="font-bold mb-4 text-xl">Quick Links</h4>
             <ul className="space-y-3 text-slate-300">
               <li><Link to="/TaperPayerHome" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Home</Link></li>

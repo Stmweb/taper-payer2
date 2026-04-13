@@ -179,7 +179,7 @@ export default function TaperPayerHome() {
                 variant="outline" 
                 size="sm" 
                 className="text-slate-700 border-slate-300 hover:bg-slate-50"
-                onClick={() => window.open('https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login', '_blank')}
+                onClick={() => window.location.href = '/TaperPayerLogin'}
               >Login</Button>
               <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90" onClick={() => setShowSignupModal(true)}>Sign up</Button>
             </div>
@@ -201,7 +201,7 @@ export default function TaperPayerHome() {
                 <Button 
                   variant="outline" 
                   className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20"
-                  onClick={() => window.open('https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login', '_blank')}
+                  onClick={() => window.location.href = '/TaperPayerLogin'}
                 >Login</Button>
                 <Button 
                   className="w-full bg-white text-blue-600 hover:bg-gray-100"

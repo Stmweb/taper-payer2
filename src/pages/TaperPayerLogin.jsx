@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ForgotPasswordModal from '@/components/ForgotPasswordModal';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +14,7 @@ export default function TaperPayerLogin() {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -318,9 +320,9 @@ export default function TaperPayerLogin() {
                 />
               </div>
               <div className="text-right mt-2">
-                <a href="#" className="text-sm text-slate-500 hover:text-blue-600">
+                <button type="button" onClick={() => setShowForgotPassword(true)} className="text-sm text-slate-500 hover:text-blue-600">
                   Forgot your password?
-                </a>
+                </button>
               </div>
             </div>
 
@@ -372,6 +374,7 @@ export default function TaperPayerLogin() {
           </div>
         </motion.div>
       </div>
+      <ForgotPasswordModal isOpen={showForgotPassword} onClose={() => setShowForgotPassword(false)} />
     </div>
   );
 }

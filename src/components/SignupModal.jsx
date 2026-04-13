@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import ForgotPasswordModal from '@/components/ForgotPasswordModal';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,7 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
   const [otpSent, setOtpSent] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [otpExpiry, setOtpExpiry] = useState(null);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -130,7 +132,7 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
 
   if (!isOpen) return null;
 
-  return createPortal(
+  const modal = createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -417,7 +419,14 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
               )}
             </Button>
 
-            <div className="mt-4 text-center">
+            <div className="mt-4 text-center space-y-2">
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(true)}
+                className="block w-full text-slate-500 hover:text-blue-600 text-sm"
+              >
+                Forgot your password?
+              </button>
               <button
                 type="button"
                 onClick={() => {
@@ -434,5 +443,12 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
       </motion.div>
     </div>,
     document.body
+  );
+
+  return (
+    <>
+      {modal}
+      <ForgotPasswordModal isOpen={showForgotPassword} onClose={() => setShowForgotPassword(false)} />
+    </>
   );
 }

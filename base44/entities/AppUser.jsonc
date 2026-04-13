@@ -37,6 +37,14 @@
         "suspended"
       ],
       "default": "active"
+    },
+    "reset_otp": {
+      "type": "string",
+      "description": "OTP code for password reset"
+    },
+    "reset_otp_expires": {
+      "type": "string",
+      "description": "Expiry timestamp for the reset OTP"
     }
   },
   "required": [

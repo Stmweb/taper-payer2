@@ -108,40 +108,31 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         if (!guid) throw new Error('Could not create customer profile.');
         setCustomerGuid(guid);
 
-        // Check KYC — auto-trigger in sandbox if not yet approved
+        // Check KYC status
+        const isVerified = (s) => s === 'approved' || s === 'verified';
         let statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
         let kyc = statusRes.data?.customer?.state;
 
-        // If not approved, try to run KYC (sandbox auto-passes)
-        const isVerified = (s) => s === 'approved' || s === 'verified';
-
+        // If not yet verified, start KYC and show Persona iframe
         if (!isVerified(kyc)) {
           try {
             const kycRes = await invoke('startKYC', { customerGuid: guid });
             if (kycRes.data?.personaUrl) {
               setPersonaUrl(kycRes.data.personaUrl);
             }
-            if (kycRes.data?.outcome === 'passed' || kycRes.data?.state === 'completed' || kycRes.data?.alreadyVerified) {
+            // Re-check status in case sandbox auto-passed
+            if (kycRes.data?.alreadyVerified || kycRes.data?.outcome === 'passed') {
               statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
               kyc = statusRes.data?.customer?.state;
             }
           } catch (_) {
-            // ignore, will show manual button below
+            // ignore
           }
         }
 
         setKycStatus(kyc);
 
-        if (!isVerified(kyc)) {
-          // Poll a few more times with delay in case verification is processing
-          for (let i = 0; i < 5; i++) {
-            await new Promise(r => setTimeout(r, 2000));
-            statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-            kyc = statusRes.data?.customer?.state;
-            if (isVerified(kyc)) break;
-          }
-        }
-
+        // If not verified, stop here — user must complete Persona flow
         if (!isVerified(kyc)) {
           setLoading(false);
           return;

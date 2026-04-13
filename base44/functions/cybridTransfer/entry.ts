@@ -172,11 +172,7 @@ Deno.serve(async (req) => {
       const firstName = nameParts[0] || 'User';
       const lastName = nameParts.slice(1).join(' ') || 'Account';
 
-      // Check if customer already exists
-      const existing = await cybridApi(token, 'GET', `/api/customers?per_page=100`);
-      const found = existing.objects?.find(c => c.email_address === email);
-      if (found) return Response.json({ customer: found });
-
+      // Create customer directly (no pre-check to avoid slow list call)
       const customer = await cybridApi(token, 'POST', '/api/customers', {
         type: 'individual',
       });
@@ -202,7 +198,7 @@ Deno.serve(async (req) => {
         return Response.json({ state: 'completed', outcome: 'passed', alreadyVerified: true });
       }
 
-      // Create identity verification
+      // Create identity verification and return immediately (no long polling)
       const iv = await cybridApi(token, 'POST', '/api/identity_verifications', {
         type: 'kyc',
         method: 'id_and_selfie',
@@ -210,13 +206,12 @@ Deno.serve(async (req) => {
         expected_behaviours: ['passed_immediately'], // sandbox: auto-pass
       });
 
-      // Poll up to 10 times for persona_inquiry_id
-      let verificationGuid = iv.guid;
+      // Wait briefly (3s) for persona_inquiry_id to appear
       let inquiry = iv;
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 3; i++) {
         if (inquiry.persona_inquiry_id || inquiry.state === 'completed' || inquiry.outcome === 'passed') break;
-        await new Promise(r => setTimeout(r, 1500));
-        inquiry = await cybridApi(token, 'GET', `/api/identity_verifications/${verificationGuid}`);
+        await new Promise(r => setTimeout(r, 1000));
+        inquiry = await cybridApi(token, 'GET', `/api/identity_verifications/${iv.guid}`);
       }
 
       return Response.json({

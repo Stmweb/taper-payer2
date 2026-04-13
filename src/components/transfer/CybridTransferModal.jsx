@@ -118,7 +118,10 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         if (!isVerified(kyc)) {
           try {
             const kycRes = await invoke('startKYC', { customerGuid: guid });
-            if (kycRes.data?.outcome === 'passed' || kycRes.data?.state === 'completed') {
+            if (kycRes.data?.personaUrl) {
+              setPersonaUrl(kycRes.data.personaUrl);
+            }
+            if (kycRes.data?.outcome === 'passed' || kycRes.data?.state === 'completed' || kycRes.data?.alreadyVerified) {
               statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
               kyc = statusRes.data?.customer?.state;
             }

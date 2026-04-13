@@ -182,14 +182,23 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       setError('Please fill in all recipient details including city.');
       return;
     }
-    // Validate ABA routing number: must be exactly 9 digits
-    if (country !== 'Canada' && !/^\d{9}$/.test(recipientRouting)) {
-      setError('Routing number must be exactly 9 digits (US ABA format, e.g. 021000021).');
-      return;
-    }
-    if (country === 'Canada' && !/^\d{8,9}$/.test(recipientRouting)) {
-      setError('Routing number must be 8-9 digits (Canadian CPA format).');
-      return;
+    // Validate routing number based on country
+    const intlCountries = ['Ghana', 'Kenya', 'Senegal', 'Dominican Republic', 'Haiti'];
+    if (country === 'Canada') {
+      if (!/^\d{8,9}$/.test(recipientRouting)) {
+        setError('Routing number must be 8-9 digits (Canadian CPA format).');
+        return;
+      }
+    } else if (intlCountries.includes(country)) {
+      if (!/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(recipientRouting.toUpperCase())) {
+        setError('Please enter a valid SWIFT/BIC code (e.g. EGHBGHAC or KCBLKENX).');
+        return;
+      }
+    } else {
+      if (!/^\d{9}$/.test(recipientRouting)) {
+        setError('Routing number must be exactly 9 digits (US ABA format, e.g. 021000021).');
+        return;
+      }
     }
     setLoading(true);
     setError('');
@@ -511,8 +520,23 @@ export default function CybridTransferModal({ amount, country, onClose }) {
           </div>
           <p className="text-xs font-semibold text-slate-600 pt-1">Recipient's Bank Account ({country})</p>
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Routing Number (9 digits)</label>
-                <Input placeholder="e.g. 021000021" value={recipientRouting} onChange={e => setRecipientRouting(e.target.value.replace(/\D/g, '').slice(0, 9))} />
+            {(() => {
+              const intlCountries = ['Ghana', 'Kenya', 'Senegal', 'Dominican Republic', 'Haiti'];
+              const isIntl = intlCountries.includes(country);
+              const isCanada = country === 'Canada';
+              return (
+                <>
+                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                    {isIntl ? 'SWIFT/BIC Code' : isCanada ? 'Routing Number (8-9 digits)' : 'Routing Number (9 digits)'}
+                  </label>
+                  <Input
+                    placeholder={isIntl ? 'e.g. EGHBGHAC or KCBLKENX' : isCanada ? 'e.g. 026007893' : 'e.g. 021000021'}
+                    value={recipientRouting}
+                    onChange={e => setRecipientRouting(isIntl ? e.target.value.toUpperCase().slice(0, 11) : e.target.value.replace(/\D/g, '').slice(0, isCanada ? 9 : 9))}
+                  />
+                </>
+              );
+            })()}
           </div>
           <div>
             <label className="block text-xs font-medium text-slate-600 mb-1">Account Number</label>

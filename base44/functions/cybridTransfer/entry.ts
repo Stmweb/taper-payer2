@@ -408,13 +408,15 @@ Deno.serve(async (req) => {
     if (action === 'createCounterpartyExternalBankAccount') {
       const { counterpartyGuid, accountNumber, routingNumber, country } = params;
       console.log('createCounterpartyExternalBankAccount params:', { counterpartyGuid, accountNumber, routingNumber, country });
+      const intlCountries = ['Ghana', 'Kenya', 'Senegal', 'Dominican Republic', 'Haiti'];
+      const routingType = country === 'Canada' ? 'CPA' : intlCountries.includes(country) ? 'SWIFT' : 'ABA';
       const account = await cybridApi(token, 'POST', '/api/external_bank_accounts', {
         name: 'Recipient Bank Account',
         account_kind: 'raw_routing_details',
         counterparty_guid: counterpartyGuid,
         asset: 'USD',
         counterparty_bank_account: {
-          routing_number_type: country === 'Canada' ? 'CPA' : 'ABA',
+          routing_number_type: routingType,
           routing_number: routingNumber,
           account_number: accountNumber,
         },

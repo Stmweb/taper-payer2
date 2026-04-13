@@ -8,23 +8,36 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
 import MobileHeader from '@/components/mobile/MobileHeader';
+import { base44 } from '@/api/base44Client';
+import { useAppAuth } from '@/lib/AppAuthContext';
 
 export default function TaperPayerLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const { login } = useAppAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
-    // Optimistic: show loading immediately, then resolve
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMsg('');
+    try {
+      const res = await base44.functions.invoke('login', { email, password });
+      const { jwt, user, cybrid_customer_id } = res.data;
+      localStorage.setItem('auth_token', jwt);
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('cybrid_customer_id', cybrid_customer_id);
+      login(user, jwt, cybrid_customer_id);
       setSubmitStatus('success');
-    }, 800);
+      window.location.href = '/TaperPayerHome';
+    } catch (err) {
+      setErrorMsg(err.response?.data?.error || 'Login failed. Please check your email and password.');
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -327,8 +340,13 @@ export default function TaperPayerLogin() {
             </div>
 
             {submitStatus === 'success' && (
-              <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm text-center">
+              <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm text-center">
                 ✓ Logging you in…
+              </div>
+            )}
+            {errorMsg && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center">
+                {errorMsg}
               </div>
             )}
             <Button

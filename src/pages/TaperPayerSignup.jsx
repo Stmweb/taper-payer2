@@ -382,12 +382,18 @@ export default function TaperPayerSignup() {
             <div>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white z-10" style={{ backgroundColor: '#2479C2' }} />
-                <Input
+                <select
                   value={formData.country}
-                  readOnly
-                  placeholder="Country"
-                  className="pl-12 h-12 dark:bg-slate-800 dark:border-gray-600 dark:text-white"
-                />
+                  onChange={(e) => setFormData({...formData, country: e.target.value})}
+                  className="w-full pl-12 h-12 border border-gray-300 dark:border-gray-600 dark:bg-slate-800 dark:text-white rounded-md text-slate-900 bg-white appearance-none"
+                >
+                  <option value="United States">United States of America</option>
+                  <option value="Dominican Republic">Dominican Republic</option>
+                  <option value="Ghana">Ghana</option>
+                  <option value="Haiti">Haiti</option>
+                  <option value="Kenya">Kenya</option>
+                  <option value="Senegal">Senegal</option>
+                </select>
               </div>
             </div>
 

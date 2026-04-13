@@ -215,6 +215,11 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
                   >
                     <option value="">Select Country</option>
                     <option value="USA">United States of America</option>
+                    <option value="DOM">Dominican Republic</option>
+                    <option value="GHA">Ghana</option>
+                    <option value="HTI">Haiti</option>
+                    <option value="KEN">Kenya</option>
+                    <option value="SEN">Senegal</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 </div>

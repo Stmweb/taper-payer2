@@ -189,7 +189,7 @@ export default function AdminEmailMarketing() {
     fetchData();
   };
 
-  const useTemplate = (tmpl) => {
+  const applyTemplate = (tmpl) => {
     setCampaign({ name: tmpl.name, subject: tmpl.subject, body_html: tmpl.body_html.trim(), category: tmpl.category });
     setPreviewTemplate(null);
     showToast('Template loaded into composer!');
@@ -270,7 +270,7 @@ export default function AdminEmailMarketing() {
                 <p className="text-sm text-gray-500">{previewTemplate.subject}</p>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" onClick={() => useTemplate(previewTemplate)} className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button size="sm" onClick={() => applyTemplate(previewTemplate)} className="bg-blue-600 hover:bg-blue-700 text-white">
                   Use Template
                 </Button>
                 <button onClick={() => setPreviewTemplate(null)} aria-label="Close preview" className="p-2.5 min-w-[44px] min-h-[44px] hover:bg-gray-100 rounded-lg flex items-center justify-center"><X className="w-5 h-5" /></button>
@@ -411,7 +411,7 @@ export default function AdminEmailMarketing() {
                     <Button size="sm" variant="outline" onClick={() => setPreviewTemplate(tmpl)} className="flex-1 gap-1 text-xs">
                       <Eye className="w-3.5 h-3.5" /> Preview
                     </Button>
-                    <Button size="sm" onClick={() => useTemplate(tmpl)} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs gap-1">
+                    <Button size="sm" onClick={() => applyTemplate(tmpl)} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs gap-1">
                       <Plus className="w-3.5 h-3.5" /> Use
                     </Button>
                   </div>

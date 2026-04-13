@@ -31,6 +31,7 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
     otp: '',
   });
   const [otpSent, setOtpSent] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [otpExpiry, setOtpExpiry] = useState(null);
 
   const handleInputChange = (e) => {
@@ -266,10 +267,31 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
               />
             </div>
 
+            <div className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                id="user-agreement"
+                checked={agreedToTerms}
+                onChange={e => setAgreedToTerms(e.target.checked)}
+                className="mt-1 w-4 h-4 accent-blue-600 cursor-pointer flex-shrink-0"
+              />
+              <label htmlFor="user-agreement" className="text-sm text-slate-600 leading-snug">
+                I agree to the{' '}
+                <a
+                  href="http://cybrid.app/user-agreement"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline hover:text-blue-700"
+                >
+                  User Agreement
+                </a>
+              </label>
+            </div>
+
             <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+              disabled={loading || !agreedToTerms}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 disabled:opacity-50"
             >
               {loading ? (
                 <>

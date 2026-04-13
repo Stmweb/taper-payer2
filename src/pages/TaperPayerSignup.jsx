@@ -16,20 +16,7 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 export default function TaperPayerSignup() {
   const isMobile = useIsMobile();
   const { login } = useAppAuth();
-  
-  // On mobile, show the SignupModal instead of the old form
-  if (isMobile) {
-    return (
-      <SignupModal
-        isOpen={true}
-        onClose={() => window.history.back()}
-        onSignupSuccess={(userData) => {
-          login(userData, userData.jwt, userData.cybrid_customer_id);
-          window.location.href = '/TaperPayerHome';
-        }}
-      />
-    );
-  }
+
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
@@ -47,6 +34,8 @@ export default function TaperPayerSignup() {
   const [sendSMS, setSendSMS] = useState(false);
   const [sendPromo, setSendPromo] = useState(false);
   const [showStateDrawer, setShowStateDrawer] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
   const states = [
     'Alabama', 'Alaska', 'Arizona', 'California', 'Colorado', 'Connecticut',
@@ -54,8 +43,19 @@ export default function TaperPayerSignup() {
     'Maryland', 'New York'
   ];
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  // On mobile, show the SignupModal instead of the old form
+  if (isMobile) {
+    return (
+      <SignupModal
+        isOpen={true}
+        onClose={() => window.history.back()}
+        onSignupSuccess={(userData) => {
+          login(userData, userData.jwt, userData.cybrid_customer_id);
+          window.location.href = '/TaperPayerHome';
+        }}
+      />
+    );
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();

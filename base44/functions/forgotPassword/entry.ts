@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import bcrypt from 'npm:bcryptjs@2.4.3';
 
 Deno.serve(async (req) => {
   try {
@@ -82,8 +83,7 @@ Deno.serve(async (req) => {
       }
 
       // Hash the new password using bcrypt
-      const bcrypt = await import('npm:bcryptjs@2.4.3');
-      const hash = await bcrypt.hash(new_password, 10);
+      const hash = bcrypt.hashSync(new_password, 10);
 
       // Update password and clear OTP
       await base44.asServiceRole.entities.AppUser.update(user.id, {

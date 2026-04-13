@@ -443,15 +443,25 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                 Your account needs to be verified before you can send money.
               </p>
               {personaUrl ? (
-                <>
-                  <a href={personaUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-                    <Button className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
-                      Open Verification →
-                    </Button>
-                  </a>
-                  <p className="text-xs text-slate-400 mt-1">After completing verification, come back and try again.</p>
-                  <Button onClick={onClose} variant="outline" className="w-full mt-1">Close</Button>
-                </>
+                <div className="w-full space-y-3">
+                  <div className="w-full rounded-xl overflow-hidden border border-blue-200" style={{ height: '480px' }}>
+                    <iframe
+                      src={personaUrl}
+                      title="Identity Verification"
+                      className="w-full h-full"
+                      allow="camera; microphone"
+                    />
+                  </div>
+                  <p className="text-xs text-slate-500 text-center">Complete the verification above, then click the button below.</p>
+                  <Button
+                    onClick={() => setKycRefreshKey(k => k + 1)}
+                    className="w-full"
+                    style={{ backgroundColor: '#3D7BB7' }}
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" /> I've Completed Verification
+                  </Button>
+                  <Button onClick={onClose} variant="outline" className="w-full">Cancel</Button>
+                </div>
               ) : (
                 <>
                   <Button

@@ -126,7 +126,7 @@ export default function SMSOptIn() {
         <div className="mt-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
           <h2 className="text-slate-800 font-semibold text-sm mb-2">Opt-In Program Details</h2>
           {[
-            { label: 'Business Name', value: 'Taper Payer LLC' },
+            { label: 'Business Name', value: 'Taper Payer INC' },
             { label: 'Program Name', value: 'Taper Payer Alerts' },
             { label: 'Opt-In Method', value: 'User-initiated web form — checkbox unchecked by default' },
             { label: 'Channels', value: 'SMS and WhatsApp' },
@@ -153,7 +153,7 @@ export default function SMSOptIn() {
         </div>
 
         <p className="text-center text-slate-400 text-xs mt-6">
-          © {new Date().getFullYear()} Taper Payer LLC ·{' '}
+          © {new Date().getFullYear()} Taper Payer INC ·{' '}
           <a href="/TaperPayerPrivacy" className="underline">Privacy Policy</a> ·{' '}
           <a href="/TaperPayerTerms" className="underline">Terms</a>
         </p>

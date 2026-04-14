@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CheckCircle, MessageSquare, Shield } from 'lucide-react';
 
 export default function SMSOptIn() {
+  const [checked, setChecked] = useState(false);
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12">
       <div className="max-w-lg w-full">
@@ -27,16 +29,22 @@ export default function SMSOptIn() {
           </div>
 
           <div className="mt-4 p-4 bg-white border border-slate-200 rounded-xl">
-            <div className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded border-2 border-green-500 bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <p className="text-slate-700 text-sm leading-relaxed">
-                "I agree to receive SMS and WhatsApp notifications about payments, top-ups, and account activity from <strong>Taper Payer</strong>. Message & data rates may apply. Reply STOP to unsubscribe at any time."
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={e => setChecked(e.target.checked)}
+                className="mt-0.5 w-5 h-5 flex-shrink-0 accent-green-600 cursor-pointer"
+              />
+              <p className="text-slate-700 text-sm leading-relaxed select-none">
+                I agree to receive SMS and WhatsApp notifications about payments, top-ups, and account activity from <strong>Taper Payer</strong>. Message & data rates may apply. Reply STOP to unsubscribe at any time.
               </p>
-            </div>
+            </label>
+            {checked && (
+              <p className="mt-3 text-green-700 text-xs font-medium flex items-center gap-1">
+                <CheckCircle className="w-3.5 h-3.5" /> Consent recorded
+              </p>
+            )}
           </div>
         </div>
 
@@ -45,7 +53,7 @@ export default function SMSOptIn() {
           <h2 className="text-slate-800 font-semibold text-base">Opt-In Details</h2>
 
           {[
-            { label: 'Opt-In Type', value: 'User-initiated in-app checkbox during signup' },
+            { label: 'Opt-In Type', value: 'User-initiated — checkbox is NOT pre-selected; user must actively check to consent' },
             { label: 'Channels', value: 'SMS and WhatsApp' },
             { label: 'Message Types', value: 'Payment requests, top-up requests, account activity alerts' },
             { label: 'Business Name', value: 'Taper Payer' },

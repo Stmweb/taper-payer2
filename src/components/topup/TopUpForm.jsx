@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Loader2, Check, AlertCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import SquarePaymentForm from './SquarePaymentForm';
 
 const COUNTRIES = [
   { name: 'Nigeria', code: 'NG', dial: '+234' },
@@ -17,44 +18,36 @@ export default function TopUpForm() {
   const [amount, setAmount] = useState('');
   const [countryCode, setCountryCode] = useState('NG');
   const [operatorId, setOperatorId] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [transactionId, setTransactionId] = useState('');
+  const [paymentId, setPaymentId] = useState('');
+  const [showPayment, setShowPayment] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     setError('');
-    setSuccess(false);
 
     if (!phoneNumber || !amount || !operatorId) {
       setError('Please fill in all required fields');
       return;
     }
 
-    setLoading(true);
-    try {
-      const response = await base44.functions.invoke('processTopUp', {
-        phoneNumber,
-        amount: parseFloat(amount),
-        countryCode,
-        operatorId,
-      });
+    setShowPayment(true);
+  };
 
-      if (response.data.success) {
-        setSuccess(true);
-        setTransactionId(response.data.transaction.id);
-        setPhoneNumber('');
-        setAmount('');
-        setTimeout(() => setSuccess(false), 5000);
-      } else {
-        setError(response.data.error || 'Transaction failed');
-      }
-    } catch (err) {
-      setError(err.message || 'Failed to process topup');
-    } finally {
-      setLoading(false);
-    }
+  const handlePaymentSuccess = (data) => {
+    setSuccess(true);
+    setPaymentId(data.paymentId);
+    setPhoneNumber('');
+    setAmount('');
+    setOperatorId('');
+    setShowPayment(false);
+    setTimeout(() => setSuccess(false), 5000);
+  };
+
+  const handlePaymentError = (err) => {
+    setError(err || 'Payment failed');
+    setShowPayment(false);
   };
 
   return (
@@ -66,7 +59,7 @@ export default function TopUpForm() {
           <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-semibold text-green-900">Top-up successful!</p>
-            <p className="text-sm text-green-700">Transaction ID: {transactionId}</p>
+            <p className="text-sm text-green-700">Payment ID: {paymentId}</p>
           </div>
         </div>
       )}
@@ -78,74 +71,73 @@ export default function TopUpForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
-          <Input
-            type="tel"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="+234 8012345678"
-            disabled={loading}
-            required
-          />
-        </div>
+      {showPayment ? (
+        <SquarePaymentForm
+          amount={amount}
+          phoneNumber={phoneNumber}
+          countryCode={countryCode}
+          operatorId={operatorId}
+          onSuccess={handlePaymentSuccess}
+          onError={handlePaymentError}
+        />
+      ) : (
+        <form onSubmit={handleFormSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Phone Number</label>
+            <Input
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="+234 8012345678"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
-          <Input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="10.00"
-            step="0.01"
-            min="0"
-            disabled={loading}
-            required
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
+            <Input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="10.00"
+              step="0.01"
+              min="0"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Country</label>
-          <select
-            value={countryCode}
-            onChange={(e) => setCountryCode(e.target.value)}
-            disabled={loading}
-            className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Country</label>
+            <select
+              value={countryCode}
+              onChange={(e) => setCountryCode(e.target.value)}
+              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              {COUNTRIES.map(c => (
+                <option key={c.code} value={c.code}>{c.name} ({c.dial})</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Mobile Operator</label>
+            <Input
+              type="text"
+              value={operatorId}
+              onChange={(e) => setOperatorId(e.target.value)}
+              placeholder="e.g., MTN, Airtel, Vodafone"
+              required
+            />
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-2"
           >
-            {COUNTRIES.map(c => (
-              <option key={c.code} value={c.code}>{c.name} ({c.dial})</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Mobile Operator</label>
-          <Input
-            type="text"
-            value={operatorId}
-            onChange={(e) => setOperatorId(e.target.value)}
-            placeholder="e.g., MTN, Airtel, Vodafone"
-            disabled={loading}
-            required
-          />
-        </div>
-
-        <Button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-2"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Processing...
-            </>
-          ) : (
-            'Top Up Now'
-          )}
-        </Button>
-      </form>
+            Continue to Payment
+          </Button>
+        </form>
+      )}
     </Card>
   );
 }

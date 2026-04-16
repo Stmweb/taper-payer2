@@ -343,17 +343,23 @@ Deno.serve(async (req) => {
       const countryCodeMap = { 'Mexico': 'MX', 'Nigeria': 'NG', 'Haiti': 'HT', 'Kenya': 'KE', 'Ghana': 'GH', 'Senegal': 'SN' };
       const countryCode = countryCodeMap[country] || 'US';
 
+      const addressObj = {
+        country_code: countryCode,
+        city: city || 'N/A',
+        street: street || '1 Main Street',
+        ...(state ? { subdivision: state } : {}),
+      };
+
+      // Only add postal_code for countries that require it (Ghana doesn't use postal codes)
+      if (countryCode !== 'GH') {
+        addressObj.postal_code = postalCode || (countryCode === 'HT' ? '1234' : countryCode === 'NG' ? '100001' : '00000');
+      }
+
       const counterparty = await cybridApi(token, 'POST', '/api/counterparties', {
         type: 'individual',
         customer_guid: customerGuid,
         name: { first: firstName, last: lastName },
-        address: {
-          country_code: countryCode,
-          city: city || 'N/A',
-          street: street || '1 Main Street',
-          postal_code: postalCode || (countryCode === 'HT' ? '1234' : countryCode === 'NG' ? '100001' : '00000'),
-          ...(state ? { subdivision: state } : {}),
-        },
+        address: addressObj,
       });
 
       const cpGuid = counterparty.guid;

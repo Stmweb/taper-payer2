@@ -1,13 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { Loader2, AlertCircle, RefreshCw, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+const SDK_SCRIPT_URL = 'https://cdn.jsdelivr.net/npm/@cybrid/cybrid-sdk-ui-js@0.0.486/cybrid-sdk-ui.min.js';
+
+function loadCybridScript() {
+  return new Promise((resolve, reject) => {
+    if (customElements.get('cybrid-app')) return resolve();
+    const existing = document.querySelector(`script[src="${SDK_SCRIPT_URL}"]`);
+    if (existing) {
+      existing.addEventListener('load', resolve);
+      existing.addEventListener('error', reject);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = SDK_SCRIPT_URL;
+    script.type = 'module';
+    script.onload = () => {
+      // Give the custom element time to register
+      setTimeout(resolve, 800);
+    };
+    script.onerror = () => reject(new Error('Failed to load Cybrid SDK.'));
+    document.head.appendChild(script);
+  });
+}
 
 export default function CybridIdentityVerification({ customerGuid, jwt, onVerified, onError }) {
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [sdkLoaded, setSdkLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const invoke = async (action, p = {}) => {
     const res = await base44.functions.invoke('cybridTransfer', { action, _jwt: jwt || '', ...p });
@@ -17,71 +40,63 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
 
   useEffect(() => {
     if (!customerGuid) return;
-    loadSdkAndMount();
+    mountSDK();
   }, [customerGuid]);
 
-  const loadSdkAndMount = async () => {
+  const mountSDK = async () => {
     setLoading(true);
     setError('');
+    setMounted(false);
     try {
-      // Get customer-scoped JWT from backend
+      // 1. Get customer-scoped JWT
       const tokenRes = await invoke('getCustomerToken', { customerGuid });
       const customerToken = tokenRes.data?.customerToken;
       if (!customerToken) throw new Error('Could not get customer token.');
 
-      // Load Cybrid SDK script if not already loaded
-      if (!document.querySelector('script[data-cybrid-sdk]')) {
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/npm/@cybrid/cybrid-sdk-ui-js@latest/cybrid-sdk-ui.min.js';
-          script.type = 'module';
-          script.setAttribute('data-cybrid-sdk', 'true');
-          script.onload = resolve;
-          script.onerror = () => reject(new Error('Failed to load Cybrid SDK.'));
-          document.head.appendChild(script);
-        });
-      }
+      // 2. Load SDK script
+      await loadCybridScript();
 
-      // Wait a tick for custom element to register
-      await new Promise(r => setTimeout(r, 500));
+      // 3. Mount element using DOM property assignment (not setAttribute)
+      if (!containerRef.current) return;
+      containerRef.current.innerHTML = '';
 
-      // Clear container and mount cybrid-app element
-      if (containerRef.current) {
-        containerRef.current.innerHTML = '';
-        const el = document.createElement('cybrid-app');
-        el.setAttribute('auth', customerToken);
-        el.setAttribute('component', 'identity-verification');
+      const el = document.createElement('cybrid-app');
 
-        const config = {
-          refreshInterval: 5000,
-          routing: false,
-          locale: 'en-US',
-          theme: 'LIGHT',
-          customer: customerGuid,
-          fiat: 'USD',
-          features: ['kyc_identity_verifications'],
-          environment: 'sandbox',
-        };
-        el.setAttribute('hostConfig', JSON.stringify(config));
+      // Use property assignment as per the JS docs
+      el.auth = customerToken;
+      el.component = 'identity-verification';
+      el.config = {
+        refreshInterval: 5000,
+        routing: false,
+        locale: 'en-US',
+        theme: 'LIGHT',
+        customer: customerGuid,
+        fiat: 'USD',
+        features: ['kyc_identity_verifications'],
+        environment: 'sandbox',
+      };
 
-        // Listen for completion events
-        el.addEventListener('eventLog', (event) => {
-          const detail = event.detail;
-          console.log('Cybrid eventLog:', detail);
-          if (detail?.code === 'identity-verification:verified' || detail?.code === 'customer:verified') {
-            onVerified?.();
-          }
-        });
+      el.addEventListener('eventLog', (event) => {
+        const detail = event.detail;
+        console.log('Cybrid eventLog:', detail);
+        if (
+          detail?.code === 'identity-verification:verified' ||
+          detail?.code === 'customer:verified' ||
+          detail?.outcome === 'passed'
+        ) {
+          onVerified?.();
+        }
+      });
 
-        el.addEventListener('errorLog', (event) => {
-          console.error('Cybrid errorLog:', event.detail);
-        });
+      el.addEventListener('errorLog', (event) => {
+        console.error('Cybrid errorLog:', event.detail);
+      });
 
-        containerRef.current.appendChild(el);
-        setSdkLoaded(true);
-      }
+      containerRef.current.appendChild(el);
+      setMounted(true);
     } catch (e) {
       setError(e.message || 'Failed to load identity verification.');
+      onError?.(e.message);
     } finally {
       setLoading(false);
     }
@@ -101,21 +116,20 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <div className="flex-1">
             <p>{error}</p>
-            <Button size="sm" variant="outline" className="mt-2" onClick={loadSdkAndMount}>
+            <Button size="sm" variant="outline" className="mt-2" onClick={mountSDK}>
               <RefreshCw className="w-3 h-3 mr-1" /> Retry
             </Button>
           </div>
         </div>
       )}
 
-      {/* Cybrid SDK mounts here */}
       <div
         ref={containerRef}
         className="w-full rounded-xl overflow-hidden border border-blue-200"
-        style={{ minHeight: sdkLoaded ? '500px' : '0' }}
+        style={{ minHeight: mounted ? '500px' : '0' }}
       />
 
-      {sdkLoaded && (
+      {mounted && (
         <div className="space-y-2">
           <p className="text-xs text-slate-500 text-center">
             Complete the ID + selfie verification above, then click below.

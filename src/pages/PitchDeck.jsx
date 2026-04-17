@@ -48,11 +48,14 @@ function CoverSlide() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-8 bg-gradient-to-br from-[#1a2f5e] to-[#3D7BB7]">
       <img
-        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/d7d75e226_ChatGPTImageDec29202501_48_52PM.png"
+        src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/431a892f8_TaperPayerNoBackground.png"
         alt="Taper Payer"
-        className="h-20 w-auto mb-6 object-contain"
+        className="h-24 w-auto mb-6 object-contain"
       />
-      <h1 className="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight">Taper Payer</h1>
+      <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight">
+        <span style={{ color: '#1D6FD1' }}>Taper</span>{' '}
+        <span style={{ color: '#2E7D32' }}>Payer</span>
+      </h1>
       <p className="text-xl md:text-2xl text-blue-100 font-light mb-2">Global Money Transfer, Reinvented</p>
       <p className="text-blue-200 text-base md:text-lg max-w-xl mt-4">
         Fast, affordable, and transparent remittances powered by blockchain rails — connecting diaspora communities with their families worldwide.

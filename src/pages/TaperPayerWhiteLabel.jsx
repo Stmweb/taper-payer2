@@ -26,12 +26,10 @@ export default function TaperPayerWhiteLabel() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await base44.functions.invoke('sendInquiryEmail', {
-        name: form.name,
-        email: form.email,
-        company: form.company,
-        phone: form.phone,
-        message: form.message,
+      await base44.integrations.Core.SendEmail({
+        to: 'support@taperpayer.com',
+        subject: `White Label Inquiry from ${form.name}`,
+        body: `<strong>Name:</strong> ${form.name}<br><strong>Email:</strong> ${form.email}<br><strong>Company:</strong> ${form.company}<br><strong>Phone:</strong> ${form.phone}<br><strong>Message:</strong> ${form.message.replace(/\n/g, '<br>')}`,
       });
       setSubmitted(true);
     } catch (err) {
@@ -467,13 +465,13 @@ export default function TaperPayerWhiteLabel() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto"
           >
-            <button onClick={() => setShowInquiry(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">
-              <X className="w-5 h-5" />
+            <button onClick={() => setShowInquiry(false)} className="absolute top-3 right-3 p-2 hover:bg-gray-100 rounded-full z-20 text-slate-500 w-10 h-10 flex items-center justify-center tap-target">
+              <X className="w-6 h-6" />
             </button>
 
-            <div className="p-6 pt-8">
+            <div className="p-6 pt-12 pb-6">
               {/* Header */}
               <div className="text-center mb-6">
                 <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
@@ -488,27 +486,27 @@ export default function TaperPayerWhiteLabel() {
                   <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
                     <CheckCircle2 className="w-9 h-9 text-green-500" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Inquiry Sent!</h3>
-                  <p className="text-slate-500 text-sm">We'll be in touch at <strong>{form.email}</strong> soon.</p>
-                  <Button className="mt-6 w-full" style={{ backgroundColor: '#3D7BB7' }} onClick={() => setShowInquiry(false)}>Close</Button>
+                  <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">Inquiry Sent!</h3>
+                  <p className="text-slate-500 text-xs md:text-sm">We'll be in touch at <strong>{form.email}</strong> soon.</p>
+                  <Button className="mt-6 w-full tap-target" style={{ backgroundColor: '#3D7BB7' }} onClick={() => setShowInquiry(false)}>Close</Button>
                 </div>
               ) : (
-                <form onSubmit={handleInquirySubmit} className="space-y-4">
+                <form onSubmit={handleInquirySubmit} className="space-y-3">
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">Full Name *</label>
-                    <Input required placeholder="John Smith" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                    <Input required placeholder="John Smith" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="text-base" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">Email Address *</label>
-                    <Input required type="email" placeholder="john@company.com" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+                    <Input required type="email" placeholder="john@company.com" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="text-base" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">Company Name</label>
-                    <Input placeholder="Acme Fintech Inc." value={form.company} onChange={e => setForm(f => ({ ...f, company: e.target.value }))} />
+                    <Input placeholder="Acme Fintech Inc." value={form.company} onChange={e => setForm(f => ({ ...f, company: e.target.value }))} className="text-base" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number</label>
-                    <Input type="tel" placeholder="+1 (555) 000-0000" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+                    <Input type="tel" placeholder="+1 (555) 000-0000" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} className="text-base" />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-600 mb-1">Tell us about your goals *</label>
@@ -518,11 +516,11 @@ export default function TaperPayerWhiteLabel() {
                       placeholder="Describe your business idea, target market, or any questions..."
                       value={form.message}
                       onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
+                      className="w-full text-base rounded-md border border-input bg-transparent px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
                     />
                   </div>
-                  {submitError && <p className="text-red-500 text-sm">{submitError}</p>}
-                  <Button type="submit" disabled={submitting} className="w-full py-6 text-base" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                  {submitError && <p className="text-red-500 text-xs md:text-sm">{submitError}</p>}
+                  <Button type="submit" disabled={submitting} className="w-full py-6 text-base tap-target" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
                     {submitting ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Sending...</> : 'Submit Inquiry'}
                   </Button>
                 </form>

@@ -152,7 +152,8 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         const linked = banksRes.data?.accounts?.[0];
         if (linked) setExternalBankAccount(linked);
 
-        setStep('recipient');
+        // Always show KYC step first — user must click Continue to proceed
+        // (don't auto-advance to recipient)
       } catch (e) {
         const msg = e.message || '';
         if (msg.toLowerCase().includes('authentication') || msg.toLowerCase().includes('logged in')) {

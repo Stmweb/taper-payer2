@@ -16,10 +16,15 @@ function createPageUrl(page) {
 export default function TaperPayerWhiteLabel() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showInquiry, setShowInquiry] = useState(false);
+  const [showDemo, setShowDemo] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', company: '', phone: '', message: '' });
+  const [demoForm, setDemoForm] = useState({ name: '', email: '', company: '', phone: '', companySize: '', timeline: '' });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [demoSubmitting, setDemoSubmitting] = useState(false);
+  const [demoSubmitted, setDemoSubmitted] = useState(false);
+  const [demoSubmitError, setDemoSubmitError] = useState('');
 
   const handleInquirySubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +41,24 @@ export default function TaperPayerWhiteLabel() {
       setSubmitError('Failed to send. Please try again.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDemoSubmit = async (e) => {
+    e.preventDefault();
+    setDemoSubmitting(true);
+    setDemoSubmitError('');
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: 'support@taperpayer.com',
+        subject: `Demo Request from ${demoForm.name}`,
+        body: `<strong>Name:</strong> ${demoForm.name}<br><strong>Email:</strong> ${demoForm.email}<br><strong>Company:</strong> ${demoForm.company}<br><strong>Phone:</strong> ${demoForm.phone}<br><strong>Company Size:</strong> ${demoForm.companySize}<br><strong>Timeline:</strong> ${demoForm.timeline}`,
+      });
+      setDemoSubmitted(true);
+    } catch (err) {
+      setDemoSubmitError('Failed to send. Please try again.');
+    } finally {
+      setDemoSubmitting(false);
     }
   };
 
@@ -417,7 +440,7 @@ export default function TaperPayerWhiteLabel() {
             Join leading fintech companies who've already scaled with our white label solution.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 px-8 py-6 text-lg">
+            <Button size="lg" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 px-8 py-6 text-lg" onClick={() => { setShowDemo(true); setDemoSubmitted(false); setDemoForm({ name: '', email: '', company: '', phone: '', companySize: '', timeline: '' }); }}>
               Request a Demo
             </Button>
             <Link to={createPageUrl('TaperPayerContact')}>
@@ -435,6 +458,90 @@ export default function TaperPayerWhiteLabel() {
           <p>© {new Date().getFullYear()} Taper Payer INC. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Demo Modal */}
+      {showDemo && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/50" onClick={() => setShowDemo(false)} />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto"
+          >
+            <button onClick={() => setShowDemo(false)} className="absolute top-3 right-3 p-2 hover:bg-gray-100 rounded-full z-20 text-slate-500 w-10 h-10 flex items-center justify-center tap-target">
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="p-6 pt-12 pb-6">
+              {/* Header */}
+              <div className="text-center mb-6">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                  <Building2 className="w-7 h-7 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-900">Request a Demo</h2>
+                <p className="text-slate-500 text-sm mt-1">See how our white label solution works for your business.</p>
+              </div>
+
+              {demoSubmitted ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 className="w-9 h-9 text-green-500" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2">Demo Request Sent!</h3>
+                  <p className="text-slate-500 text-xs md:text-sm">We'll be in touch at <strong>{demoForm.email}</strong> soon with demo availability.</p>
+                  <Button className="mt-6 w-full tap-target" style={{ backgroundColor: '#3D7BB7' }} onClick={() => setShowDemo(false)}>Close</Button>
+                </div>
+              ) : (
+                <form onSubmit={handleDemoSubmit} className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Full Name *</label>
+                    <Input required placeholder="John Smith" value={demoForm.name} onChange={e => setDemoForm(f => ({ ...f, name: e.target.value }))} className="text-base" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Email Address *</label>
+                    <Input required type="email" placeholder="john@company.com" value={demoForm.email} onChange={e => setDemoForm(f => ({ ...f, email: e.target.value }))} className="text-base" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Company Name *</label>
+                    <Input required placeholder="Acme Fintech Inc." value={demoForm.company} onChange={e => setDemoForm(f => ({ ...f, company: e.target.value }))} className="text-base" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number</label>
+                    <Input type="tel" placeholder="+1 (555) 000-0000" value={demoForm.phone} onChange={e => setDemoForm(f => ({ ...f, phone: e.target.value }))} className="text-base" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Company Size *</label>
+                    <select required value={demoForm.companySize} onChange={e => setDemoForm(f => ({ ...f, companySize: e.target.value }))} className="w-full text-base rounded-md border border-input bg-transparent px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                      <option value="">Select company size</option>
+                      <option value="1-10">1-10 employees</option>
+                      <option value="11-50">11-50 employees</option>
+                      <option value="51-200">51-200 employees</option>
+                      <option value="200+">200+ employees</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Timeline *</label>
+                    <select required value={demoForm.timeline} onChange={e => setDemoForm(f => ({ ...f, timeline: e.target.value }))} className="w-full text-base rounded-md border border-input bg-transparent px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                      <option value="">Select timeline</option>
+                      <option value="immediately">Immediately</option>
+                      <option value="within_1_month">Within 1 month</option>
+                      <option value="within_3_months">Within 3 months</option>
+                      <option value="within_6_months">Within 6 months</option>
+                      <option value="exploring">Just exploring</option>
+                    </select>
+                  </div>
+                  {demoSubmitError && <p className="text-red-500 text-xs md:text-sm">{demoSubmitError}</p>}
+                  <Button type="submit" disabled={demoSubmitting} className="w-full py-6 text-base tap-target" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                    {demoSubmitting ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Sending...</> : 'Request Demo'}
+                  </Button>
+                </form>
+              )}
+            </div>
+          </motion.div>
+        </div>,
+        document.body
+      )}
 
       {/* Inquiry Modal */}
       {showInquiry && createPortal(

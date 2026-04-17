@@ -284,9 +284,9 @@ function TeamSlide() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 flex-1 items-start">
         {[
-          { initials: 'SG', name: 'Stanley Gilles', role: 'Founder & CEO', desc: 'Haitian-American entrepreneur. Deep expertise in fintech and diaspora financial services.' },
-          { initials: 'TBD', name: 'CTO', role: 'Chief Technology Officer', desc: 'Senior engineering role — open. Strong candidate pipeline from fintech and blockchain backgrounds.' },
-          { initials: 'TBD', name: 'Compliance Officer', role: 'BSA/AML Officer', desc: 'Regulatory and compliance expertise for MSB licensing, AML programs, and KYC operations.' },
+          { initials: 'KL', name: 'Katy Lucas', role: 'Founder & CEO', desc: 'Visionary leader driving Taper Payer\'s mission to make global money transfer fast, affordable, and accessible.' },
+          { initials: 'SG', name: 'Stanley J. Gilles', role: 'Chief Technology Officer', desc: 'Haitian-American technologist with deep expertise in fintech infrastructure, blockchain rails, and diaspora financial services.' },
+          { initials: 'DJ', name: 'David Jeanty', role: 'BSA/AML Officer', desc: 'Regulatory and compliance expert specializing in MSB licensing, AML programs, and KYC operations.' },
         ].map((m, i) => (
           <div key={i} className="bg-slate-800 border border-slate-700 rounded-2xl p-6">
             <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-lg mb-4">

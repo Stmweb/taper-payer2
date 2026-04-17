@@ -50,7 +50,7 @@ function CoverSlide() {
       <img
         src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/431a892f8_TaperPayerNoBackground.png"
         alt="Taper Payer"
-        className="h-24 w-auto mb-6 object-contain"
+        className="h-40 w-auto mb-6 object-contain"
       />
       <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight">
         <span style={{ color: '#1D6FD1' }}>Taper</span>{' '}

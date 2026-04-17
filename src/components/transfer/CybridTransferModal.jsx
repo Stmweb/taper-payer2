@@ -113,19 +113,21 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         let statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
         let kyc = statusRes.data?.customer?.state;
 
-        // Always start KYC to get a Persona URL (even if already verified)
-        try {
-          const kycRes = await invoke('startKYC', { customerGuid: guid });
-          if (kycRes.data?.personaUrl) {
-            setPersonaUrl(kycRes.data.personaUrl);
+        // Start KYC to get Persona URL (only if not yet verified)
+        if (!isVerified(kyc)) {
+          try {
+            const kycRes = await invoke('startKYC', { customerGuid: guid });
+            if (kycRes.data?.personaUrl) {
+              setPersonaUrl(kycRes.data.personaUrl);
+            }
+            // Re-check status in case sandbox auto-passed
+            if (kycRes.data?.alreadyVerified || kycRes.data?.outcome === 'passed') {
+              statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
+              kyc = statusRes.data?.customer?.state;
+            }
+          } catch (_) {
+            // ignore
           }
-          // Re-check status in case sandbox auto-passed
-          if (!isVerified(kyc) && (kycRes.data?.alreadyVerified || kycRes.data?.outcome === 'passed')) {
-            statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-            kyc = statusRes.data?.customer?.state;
-          }
-        } catch (_) {
-          // ignore KYC errors — status check below will handle it
         }
 
         setKycStatus(kyc);
@@ -417,39 +419,14 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               <p className="text-sm text-slate-500">Creating customer profile & accounts</p>
             </>
           ) : error ? null : (kycStatus === 'approved' || kycStatus === 'verified') ? (
-            personaUrl ? (
-              <div className="w-full space-y-3">
-                <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-sm">
-                  <CheckCircle className="w-4 h-4 shrink-0" />
-                  <span>Identity previously verified. Complete the form below to continue.</span>
-                </div>
-                <div className="w-full rounded-xl overflow-hidden border border-blue-200" style={{ height: '480px' }}>
-                  <iframe
-                    src={personaUrl}
-                    title="Identity Verification"
-                    className="w-full h-full"
-                    allow="camera; microphone"
-                  />
-                </div>
-                <p className="text-xs text-slate-500 text-center">Complete the verification above, then click the button below.</p>
-                <Button
-                  onClick={() => setStep('recipient')}
-                  className="w-full"
-                  style={{ backgroundColor: '#3D7BB7' }}
-                >
-                  Continue <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </div>
-            ) : (
-              <>
-                <CheckCircle className="w-16 h-16 text-green-500" />
-                <p className="font-semibold text-slate-800">Identity Verified</p>
-                <p className="text-sm text-slate-600">Your accounts are ready.</p>
-                <Button onClick={() => setStep('recipient')} className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
-                  Continue <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </>
-            )
+            <>
+              <CheckCircle className="w-16 h-16 text-green-500" />
+              <p className="font-semibold text-slate-800">Identity Verified</p>
+              <p className="text-sm text-slate-600">Your accounts are ready.</p>
+              <Button onClick={() => setStep('recipient')} className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
+                Continue <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </>
           ) : (
             <>
               <AlertCircle className="w-16 h-16 text-amber-500" />

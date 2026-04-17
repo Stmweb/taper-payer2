@@ -89,7 +89,8 @@ Deno.serve(async (req) => {
         <a href="${shareUrl}" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#3D7BB7;color:white;border-radius:8px;text-decoration:none;">View & Pay Request</a>
       </div>`;
       const text = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` Note: "${note}"` : ''} ${shareUrl}`;
-      const smsBody = `${senderName} is requesting ${currency} ${amount}. View request: ${shareUrl}`;
+      const recipientName = recipient || 'there';
+      const smsBody = `Hi ${recipientName}, you've received a payment request of ${amount} ${currency} from ${senderName} via Taper Payer. Pay now: ${shareUrl}`;
 
       const phone = normalizePhone(recipient);
       if (deliveryMethod === 'whatsapp') {

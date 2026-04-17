@@ -319,10 +319,10 @@ function AskSlide() {
         ))}
       </div>
       <a
-        href="mailto:stanley@taperpayer.com"
+        href="mailto:Info@taperpayer.com"
         className="bg-white text-[#1a2f5e] font-bold px-8 py-3 rounded-xl text-base hover:bg-blue-50 transition-colors"
       >
-        Contact Us → stanley@taperpayer.com
+        Contact Us → Info@taperpayer.com
       </a>
     </div>
   );

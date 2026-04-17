@@ -6,7 +6,7 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 import CybridIdentityVerification from './CybridIdentityVerification';
 import {
   Loader2, CheckCircle, AlertCircle, ArrowRight, Building2,
-  User, CreditCard, RefreshCw, ChevronRight
+  User, CreditCard, RefreshCw, ChevronRight, ExternalLink
 } from 'lucide-react';
 
 const STEPS = [
@@ -52,6 +52,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   // Customer & accounts
   const [customerGuid, setCustomerGuid] = useState(null);
   const [kycStatus, setKycStatus] = useState(null);
+  const [personaUrl, setPersonaUrl] = useState(null);
   const [fiatAccount, setFiatAccount] = useState(null);
   const [tradingAccount, setTradingAccount] = useState(null);
   const [externalBankAccount, setExternalBankAccount] = useState(null);
@@ -107,18 +108,27 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         if (!guid) throw new Error('Could not create customer profile.');
         setCustomerGuid(guid);
 
-        // Check KYC status
-        const isVerified = (s) => s === 'approved' || s === 'verified';
-        let statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-        let kyc = statusRes.data?.customer?.state;
+        // Always run startKYC to check if Persona is needed
+        const kycRes = await invoke('startKYC', { customerGuid: guid });
+        const { alreadyVerified, personaUrl: pUrl, state: kycState } = kycRes.data || {};
 
-        setKycStatus(kyc);
-
-        // If not verified, stop here — user must complete Persona flow
-        if (!isVerified(kyc)) {
+        if (pUrl) {
+          // Persona verification required — show the link
+          setPersonaUrl(pUrl);
+          setKycStatus(kycState || 'unverified');
           setLoading(false);
           return;
         }
+
+        if (!alreadyVerified) {
+          // KYC created but no Persona URL yet — user must wait/retry
+          setKycStatus(kycState || 'unverified');
+          setLoading(false);
+          return;
+        }
+
+        // Already verified — load accounts and proceed
+        setKycStatus('verified');
 
         // Create fiat & trading accounts in parallel
         const [fiatRes, tradingRes] = await Promise.all([
@@ -133,9 +143,6 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         const banksRes = await invoke('listExternalBankAccounts', { customerGuid: guid });
         const linked = banksRes.data?.accounts?.[0];
         if (linked) setExternalBankAccount(linked);
-
-        // Always show KYC step first — user must click Continue to proceed
-        // (don't auto-advance to recipient)
       } catch (e) {
         const msg = e.message || '';
         if (msg.toLowerCase().includes('authentication') || msg.toLowerCase().includes('logged in')) {
@@ -400,7 +407,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               <p className="font-semibold text-slate-800">Setting up your account…</p>
               <p className="text-sm text-slate-500">Creating customer profile & accounts</p>
             </>
-          ) : error ? null : (kycStatus === 'approved' || kycStatus === 'verified') ? (
+          ) : error ? null : (kycStatus === 'verified' && fiatAccount) ? (
             <>
               <CheckCircle className="w-16 h-16 text-green-500" />
               <p className="font-semibold text-slate-800">Identity Verified</p>
@@ -410,15 +417,42 @@ export default function CybridTransferModal({ amount, country, onClose }) {
               </Button>
             </>
           ) : customerGuid ? (
-            <div className="w-full">
-              <p className="font-semibold text-slate-800 mb-3 text-center">Identity Verification Required</p>
-              <CybridIdentityVerification
-                customerGuid={customerGuid}
-                jwt={jwt}
-                onVerified={() => setKycRefreshKey(k => k + 1)}
-                onError={(msg) => setError(msg)}
-              />
-              <Button onClick={onClose} variant="outline" className="w-full mt-3">Cancel</Button>
+            <div className="w-full space-y-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center space-y-3">
+                <div className="text-3xl">🪪</div>
+                <p className="font-semibold text-slate-800">Identity Verification Required</p>
+                <p className="text-sm text-slate-600">
+                  We need to verify your identity before you can send money. This is a one-time process that takes about 2 minutes.
+                </p>
+                {personaUrl ? (
+                  <Button
+                    className="w-full"
+                    style={{ backgroundColor: '#3D7BB7' }}
+                    onClick={() => window.open(personaUrl, '_blank')}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Start Verification →
+                  </Button>
+                ) : (
+                  <Button
+                    className="w-full"
+                    style={{ backgroundColor: '#3D7BB7' }}
+                    onClick={() => setKycRefreshKey(k => k + 1)}
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Check Status
+                  </Button>
+                )}
+              </div>
+              {personaUrl && (
+                <div className="space-y-2">
+                  <p className="text-xs text-slate-500 text-center">Completed the verification? Click below to continue.</p>
+                  <Button onClick={() => setKycRefreshKey(k => k + 1)} className="w-full" variant="outline">
+                    <RefreshCw className="w-4 h-4 mr-2" /> I've Completed Verification
+                  </Button>
+                </div>
+              )}
+              <Button onClick={onClose} variant="outline" className="w-full">Cancel</Button>
             </div>
           ) : null}
         </div>

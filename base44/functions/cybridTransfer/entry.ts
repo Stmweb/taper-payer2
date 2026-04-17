@@ -1,3 +1,5 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+
 const CYBRID_CLIENT_ID = Deno.env.get('CYBRID_CLIENT_ID');
 const CYBRID_CLIENT_SECRET = Deno.env.get('CYBRID_CLIENT_SECRET');
 const CYBRID_BASE = 'https://bank.sandbox.cybrid.app';
@@ -63,7 +65,8 @@ function decodeCustomJwt(token) {
 
 Deno.serve(async (req) => {
   try {
-    const { action, _jwt, ...params } = await req.json();
+    const base44 = createClientFromRequest(req);
+    const { action, _jwt, appUserId, ...params } = await req.json();
     const appUser = decodeCustomJwt(_jwt);
     console.log('JWT present:', !!_jwt, '| decoded user:', appUser?.email || 'none');
     if (!appUser) return Response.json({ error: 'You must be logged in to send money. Please log in and try again.' }, { status: 401 });
@@ -196,20 +199,27 @@ Deno.serve(async (req) => {
     if (action === 'createCustomer') {
       const { name, email } = params;
 
-      // Always derive a valid name first
-      let cleanName = (name || '').trim();
-      if (!cleanName && email) {
-        cleanName = email.split('@')[0].replace(/[._\-]/g, ' ');
+      // Check if this AppUser already has a Cybrid customer ID saved
+      if (appUserId) {
+        const existing = await base44.asServiceRole.entities.AppUser.get(appUserId);
+        if (existing?.cybrid_customer_id) {
+          console.log('Reusing existing cybrid_customer_id:', existing.cybrid_customer_id);
+          const customer = await cybridApi(token, 'GET', `/api/customers/${existing.cybrid_customer_id}`);
+          return Response.json({ customer });
+        }
       }
-      if (!cleanName) cleanName = 'User Account';
-      const nameParts = cleanName.split(' ').filter(Boolean);
-      const firstName = nameParts[0] || 'User';
-      const lastName = nameParts.slice(1).join(' ') || 'Account';
 
-      // Create customer directly (no pre-check to avoid slow list call)
+      // Create new customer
       const customer = await cybridApi(token, 'POST', '/api/customers', {
         type: 'individual',
       });
+
+      // Persist the new customer GUID to AppUser
+      if (appUserId && customer.guid) {
+        await base44.asServiceRole.entities.AppUser.update(appUserId, { cybrid_customer_id: customer.guid });
+        console.log('Saved cybrid_customer_id:', customer.guid, 'to AppUser:', appUserId);
+      }
+
       return Response.json({ customer });
     }
 

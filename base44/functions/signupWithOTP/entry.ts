@@ -120,7 +120,7 @@ Deno.serve(async (req) => {
         const cybridSecret = Deno.env.get('CYBRID_CLIENT_SECRET');
         const cybridAuth = 'Basic ' + btoa(`${cybridKey}:${cybridSecret}`);
 
-        const tokenRes = await fetch('https://api.cybrid.io/oauth/token', {
+        const tokenRes = await fetch('https://id.sandbox.cybrid.app/oauth/token', {
           method: 'POST',
           headers: { Authorization: cybridAuth, 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'grant_type=client_credentials&scope=customers:execute',
@@ -130,15 +130,10 @@ Deno.serve(async (req) => {
           const tokenData = await tokenRes.json();
           const accessToken = tokenData.access_token;
 
-          const customerRes = await fetch('https://api.cybrid.io/api/customers', {
+          const customerRes = await fetch('https://bank.sandbox.cybrid.app/api/customers', {
             method: 'POST',
             headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: 'individual',
-              email: email,
-              first_name: full_name.split(' ')[0],
-              last_name: full_name.split(' ').slice(1).join(' ') || 'User',
-            }),
+            body: JSON.stringify({ type: 'individual' }),
           });
 
           const customerData = await customerRes.json();

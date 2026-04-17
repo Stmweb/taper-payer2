@@ -62,7 +62,6 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
 
       const el = document.createElement('cybrid-app');
 
-      // Use property assignment as per the JS docs
       el.auth = customerToken;
       el.component = 'identity-verification';
       el.config = {
@@ -94,6 +93,17 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
 
       containerRef.current.appendChild(el);
       setMounted(true);
+
+      // Fallback: if the widget stays blank after 5s, show manual link
+      setTimeout(() => {
+        if (containerRef.current) {
+          const cybridEl = containerRef.current.querySelector('cybrid-app');
+          if (cybridEl && cybridEl.shadowRoot === null && !cybridEl.innerHTML) {
+            setError('widget_blank');
+          }
+        }
+      }, 5000);
+
     } catch (e) {
       setError(e.message || 'Failed to load identity verification.');
       onError?.(e.message);
@@ -111,7 +121,7 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
         </div>
       )}
 
-      {error && (
+      {error && error !== 'widget_blank' && (
         <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <div className="flex-1">
@@ -120,6 +130,16 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
               <RefreshCw className="w-3 h-3 mr-1" /> Retry
             </Button>
           </div>
+        </div>
+      )}
+
+      {error === 'widget_blank' && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-sm text-center space-y-3">
+          <p className="text-slate-700 font-medium">Identity verification widget could not load in this browser.</p>
+          <p className="text-slate-500 text-xs">This can happen in embedded or restricted environments. Please complete verification in the full app.</p>
+          <Button size="sm" variant="outline" className="mt-1" onClick={mountSDK}>
+            <RefreshCw className="w-3 h-3 mr-1" /> Try Again
+          </Button>
         </div>
       )}
 

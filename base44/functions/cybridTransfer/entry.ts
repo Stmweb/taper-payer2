@@ -247,7 +247,6 @@ Deno.serve(async (req) => {
         type: 'kyc',
         method: 'id_and_selfie',
         customer_guid: customerGuid,
-        expected_behaviours: ['passed_immediately'], // sandbox: auto-pass
       });
 
       // Wait briefly (3s) for persona_inquiry_id to appear

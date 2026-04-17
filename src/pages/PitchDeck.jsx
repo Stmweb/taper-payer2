@@ -48,10 +48,14 @@ function CoverSlide() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-8 bg-gradient-to-br from-[#1a2f5e] to-[#3D7BB7]">
       <img
-        src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/9971a8b23_TaperPayerLogoTransparent.png"
+        src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/431a892f8_TaperPayerNoBackground.png"
         alt="Taper Payer"
-        className="h-44 w-auto mb-4 object-contain"
+        className="h-40 w-auto mb-6 object-contain"
       />
+      <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tight">
+        <span style={{ color: '#1D6FD1' }}>Taper</span>{' '}
+        <span style={{ color: '#2E7D32' }}>Payer</span>
+      </h1>
       <p className="text-xl md:text-2xl text-blue-100 font-light mb-2">Global Money Transfer, Reinvented</p>
       <p className="text-blue-200 text-base md:text-lg max-w-xl mt-4">
         Fast, affordable, and transparent remittances powered by blockchain rails — connecting diaspora communities with their families worldwide.
@@ -319,10 +323,10 @@ function AskSlide() {
         ))}
       </div>
       <a
-        href="mailto:Info@taperpayer.com"
+        href="mailto:stanley@taperpayer.com"
         className="bg-white text-[#1a2f5e] font-bold px-8 py-3 rounded-xl text-base hover:bg-blue-50 transition-colors"
       >
-        Contact Us → Info@taperpayer.com
+        Contact Us → stanley@taperpayer.com
       </a>
     </div>
   );

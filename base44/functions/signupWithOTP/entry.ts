@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
-    const { action, email, otp, full_name, phone, password } = body;
+    const { action, email, otp, full_name, phone, password, country, state } = body;
 
     // Step 1: Request OTP (send verification email)
     if (action === 'request-otp') {

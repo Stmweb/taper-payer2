@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3, ChevronRight, Loader2 } from 'lucide-react';
+import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3, ChevronRight, Loader2, Building2 } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
 import { base44 } from '@/api/base44Client';
 

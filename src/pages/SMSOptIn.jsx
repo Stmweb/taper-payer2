@@ -38,8 +38,7 @@ export default function SMSOptIn() {
               '✅ Transfer confirmation & receipt',
               '✅ Mobile top-up delivery status',
               '✅ Payment request notifications',
-              '✅ Account security alerts',
-              '✅ Promotional offers (occasional)',
+              '✅ Account security alerts & OTP codes',
             ].map(item => (
               <li key={item}>{item}</li>
             ))}
@@ -96,7 +95,7 @@ export default function SMSOptIn() {
                 className="mt-0.5 w-5 h-5 flex-shrink-0 accent-green-600 cursor-pointer"
               />
               <span className="text-slate-700 text-xs leading-relaxed select-none">
-                By checking this box, I agree to receive recurring automated SMS text messages from <strong>Taper Payer</strong> (including transfer alerts, top-up updates, payment requests, and occasional promotions) at the phone number provided. Consent is not a condition of purchase. Message & data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to unsubscribe or <strong>HELP</strong> for help. View our{' '}
+                By checking this box, I agree to receive recurring automated SMS text messages from <strong>Taper Payer</strong> (including one-time passcodes, transfer alerts, top-up updates, and payment notifications) at the phone number provided. Consent is not a condition of purchase. Message & data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to unsubscribe or <strong>HELP</strong> for help. View our{' '}
                 <a href="/TaperPayerPrivacy" className="text-blue-600 underline">Privacy Policy</a> and{' '}
                 <a href="/TaperPayerTerms" className="text-blue-600 underline">Terms of Service</a>.
               </span>
@@ -129,7 +128,8 @@ export default function SMSOptIn() {
             { label: 'Business Name', value: 'Taper Payer INC' },
             { label: 'Program Name', value: 'Taper Payer Alerts' },
             { label: 'Opt-In Method', value: 'User-initiated web form — checkbox unchecked by default' },
-            { label: 'Channels', value: 'SMS and WhatsApp' },
+            { label: 'Use Case', value: 'Transactional notifications & two-factor authentication (OTP)' },
+            { label: 'Channels', value: 'SMS' },
             { label: 'Message Frequency', value: 'Varies (typically 2–6 msgs/month)' },
             { label: 'Cost Disclosure', value: 'Message & data rates may apply' },
             { label: 'Opt-Out', value: 'Reply STOP' },

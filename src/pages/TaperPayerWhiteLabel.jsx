@@ -74,12 +74,6 @@ export default function TaperPayerWhiteLabel() {
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center gap-6 lg:gap-8">
-              <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
-              </a>
-              <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
-              </a>
             </div>
 
             <div className="md:hidden w-10"></div>
@@ -88,14 +82,6 @@ export default function TaperPayerWhiteLabel() {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden bg-gradient-to-br from-blue-600 to-green-600 -mx-4 px-4 py-6 space-y-3 rounded-b-2xl">
-              <div className="pt-3 space-y-3">
-                <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20">Login</Button>
-                </a>
-                <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full bg-white text-blue-600 hover:bg-gray-100">Sign up</Button>
-                </a>
-              </div>
             </div>
           )}
         </div>
@@ -443,39 +429,10 @@ export default function TaperPayerWhiteLabel() {
         </div>
       </section>
 
-      {/* Footer without social icons */}
+      {/* Footer */}
       <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-bold text-lg mb-4">About</h4>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li><Link to="/" className="hover:text-white">Home</Link></li>
-                <li><a href="/TaperPayerAbout" className="hover:text-white">About Us</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-lg mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li><a href="/TaperPayerHowItWorks" className="hover:text-white">How It Works</a></li>
-                <li><a href="/TaperPayerRates" className="hover:text-white">Exchange Rates</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-lg mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li><a href="/TaperPayerTerms" className="hover:text-white">Terms</a></li>
-                <li><a href="/TaperPayerPrivacy" className="hover:text-white">Privacy</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold text-lg mb-4">Contact</h4>
-              <p className="text-sm text-gray-300">support@taperpayer.com</p>
-            </div>
-          </div>
-          <div className="border-t border-slate-700 pt-8 text-center text-sm text-gray-400">
-            <p>© {new Date().getFullYear()} Taper Payer INC. All rights reserved.</p>
-          </div>
+        <div className="container mx-auto px-6 text-center text-sm text-gray-400">
+          <p>© {new Date().getFullYear()} Taper Payer INC. All rights reserved.</p>
         </div>
       </footer>
 

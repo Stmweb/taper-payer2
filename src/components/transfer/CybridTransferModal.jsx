@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
+import CybridIdentityVerification from './CybridIdentityVerification';
 import {
   Loader2, CheckCircle, AlertCircle, ArrowRight, Building2,
   User, CreditCard, RefreshCw, ChevronRight
@@ -51,8 +52,6 @@ export default function CybridTransferModal({ amount, country, onClose }) {
   // Customer & accounts
   const [customerGuid, setCustomerGuid] = useState(null);
   const [kycStatus, setKycStatus] = useState(null);
-  const [kycLoading, setKycLoading] = useState(false);
-  const [personaUrl, setPersonaUrl] = useState(null);
   const [fiatAccount, setFiatAccount] = useState(null);
   const [tradingAccount, setTradingAccount] = useState(null);
   const [externalBankAccount, setExternalBankAccount] = useState(null);
@@ -112,23 +111,6 @@ export default function CybridTransferModal({ amount, country, onClose }) {
         const isVerified = (s) => s === 'approved' || s === 'verified';
         let statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
         let kyc = statusRes.data?.customer?.state;
-
-        // Start KYC to get Persona URL (only if not yet verified)
-        if (!isVerified(kyc)) {
-          try {
-            const kycRes = await invoke('startKYC', { customerGuid: guid });
-            if (kycRes.data?.personaUrl) {
-              setPersonaUrl(kycRes.data.personaUrl);
-            }
-            // Re-check status in case sandbox auto-passed
-            if (kycRes.data?.alreadyVerified || kycRes.data?.outcome === 'passed') {
-              statusRes = await invoke('getCustomerStatus', { customerGuid: guid });
-              kyc = statusRes.data?.customer?.state;
-            }
-          } catch (_) {
-            // ignore
-          }
-        }
 
         setKycStatus(kyc);
 
@@ -411,7 +393,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
 
       {/* ── init ── */}
       {step === 'init' && (
-        <div className="flex flex-col items-center py-10 gap-4 text-center">
+        <div className="flex flex-col items-center py-6 gap-4 w-full">
           {loading ? (
             <>
               <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
@@ -427,70 +409,18 @@ export default function CybridTransferModal({ amount, country, onClose }) {
                 Continue <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </>
-          ) : (
-            <>
-              <AlertCircle className="w-16 h-16 text-amber-500" />
-              <p className="font-semibold text-slate-800">Identity Verification Required</p>
-              <p className="text-sm text-slate-600 mb-2">
-                Your account needs to be verified before you can send money.
-              </p>
-              {personaUrl ? (
-                <div className="w-full space-y-3">
-                  <div className="w-full rounded-xl overflow-hidden border border-blue-200" style={{ height: '480px' }}>
-                    <iframe
-                      src={personaUrl}
-                      title="Identity Verification"
-                      className="w-full h-full"
-                      allow="camera; microphone"
-                    />
-                  </div>
-                  <p className="text-xs text-slate-500 text-center">Complete the verification above, then click the button below.</p>
-                  <Button
-                    onClick={() => setKycRefreshKey(k => k + 1)}
-                    className="w-full"
-                    style={{ backgroundColor: '#3D7BB7' }}
-                  >
-                    <RefreshCw className="w-4 h-4 mr-2" /> I've Completed Verification
-                  </Button>
-                  <Button onClick={onClose} variant="outline" className="w-full">Cancel</Button>
-                </div>
-              ) : (
-                <>
-                  <Button
-                    onClick={async () => {
-                      setKycLoading(true);
-                      try {
-                        const res = await invoke('startKYC', { customerGuid });
-                        if (res.data?.personaUrl) {
-                          setPersonaUrl(res.data.personaUrl);
-                        } else if (res.data?.outcome === 'passed' || res.data?.state === 'approved') {
-                          // Auto-passed in sandbox, refresh KYC status
-                          setTimeout(() => setKycRefreshKey(k => k + 1), 500);
-                        }
-                      } catch (e) {
-                        setError(e.message || 'Could not start verification.');
-                      } finally {
-                        setKycLoading(false);
-                      }
-                    }}
-                    disabled={kycLoading}
-                    className="w-full"
-                    style={{ backgroundColor: '#3D7BB7' }}
-                  >
-                    {kycLoading ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Starting...</> : 'Start Identity Verification'}
-                  </Button>
-                  <Button 
-                    onClick={() => setKycRefreshKey(k => k + 1)} 
-                    variant="outline" 
-                    className="w-full mt-2"
-                  >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Check Verification Status
-                  </Button>
-                </>
-              )}
-            </>
-          )}
+          ) : customerGuid ? (
+            <div className="w-full">
+              <p className="font-semibold text-slate-800 mb-3 text-center">Identity Verification Required</p>
+              <CybridIdentityVerification
+                customerGuid={customerGuid}
+                jwt={jwt}
+                onVerified={() => setKycRefreshKey(k => k + 1)}
+                onError={(msg) => setError(msg)}
+              />
+              <Button onClick={onClose} variant="outline" className="w-full mt-3">Cancel</Button>
+            </div>
+          ) : null}
         </div>
       )}
 

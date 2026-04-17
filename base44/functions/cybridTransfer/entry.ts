@@ -11,7 +11,7 @@ async function getBankToken() {
   const credentials = btoa(`${CYBRID_CLIENT_ID}:${CYBRID_CLIENT_SECRET}`);
   const body = new URLSearchParams({
     grant_type: 'client_credentials',
-    scope: 'banks:read customers:read customers:execute accounts:read accounts:execute transfers:read transfers:execute counterparties:read counterparties:execute external_bank_accounts:read external_bank_accounts:execute identity_verifications:read identity_verifications:execute quotes:read quotes:execute trades:read trades:execute workflows:read workflows:execute',
+    scope: 'banks:read customers:read customers:write customers:execute accounts:read accounts:execute transfers:read transfers:execute counterparties:read counterparties:execute external_bank_accounts:read external_bank_accounts:execute identity_verifications:read identity_verifications:execute quotes:read quotes:execute trades:read trades:execute workflows:read workflows:execute',
   });
   const res = await fetch(`${CYBRID_ID_BASE}/oauth/token`, {
     method: 'POST',
@@ -154,6 +154,40 @@ Deno.serve(async (req) => {
       try { createData = JSON.parse(createText); } catch { createData = { raw: createText }; }
       if (!createRes.ok) throw new Error(createData?.message || createText);
       return Response.json({ bank: createData, newBankGuid: createData.guid });
+    }
+
+    // ── Get customer-scoped JWT for Cybrid SDK ────────────────────────────────
+    if (action === 'getCustomerToken') {
+      const { customerGuid } = params;
+      // First get bank token
+      const bankToken = await getBankToken();
+      // Then call POST /api/customer_tokens on the Identity API
+      const res = await fetch(`${CYBRID_ID_BASE}/api/customer_tokens`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${bankToken}`,
+        },
+        body: JSON.stringify({
+          customer_guid: customerGuid,
+          scopes: [
+            'customers:read',
+            'customers:write',
+            'accounts:read',
+            'accounts:execute',
+            'identity_verifications:read',
+            'identity_verifications:execute',
+            'transfers:read',
+            'transfers:execute',
+          ],
+        }),
+      });
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); } catch { data = { raw: text }; }
+      console.log('getCustomerToken response:', res.status, text.substring(0, 400));
+      if (!res.ok) throw new Error(data?.message || data?.error_description || JSON.stringify(data) || text);
+      return Response.json({ customerToken: data.access_token });
     }
 
     const token = await getBankToken();

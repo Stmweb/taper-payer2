@@ -5,8 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Loader2, CheckCircle, AlertCircle, Wifi, Lock, Search, X } from 'lucide-react';
 import MoncashPaymentForm from './MoncashPaymentForm';
 
-const SQUARE_APP_ID = 'LB1388EHJ2EJX';
-const SQUARE_LOCATION_ID = 'L7H9WE3FZR5KE';
+// Square config is fetched from backend to use the correct env variables
 
 const COUNTRIES = [
   { name: 'Nigeria', iso: 'NG', flag: '🇳🇬', dial: '+234' },
@@ -116,12 +115,18 @@ export default function TaperConnectForm({ initialCountry }) {
     setSquareError('');
 
     const initSquare = async () => {
+      // Fetch Square config from backend
+      const configRes = await base44.functions.invoke('getSquareConfig', {});
+      const { applicationId, locationId } = configRes.data;
+
+      if (!applicationId || !locationId) {
+        throw new Error('Square configuration missing.');
+      }
+
       // Load script if not already present
       if (!window.Square) {
         await new Promise((resolve, reject) => {
-          // Check if script tag already exists
           if (document.querySelector('script[src*="squarecdn"]')) {
-            // Already loading, just wait
             const poll = setInterval(() => {
               if (window.Square) { clearInterval(poll); resolve(); }
             }, 100);
@@ -138,10 +143,10 @@ export default function TaperConnectForm({ initialCountry }) {
 
       if (cancelled) return;
 
-      const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+      const payments = window.Square.payments(applicationId, locationId);
       squarePaymentsRef.current = payments;
       const card = await payments.card();
-      
+
       if (cancelled) { card.destroy().catch(() => {}); return; }
 
       await card.attach('#square-card-container');

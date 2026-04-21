@@ -104,43 +104,62 @@ export default function TaperConnectForm({ initialCountry }) {
     }
   }, []);
 
-  // Load Square Web Payments SDK
-  useEffect(() => {
-    const loadSquare = async () => {
-      if (window.Square) return;
-      const script = document.createElement('script');
-      script.src = 'https://web.squarecdn.com/v1/square.js';
-      script.async = true;
-      document.head.appendChild(script);
-    };
-    loadSquare();
-  }, []);
+  const [squareReady, setSquareReady] = useState(false);
+  const [squareError, setSquareError] = useState('');
 
-  // Initialize Square card when payment method is 'card' and step is 2
+  // Load Square Web Payments SDK and init card element
   useEffect(() => {
     if (paymentMethod !== 'card' || step !== 2) return;
 
-    let card;
-    const initCard = async () => {
-      await new Promise(resolve => {
-        const check = setInterval(() => {
-          if (window.Square) { clearInterval(check); resolve(); }
-        }, 200);
-      });
+    let cancelled = false;
+    setSquareReady(false);
+    setSquareError('');
+
+    const initSquare = async () => {
+      // Load script if not already present
+      if (!window.Square) {
+        await new Promise((resolve, reject) => {
+          // Check if script tag already exists
+          if (document.querySelector('script[src*="squarecdn"]')) {
+            // Already loading, just wait
+            const poll = setInterval(() => {
+              if (window.Square) { clearInterval(poll); resolve(); }
+            }, 100);
+            setTimeout(() => { clearInterval(poll); reject(new Error('Square SDK timeout')); }, 10000);
+            return;
+          }
+          const script = document.createElement('script');
+          script.src = 'https://web.squarecdn.com/v1/square.js';
+          script.onload = resolve;
+          script.onerror = () => reject(new Error('Failed to load Square SDK'));
+          document.head.appendChild(script);
+        });
+      }
+
+      if (cancelled) return;
+
       const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
       squarePaymentsRef.current = payments;
-      card = await payments.card();
+      const card = await payments.card();
+      
+      if (cancelled) { card.destroy().catch(() => {}); return; }
+
       await card.attach('#square-card-container');
       squareCardRef.current = card;
+      setSquareReady(true);
     };
 
-    initCard().catch(console.error);
+    initSquare().catch((err) => {
+      if (!cancelled) setSquareError(err.message || 'Card payment unavailable. Please try again.');
+    });
 
     return () => {
+      cancelled = true;
       if (squareCardRef.current) {
         squareCardRef.current.destroy().catch(() => {});
         squareCardRef.current = null;
       }
+      setSquareReady(false);
     };
   }, [paymentMethod, step]);
 
@@ -222,8 +241,8 @@ export default function TaperConnectForm({ initialCountry }) {
       setError('Please enter a phone number and select a plan.');
       return;
     }
-    if (!squareCardRef.current) {
-      setError('Payment system is loading. Please wait and try again.');
+    if (!squareCardRef.current || !squareReady) {
+      setError('Card input is still loading. Please wait a moment and try again.');
       return;
     }
 
@@ -489,7 +508,19 @@ export default function TaperConnectForm({ initialCountry }) {
             <>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
-                <div id="square-card-container" className="p-3 border border-slate-200 rounded-lg bg-white min-h-[44px]"></div>
+                {squareError ? (
+                  <div className="p-3 border border-red-200 rounded-lg bg-red-50 text-red-600 text-sm">{squareError}</div>
+                ) : (
+                  <div className="relative">
+                    {!squareReady && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white z-10 rounded-lg border border-slate-200">
+                        <Loader2 className="w-4 h-4 animate-spin text-cyan-500 mr-2" />
+                        <span className="text-sm text-slate-500">Loading card input...</span>
+                      </div>
+                    )}
+                    <div id="square-card-container" className="border border-slate-200 rounded-lg bg-white min-h-[56px]"></div>
+                  </div>
+                )}
                 {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
               </div>
               {selectedProduct && (() => {
@@ -505,7 +536,7 @@ export default function TaperConnectForm({ initialCountry }) {
                   })()}
               <Button
                 onClick={handleCardPayment}
-                disabled={loading || !phoneNumber || !selectedProduct}
+                disabled={loading || !phoneNumber || !selectedProduct || !squareReady}
                 className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
               >
                 {loading ? (

@@ -1,11 +1,9 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
-// Generate a 6-digit OTP
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-// Send OTP via Mailgun
 async function sendOTPEmail(email, otp) {
   const mailgunDomain = Deno.env.get('MAILGUN_DOMAIN');
   const mailgunKey = Deno.env.get('MAILGUN_API_KEY');
@@ -40,9 +38,7 @@ async function sendOTPEmail(email, otp) {
     `https://api.mailgun.net/v3/${mailgunDomain}/messages`,
     {
       method: 'POST',
-      headers: {
-        'Authorization': 'Basic ' + btoa('api:' + mailgunKey),
-      },
+      headers: { 'Authorization': 'Basic ' + btoa('api:' + mailgunKey) },
       body: formData,
     }
   );
@@ -60,7 +56,7 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action, email, otp, full_name, phone, password, country, state } = body;
 
-    // Step 1: Request OTP (send verification email)
+    // Step 1: Request OTP
     if (action === 'request-otp') {
       if (!email) {
         return Response.json({ error: 'Email is required' }, { status: 400 });
@@ -72,22 +68,35 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Email already registered' }, { status: 409 });
       }
 
-      // Generate and store OTP
       const newOTP = generateOTP();
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
-      // Store OTP in a temporary signup record (you could use a simple entity or cache)
-      // For now, we'll store it in memory (in production, use a database)
-      // Create a temporary OTP entity or just send it and trust the user to enter it quickly
-      
+      // Store OTP + expiry on a pending AppUser record (reset_otp / reset_otp_expires fields)
+      // We reuse these fields for signup pending state; record has no password_hash yet
+      const pendingRecords = await base44.asServiceRole.entities.AppUser.filter({ email, password_hash: '' });
+      if (pendingRecords && pendingRecords.length > 0) {
+        await base44.asServiceRole.entities.AppUser.update(pendingRecords[0].id, {
+          reset_otp: newOTP,
+          reset_otp_expires: expiresAt,
+        });
+      } else {
+        await base44.asServiceRole.entities.AppUser.create({
+          email,
+          password_hash: '', // placeholder — will be filled on verify-otp
+          full_name: '',
+          phone: '',
+          reset_otp: newOTP,
+          reset_otp_expires: expiresAt,
+        });
+      }
+
       await sendOTPEmail(email, newOTP);
 
-      // Return OTP for verification (in production, don't expose this in response)
+      // Do NOT return the OTP in the response
       return Response.json({
         success: true,
-        message: 'OTP sent to email',
-        otp: newOTP, // Remove in production - only for testing
-        expiresAt: expiresAt.toISOString(),
+        message: 'Verification code sent to your email',
+        expiresAt,
       });
     }
 
@@ -97,21 +106,28 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Missing required fields' }, { status: 400 });
       }
 
-      // In production, verify the OTP from your storage
-      // For now, we'll skip OTP verification and proceed with account creation
-      
-      // Check if user already exists
-      const existing = await base44.asServiceRole.entities.AppUser.filter({ email });
-      if (existing && existing.length > 0) {
-        return Response.json({ error: 'Email already registered' }, { status: 409 });
+      // Find the pending signup record
+      const pendingRecords = await base44.asServiceRole.entities.AppUser.filter({ email, password_hash: '' });
+      if (!pendingRecords || pendingRecords.length === 0) {
+        return Response.json({ error: 'No pending verification found. Please request a new code.' }, { status: 400 });
+      }
+
+      const pending = pendingRecords[0];
+
+      // Validate OTP
+      if (pending.reset_otp !== otp) {
+        return Response.json({ error: 'Invalid verification code.' }, { status: 400 });
+      }
+
+      // Check expiry
+      if (!pending.reset_otp_expires || new Date() > new Date(pending.reset_otp_expires)) {
+        return Response.json({ error: 'Verification code has expired. Please request a new one.' }, { status: 400 });
       }
 
       // Hash password
       const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const password_hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+      const password_hash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 
       // Create Cybrid customer
       let cybrid_customer_id = null;
@@ -125,17 +141,14 @@ Deno.serve(async (req) => {
           headers: { Authorization: cybridAuth, 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'grant_type=client_credentials&scope=customers:execute',
         });
-        
+
         if (tokenRes.ok) {
           const tokenData = await tokenRes.json();
-          const accessToken = tokenData.access_token;
-
           const customerRes = await fetch('https://bank.sandbox.cybrid.app/api/customers', {
             method: 'POST',
-            headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+            headers: { Authorization: `Bearer ${tokenData.access_token}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'individual' }),
           });
-
           const customerData = await customerRes.json();
           cybrid_customer_id = customerData.guid;
         }
@@ -143,8 +156,8 @@ Deno.serve(async (req) => {
         console.warn('Cybrid customer creation failed:', cybridError.message);
       }
 
-      // Create user
-      const user = await base44.asServiceRole.entities.AppUser.create({
+      // Finalize the user record (fill in all fields, clear OTP)
+      const user = await base44.asServiceRole.entities.AppUser.update(pending.id, {
         email,
         password_hash,
         full_name,
@@ -152,22 +165,23 @@ Deno.serve(async (req) => {
         country,
         state,
         cybrid_customer_id,
+        reset_otp: '',
+        reset_otp_expires: '',
       });
 
       // Generate JWT
       const jwtHeader = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
       const jwtPayload = btoa(JSON.stringify({
-        user_id: user.id,
-        email: user.email,
+        user_id: pending.id,
+        email,
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 86400 * 7,
       }));
-      const signature = btoa('demo-signature');
-      const jwt = `${jwtHeader}.${jwtPayload}.${signature}`;
+      const jwt = `${jwtHeader}.${jwtPayload}.${btoa('demo-signature')}`;
 
       return Response.json({
         success: true,
-        user: { id: user.id, email: user.email, full_name, phone },
+        user: { id: pending.id, email, full_name, phone },
         jwt,
         cybrid_customer_id,
       });

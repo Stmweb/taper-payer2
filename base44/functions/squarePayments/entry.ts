@@ -61,6 +61,7 @@ Deno.serve(async (req) => {
       const amountCents = Math.round(parseFloat(amount) * 100);
 
       const paymentBody = {
+        idempotency_key: crypto.randomUUID(),
         source_id: sourceId,
         amount_money: {
           amount: amountCents,

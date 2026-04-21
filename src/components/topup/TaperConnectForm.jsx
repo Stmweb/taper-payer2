@@ -269,7 +269,7 @@ export default function TaperConnectForm({ initialCountry }) {
       const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
 
       const paymentRes = await base44.functions.invoke('processSquareTopUp', {
-        amount: parseFloat(retailAmount),
+        amount: parseFloat(retailAmount), // backend adds $1 service fee on top
         phoneNumber: fullPhone,
         countryCode: selectedCountry.iso,
         operatorId: detectedOperator?.id || selectedProduct?.operator?.id,

@@ -15,10 +15,14 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Step 1: Process payment with Square
+    const SERVICE_FEE = 1.00;
+    const topupAmount = parseFloat(amount);
+    const chargeAmount = parseFloat((topupAmount + SERVICE_FEE).toFixed(2));
+
+    // Step 1: Charge customer topupAmount + service fee via Square
     const squareRes = await base44.asServiceRole.functions.invoke('squarePayments', {
       action: 'createPayment',
-      amount: amount,
+      amount: chargeAmount,
       currency: 'USD',
       sourceId: sourceToken,
       description: `Top-up for ${phoneNumber} (${countryCode})`,
@@ -30,13 +34,12 @@ Deno.serve(async (req) => {
 
     const payment = squareRes.data.payment;
 
-    // Step 2: If payment successful, process the top-up via DTone or Reloadly
+    // Step 2: Process the top-up for exactly the topupAmount (without fee)
     let topupResult = {};
     try {
-      // Try DTone first
       const dtoneRes = await base44.asServiceRole.functions.invoke('processTopUp', {
         phoneNumber,
-        amount,
+        amount: topupAmount,
         countryCode,
         operatorId,
       });

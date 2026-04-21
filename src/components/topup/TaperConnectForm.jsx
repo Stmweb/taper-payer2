@@ -3,8 +3,10 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Loader2, CheckCircle, AlertCircle, Wifi, Lock, Search, X } from 'lucide-react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import MoncashPaymentForm from './MoncashPaymentForm';
+
+const SQUARE_APP_ID = 'LB1388EHJ2EJX';
+const SQUARE_LOCATION_ID = 'L7H9WE3FZR5KE';
 
 const COUNTRIES = [
   { name: 'Nigeria', iso: 'NG', flag: '🇳🇬', dial: '+234' },
@@ -93,14 +95,54 @@ export default function TaperConnectForm({ initialCountry }) {
   const [customAmount, setCustomAmount] = useState('');
   const [exchangeRate, setExchangeRate] = useState(130);
   const detectTimeout = useRef(null);
-  const stripe = useStripe();
-  const elements = useElements();
+  const squareCardRef = useRef(null);
+  const squarePaymentsRef = useRef(null);
 
   React.useEffect(() => {
     if (initialCountry && step === 2) {
       loadProducts(initialCountry);
     }
   }, []);
+
+  // Load Square Web Payments SDK
+  useEffect(() => {
+    const loadSquare = async () => {
+      if (window.Square) return;
+      const script = document.createElement('script');
+      script.src = 'https://web.squarecdn.com/v1/square.js';
+      script.async = true;
+      document.head.appendChild(script);
+    };
+    loadSquare();
+  }, []);
+
+  // Initialize Square card when payment method is 'card' and step is 2
+  useEffect(() => {
+    if (paymentMethod !== 'card' || step !== 2) return;
+
+    let card;
+    const initCard = async () => {
+      await new Promise(resolve => {
+        const check = setInterval(() => {
+          if (window.Square) { clearInterval(check); resolve(); }
+        }, 200);
+      });
+      const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+      squarePaymentsRef.current = payments;
+      card = await payments.card();
+      await card.attach('#square-card-container');
+      squareCardRef.current = card;
+    };
+
+    initCard().catch(console.error);
+
+    return () => {
+      if (squareCardRef.current) {
+        squareCardRef.current.destroy().catch(() => {});
+        squareCardRef.current = null;
+      }
+    };
+  }, [paymentMethod, step]);
 
   const handlePhoneChange = (value) => {
     setPhoneNumber(value);
@@ -180,7 +222,7 @@ export default function TaperConnectForm({ initialCountry }) {
       setError('Please enter a phone number and select a plan.');
       return;
     }
-    if (!stripe || !elements) {
+    if (!squareCardRef.current) {
       setError('Payment system is loading. Please wait and try again.');
       return;
     }
@@ -190,32 +232,27 @@ export default function TaperConnectForm({ initialCountry }) {
     setCardError('');
 
     try {
-      const cardElement = elements.getElement(CardElement);
-      const { error: stripeError, paymentMethod: pm } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-      });
-
-      if (stripeError) {
-        setCardError(stripeError.message);
+      const result = await squareCardRef.current.tokenize();
+      if (result.status !== 'OK') {
+        setCardError(result.errors?.[0]?.message || 'Card details are invalid.');
         setLoading(false);
         return;
       }
 
+      const sourceToken = result.token;
       const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
       const fullPhone = selectedCountry.dial + localDigits;
       const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
-      
-      const paymentRes = await base44.functions.invoke('processDtonePayment', {
-        paymentMethodId: pm.id,
-        fullPhone,
-        amount: retailAmount,
-        productId: selectedProduct?.id,
+
+      const paymentRes = await base44.functions.invoke('processSquareTopUp', {
+        amount: parseFloat(retailAmount),
+        phoneNumber: fullPhone,
+        countryCode: selectedCountry.iso,
+        operatorId: detectedOperator?.id || selectedProduct?.operator?.id,
+        sourceToken,
       });
 
       if (paymentRes.data?.success) {
-        // Send confirmation notification (non-blocking)
-        const fullPhone = selectedCountry.dial + localDigits;
         base44.functions.invoke('sendNotification', {
           type: 'topup_confirmation',
           recipient: fullPhone,
@@ -244,6 +281,10 @@ export default function TaperConnectForm({ initialCountry }) {
     setCardError('');
     setPaymentMethod('card');
     setDetectedOperator(null);
+    if (squareCardRef.current) {
+      squareCardRef.current.destroy().catch(() => {});
+      squareCardRef.current = null;
+    }
   };
 
   if (success) {
@@ -448,20 +489,7 @@ export default function TaperConnectForm({ initialCountry }) {
             <>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
-                <div className="p-3 border border-slate-200 rounded-lg bg-white">
-                  <CardElement
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: '14px',
-                          color: '#1e293b',
-                          '::placeholder': { color: '#cbd5e1' },
-                        },
-                        invalid: { color: '#dc2626' },
-                      },
-                    }}
-                  />
-                </div>
+                <div id="square-card-container" className="p-3 border border-slate-200 rounded-lg bg-white min-h-[44px]"></div>
                 {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
               </div>
               {selectedProduct && (() => {
@@ -477,7 +505,7 @@ export default function TaperConnectForm({ initialCountry }) {
                   })()}
               <Button
                 onClick={handleCardPayment}
-                disabled={loading || !phoneNumber || !selectedProduct || !stripe}
+                disabled={loading || !phoneNumber || !selectedProduct}
                 className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
               >
                 {loading ? (

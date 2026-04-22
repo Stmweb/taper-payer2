@@ -30,6 +30,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
   const [recipient, setRecipient] = useState('');
   const [recipientCountry, setRecipientCountry] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState('sms');
+  const [senderPhone, setSenderPhone] = useState(user?.phone || '');
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -83,6 +84,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         type: 'request_money',
         recipient: normalizedRecipient,
         senderName,
+        senderPhone,
         amount,
         currency,
         note,
@@ -105,6 +107,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setRecipientCountry(null);
     setDeliveryMethod('sms');
     setNote('');
+    setSenderPhone(user?.phone || '');
     setSuccess(false);
     setError('');
     setCountrySearch('');
@@ -250,6 +253,17 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
                     placeholder="Add a message so they know what the payment is for."
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
+                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Your phone number <span className="text-slate-400 font-normal">(optional)</span></label>
+                  <Input
+                    type="tel"
+                    placeholder="+1 555 000 0000"
+                    value={senderPhone}
+                    onChange={(e) => setSenderPhone(e.target.value)}
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
                 </div>

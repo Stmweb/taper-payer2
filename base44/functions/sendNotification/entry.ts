@@ -81,16 +81,17 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Please provide a valid phone number' }, { status: 400 });
       }
 
+      const senderPhone = payload.senderPhone || '';
       const subject = `${senderName} is requesting money via Taper Payer`;
       const html = `<div style="font-family:sans-serif;max-width:480px;margin:auto;padding:24px;">
         <h2 style="color:#3D7BB7;">Payment Request</h2>
         <p><strong>${senderName}</strong> is requesting <strong>${currency} ${amount}</strong> via Taper Payer.</p>
         ${note ? `<p style="color:#64748b;font-style:italic;">"${note}"</p>` : ''}
+        ${senderPhone ? `<p style="color:#64748b;">Contact: ${senderPhone}</p>` : ''}
         <a href="${shareUrl}" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#3D7BB7;color:white;border-radius:8px;text-decoration:none;">View & Pay Request</a>
       </div>`;
-      const text = `${senderName} is requesting ${currency} ${amount} via Taper Payer.${note ? ` Note: "${note}"` : ''} ${shareUrl}`;
       const recipientName = recipient || 'there';
-      const smsBody = `Hi ${recipientName}, you've received a payment request of ${amount} ${currency} from ${senderName} via Taper Payer. Pay now: ${shareUrl}`;
+      const smsBody = `Hi ${recipientName}, you've received a payment request of ${amount} ${currency} from ${senderName} via Taper Payer.${senderPhone ? ` Contact: ${senderPhone}.` : ''} Pay now: ${shareUrl}`;
 
       const phone = normalizePhone(recipient);
       if (deliveryMethod === 'whatsapp') {

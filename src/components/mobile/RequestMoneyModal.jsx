@@ -32,6 +32,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
   const [deliveryMethod, setDeliveryMethod] = useState('sms');
   const [senderPhone, setSenderPhone] = useState(user?.phone || '');
   const [senderPhoneCountry, setSenderPhoneCountry] = useState(COUNTRIES[0]);
+  const [recipientPhoneCountry, setRecipientPhoneCountry] = useState(COUNTRIES[0]);
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -60,13 +61,13 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
       // Normalize phone number with country code if it looks like a phone
       const formatRecipient = (value, country) => {
         const isPhone = /^\+?[\d\s\-().]{7,}$/.test(value);
-        if (!isPhone) return value; // It's not a phone, return as-is (email)
+        if (!isPhone) return value;
         if (value.startsWith('+')) return value;
         const dial = country?.dial || '+1';
         return dial + value;
       };
       
-      const normalizedRecipient = formatRecipient(recipient, recipientCountry);
+      const normalizedRecipient = formatRecipient(recipient, recipientPhoneCountry);
       
       // Create payment request with unique URL
       const requestRes = await base44.functions.invoke('createPaymentRequest', {
@@ -109,6 +110,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setCurrency('USD');
     setRecipient('');
     setRecipientCountry(null);
+    setRecipientPhoneCountry(COUNTRIES[0]);
     setDeliveryMethod('sms');
     setNote('');
     setSenderPhone(user?.phone || '');
@@ -240,15 +242,27 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Who are you requesting from?</label>
-                  <Input
-                    type="text"
-                    placeholder=""
-                    value={recipient}
-                    onChange={(e) => setRecipient(e.target.value)}
-                    required
-                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                  />
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Who are you requesting from? <span className="text-red-500">*</span></label>
+                  <div className="flex gap-2">
+                    <select
+                      value={recipientPhoneCountry.name}
+                      onChange={(e) => setRecipientPhoneCountry(COUNTRIES.find(c => c.name === e.target.value))}
+                      className="h-11 px-2 border border-slate-300 rounded-lg text-slate-900 bg-white text-sm"
+                      style={{ minWidth: '90px' }}
+                    >
+                      {COUNTRIES.map(c => (
+                        <option key={c.name} value={c.name}>{c.flag} {c.dial}</option>
+                      ))}
+                    </select>
+                    <Input
+                      type="text"
+                      placeholder="Phone number"
+                      value={recipient}
+                      onChange={(e) => setRecipient(e.target.value)}
+                      required
+                      style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
                 </div>
 
                 <div>

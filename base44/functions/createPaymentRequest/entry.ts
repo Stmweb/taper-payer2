@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 function generateRequestId() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -21,16 +21,17 @@ Deno.serve(async (req) => {
     try {
       const user = await base44.auth.me();
       if (user) {
-        resolvedSenderName = sender_name || user.full_name || 'Someone';
-        resolvedSenderEmail = sender_email || user.email || '';
+        // Prefer Base44 auth user's name as authoritative source
+        resolvedSenderName = user.full_name || sender_name || 'Someone';
+        resolvedSenderEmail = user.email || sender_email || '';
       }
-    } catch (_) {
+    } catch (e) {
       // Not logged in, use provided values
     }
 
     const request_id = generateRequestId();
     const expires_at = new Date();
-    expires_at.setDate(expires_at.getDate() + 30); // 30 day expiration
+    expires_at.setDate(expires_at.getDate() + 30);
 
     const paymentRequest = await base44.asServiceRole.entities.PaymentRequest.create({
       request_id,

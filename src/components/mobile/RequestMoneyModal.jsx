@@ -50,7 +50,10 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     }
     setLoading(true);
     try {
-      const senderName = user?.full_name || 'Someone';
+      // Try context first, then localStorage fallback
+      const storedUser = localStorage.getItem('user');
+      const parsedStoredUser = storedUser ? JSON.parse(storedUser) : null;
+      const senderName = user?.full_name || parsedStoredUser?.full_name || 'Someone';
       
       // Normalize phone number with country code if it looks like a phone
       const formatRecipient = (value, country) => {

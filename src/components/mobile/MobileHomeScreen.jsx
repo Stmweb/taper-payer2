@@ -55,10 +55,6 @@ const destinations = [
   { name: 'Nigeria', flag: '🇳🇬', code: 'NGN' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Jamaica', flag: '🇯🇲', code: 'JMD' },
-  { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
-  { name: 'Brazil', flag: '🇧🇷', code: 'BRL' },
-  { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
-  { name: 'Chile', flag: '🇨🇱', code: 'CLP' },
 ];
 
 const features = [

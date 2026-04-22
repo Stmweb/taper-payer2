@@ -31,6 +31,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
   const [recipientCountry, setRecipientCountry] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState('sms');
   const [senderPhone, setSenderPhone] = useState(user?.phone || '');
+  const [senderPhoneCountry, setSenderPhoneCountry] = useState(COUNTRIES[0]);
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -45,7 +46,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!amount || !recipient || !recipientCountry) {
+    if (!amount || !recipient || !recipientCountry || !senderPhone) {
       setError('Please fill in all required fields.');
       return;
     }
@@ -80,11 +81,14 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
       });
 
       // Send notification with share URL (non-blocking — don't fail if delivery fails)
+      const fullSenderPhone = senderPhone
+        ? (senderPhone.startsWith('+') ? senderPhone : `${senderPhoneCountry.dial}${senderPhone}`)
+        : '';
       base44.functions.invoke('sendNotification', {
         type: 'request_money',
         recipient: normalizedRecipient,
         senderName,
-        senderPhone,
+        senderPhone: fullSenderPhone,
         amount,
         currency,
         note,
@@ -108,6 +112,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setDeliveryMethod('sms');
     setNote('');
     setSenderPhone(user?.phone || '');
+    setSenderPhoneCountry(COUNTRIES[0]);
     setSuccess(false);
     setError('');
     setCountrySearch('');
@@ -258,14 +263,27 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Your phone number <span className="text-slate-400 font-normal">(optional)</span></label>
-                  <Input
-                    type="tel"
-                    placeholder="+1 555 000 0000"
-                    value={senderPhone}
-                    onChange={(e) => setSenderPhone(e.target.value)}
-                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                  />
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Your phone number <span className="text-red-500">*</span></label>
+                  <div className="flex gap-2">
+                    <select
+                      value={senderPhoneCountry.name}
+                      onChange={(e) => setSenderPhoneCountry(COUNTRIES.find(c => c.name === e.target.value))}
+                      className="h-11 px-2 border border-slate-300 rounded-lg text-slate-900 bg-white text-sm"
+                      style={{ minWidth: '90px' }}
+                    >
+                      {COUNTRIES.map(c => (
+                        <option key={c.name} value={c.name}>{c.flag} {c.dial}</option>
+                      ))}
+                    </select>
+                    <Input
+                      type="tel"
+                      placeholder="555 000 0000"
+                      value={senderPhone}
+                      onChange={(e) => setSenderPhone(e.target.value)}
+                      required
+                      style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
                 </div>
 
                 <Button

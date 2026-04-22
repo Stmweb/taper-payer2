@@ -51,10 +51,10 @@ const quickActions = [
 ];
 
 const destinations = [
-  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
-  { name: 'Nigeria', flag: '🇳🇬', code: 'NGN' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
-  { name: 'Jamaica', flag: '🇯🇲', code: 'JMD' },
+  { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
+  { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
+  { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
 ];
 
 const features = [

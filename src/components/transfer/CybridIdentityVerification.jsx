@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
-import { Loader2, AlertCircle, ExternalLink, CheckCircle, RefreshCw } from 'lucide-react';
+import { Loader2, AlertCircle, ExternalLink, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function CybridIdentityVerification({ customerGuid, jwt, onVerified, onError }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [personaUrl, setPersonaUrl] = useState('');
-  const [opened, setOpened] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const pollRef = useRef(null);
 
   const invoke = async (action, p = {}) => {
     const res = await base44.functions.invoke('cybridTransfer', { action, _jwt: jwt || '', ...p });
@@ -46,6 +47,23 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
     loadVerification();
   }, [customerGuid]);
 
+  const openPersonaPopup = () => {
+    if (!personaUrl) return;
+    setVerifying(true);
+    const popup = window.open(personaUrl, 'persona_verify', 'width=600,height=700,left=200,top=100');
+    pollRef.current = setInterval(() => {
+      if (!popup || popup.closed) {
+        clearInterval(pollRef.current);
+        // Popup closed — auto-proceed to KYC status check
+        onVerified?.();
+      }
+    }, 500);
+  };
+
+  useEffect(() => {
+    return () => { if (pollRef.current) clearInterval(pollRef.current); };
+  }, []);
+
   if (loading) {
     return (
       <div className="flex flex-col items-center py-8 gap-3 text-center">
@@ -81,27 +99,17 @@ export default function CybridIdentityVerification({ customerGuid, jwt, onVerifi
           <Button
             className="w-full"
             style={{ backgroundColor: '#3D7BB7' }}
-            onClick={() => {
-              window.open(personaUrl, '_blank');
-              setOpened(true);
-            }}
+            onClick={openPersonaPopup}
+            disabled={verifying}
           >
-            <ExternalLink className="w-4 h-4 mr-2" />
-            Start Verification →
+            {verifying ? (
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Waiting for verification…</>
+            ) : (
+              <><ExternalLink className="w-4 h-4 mr-2" /> Start Verification →</>
+            )}
           </Button>
         ) : null}
       </div>
-
-      {opened && (
-        <div className="space-y-2">
-          <p className="text-xs text-slate-500 text-center">
-            Completed the verification? Click below to continue.
-          </p>
-          <Button onClick={onVerified} className="w-full" style={{ backgroundColor: '#3D7BB7' }}>
-            <CheckCircle className="w-4 h-4 mr-2" /> I've Completed Verification
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

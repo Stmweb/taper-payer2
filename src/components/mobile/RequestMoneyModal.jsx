@@ -75,8 +75,8 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         sender_email: user?.email || '',
       });
 
-      // Send notification with share URL
-      await base44.functions.invoke('sendNotification', {
+      // Send notification with share URL (non-blocking — don't fail if delivery fails)
+      base44.functions.invoke('sendNotification', {
         type: 'request_money',
         recipient: normalizedRecipient,
         senderName,
@@ -85,8 +85,8 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         note,
         recipientCountry: recipientCountry.name,
         deliveryMethod,
-        shareUrl: requestRes.data.share_url,
-      });
+        shareUrl: requestRes.data?.share_url || '',
+      }).catch((e) => console.warn('Notification delivery failed:', e));
       setSuccess(true);
     } catch (err) {
       setError('Failed to send request. Please try again.');

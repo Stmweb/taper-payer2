@@ -1,0 +1,45 @@
+{
+  "name": "PromotionalBanner",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Banner title/name"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "URL of the promotional banner image"
+    },
+    "cta_text": {
+      "type": "string",
+      "description": "Call-to-action text"
+    },
+    "cta_link": {
+      "type": "string",
+      "description": "Link for the CTA button"
+    },
+    "target_size": {
+      "type": "string",
+      "enum": [
+        "mobile",
+        "tablet",
+        "desktop",
+        "wide"
+      ],
+      "description": "Recommended display size"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the banner is active/visible"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Order of display in carousel"
+    }
+  },
+  "required": [
+    "image_url"
+  ]
+}

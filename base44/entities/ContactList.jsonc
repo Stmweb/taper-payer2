@@ -1,0 +1,24 @@
+{
+  "name": "ContactList",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Contact list name e.g. VIP Customers, Haiti Subscribers"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of this list"
+    },
+    "subscriber_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of subscriber IDs in this list"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Menu, X, CheckCircle2, Globe, Zap, Shield, Users, BarChart3, ChevronRight, Loader2, Building2 } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
+import CalSection from '@/components/whitelabel/CalSection';
 import { base44 } from '@/api/base44Client';
 
 function createPageUrl(page) {
@@ -430,27 +431,8 @@ export default function TaperPayerWhiteLabel() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-6">
-            Ready to Launch Your Platform?
-          </h2>
-          <p className="text-xl text-slate-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join leading fintech companies who've already scaled with our white label solution.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" style={{ backgroundColor: '#2479C2' }} className="hover:opacity-90 px-8 py-6 text-lg" onClick={() => { setShowDemo(true); setDemoSubmitted(false); setDemoForm({ name: '', email: '', company: '', phone: '', companySize: '', timeline: '' }); }}>
-              Request a Demo
-            </Button>
-            <Link to={createPageUrl('TaperPayerContact')}>
-              <Button size="lg" variant="outline" className="px-8 py-6 text-lg border-2">
-                Contact Us
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* CTA Section — Cal.com Inline Booking */}
+      <CalSection />
 
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12 border-t border-slate-800">

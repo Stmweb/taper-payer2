@@ -1,0 +1,77 @@
+{
+  "name": "EmailCampaign",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Campaign name"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line"
+    },
+    "body_html": {
+      "type": "string",
+      "description": "HTML body of the email"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Custom sender email address"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Custom sender display name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "scheduled",
+        "sent",
+        "failed"
+      ],
+      "default": "draft",
+      "description": "Campaign status"
+    },
+    "sent_count": {
+      "type": "number",
+      "description": "Number of emails sent"
+    },
+    "sent_at": {
+      "type": "string",
+      "description": "When the campaign was sent"
+    },
+    "scheduled_at": {
+      "type": "string",
+      "description": "When the campaign is scheduled to send"
+    },
+    "template_id": {
+      "type": "string",
+      "description": "Template ID used to create this campaign"
+    },
+    "category": {
+      "type": "string",
+      "description": "Campaign category"
+    },
+    "target_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Only send to subscribers with these tags"
+    },
+    "contact_list_id": {
+      "type": "string",
+      "description": "Contact list ID to send to (empty = all active subscribers)"
+    },
+    "manual_emails": {
+      "type": "string",
+      "description": "Manually entered emails (one per line, optionally with name: email, Name)"
+    }
+  },
+  "required": [
+    "name",
+    "subject",
+    "body_html"
+  ]
+}

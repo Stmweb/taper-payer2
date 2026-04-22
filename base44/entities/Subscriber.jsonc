@@ -1,0 +1,37 @@
+{
+  "name": "Subscriber",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Subscriber email address"
+    },
+    "name": {
+      "type": "string",
+      "description": "Subscriber full name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "unsubscribed"
+      ],
+      "default": "active",
+      "description": "Subscription status"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for segmentation"
+    },
+    "source": {
+      "type": "string",
+      "description": "How they subscribed (e.g. website, import)"
+    }
+  },
+  "required": [
+    "email"
+  ]
+}

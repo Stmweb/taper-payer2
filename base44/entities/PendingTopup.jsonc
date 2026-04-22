@@ -1,0 +1,53 @@
+{
+  "name": "PendingTopup",
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "description": "Moncash order ID"
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "Recipient phone number (full international format)"
+    },
+    "country_code": {
+      "type": "string",
+      "description": "Country code e.g. HT"
+    },
+    "operator_id": {
+      "type": "string",
+      "description": "DTone operator ID"
+    },
+    "operator_name": {
+      "type": "string",
+      "description": "Operator name e.g. Natcom Haiti"
+    },
+    "product_id": {
+      "type": "string",
+      "description": "DTone product ID to use for the top-up"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount in USD"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "failed"
+      ],
+      "default": "pending"
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Error details if top-up failed"
+    }
+  },
+  "required": [
+    "order_id",
+    "phone_number",
+    "operator_id",
+    "amount"
+  ]
+}

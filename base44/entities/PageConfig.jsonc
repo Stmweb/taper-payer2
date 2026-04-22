@@ -1,0 +1,68 @@
+{
+  "name": "PageConfig",
+  "type": "object",
+  "properties": {
+    "page_name": {
+      "type": "string",
+      "description": "Page identifier (e.g., TaperPayerHome, TaperPayerTopUp)"
+    },
+    "background_image": {
+      "type": "string",
+      "description": "Background image URL"
+    },
+    "background_position": {
+      "type": "string",
+      "enum": [
+        "top",
+        "center",
+        "bottom",
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ],
+      "default": "center",
+      "description": "Background position"
+    },
+    "background_size": {
+      "type": "string",
+      "enum": [
+        "cover",
+        "contain",
+        "auto"
+      ],
+      "default": "cover",
+      "description": "Background size"
+    },
+    "hidden_elements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of element IDs or class names to hide"
+    },
+    "hidden_sections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of section IDs to hide"
+    },
+    "content_overrides": {
+      "type": "object",
+      "description": "Object with content block IDs as keys and {title, body, imageUrl, html} as values"
+    },
+    "button_overrides": {
+      "type": "object",
+      "description": "Object with button IDs as keys and {label, color} as values"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this configuration is active"
+    }
+  },
+  "required": [
+    "page_name"
+  ]
+}

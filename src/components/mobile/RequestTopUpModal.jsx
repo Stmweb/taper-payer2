@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
@@ -205,47 +204,19 @@ const COUNTRIES = [
   { name: 'Zimbabwe', flag: '🇿🇼', dial: '+263' },
 ];
 
-function detectCountry(phone) {
-  if (!phone || phone.trim().length < 5) return null;
-  const cleaned = phone.replace(/\D/g, '');
-  if (!cleaned) return null;
-  if (cleaned.endsWith('509') || cleaned.startsWith('509')) return { name: 'Haiti', flag: '🇭🇹' };
-  if (cleaned.endsWith('1876') || cleaned.startsWith('1876')) return { name: 'Jamaica', flag: '🇯🇲' };
-  if (cleaned.startsWith('1') && cleaned.length >= 10) return { name: 'USA', flag: '🇺🇸' };
-  if (cleaned.startsWith('234')) return { name: 'Nigeria', flag: '🇳🇬' };
-  if (cleaned.startsWith('233')) return { name: 'Ghana', flag: '🇬🇭' };
-  if (cleaned.startsWith('254')) return { name: 'Kenya', flag: '🇰🇪' };
-  if (cleaned.startsWith('55')) return { name: 'Brazil', flag: '🇧🇷' };
-  if (cleaned.startsWith('52')) return { name: 'Mexico', flag: '🇲🇽' };
-  return null;
-}
+const US_COUNTRY = COUNTRIES.find(c => c.name === 'United States');
 
 export default function RequestTopUpModal({ isOpen, onClose }) {
   const { user } = useAppAuth();
-  const [myCountry, setMyCountry] = useState(null);
-  const [requesterCountry, setRequesterCountry] = useState(null);
+  const [myPhoneCountry, setMyPhoneCountry] = useState(US_COUNTRY);
+  const [requesterPhoneCountry, setRequesterPhoneCountry] = useState(US_COUNTRY);
   const [myPhone, setMyPhone] = useState('');
   const [requesterPhone, setRequesterPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [myCountrySearch, setMyCountrySearch] = useState('');
-  const [requesterCountrySearch, setRequesterCountrySearch] = useState('');
-
-  const generatedNote = myCountry ? `Please send Top up my ${myCountry.name} ${myCountry.flag}` : '';
-
-  const filteredMyCountries = useMemo(() => {
-    if (!myCountrySearch) return COUNTRIES;
-    return COUNTRIES.filter(c => c.name.toLowerCase().includes(myCountrySearch.toLowerCase()));
-  }, [myCountrySearch]);
-
-  const filteredRequesterCountries = useMemo(() => {
-    if (!requesterCountrySearch) return COUNTRIES;
-    return COUNTRIES.filter(c => c.name.toLowerCase().includes(requesterCountrySearch.toLowerCase()));
-  }, [requesterCountrySearch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -258,25 +229,22 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
     try {
       const senderName = user?.full_name || 'Someone';
       const topupLink = `https://taperpayer.com/TaperPayerTopUp`;
-      const finalNote = note || generatedNote;
-      
-      // Normalize phone numbers with country codes
+
       const formatPhone = (phone, country) => {
         if (phone.startsWith('+')) return phone;
-        const dial = country?.dial || '+1';
-        return dial + phone;
+        return (country?.dial || '+1') + phone;
       };
-      
-      const normalizedMyPhone = formatPhone(myPhone, myCountry);
-      const normalizedRequesterPhone = formatPhone(requesterPhone, requesterCountry);
-      
+
+      const normalizedMyPhone = formatPhone(myPhone, myPhoneCountry);
+      const normalizedRequesterPhone = formatPhone(requesterPhone, requesterPhoneCountry);
+
       await base44.functions.invoke('sendNotification', {
         type: 'request_topup',
         recipient: normalizedRequesterPhone,
         myPhone: normalizedMyPhone,
         senderName,
         amount,
-        note: finalNote,
+        note: note || '',
         topupLink,
       });
       setSuccess(true);
@@ -288,16 +256,14 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
   };
 
   const handleClose = () => {
-    setMyCountry(null);
-    setRequesterCountry(null);
     setMyPhone('');
     setRequesterPhone('');
     setAmount('');
     setNote('');
+    setMyPhoneCountry(US_COUNTRY);
+    setRequesterPhoneCountry(US_COUNTRY);
     setSuccess(false);
     setError('');
-    setMyCountrySearch('');
-    setRequesterCountrySearch('');
     onClose();
   };
 
@@ -320,8 +286,8 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
           {success ? (
             <div className="text-center py-8">
               <div className="flex justify-center mb-4">
-                 <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/d7d75e226_ChatGPTImageDec29202501_48_52PM.png" alt="Taper Payer" className="w-16 h-16" style={{ imageRendering: 'crisp-edges', imageResolution: '300dpi' }} />
-               </div>
+                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/d7d75e226_ChatGPTImageDec29202501_48_52PM.png" alt="Taper Payer" className="w-16 h-16" style={{ imageRendering: 'crisp-edges', imageResolution: '300dpi' }} />
+              </div>
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-slate-900 mb-2">Request sent!</h3>
               <p className="text-slate-500 text-sm">We've sent them an SMS & WhatsApp message with a link to top up your phone. You'll be notified once it's done.</p>
@@ -341,90 +307,52 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Country <span className="text-red-500">*</span></label>
-                  <Select value={myCountry?.name || ''} onValueChange={(countryName) => {
-                    const country = COUNTRIES.find(c => c.name === countryName);
-                    setMyCountry(country);
-                    setMyPhone('');
-                    setMyCountrySearch('');
-                  }}>
-                    <SelectTrigger style={{ color: '#1e293b', backgroundColor: '#ffffff' }}>
-                      <SelectValue placeholder="Search country..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <div className="p-2">
-                        <Input
-                          placeholder="Search countries..."
-                          value={myCountrySearch}
-                          onChange={(e) => setMyCountrySearch(e.target.value)}
-                          style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                          className="mb-2"
-                        />
-                      </div>
-                      {filteredMyCountries.map((country) => (
-                        <SelectItem key={country.name} value={country.name}>
-                          {country.flag} {country.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Your phone number <span className="text-red-500">*</span></label>
-                  <Input
-                    type="tel"
-                    placeholder={myCountry ? `Enter number for ${myCountry.name}` : 'Select country first'}
-                    value={myPhone}
-                    onChange={(e) => setMyPhone(e.target.value)}
-                    disabled={!myCountry}
-                    required
-                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                  />
+                  <div className="flex gap-2">
+                    <select
+                      value={myPhoneCountry.name}
+                      onChange={(e) => setMyPhoneCountry(COUNTRIES.find(c => c.name === e.target.value))}
+                      className="h-11 px-2 border border-slate-300 rounded-lg text-slate-900 bg-white text-sm"
+                      style={{ minWidth: '90px' }}
+                    >
+                      {COUNTRIES.map(c => (
+                        <option key={c.name} value={c.name}>{c.flag} {c.dial}</option>
+                      ))}
+                    </select>
+                    <Input
+                      type="tel"
+                      placeholder="Phone number"
+                      value={myPhone}
+                      onChange={(e) => setMyPhone(e.target.value)}
+                      required
+                      style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
                   <p className="text-xs text-slate-400 mt-1">This is the number that will receive the top-up</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Their country <span className="text-red-500">*</span></label>
-                  <Select value={requesterCountry?.name || ''} onValueChange={(countryName) => {
-                    const country = COUNTRIES.find(c => c.name === countryName);
-                    setRequesterCountry(country);
-                    setRequesterPhone('');
-                    setRequesterCountrySearch('');
-                  }}>
-                    <SelectTrigger style={{ color: '#1e293b', backgroundColor: '#ffffff' }}>
-                      <SelectValue placeholder="Search country..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <div className="p-2">
-                        <Input
-                          placeholder="Search countries..."
-                          value={requesterCountrySearch}
-                          onChange={(e) => setRequesterCountrySearch(e.target.value)}
-                          style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                          className="mb-2"
-                        />
-                      </div>
-                      {filteredRequesterCountries.map((country) => (
-                        <SelectItem key={country.name} value={country.name}>
-                          {country.flag} {country.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Who are you requesting from? <span className="text-red-500">*</span></label>
-                  <Input
-                    type="tel"
-                    placeholder={requesterCountry ? `Enter their number for ${requesterCountry.name}` : 'Select their country first'}
-                    value={requesterPhone}
-                    onChange={(e) => setRequesterPhone(e.target.value)}
-                    disabled={!requesterCountry}
-                    required
-                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                  />
+                  <div className="flex gap-2">
+                    <select
+                      value={requesterPhoneCountry.name}
+                      onChange={(e) => setRequesterPhoneCountry(COUNTRIES.find(c => c.name === e.target.value))}
+                      className="h-11 px-2 border border-slate-300 rounded-lg text-slate-900 bg-white text-sm"
+                      style={{ minWidth: '90px' }}
+                    >
+                      {COUNTRIES.map(c => (
+                        <option key={c.name} value={c.name}>{c.flag} {c.dial}</option>
+                      ))}
+                    </select>
+                    <Input
+                      type="tel"
+                      placeholder="Their phone number"
+                      value={requesterPhone}
+                      onChange={(e) => setRequesterPhone(e.target.value)}
+                      required
+                      style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
                   <p className="text-xs text-slate-400 mt-1">They'll receive an SMS & WhatsApp message with a link to top you up</p>
                 </div>
 
@@ -444,12 +372,11 @@ export default function RequestTopUpModal({ isOpen, onClose }) {
                   <label className="block text-sm font-medium text-slate-700 mb-1">Note <span className="text-slate-400 font-normal">(optional)</span></label>
                   <Input
                     type="text"
-                    placeholder={generatedNote || "Add a message"}
+                    placeholder="Add a message"
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
-                  {generatedNote && !note && <p className="text-xs text-slate-400 mt-1">Message will auto-generate based on your phone's country</p>}
                 </div>
 
                 <Button

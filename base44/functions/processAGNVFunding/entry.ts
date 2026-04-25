@@ -30,7 +30,42 @@ Deno.serve(async (req) => {
     // Amount in cents
     const amountCents = Math.round(amount * 100);
 
-    // Create Square Checkout
+    // Create Square Order first
+    const orderRes = await fetch(`https://connect.squareup.com/v2/orders`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${squareAccessToken}`,
+        'Content-Type': 'application/json',
+        'Square-Version': '2024-04-17',
+      },
+      body: JSON.stringify({
+        idempotency_key: `agnv-order-${user.id}-${Date.now()}`,
+        location_id: squareLocationId,
+        line_items: [
+          {
+            name: 'AGNV Account Funding',
+            quantity: '1',
+            base_price_money: {
+              amount: amountCents,
+              currency: 'USD',
+            },
+          },
+        ],
+        reference_id: `user-${user.id}`,
+      }),
+    });
+
+    const orderData = await orderRes.json();
+
+    if (!orderRes.ok) {
+      console.error('Square order error:', orderData);
+      return Response.json(
+        { error: orderData.errors?.[0]?.detail || 'Failed to create order' },
+        { status: 400 }
+      );
+    }
+
+    // Create Checkout with order ID
     const checkoutRes = await fetch(`https://connect.squareup.com/v2/locations/${squareLocationId}/checkouts`, {
       method: 'POST',
       headers: {
@@ -39,21 +74,8 @@ Deno.serve(async (req) => {
         'Square-Version': '2024-04-17',
       },
       body: JSON.stringify({
-        idempotency_key: `agnv-fund-${user.id}-${Date.now()}`,
-        order: {
-          location_id: squareLocationId,
-          line_items: [
-            {
-              name: 'AGNV Account Funding',
-              quantity: '1',
-              base_price_money: {
-                amount: amountCents,
-                currency: 'USD',
-              },
-            },
-          ],
-          reference_id: `user-${user.id}`,
-        },
+        idempotency_key: `agnv-checkout-${user.id}-${Date.now()}`,
+        order_id: orderData.order.id,
         redirect_url: `${appUrl || 'https://taperpayer.com'}/TaperPayerHome?funding=success`,
       }),
     });

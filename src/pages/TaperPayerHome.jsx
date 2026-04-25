@@ -37,6 +37,7 @@ function createPageUrl(page) {
 }
 
 const countries = [
+  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
   { name: 'Nigeria', flag: '🇳🇬', code: 'NGN' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
@@ -45,7 +46,6 @@ const countries = [
   { name: 'Cameroon', flag: '🇨🇲', code: 'XAF' },
   { name: 'Morocco', flag: '🇲🇦', code: 'MAD' },
   { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
-  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
   { name: 'Jamaica', flag: '🇯🇲', code: 'JMD' },
   { name: 'Brazil', flag: '🇧🇷', code: 'BRL' },
   { name: 'Chile', flag: '🇨🇱', code: 'CLP' },
@@ -395,13 +395,16 @@ export default function TaperPayerHome() {
       {/* Quick Actions */}
       <section className="container mx-auto px-6 py-10">
         <h2 className="text-2xl font-bold text-slate-800 mb-6 text-center">Quick Actions</h2>
-        <div className="grid grid-cols-5 gap-4 max-w-3xl mx-auto">
+        <div className="grid grid-cols-5 gap-4 max-w-4xl mx-auto">
           {[
             { id: 'send', label: 'Send Money', icon: Send, color: '#3D7BB7', bg: '#e3f2fd', desc: 'Transfer globally' },
             { id: 'topup', label: 'Mobile Top-Up', icon: PhoneCall, color: '#F88F2B', bg: '#fff3e0', desc: 'Recharge instantly' },
             { id: 'request', label: 'Request Money', icon: HandCoins, color: '#61AF39', bg: '#e8f5e9', desc: 'Ask to get paid' },
             { id: 'requesttopup', label: 'Request Top-Up', icon: PhoneOutgoing, color: '#e91e8c', bg: '#fce4ec', desc: 'Ask someone to top up' },
             { id: 'sendagnv', label: 'Send AGNV', icon: Globe, color: '#7c3aed', bg: '#ede9fe', desc: 'Send via AGNV' },
+            { id: 'splitbills', label: 'Split Bills', icon: DollarSign, color: '#FF6B6B', bg: '#ffe0e0', desc: 'Divide expenses' },
+            { id: 'favorites', label: 'Favorites', icon: Users, color: '#4ECDC4', bg: '#e0f7f6', desc: 'Quick contacts' },
+            { id: 'groupwallet', label: 'Group Wallet', icon: Users, color: '#95E1D3', bg: '#e8f9f7', desc: 'Shared account' },
           ].map((action) => {
             const Icon = action.icon;
             return (
@@ -415,6 +418,7 @@ export default function TaperPayerHome() {
                   else if (action.id === 'request') setShowRequestMoney(true);
                   else if (action.id === 'requesttopup') setShowRequestTopUp(true);
                   else if (action.id === 'sendagnv') setShowSendAGNV(true);
+                  else setShowComingSoon(true);
                 }}
                 className="flex flex-col items-center gap-3 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
               >

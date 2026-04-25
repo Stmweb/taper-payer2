@@ -7,8 +7,11 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   ArrowRight, Shield, Zap, DollarSign, Globe, Users, TrendingUp,
-  RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram
+  RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram,
+  Send, PhoneCall, HandCoins, PhoneOutgoing
 } from 'lucide-react';
+import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
+import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
 import SiteFooter from '@/components/SiteFooter';
 import MobileHomeScreen from '@/components/mobile/MobileHomeScreen';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -92,6 +95,8 @@ export default function TaperPayerHome() {
    const [showPINModal, setShowPINModal] = useState(false);
    const [showComingSoon, setShowComingSoon] = useState(false);
    const [showSignupModal, setShowSignupModal] = useState(false);
+   const [showRequestMoney, setShowRequestMoney] = useState(false);
+   const [showRequestTopUp, setShowRequestTopUp] = useState(false);
 
    const toggleDarkMode = () => {
      setIsDark(!isDark);
@@ -404,6 +409,43 @@ export default function TaperPayerHome() {
       </section>
 
 
+      {/* Quick Actions */}
+      <section className="container mx-auto px-6 py-10">
+        <h2 className="text-2xl font-bold text-slate-800 mb-6 text-center">Quick Actions</h2>
+        <div className="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
+          {[
+            { id: 'send', label: 'Send Money', icon: Send, color: '#3D7BB7', bg: '#e3f2fd', desc: 'Transfer globally' },
+            { id: 'topup', label: 'Mobile Top-Up', icon: PhoneCall, color: '#F88F2B', bg: '#fff3e0', desc: 'Recharge instantly' },
+            { id: 'request', label: 'Request Money', icon: HandCoins, color: '#61AF39', bg: '#e8f5e9', desc: 'Ask to get paid' },
+            { id: 'requesttopup', label: 'Request Top-Up', icon: PhoneOutgoing, color: '#e91e8c', bg: '#fce4ec', desc: 'Ask someone to top up' },
+          ].map((action) => {
+            const Icon = action.icon;
+            return (
+              <motion.button
+                key={action.id}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => {
+                  if (action.id === 'send') setShowComingSoon(true);
+                  else if (action.id === 'topup') setShowTaperConnect(true);
+                  else if (action.id === 'request') setShowRequestMoney(true);
+                  else if (action.id === 'requesttopup') setShowRequestTopUp(true);
+                }}
+                className="flex flex-col items-center gap-3 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
+              >
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: action.bg }}>
+                  <Icon className="w-7 h-7" style={{ color: action.color }} />
+                </div>
+                <div className="text-center">
+                  <p className="text-slate-800 font-semibold text-sm">{action.label}</p>
+                  <p className="text-slate-400 text-xs mt-0.5">{action.desc}</p>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Promo Carousel */}
       <PromoCarousel />
 
@@ -687,6 +729,12 @@ export default function TaperPayerHome() {
 
       {/* Coming Soon Modal */}
       <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
+
+      {/* Request Money Modal */}
+      <RequestMoneyModal isOpen={showRequestMoney} onClose={() => setShowRequestMoney(false)} />
+
+      {/* Request Top-Up Modal */}
+      <RequestTopUpModal isOpen={showRequestTopUp} onClose={() => setShowRequestTopUp(false)} />
 
       {/* Signup Modal */}
       <SignupModal

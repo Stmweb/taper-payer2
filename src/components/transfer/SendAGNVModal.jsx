@@ -515,10 +515,43 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             <div className="text-center py-8 space-y-4">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
               <h3 className="text-xl font-bold text-slate-900">Transfer Successful!</h3>
-              <p className="text-slate-500 text-sm">
-                Your AGNV transfer of {agnvAmount} AGNV (${sendAmount} USD) to {recipientName} has been completed.
-              </p>
-              {txHash && <p className="text-xs text-slate-400 break-all">TX: {txHash}</p>}
+              
+              <div className="bg-slate-50 rounded-xl p-4 text-left space-y-2 my-4 border border-slate-200">
+                <p className="font-semibold text-slate-900">Transaction Receipt</p>
+                <div className="text-sm text-slate-700 space-y-1">
+                  <p><span className="font-medium">From:</span> {appUser?.full_name}</p>
+                  <p><span className="font-medium">To:</span> {recipientName}</p>
+                  <p><span className="font-medium">Phone:</span> {recipientPhone}</p>
+                  <p><span className="font-medium">Amount:</span> ${sendAmount} USD = {agnvAmount} AGNV</p>
+                  <p><span className="font-medium">Status:</span> Pending Processing</p>
+                  <p><span className="font-medium">Date:</span> {new Date().toLocaleString()}</p>
+                  {txHash && <p><span className="font-medium">ID:</span> {txHash}</p>}
+                </div>
+              </div>
+
+              <div className="flex gap-2 justify-center">
+                <button
+                  onClick={() => {
+                    const message = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount: $${sendAmount} USD = ${agnvAmount} AGNV\nDate: ${new Date().toLocaleString()}\n\nStatus: Pending Processing`;
+                    const whatsappUrl = `https://wa.me/${recipientPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                  }}
+                  className="flex-1 px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold text-sm flex items-center justify-center gap-2"
+                >
+                  <span>💬</span> WhatsApp
+                </button>
+                <button
+                  onClick={() => {
+                    const message = `AGNV Transfer Receipt: $${sendAmount} USD = ${agnvAmount} AGNV to ${recipientName}. Date: ${new Date().toLocaleString()}`;
+                    const smsUrl = `sms:${recipientPhone.replace(/\D/g, '')}?body=${encodeURIComponent(message)}`;
+                    window.location.href = smsUrl;
+                  }}
+                  className="flex-1 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm flex items-center justify-center gap-2"
+                >
+                  <span>📱</span> SMS
+                </button>
+              </div>
+
               <Button onClick={handleClose} className="w-full" style={{ backgroundColor: '#7c3aed' }}>Done</Button>
             </div>
           )}

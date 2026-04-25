@@ -72,8 +72,11 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const webPaymentsRef = useRef(null);
   const cardRef = useRef(null);
 
-  const agnvAmount = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_AGNV).toFixed(2) : '';
-  const htgEquiv = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_HTG).toFixed(2) : '';
+  const sendValue = parseFloat(sendAmount) || 0;
+  const transactionFee = (sendValue * 0.1).toFixed(2);
+  const amountAfterFee = (sendValue - transactionFee).toFixed(2);
+  const agnvAmount = amountAfterFee ? (amountAfterFee * RATES.USD_TO_AGNV).toFixed(2) : '';
+  const htgEquiv = amountAfterFee ? (amountAfterFee * RATES.USD_TO_HTG).toFixed(2) : '';
 
   // Check auth on mount
   useEffect(() => {
@@ -231,7 +234,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setLoading(true);
     try {
       const res = await base44.functions.invoke('sendAGNV', {
-        amountUSD: amount,
+        amountUSD: parseFloat(amountAfterFee),
         recipientName,
         recipientPhone,
       });
@@ -456,10 +459,24 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
-                  {agnvAmount && (
-                    <p className="text-xs text-purple-600 mt-1 font-medium">
-                      ≈ {agnvAmount} AGNV &nbsp;|&nbsp; ≈ {htgEquiv} HTG
-                    </p>
+                  {sendAmount && (
+                    <div className="mt-2 p-3 bg-purple-50 rounded-lg text-sm space-y-1">
+                      <div className="flex justify-between text-slate-700">
+                        <span>Amount:</span>
+                        <span className="font-medium">${sendValue.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between text-slate-600 text-xs">
+                        <span>Transaction Fee (10%):</span>
+                        <span className="font-medium">-${transactionFee}</span>
+                      </div>
+                      <div className="border-t border-purple-200 pt-1 flex justify-between text-slate-800 font-semibold">
+                        <span>Receiver Gets:</span>
+                        <span>${amountAfterFee}</span>
+                      </div>
+                      <div className="text-purple-600 font-medium">
+                        ≈ {agnvAmount} AGNV &nbsp;|&nbsp; ≈ {htgEquiv} HTG
+                      </div>
+                    </div>
                   )}
                 </div>
 

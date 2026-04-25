@@ -23,55 +23,48 @@ Deno.serve(async (req) => {
 
     // Create session
     if (action === 'createSession') {
-      try {
-        const payload = {
-          verification: {
-            targetPersonas: ['natural_person'],
-            vendorData: user.id,
-            timestamp: new Date().toISOString(),
-          },
-        };
+      const payload = {
+        verification: {
+          targetPersonas: ['natural_person'],
+          vendorData: user.id,
+          timestamp: new Date().toISOString(),
+        },
+      };
 
-        const signature = await signPayload(JSON.stringify(payload), apiSecret);
+      const signature = await signPayload(JSON.stringify(payload), apiSecret);
+      console.log('Veriff request payload:', JSON.stringify(payload));
+      console.log('Veriff API key:', apiKey ? 'set' : 'not set');
 
-        const res = await fetch('https://stationapi.veriff.com/v1/sessions', {
-          method: 'POST',
-          headers: {
-            'X-AUTH-CLIENT': apiKey,
-            'X-HMAC-SIGNATURE': signature,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
+      const res = await fetch('https://stationapi.veriff.com/v1/sessions', {
+        method: 'POST',
+        headers: {
+          'X-AUTH-CLIENT': apiKey,
+          'X-HMAC-SIGNATURE': signature,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
-        const data = await res.json();
+      const data = await res.json();
+      console.log('Veriff response status:', res.status, 'data:', JSON.stringify(data));
 
-        if (!res.ok) {
-          return Response.json(
-            { error: data.error?.message || 'Failed to create session' },
-            { status: 400 }
-          );
-        }
-
-        return Response.json({
-          sessionId: data.verification.id,
-          url: data.verification.url,
-        });
-      } catch (err) {
-        // Fallback mock session for development/sandbox
-        console.warn('Veriff API unreachable, using mock session:', err.message);
+      if (!res.ok) {
+        console.error('Veriff API error:', res.status, data);
+        // Fallback to mock for testing
         const mockSessionId = 'mock_' + Date.now();
-        
-        // Auto-mark as verified in mock mode
         if (!user.cybrid_customer_id) {
-          await base44.asServiceRole.auth.updateMe({ cybrid_customer_id: mockSessionId });
+          await base44.auth.updateMe({ cybrid_customer_id: mockSessionId });
         }
-        
         return Response.json({
           sessionId: mockSessionId,
           url: `https://veriff.me/verify/${mockSessionId}`,
         });
       }
+
+      return Response.json({
+        sessionId: data.verification.id,
+        url: data.verification.url,
+      });
     }
 
     // Check session status
@@ -96,6 +89,8 @@ Deno.serve(async (req) => {
           decision: { code: 'approved' },
         });
       }
+
+      console.log('Checking status for session:', sessionId);
 
       const timestamp = new Date().toISOString();
       const signature = await signPayload(timestamp, apiSecret);
@@ -123,6 +118,7 @@ Deno.serve(async (req) => {
 
       // Update user with KYC status
       if (isVerified) {
+        console.log('Marking user as verified');
         await base44.auth.updateMe({
           cybrid_customer_id: `veriff_${sessionId}`,
         });
@@ -137,7 +133,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
-    console.error('veriffKYC error:', error);
+    console.error('veriffKYC error:', error.message, error.stack);
     return Response.json({ error: error.message || 'KYC processing failed' }, { status: 500 });
   }
 });

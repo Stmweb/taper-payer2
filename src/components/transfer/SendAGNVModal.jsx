@@ -95,11 +95,10 @@ export default function SendAGNVModal({ isOpen, onClose }) {
           const script = document.createElement('script');
           script.src = 'https://web-payments-sdk.squareup.com/sq.js';
           script.async = true;
-          script.crossOrigin = 'anonymous';
           
           const timeout = setTimeout(() => {
-            reject(new Error('Square SDK loading took too long. Please check your internet connection.'));
-          }, 30000);
+            reject(new Error('Square SDK loading took too long. Please try again.'));
+          }, 15000);
           
           script.onload = () => {
             clearTimeout(timeout);
@@ -110,7 +109,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
           script.onerror = (e) => {
             clearTimeout(timeout);
             console.error('Square SDK load error:', e);
-            reject(new Error('Unable to load Square payment SDK. Please check your internet connection.'));
+            reject(new Error('Unable to load payment form. Please refresh the page and try again.'));
           };
           
           document.head.appendChild(script);

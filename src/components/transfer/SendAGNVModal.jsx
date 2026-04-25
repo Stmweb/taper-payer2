@@ -174,19 +174,6 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">BNB Smart Chain Wallet Address <span className="text-red-500">*</span></label>
-                  <Input
-                    type="text"
-                    placeholder="0x..."
-                    value={recipientWallet}
-                    onChange={(e) => setRecipientWallet(e.target.value)}
-                    required
-                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                  />
-                  <p className="text-xs text-slate-400 mt-1">Recipient's BNB Smart Chain wallet address to receive AGNV</p>
-                </div>
-
                 <Button
                   type="submit"
                   disabled={loading}

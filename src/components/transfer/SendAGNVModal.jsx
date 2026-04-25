@@ -15,7 +15,8 @@ const RATES = {
 
 export default function SendAGNVModal({ isOpen, onClose }) {
   const [step, setStep] = useState('fund'); // 'fund' or 'send'
-  const [amountUSD, setAmountUSD] = useState('');
+  const [fundedAmount, setFundedAmount] = useState(0);
+  const [sendAmount, setSendAmount] = useState('');
   const [recipientName, setRecipientName] = useState('');
   const [recipientPhone, setRecipientPhone] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,20 +25,37 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const [txHash, setTxHash] = useState('');
   const [fundingComplete, setFundingComplete] = useState(false);
 
-  const agnvAmount = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_AGNV).toFixed(2) : '';
-  const htgEquiv = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_HTG).toFixed(2) : '';
+  const agnvAmount = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_AGNV).toFixed(2) : '';
+  const htgEquiv = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_HTG).toFixed(2) : '';
 
-  const handleFundingSuccess = (fundedAmount) => {
+  const handleFundingSuccess = (amount) => {
     setFundingComplete(true);
     setStep('send');
-    setAmountUSD(fundedAmount?.toString() || '');
+    setFundedAmount(parseFloat(amount) || 0);
+    setSendAmount('');
+  };
+
+  const handleAmountChange = (value) => {
+    const numValue = parseFloat(value);
+    
+    // Only allow amounts up to funded amount
+    if (numValue <= fundedAmount || value === '') {
+      setSendAmount(value);
+    }
   };
 
   const handleSendSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!amountUSD || !recipientName || !recipientPhone) {
+    const amount = parseFloat(sendAmount);
+    
+    if (!sendAmount || !recipientName || !recipientPhone) {
       setError('Please fill in all required fields.');
+      return;
+    }
+    
+    if (amount > fundedAmount) {
+      setError(`Cannot send more than $${fundedAmount} (your funded amount).`);
       return;
     }
     setLoading(true);
@@ -46,7 +64,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amountUSD: parseFloat(amountUSD),
+          amountUSD: parseFloat(sendAmount),
           recipientName,
           recipientPhone,
         }),
@@ -64,7 +82,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
   const handleClose = () => {
     setStep('fund');
-    setAmountUSD('');
+    setFundedAmount(0);
+    setSendAmount('');
     setRecipientName('');
     setRecipientPhone('');
     setSuccess(false);
@@ -94,7 +113,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             <div className="text-center py-8">
               <CheckCircle className="w-16 h-16 text-purple-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-slate-900 mb-2">Transfer Successful!</h3>
-              <p className="text-slate-500 text-sm mb-4">Your AGNV transfer of {agnvAmount} AGNV (${amountUSD} USD) to {recipientName} has been completed.</p>
+              <p className="text-slate-500 text-sm mb-4">Your AGNV transfer of {agnvAmount} AGNV (${sendAmount} USD) to {recipientName} has been completed.</p>
               {txHash && <p className="text-xs text-slate-400 break-all mb-4">TX: {txHash}</p>}
               <Button onClick={handleClose} className="mt-6 w-full" style={{ backgroundColor: '#7c3aed' }}>Done</Button>
             </div>
@@ -159,12 +178,17 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
                   <form onSubmit={handleSendSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Amount (USD) <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Amount (USD) <span className="text-red-500">*</span>
+                    <span className="text-xs text-slate-500 font-normal"> Max: ${fundedAmount}</span>
+                  </label>
                   <Input
                     type="number"
                     placeholder="0.00"
-                    value={amountUSD}
-                    onChange={(e) => setAmountUSD(e.target.value)}
+                    value={sendAmount}
+                    onChange={(e) => handleAmountChange(e.target.value)}
+                    max={fundedAmount}
+                    step="0.01"
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />

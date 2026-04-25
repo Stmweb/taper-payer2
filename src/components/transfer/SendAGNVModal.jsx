@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
@@ -83,7 +83,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   }, [isOpen, appUser]);
 
   // Initialize Square Web Payments
-  const initSquare = async () => {
+  const initSquare = useCallback(async () => {
     setSquareLoading(true);
     setError('');
     
@@ -143,7 +143,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     } finally {
       setSquareLoading(false);
     }
-  };
+  }, []);
 
   // Load Square SDK when funding step is active
   useEffect(() => {

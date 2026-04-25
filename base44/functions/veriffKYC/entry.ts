@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
 
         const signature = await signPayload(JSON.stringify(payload), apiSecret);
 
-        const res = await fetch('https://api.veriff.com/v1/sessions', {
+        const res = await fetch('https://stationapi.veriff.com/v1/sessions', {
           method: 'POST',
           headers: {
             'X-AUTH-CLIENT': apiKey,
@@ -100,7 +100,7 @@ Deno.serve(async (req) => {
       const timestamp = new Date().toISOString();
       const signature = await signPayload(timestamp, apiSecret);
 
-      const res = await fetch(`https://api.veriff.com/v1/sessions/${sessionId}`, {
+      const res = await fetch(`https://stationapi.veriff.com/v1/sessions/${sessionId}`, {
         method: 'GET',
         headers: {
           'X-AUTH-CLIENT': apiKey,

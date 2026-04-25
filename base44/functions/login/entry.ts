@@ -1,12 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
-
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
+import bcrypt from 'npm:bcryptjs@2.4.3';
 
 async function generateJWT(user) {
   const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
@@ -39,9 +32,9 @@ Deno.serve(async (req) => {
 
     const user = users[0];
 
-    // Verify password
-    const password_hash = await hashPassword(password);
-    if (password_hash !== user.password_hash) {
+    // Verify password using bcrypt
+    const isPasswordValid = bcrypt.compareSync(password, user.password_hash);
+    if (!isPasswordValid) {
       return Response.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 

@@ -53,7 +53,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const [error, setError] = useState('');
   const [kycRefreshKey, setKycRefreshKey] = useState(0);
   const [showSignup, setShowSignup] = useState(false);
-  const [personaUrl, setPersonaUrl] = useState(null);
+  const [veriffUrl, setVeriffUrl] = useState(null);
+  const [veriffSessionId, setVeriffSessionId] = useState(null);
   const [kycStatus, setKycStatus] = useState(null);
 
   // Funding & sending
@@ -94,23 +95,18 @@ export default function SendAGNVModal({ isOpen, onClose }) {
           return;
         }
 
-        // Start KYC
-        const res = await base44.functions.invoke('cybridTransfer', {
-          action: 'startKYC',
-          customerGuid: freshUser?.id,
-          _jwt: '',
-          appUserId: freshUser?.id,
+        // Create Veriff session
+        const res = await base44.functions.invoke('veriffKYC', {
+          action: 'createSession',
         });
 
-        const { personaUrl: pUrl, state: kycState } = res.data || {};
-        if (pUrl) {
-          setPersonaUrl(pUrl);
-          setKycStatus(kycState || 'unverified');
-        } else {
-          setKycStatus(kycState || 'pending');
-        }
+        if (res.data?.error) throw new Error(res.data.error);
+
+        setVeriffSessionId(res.data?.sessionId);
+        setVeriffUrl(res.data?.url);
+        setKycStatus('unverified');
       } catch (err) {
-        setError(err.message || 'Failed to check KYC status');
+        setError(err.message || 'Failed to create KYC session');
       } finally {
         setLoading(false);
       }
@@ -176,7 +172,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setSuccess(false);
     setError('');
     setTxHash('');
-    setPersonaUrl(null);
+    setVeriffUrl(null);
+    setVeriffSessionId(null);
     setKycStatus(null);
     setShowSignup(false);
     onClose();
@@ -257,17 +254,17 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                     Continue to Funding
                   </Button>
                 </div>
-              ) : personaUrl ? (
+              ) : veriffUrl ? (
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center space-y-3">
                   <div className="text-3xl">🪪</div>
                   <p className="font-semibold text-slate-800">Identity Verification Required</p>
                   <p className="text-sm text-slate-600">
-                    We need to verify your identity. This is a one-time process that takes about 2 minutes.
+                    We need to verify your identity with Veriff. This is a one-time process that takes about 2 minutes.
                   </p>
                   <Button
                     className="w-full"
                     style={{ backgroundColor: '#7c3aed' }}
-                    onClick={() => window.open(personaUrl, '_blank')}
+                    onClick={() => window.open(veriffUrl, '_blank')}
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Start Verification →

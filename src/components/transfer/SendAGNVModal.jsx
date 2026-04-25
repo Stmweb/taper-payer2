@@ -148,7 +148,6 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                       <Info className="w-4 h-4 text-blue-500" />
                       <span className="text-sm font-semibold text-blue-700">Step 1: Fund Your Account</span>
                     </div>
-                    <p className="text-sm text-blue-700">Add funds to your account using Square. These funds will be converted to AGNV when you send.</p>
                   </div>
 
                   {error && (

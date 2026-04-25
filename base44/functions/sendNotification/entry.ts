@@ -139,21 +139,22 @@ Deno.serve(async (req) => {
 
     } else if (type === 'request_topup') {
       const { myPhone, topupLink } = payload;
-      const subject = `${senderName} is requesting a mobile top-up via Taper Payer`;
-      const html = `<div style="font-family:sans-serif;max-width:480px;margin:auto;padding:24px;">
-        <h2 style="color:#F88F2B;">Top-Up Request</h2>
-        <p><strong>${senderName}</strong> is asking you to top up their phone (<strong>${myPhone}</strong>) with <strong>$${amount} USD</strong> via Taper Payer.</p>
-        ${note ? `<p style="color:#64748b;font-style:italic;">"${note}"</p>` : ''}
-        <a href="${topupLink}" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#F88F2B;color:white;border-radius:8px;text-decoration:none;">Top Up Now on Taper Payer</a>
-      </div>`;
       const smsBody = `${senderName} is asking you to top up their phone (${myPhone}) with $${amount} USD.${note ? ` "${note}"` : ''} Top up now: ${topupLink}`;
 
-      if (isEmail(recipient)) {
-        results.email = await sendEmail({ to: recipient, subject, html, text: smsBody });
-      }
       if (isPhone(recipient)) {
         const phone = normalizePhone(recipient);
-        results.sms = await sendSMS({ to: phone, body: smsBody });
+        results.whatsapp = await sendWhatsAppTemplate({
+          to: `whatsapp:${phone}`,
+          contentSid: 'HXd835b050c681889158e3b929eb1ea7c2',
+          variables: {
+            '1': 'there',
+            '2': senderName,
+            '3': myPhone,
+            '4': String(amount),
+            '5': note || 'No note provided',
+            '6': topupLink,
+          }
+        });
       }
 
     } else if (type === 'topup_confirmation') {

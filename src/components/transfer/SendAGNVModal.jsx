@@ -88,8 +88,16 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setError('');
     
     try {
+      // Load Square SDK if not already loaded
       if (!window.Square) {
-        throw new Error('Square SDK not available. Please refresh the page.');
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://web-payments-sdk.squareup.com/sq.js';
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = () => reject(new Error('Failed to load Square SDK'));
+          document.head.appendChild(script);
+        });
       }
 
       const config = await base44.functions.invoke('getSquareConfig', {});

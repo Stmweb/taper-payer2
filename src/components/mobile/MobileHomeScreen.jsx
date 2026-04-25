@@ -149,7 +149,7 @@ export default function MobileHomeScreen() {
         <div>
           <p className="text-slate-500 text-sm font-medium">Welcome back 👋</p>
            <h1 className="text-2xl font-bold mt-0.5">
-             <span style={{ color: '#000' }}>{user?.full_name ? user.full_name.split(' ')[0] : 'Taper'}</span>
+             <span style={{ color: user?.full_name ? '#000' : '#3D7BB7' }}>{user?.full_name ? user.full_name.split(' ')[0] : 'Taper'}</span>
              {!user?.full_name && <span style={{ color: '#61AF39' }}> Payer</span>}
            </h1>
         </div>

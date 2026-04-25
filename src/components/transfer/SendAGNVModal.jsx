@@ -546,7 +546,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                   <p><span className="font-medium">From:</span> {appUser?.full_name}</p>
                   <p><span className="font-medium">To:</span> {recipientName}</p>
                   <p><span className="font-medium">Phone:</span> {recipientPhone}</p>
-                  <p><span className="font-medium">Amount:</span> ${sendAmount} USD = {agnvAmount} AGNV</p>
+                  <p><span className="font-medium">Amount Sent:</span> ${sendAmount} USD</p>
+                  <p><span className="font-medium">Receiver Gets:</span> {agnvAmount} AGNV = {htgEquiv} HTG</p>
                   <p><span className="font-medium">Status:</span> Pending Processing</p>
                   <p><span className="font-medium">Date:</span> {new Date().toLocaleString()}</p>
                   {txHash && <p><span className="font-medium">ID:</span> {txHash}</p>}

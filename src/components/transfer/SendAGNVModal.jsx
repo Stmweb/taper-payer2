@@ -284,9 +284,11 @@ export default function SendAGNVModal({ isOpen, onClose }) {
         <div className="p-6 pt-4">
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-xl" style={{ background: 'linear-gradient(90deg, #003DA5 0%, #003DA5 33%, white 33%, white 66%, #CE1126 66%, #CE1126 100%)' }}>
-              <span style={{ color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>A</span>
-            </div>
+            <img 
+              src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/07b27ff60_AGNVNEWLogo.jpeg"
+              alt="AGNV"
+              className="w-12 h-12 rounded-full"
+            />
             <div>
               <h2 className="text-xl font-bold text-slate-900">Send AGNV</h2>
             </div>

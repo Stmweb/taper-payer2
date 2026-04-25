@@ -36,6 +36,7 @@ import PaymentRequest from './pages/PaymentRequest';
 import PrepayNationTest from './pages/PrepayNationTest';
 import PitchDeck from './pages/PitchDeck';
 import TaperPayerCybridCompliance from './pages/TaperPayerCybridCompliance';
+import AdminAGNVTransactions from './pages/AdminAGNVTransactions';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -191,6 +192,7 @@ const AuthenticatedApp = () => {
         <Route path="/PrepayNationTest" element={<PrepayNationTest />} />
         <Route path="/PitchDeck" element={<PitchDeck />} />
         <Route path="/TaperPayerCybridCompliance" element={<TaperPayerCybridCompliance />} />
+        <Route path="/AdminAGNVTransactions" element={<AdminAGNVTransactions />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

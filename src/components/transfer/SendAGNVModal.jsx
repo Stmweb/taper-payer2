@@ -241,7 +241,21 @@ export default function SendAGNVModal({ isOpen, onClose }) {
       
       if (res.data?.error) throw new Error(res.data.error);
       
-      setTxHash(res.data?.transactionId || '');
+      const txId = res.data?.transactionId || '';
+      setTxHash(txId);
+
+      // Log transaction for admin tracking
+      await base44.functions.invoke('logAGNVTransaction', {
+        recipientName,
+        recipientPhone,
+        recipientWallet: '',
+        amountUSD: parseFloat(amountAfterFee),
+        amountAGNV: parseFloat(agnvAmount),
+        usdcTxHash: '',
+        agnvTxHash: txId,
+        status: 'pending',
+      }).catch(e => console.warn('Failed to log transaction:', e));
+
       setSuccess(true);
       setStep('done');
     } catch (err) {

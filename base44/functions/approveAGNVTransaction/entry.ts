@@ -20,6 +20,41 @@ Deno.serve(async (req) => {
       }
     );
 
+    // Send WhatsApp notification when approved
+    if (approved && transaction.recipient_phone) {
+      const accountSid = Deno.env.get('TWILIO_ACCOUNT_SID');
+      const authToken = Deno.env.get('TWILIO_AUTH_TOKEN');
+      const fromNumber = Deno.env.get('TWILIO_WHATSAPP_NUMBER');
+
+      const message = `✅ Your AGNV transfer has been approved!\n\nRecipient: ${transaction.recipient_name}\nAmount: $${transaction.amount_usd} USD = ${transaction.amount_agnv} AGNV\n\nThe funds will be transferred shortly.`;
+
+      const toPhone = `whatsapp:${transaction.recipient_phone}`;
+
+      try {
+        const response = await fetch(
+          `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': `Basic ${btoa(`${accountSid}:${authToken}`)}`,
+            },
+            body: new URLSearchParams({
+              From: fromNumber,
+              To: toPhone,
+              Body: message,
+            }).toString(),
+          }
+        );
+
+        if (!response.ok) {
+          console.warn('WhatsApp notification failed:', await response.text());
+        }
+      } catch (err) {
+        console.warn('Failed to send WhatsApp notification:', err.message);
+      }
+    }
+
     if (!approved && rejectionReason) {
       await base44.integrations.Core.SendEmail({
         to: transaction.created_by,

@@ -143,18 +143,7 @@ Deno.serve(async (req) => {
 
       if (isPhone(recipient)) {
         const phone = normalizePhone(recipient);
-        results.whatsapp = await sendWhatsAppTemplate({
-          to: `whatsapp:${phone}`,
-          contentSid: 'HXd835b050c681889158e3b929eb1ea7c2',
-          variables: {
-            '1': 'there',
-            '2': senderName,
-            '3': myPhone,
-            '4': String(amount),
-            '5': note || 'No note provided',
-            '6': topupLink,
-          }
-        });
+        results.sms = await sendSMS({ to: phone, body: smsBody });
       }
 
     } else if (type === 'topup_confirmation') {

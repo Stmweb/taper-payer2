@@ -1,26 +1,25 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
 const CURRENCIES = ['USD', 'HTG', 'NGN', 'GHS', 'JMD', 'KES', 'BRL', 'MXN'];
 
 const COUNTRIES = [
-  { name: 'Haiti', flag: '🇭🇹', dial: '+509' },
-  { name: 'United States', flag: '🇺🇸', dial: '+1' },
-  { name: 'Nigeria', flag: '🇳🇬', dial: '+234' },
+  { name: 'Brazil', flag: '🇧🇷', dial: '+55' },
+  { name: 'Canada', flag: '🇨🇦', dial: '+1' },
   { name: 'Ghana', flag: '🇬🇭', dial: '+233' },
+  { name: 'Haiti', flag: '🇭🇹', dial: '+509' },
   { name: 'Jamaica', flag: '🇯🇲', dial: '+1876' },
   { name: 'Kenya', flag: '🇰🇪', dial: '+254' },
-  { name: 'Brazil', flag: '🇧🇷', dial: '+55' },
   { name: 'Mexico', flag: '🇲🇽', dial: '+52' },
-  { name: 'Canada', flag: '🇨🇦', dial: '+1' },
+  { name: 'Nigeria', flag: '🇳🇬', dial: '+234' },
   { name: 'United Kingdom', flag: '🇬🇧', dial: '+44' },
+  { name: 'United States', flag: '🇺🇸', dial: '+1' },
 ];
 
 export default function RequestMoneyModal({ isOpen, onClose }) {
@@ -28,7 +27,6 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [recipient, setRecipient] = useState('');
-  const [recipientCountry, setRecipientCountry] = useState(null);
   const [deliveryMethod, setDeliveryMethod] = useState('sms');
   const [senderPhone, setSenderPhone] = useState(user?.phone || '');
   const [senderPhoneCountry, setSenderPhoneCountry] = useState(COUNTRIES[0]);
@@ -37,17 +35,12 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [countrySearch, setCountrySearch] = useState('');
 
-  const filteredCountries = useMemo(() => {
-    if (!countrySearch) return COUNTRIES;
-    return COUNTRIES.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase()));
-  }, [countrySearch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!amount || !recipient || !recipientCountry || !senderPhone) {
+    if (!amount || !recipient || !senderPhone) {
       setError('Please fill in all required fields.');
       return;
     }
@@ -72,7 +65,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
       // Create payment request with unique URL
       const requestRes = await base44.functions.invoke('createPaymentRequest', {
         recipient: normalizedRecipient,
-        recipient_country: recipientCountry.name,
+        recipient_country: '',
         amount: parseFloat(amount),
         currency,
         note,
@@ -93,7 +86,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
         amount,
         currency,
         note,
-        recipientCountry: recipientCountry.name,
+        recipientCountry: '',
         deliveryMethod,
         shareUrl: requestRes.data?.share_url || '',
       }).catch((e) => console.warn('Notification delivery failed:', e));
@@ -109,7 +102,6 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setAmount('');
     setCurrency('USD');
     setRecipient('');
-    setRecipientCountry(null);
     setRecipientPhoneCountry(COUNTRIES[0]);
     setDeliveryMethod('sms');
     setNote('');
@@ -117,7 +109,6 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
     setSenderPhoneCountry(COUNTRIES[0]);
     setSuccess(false);
     setError('');
-    setCountrySearch('');
     onClose();
   };
 
@@ -184,34 +175,7 @@ export default function RequestMoneyModal({ isOpen, onClose }) {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Select Receiving Country <span className="text-red-500">*</span></label>
-                  <Select value={recipientCountry?.name || ''} onValueChange={(countryName) => {
-                    const country = COUNTRIES.find(c => c.name === countryName);
-                    setRecipientCountry(country);
-                    setCountrySearch('');
-                  }}>
-                    <SelectTrigger style={{ color: '#1e293b', backgroundColor: '#ffffff' }}>
-                      <SelectValue placeholder="Search country..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <div className="p-2">
-                        <Input
-                          placeholder="Search countries..."
-                          value={countrySearch}
-                          onChange={(e) => setCountrySearch(e.target.value)}
-                          style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                          className="mb-2"
-                        />
-                      </div>
-                      {filteredCountries.map((country) => (
-                        <SelectItem key={country.name} value={country.name}>
-                          {country.flag} {country.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Delivery Method <span className="text-red-500">*</span></label>

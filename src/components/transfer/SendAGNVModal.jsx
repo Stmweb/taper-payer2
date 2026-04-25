@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CheckCircle, AlertCircle, Loader2, Info, ArrowLeft } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 
 const RATES = {
   USD_TO_AGNV: 10,   // 1 USD = 10 AGNV
@@ -26,9 +27,26 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const agnvAmount = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_AGNV).toFixed(2) : '';
   const htgEquiv = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_HTG).toFixed(2) : '';
 
-  const handleFundingComplete = () => {
-    setFundingComplete(true);
-    setStep('send');
+  const handleFundingSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (!fundingAmount) {
+      setError('Please enter an amount');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await base44.functions.invoke('processAGNVFunding', {
+        amount: parseFloat(fundingAmount),
+      });
+      setFundingComplete(true);
+      setStep('send');
+      setAmountUSD(fundingAmount);
+    } catch (err) {
+      setError(err.message || 'Payment failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSendSubmit = async (e) => {
@@ -137,7 +155,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                     </div>
                   )}
 
-                  <form onSubmit={(e) => { e.preventDefault(); setError(''); if (!fundingAmount) { setError('Please enter an amount'); return; } handleFundingComplete(); }} className="space-y-4">
+                  <form onSubmit={handleFundingSubmit} className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">Funding Amount (USD) <span className="text-red-500">*</span></label>
                       <Input
@@ -152,10 +170,11 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
                     <Button
                       type="submit"
+                      disabled={loading}
                       className="w-full py-3 text-white"
                       style={{ backgroundColor: '#7c3aed' }}
                     >
-                      Fund Account
+                      {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</> : 'Fund Account'}
                     </Button>
                   </form>
                 </>

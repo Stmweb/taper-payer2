@@ -64,8 +64,10 @@ export default function AccountSettings() {
       // Fetch fresh user data from server
       const updatedUser = await base44.auth.me();
       setUser(updatedUser);
-      // Sync to AppAuth context
-      login(updatedUser, appUser?.jwt, appUser?.cybrid_customer_id);
+      // Sync to AppAuth context with stored values
+      const storedJwt = localStorage.getItem('auth_token');
+      const storedCybridId = localStorage.getItem('cybrid_customer_id');
+      login(updatedUser, storedJwt, storedCybridId);
       setEditingField(null);
       toast.success('Profile updated successfully');
     } catch (e) {

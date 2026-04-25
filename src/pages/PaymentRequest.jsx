@@ -126,6 +126,13 @@ export default function PaymentRequest() {
                 <p className="text-slate-900 font-medium">{request?.sender_name}</p>
               </div>
 
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">
+                  To
+                </p>
+                <p className="text-slate-900 font-medium">{request?.recipient}</p>
+              </div>
+
               {request?.note && (
                 <div>
                   <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">

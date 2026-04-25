@@ -183,7 +183,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setLoading(true);
     try {
       // Request tokenization
-      const result = await webPaymentsRef.current.card.tokenize();
+      const result = await cardRef.current.tokenize();
       if (result.status !== 'OK') {
         throw new Error(result.errors?.[0]?.message || 'Failed to tokenize card');
       }

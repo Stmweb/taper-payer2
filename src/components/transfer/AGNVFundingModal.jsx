@@ -21,15 +21,21 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
         const appId = await base44.functions.invoke('getSquareConfig', {});
         const squareAppId = appId.data.squareApplicationId;
         
+        if (window.Square) {
+          const payments = window.Square.payments(squareAppId);
+          setPaymentRequest(payments);
+          setWeb(payments);
+          setSquareReady(true);
+          return;
+        }
+        
         const script = document.createElement('script');
         script.src = 'https://web.squarecdn.com/v1/square.js';
         script.onload = async () => {
-          const { web: squareWeb } = window;
-          setWeb(squareWeb);
-          await squareWeb.payments(squareAppId).then(payments => {
-            setPaymentRequest(payments);
-            setSquareReady(true);
-          });
+          const payments = window.Square.payments(squareAppId);
+          setPaymentRequest(payments);
+          setWeb(payments);
+          setSquareReady(true);
         };
         document.head.appendChild(script);
       } catch (err) {

@@ -38,6 +38,7 @@ export default function SiteFooter() {
               <li><Link to="/TaperPayerCookies" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Cookies Policy</Link></li>
               <li><Link to="/TaperPayerWhiteLabel" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> White Label</Link></li>
               <li><Link to="/TaperPayerAML" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> AML Policy</Link></li>
+              <li><Link to="/TaperPayerCybridCompliance" className="hover:text-white transition-colors flex items-center gap-2"><span style={{ color: '#61AF39' }}>›</span> Compliance</Link></li>
             </ul>
           </div>
 

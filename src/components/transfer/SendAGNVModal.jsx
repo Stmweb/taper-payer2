@@ -87,78 +87,58 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
     const initSquare = async () => {
       try {
-        // Load Square Web Payments SDK with retry
+        // Check if Square SDK already loaded
         if (!window.Square) {
-          let attempts = 0;
-          const maxAttempts = 2;
+          console.log('Loading Square SDK from CDN...');
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://web-payments-sdk.squareup.com/sq.js';
+            script.async = true;
+            script.crossOrigin = 'anonymous';
+            
+            const timeout = setTimeout(() => {
+              reject(new Error('Square SDK loading took too long. Please check your internet connection.'));
+            }, 30000);
+            
+            script.onload = () => {
+              clearTimeout(timeout);
+              console.log('Square SDK loaded successfully');
+              resolve();
+            };
+            
+            script.onerror = (e) => {
+              clearTimeout(timeout);
+              console.error('Square SDK load error:', e);
+              reject(new Error('Unable to load Square payment SDK. Please check your internet connection.'));
+            };
+            
+            document.head.appendChild(script);
+          });
+        }
 
-          while (attempts < maxAttempts) {
-            try {
-              await new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = 'https://web-payments-sdk.squareup.com/sq.js';
-                script.async = true;
-                
-                const timeout = setTimeout(() => {
-                  reject(new Error('Square SDK load timeout'));
-                }, 20000);
-                
-                script.onload = () => {
-                  clearTimeout(timeout);
-                  if (window.Square) {
-                    resolve();
-                  } else {
-                    reject(new Error('Square object not available'));
-                  }
-                };
-                
-                script.onerror = () => {
-                  clearTimeout(timeout);
-                  reject(new Error('Failed to load Square SDK from CDN'));
-                };
-                
-                document.head.appendChild(script);
-              });
-              break; // Success, exit retry loop
-            } catch (err) {
-              attempts++;
-              if (attempts >= maxAttempts) {
-                throw err; // Final attempt failed
-              }
-              // Wait before retrying
-              await new Promise(r => setTimeout(r, 1000));
-            }
-          }
+        if (!window.Square) {
+          throw new Error('Square SDK not available');
         }
 
         const config = await base44.functions.invoke('getSquareConfig', {});
         if (!config.data?.squareApplicationId) {
-          throw new Error('Square Application ID not configured');
+          throw new Error('Square configuration missing');
         }
 
         const { squareApplicationId } = config.data;
-
         const payments = await window.Square.payments(squareApplicationId, 'US');
-        if (!payments) {
-          throw new Error('Failed to initialize Square payments');
-        }
         webPaymentsRef.current = payments;
 
         const card = await payments.card();
-        if (!card) {
-          throw new Error('Failed to create card element');
-        }
         cardRef.current = card;
 
-        if (!cardContainerRef.current) {
-          throw new Error('Payment form container not found');
+        if (cardContainerRef.current) {
+          await card.attach(cardContainerRef.current);
+          setSquareReady(true);
         }
-
-        await card.attach(cardContainerRef.current);
-        setSquareReady(true);
       } catch (err) {
-        console.error('Square initialization error:', err);
-        setError(err.message || 'Failed to load payment form. Please try again.');
+        console.error('Square init failed:', err);
+        setError(err.message || 'Payment form unavailable. Please refresh and try again.');
       }
     };
 

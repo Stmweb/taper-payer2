@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
           method: 'POST',
           headers: {
             'X-AUTH-CLIENT': apiKey,
-            'X-SIGNATURE': signature,
+            'X-HMAC-SIGNATURE': signature,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(payload),
@@ -104,7 +104,7 @@ Deno.serve(async (req) => {
         method: 'GET',
         headers: {
           'X-AUTH-CLIENT': apiKey,
-          'X-SIGNATURE': signature,
+          'X-HMAC-SIGNATURE': signature,
           'X-TIMESTAMP': timestamp,
         },
       });

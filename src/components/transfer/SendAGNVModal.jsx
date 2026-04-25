@@ -161,8 +161,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             <div className="text-center py-8">
               <AlertCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-slate-900 mb-2">KYC Verification Required</h3>
-              <p className="text-slate-600 text-sm mb-4">Complete identity verification to send AGNV.</p>
-              <Button onClick={onClose} className="w-full" style={{ backgroundColor: '#7c3aed' }}>Close</Button>
+              <p className="text-slate-600 text-sm mb-4">Complete identity verification to send AGNV. Go to Account Settings to verify your identity.</p>
+              <Button onClick={() => window.location.href = '/AccountSettings'} className="w-full" style={{ backgroundColor: '#7c3aed' }}>Go to Account Settings</Button>
             </div>
           ) : success ? (
             <div className="text-center py-8">

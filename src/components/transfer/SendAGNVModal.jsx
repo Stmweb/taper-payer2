@@ -87,41 +87,48 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
     const initSquare = async () => {
       try {
-        // Load Square Web Payments SDK
+        // Load Square Web Payments SDK with retry
         if (!window.Square) {
-          await new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://web-payments-sdk.squareup.com/sq.js';
-            script.async = true;
-            
-            script.onload = () => {
-              if (window.Square) {
-                resolve();
-              } else {
-                reject(new Error('Square object not available after script load'));
+          let attempts = 0;
+          const maxAttempts = 2;
+
+          while (attempts < maxAttempts) {
+            try {
+              await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://web-payments-sdk.squareup.com/sq.js';
+                script.async = true;
+                
+                const timeout = setTimeout(() => {
+                  reject(new Error('Square SDK load timeout'));
+                }, 20000);
+                
+                script.onload = () => {
+                  clearTimeout(timeout);
+                  if (window.Square) {
+                    resolve();
+                  } else {
+                    reject(new Error('Square object not available'));
+                  }
+                };
+                
+                script.onerror = () => {
+                  clearTimeout(timeout);
+                  reject(new Error('Failed to load Square SDK from CDN'));
+                };
+                
+                document.head.appendChild(script);
+              });
+              break; // Success, exit retry loop
+            } catch (err) {
+              attempts++;
+              if (attempts >= maxAttempts) {
+                throw err; // Final attempt failed
               }
-            };
-            
-            script.onerror = () => {
-              reject(new Error('Failed to load Square SDK from CDN'));
-            };
-            
-            const timeout = setTimeout(() => {
-              reject(new Error('Square SDK load timeout'));
-            }, 20000);
-            
-            document.head.appendChild(script);
-            
-            // Cancel timeout on load/error
-            script.onload = () => {
-              clearTimeout(timeout);
-              if (window.Square) resolve();
-            };
-            script.onerror = () => {
-              clearTimeout(timeout);
-              reject(new Error('Failed to load Square SDK from CDN'));
-            };
-          });
+              // Wait before retrying
+              await new Promise(r => setTimeout(r, 1000));
+            }
+          }
         }
 
         const config = await base44.functions.invoke('getSquareConfig', {});

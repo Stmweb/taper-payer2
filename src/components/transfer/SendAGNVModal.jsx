@@ -10,6 +10,7 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 
 const STEPS = [
   { id: 'auth',    label: 'Login/Sign Up'   },
+  { id: 'fund',    label: 'Fund Account'    },
   { id: 'send',    label: 'Send AGNV'       },
   { id: 'done',    label: 'Complete'        },
 ];
@@ -55,10 +56,12 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const [veriffSessionId, setVeriffSessionId] = useState(null);
   const [kycStatus, setKycStatus] = useState(null);
 
-  // Sending
+  // Funding & sending
+  const [fundedAmount, setFundedAmount] = useState(0);
   const [sendAmount, setSendAmount] = useState('');
   const [recipientName, setRecipientName] = useState('');
   const [recipientPhone, setRecipientPhone] = useState('');
+  const [recipientCountry, setRecipientCountry] = useState('');
   const [success, setSuccess] = useState(false);
   const [txHash, setTxHash] = useState('');
 
@@ -69,13 +72,22 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   useEffect(() => {
     if (!isOpen) return;
     // Skip auth step if user already logged in via header
-    setStep(appUser ? 'send' : 'auth');
+    setStep(appUser ? 'fund' : 'auth');
   }, [isOpen, appUser]);
 
 
 
+  const handleFundingSuccess = (amount) => {
+    setFundedAmount(parseFloat(amount) || 0);
+    setStep('send');
+    setSendAmount('');
+  };
+
   const handleAmountChange = (value) => {
-    setSendAmount(value);
+    const numValue = parseFloat(value);
+    if (numValue <= fundedAmount || value === '') {
+      setSendAmount(value);
+    }
   };
 
   const handleSendSubmit = async (e) => {
@@ -83,8 +95,13 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setError('');
     const amount = parseFloat(sendAmount);
     
-    if (!sendAmount || !recipientName || !recipientPhone) {
+    if (!sendAmount || !recipientName || !recipientPhone || !recipientCountry) {
       setError('Please fill in all required fields.');
+      return;
+    }
+
+    if (amount > fundedAmount) {
+      setError(`Cannot send more than $${fundedAmount} (your funded amount).`);
       return;
     }
 
@@ -110,9 +127,11 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
   const handleClose = () => {
     setStep('auth');
+    setFundedAmount(0);
     setSendAmount('');
     setRecipientName('');
     setRecipientPhone('');
+    setRecipientCountry('');
     setSuccess(false);
     setError('');
     setTxHash('');
@@ -173,16 +192,78 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               >
                 Login / Sign Up
               </Button>
-            </div>
-          )}
+              </div>
+              )}
 
-          {/* Step 2: Send */}
-          {step === 'send' && !success && (
+              {/* Step 2: Fund */}
+              {step === 'fund' && (
+              <div className="space-y-4">
+              <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Info className="w-4 h-4 text-purple-500" />
+                  <span className="text-sm font-semibold text-purple-700">Step 2: Fund Your Account</span>
+                </div>
+                <p className="text-sm text-slate-600 mb-4">
+                  Add funds to your account using Square. This amount will be available to send as AGNV.
+                </p>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-semibold">$</span>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        min="1"
+                        placeholder="0.00"
+                        className="pl-8 border-slate-300"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Quick amounts */}
+                  <div>
+                    <label className="block text-xs font-medium text-slate-600 mb-2">Quick Select</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[25, 50, 100, 250].map(amount => (
+                        <button
+                          key={amount}
+                          className="px-3 py-2 rounded-lg text-sm font-semibold border transition-all"
+                          style={{ 
+                            backgroundColor: '#7c3aed',
+                            color: 'white',
+                            borderColor: '#7c3aed'
+                          }}
+                        >
+                          ${amount}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div id="card-container" className="border border-slate-300 rounded-lg p-4 bg-white min-h-[60px]"></div>
+
+                  <Button
+                    onClick={() => handleFundingSuccess(100)}
+                    className="w-full py-3 text-white font-semibold"
+                    style={{ backgroundColor: '#7c3aed' }}
+                  >
+                    {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
+                    {loading ? 'Processing...' : 'Fund Account'}
+                  </Button>
+                </div>
+              </div>
+              </div>
+              )}
+
+              {/* Step 3: Send */}
+              {step === 'send' && !success && (
             <div className="space-y-4">
               <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4 mb-5">
                 <div className="flex items-center gap-1 mb-3">
                   <Info className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-semibold text-purple-700">Send AGNV</span>
+                  <span className="text-sm font-semibold text-purple-700">Step 3: Send AGNV</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center text-sm mb-3">
                   <div className="bg-white rounded-xl p-2 shadow-sm">
@@ -204,12 +285,14 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
                     Amount (USD) <span className="text-red-500">*</span>
+                    <span className="text-xs text-slate-500 font-normal"> Max: ${fundedAmount}</span>
                   </label>
                   <Input
                     type="number"
                     placeholder="0.00"
                     value={sendAmount}
                     onChange={(e) => handleAmountChange(e.target.value)}
+                    max={fundedAmount}
                     step="0.01"
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
@@ -234,18 +317,30 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Recipient Phone <span className="text-red-500">*</span></label>
-                  <Input
-                    type="tel"
-                    placeholder="Phone number"
-                    value={recipientPhone}
-                    onChange={(e) => setRecipientPhone(e.target.value)}
-                    required
-                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                  />
-                </div>
+                   <label className="block text-sm font-medium text-slate-700 mb-1">Recipient Phone <span className="text-red-500">*</span></label>
+                   <Input
+                     type="tel"
+                     placeholder="Phone number"
+                     value={recipientPhone}
+                     onChange={(e) => setRecipientPhone(e.target.value)}
+                     required
+                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                   />
+                 </div>
 
-                <Button
+                 <div>
+                   <label className="block text-sm font-medium text-slate-700 mb-1">Recipient Country <span className="text-red-500">*</span></label>
+                   <Input
+                     type="text"
+                     placeholder="Country"
+                     value={recipientCountry}
+                     onChange={(e) => setRecipientCountry(e.target.value)}
+                     required
+                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                   />
+                 </div>
+
+                 <Button
                   type="submit"
                   disabled={loading}
                   className="w-full py-3 text-white"

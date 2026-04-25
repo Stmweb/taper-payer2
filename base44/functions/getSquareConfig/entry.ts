@@ -8,9 +8,16 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const squareAppId = Deno.env.get('SQUARE_APPLICATION_ID');
+    const squareLocationId = Deno.env.get('SQUARE_LOCATION_ID');
+
+    if (!squareAppId || !squareLocationId) {
+      return Response.json({ error: 'Square configuration missing' }, { status: 500 });
+    }
+
     return Response.json({
-      applicationId: Deno.env.get('SQUARE_APPLICATION_ID'),
-      locationId: Deno.env.get('SQUARE_LOCATION_ID'),
+      squareApplicationId: squareAppId,
+      squareLocationId: squareLocationId,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

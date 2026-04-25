@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AlertCircle, Loader2, CreditCard } from 'lucide-react';
@@ -11,39 +10,59 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [squareReady, setSquareReady] = useState(false);
-  const [web, setWeb] = useState(null);
-  const [paymentRequest, setPaymentRequest] = useState(null);
+  const [card, setCard] = useState(null);
 
   useEffect(() => {
-    const loadSquare = async () => {
-      try {
-        const appId = await base44.functions.invoke('getSquareConfig', {});
-        const squareAppId = appId.data.squareApplicationId;
-        
-        if (window.Square) {
-          const payments = window.Square.payments(squareAppId);
-          setPaymentRequest(payments);
-          setWeb(payments);
-          setSquareReady(true);
-          return;
-        }
-        
-        const script = document.createElement('script');
-        script.src = 'https://web.squarecdn.com/v1/square.js';
-        script.onload = async () => {
-          const payments = window.Square.payments(squareAppId);
-          setPaymentRequest(payments);
-          setWeb(payments);
-          setSquareReady(true);
-        };
-        document.head.appendChild(script);
-      } catch (err) {
-        setError('Failed to load payment processor');
-      }
-    };
-    loadSquare();
+    loadSquareSDK();
   }, []);
+
+  const loadSquareSDK = async () => {
+    try {
+      // Check if Square is already loaded
+      if (window.Square) {
+        await initializeCard();
+        return;
+      }
+
+      // Load Square SDK script
+      const script = document.createElement('script');
+      script.src = 'https://web.squarecdn.com/v1/square.js';
+      script.async = true;
+      script.onload = initializeCard;
+      script.onerror = () => setError('Failed to load Square SDK');
+      document.head.appendChild(script);
+    } catch (err) {
+      setError('Failed to initialize: ' + err.message);
+    }
+  };
+
+  const initializeCard = async () => {
+    try {
+      // Get Square app configuration
+      const config = await base44.functions.invoke('getSquareConfig', {});
+      
+      if (config.data.error) {
+        setError(config.data.error);
+        return;
+      }
+
+      const appId = config.data.squareApplicationId;
+      if (!appId) {
+        setError('Square configuration missing');
+        return;
+      }
+
+      // Initialize Square payments
+      const payments = window.Square.payments(appId);
+      
+      // Create and attach card element
+      const cardPaymentMethod = await payments.card();
+      await cardPaymentMethod.attach('#card-container');
+      setCard(cardPaymentMethod);
+    } catch (err) {
+      setError('Payment setup failed: ' + (err.message || err));
+    }
+  };
 
   const handleQuickSelect = (value) => {
     setAmount(value.toString());
@@ -58,41 +77,32 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
       return;
     }
 
-    if (!paymentRequest) {
-      setError('Payment processor not ready');
+    if (!card) {
+      setError('Payment processor not ready. Please refresh and try again.');
       return;
     }
 
     setLoading(true);
     try {
-      // Create card payment method
-      const cardPayments = await paymentRequest.cardPayments();
-      const result = await cardPayments.requestCardDetails({
-        billingContact: {
-          addressLines: [''],
-          city: '',
-          state: '',
-          postalCode: '',
-          countryCode: 'US',
-        },
+      // Tokenize the card
+      const result = await card.tokenize();
+
+      if (result.status !== 'OK') {
+        setError(result.errors?.[0]?.message || 'Card validation failed');
+        setLoading(false);
+        return;
+      }
+
+      // Send token to backend for payment
+      const paymentRes = await base44.functions.invoke('processSquarePayment', {
+        amount: parseFloat(amount),
+        sourceToken: result.token,
       });
 
-      if (result.status === 'OK') {
-        const { token } = result.details;
-        
-        // Send token to backend
-        const res = await base44.functions.invoke('processSquarePayment', {
-          amount: parseFloat(amount),
-          sourceToken: token,
-        });
-
-        if (res.data.success) {
-          onSuccess(parseFloat(amount));
-        } else {
-          setError(res.data.error || 'Payment failed');
-        }
+      if (paymentRes.data.success) {
+        onSuccess(parseFloat(amount));
       } else {
-        setError('Card details collection cancelled');
+        setError(paymentRes.data.error || 'Payment failed');
       }
     } catch (err) {
       setError(err.message || 'Payment processing failed');
@@ -160,18 +170,24 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
           </div>
         </div>
 
+        {/* Card Input Container */}
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
+          <div id="card-container" className="border border-slate-300 rounded-lg p-4 bg-white min-h-[60px]"></div>
+        </div>
+
         {/* Info Box */}
         <div className="rounded-2xl p-4 border" style={{ backgroundColor: '#e3f2fd', borderColor: '#3D7BB7' }}>
           <p className="text-sm flex items-start gap-2" style={{ color: '#3D7BB7' }}>
             <CreditCard className="w-4 h-4 flex-shrink-0 mt-0.5" />
-            <span>Click Pay to securely enter card details. Your wallet is credited immediately upon successful payment.</span>
+            <span>Your card details are securely tokenized. Your wallet is credited immediately upon successful payment.</span>
           </p>
         </div>
 
         {/* Submit Button */}
         <Button
           type="submit"
-          disabled={loading || !amount || !squareReady}
+          disabled={loading || !amount || !card}
           className="w-full text-white py-3 md:py-4 text-base md:text-lg font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
           style={{ backgroundColor: '#3D7BB7' }}
         >

@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import SignupModal from '@/components/SignupModal';
+import { useAppAuth } from '@/lib/AppAuthContext';
 
 export default function SiteHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const { user, logout } = useAppAuth();
 
   return (
     <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
@@ -38,17 +40,36 @@ export default function SiteHeader() {
             <Link to="/TaperPayerRates" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Exchange Rates</Link>
             <Link to="/TaperPayerTopUp" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Taper Mobile</Link>
             <Link to="/TaperPayerContact" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Contact</Link>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setShowSignupModal(true)}
-              className="text-slate-700 border-slate-300 hover:bg-slate-50"
-            >
-              Login
-            </Button>
-            <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-              <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
-            </a>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col items-end">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">{user.full_name}</p>
+                  <p className="text-xs text-slate-500 dark:text-gray-400">{user.email}</p>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={logout}
+                  className="text-slate-700 dark:text-gray-200"
+                >
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowSignupModal(true)}
+                  className="text-slate-700 border-slate-300 hover:bg-slate-50"
+                >
+                  Login
+                </Button>
+                <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
+                </a>
+              </>
+            )}
           </div>
 
           {/* Spacer for Mobile to Balance Layout */}
@@ -65,19 +86,36 @@ export default function SiteHeader() {
             <Link to="/TaperPayerTopUp" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Taper Mobile</Link>
             <Link to="/TaperPayerContact" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</Link>
             <div className="pt-3 space-y-3">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowSignupModal(true)}
-                className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20"
-              >
-                Login
-              </Button>
-              <Button 
-                onClick={() => setShowSignupModal(true)}
-                className="w-full bg-white text-blue-600 hover:bg-gray-100"
-              >
-                Sign up
-              </Button>
+              {user ? (
+                <>
+                  <div className="bg-white/10 rounded-lg p-3 text-white mb-3">
+                    <p className="text-sm font-semibold">{user.full_name}</p>
+                    <p className="text-xs text-white/70">{user.email}</p>
+                  </div>
+                  <Button 
+                    onClick={logout}
+                    className="w-full bg-white text-blue-600 hover:bg-gray-100"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" /> Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setShowSignupModal(true)}
+                    className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20"
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    onClick={() => setShowSignupModal(true)}
+                    className="w-full bg-white text-blue-600 hover:bg-gray-100"
+                  >
+                    Sign up
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         )}

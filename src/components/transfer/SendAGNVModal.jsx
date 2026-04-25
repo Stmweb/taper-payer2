@@ -257,26 +257,17 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               ) : veriffUrl ? (
                 <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center space-y-3">
                   <div className="text-3xl">🪪</div>
-                  <p className="font-semibold text-slate-800">Identity Verification Required</p>
+                  <p className="font-semibold text-slate-800">Identity Verification</p>
                   <p className="text-sm text-slate-600">
-                    We need to verify your identity with Veriff. This is a one-time process that takes about 2 minutes.
+                    Verification session created. Check your email for instructions or refresh to check status.
                   </p>
-                  <Button
-                    className="w-full"
-                    style={{ backgroundColor: '#7c3aed' }}
-                    onClick={() => window.open(veriffUrl, '_blank')}
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Start Verification →
-                  </Button>
-                  <div className="space-y-2 pt-2">
-                    <p className="text-xs text-slate-500">Completed the verification?</p>
+                  <div className="space-y-2">
                     <Button
                       onClick={() => setKycRefreshKey(k => k + 1)}
                       className="w-full"
-                      variant="outline"
+                      style={{ backgroundColor: '#7c3aed' }}
                     >
-                      <RefreshCw className="w-4 h-4 mr-2" /> I've Completed Verification
+                      <RefreshCw className="w-4 h-4 mr-2" /> Check Verification Status
                     </Button>
                   </div>
                 </div>

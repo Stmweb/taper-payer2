@@ -89,27 +89,44 @@ export default function SendAGNVModal({ isOpen, onClose }) {
       try {
         // Load Square Web Payments SDK
         if (!window.Square) {
-          const script = document.createElement('script');
-          script.src = 'https://web-payments-sdk.squareup.com/sq.js';
-          script.async = true;
-          script.onerror = () => {
-            throw new Error('Failed to load Square SDK script');
-          };
-          document.head.appendChild(script);
-          
           await new Promise((resolve, reject) => {
-            script.onload = resolve;
-            setTimeout(() => reject(new Error('Square SDK load timeout')), 10000);
+            const script = document.createElement('script');
+            script.src = 'https://web-payments-sdk.squareup.com/sq.js';
+            script.async = true;
+            
+            script.onload = () => {
+              if (window.Square) {
+                resolve();
+              } else {
+                reject(new Error('Square object not available after script load'));
+              }
+            };
+            
+            script.onerror = () => {
+              reject(new Error('Failed to load Square SDK from CDN'));
+            };
+            
+            const timeout = setTimeout(() => {
+              reject(new Error('Square SDK load timeout'));
+            }, 10000);
+            
+            document.head.appendChild(script);
+            
+            // Cancel timeout on load/error
+            script.onload = () => {
+              clearTimeout(timeout);
+              if (window.Square) resolve();
+            };
+            script.onerror = () => {
+              clearTimeout(timeout);
+              reject(new Error('Failed to load Square SDK from CDN'));
+            };
           });
-        }
-
-        if (!window.Square) {
-          throw new Error('Square object not available after script load');
         }
 
         const config = await base44.functions.invoke('getSquareConfig', {});
         if (!config.data?.squareApplicationId) {
-          throw new Error('Square Application ID not found in config');
+          throw new Error('Square Application ID not configured');
         }
 
         const { squareApplicationId } = config.data;
@@ -126,12 +143,12 @@ export default function SendAGNVModal({ isOpen, onClose }) {
         }
         cardRef.current = card;
 
-        if (cardContainerRef.current) {
-          await card.attach(cardContainerRef.current);
-          setSquareReady(true);
-        } else {
-          throw new Error('Card container not found');
+        if (!cardContainerRef.current) {
+          throw new Error('Payment form container not found');
         }
+
+        await card.attach(cardContainerRef.current);
+        setSquareReady(true);
       } catch (err) {
         console.error('Square initialization error:', err);
         setError(err.message || 'Failed to load payment form. Please try again.');

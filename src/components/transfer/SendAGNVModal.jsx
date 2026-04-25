@@ -91,30 +91,49 @@ export default function SendAGNVModal({ isOpen, onClose }) {
           const script = document.createElement('script');
           script.src = 'https://web-payments-sdk.squareup.com/sq.js';
           script.async = true;
+          script.onerror = () => {
+            throw new Error('Failed to load Square SDK script');
+          };
           document.head.appendChild(script);
           
           await new Promise((resolve, reject) => {
             script.onload = resolve;
-            script.onerror = reject;
+            setTimeout(() => reject(new Error('Square SDK load timeout')), 10000);
           });
         }
 
+        if (!window.Square) {
+          throw new Error('Square object not available after script load');
+        }
+
         const config = await base44.functions.invoke('getSquareConfig', {});
+        if (!config.data?.squareApplicationId) {
+          throw new Error('Square Application ID not found in config');
+        }
+
         const { squareApplicationId } = config.data;
 
         const payments = await window.Square.payments(squareApplicationId, 'US');
+        if (!payments) {
+          throw new Error('Failed to initialize Square payments');
+        }
         webPaymentsRef.current = payments;
 
         const card = await payments.card();
+        if (!card) {
+          throw new Error('Failed to create card element');
+        }
         cardRef.current = card;
 
         if (cardContainerRef.current) {
           await card.attach(cardContainerRef.current);
           setSquareReady(true);
+        } else {
+          throw new Error('Card container not found');
         }
       } catch (err) {
         console.error('Square initialization error:', err);
-        setError('Failed to load payment form. Please try again.');
+        setError(err.message || 'Failed to load payment form. Please try again.');
       }
     };
 

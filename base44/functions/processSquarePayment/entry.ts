@@ -29,27 +29,23 @@ Deno.serve(async (req) => {
     const [month, year] = expiry.split('/');
     const amountCents = Math.round(amount * 100);
 
-    // Create payment source
-    const sourcePayload = {
-      source_id: `card_nonce_${crypto.randomUUID()}`,
-      card: {
-        card_number: cardNumber,
-        expiration_month: parseInt(month),
-        expiration_year: parseInt(`20${year}`),
-        cvc: cvv,
-      },
-    };
-
     console.log('Creating payment with amount:', amountCents);
 
-    // Create the payment
+    // Create the payment using the card details directly
     const paymentPayload = {
       idempotency_key: crypto.randomUUID(),
       amount_money: {
         amount: amountCents,
         currency: 'USD',
       },
-      source_id: sourcePayload.source_id,
+      card_details: {
+        card: {
+          card_number: cardNumber,
+          expiration_month: parseInt(month),
+          expiration_year: parseInt(`20${year}`),
+          cvc: cvv,
+        },
+      },
       location_id: squareLocationId,
       note: `AGNV Account Funding - ${user.email}`,
     };

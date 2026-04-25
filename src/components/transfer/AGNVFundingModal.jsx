@@ -14,7 +14,6 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
   const [cvv, setCvv] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [useDebitCard, setUseDebitCard] = useState(true);
 
   const handleQuickSelect = (value) => {
     setAmount(value.toString());
@@ -38,11 +37,6 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
 
     if (!amount || parseFloat(amount) <= 0) {
       setError('Please enter a valid amount');
-      return;
-    }
-
-    if (!useDebitCard) {
-      setError('MonCash is coming soon');
       return;
     }
 
@@ -94,30 +88,7 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
         </div>
       </div>
 
-      {/* Payment Method Tabs */}
-      <div className="flex gap-3 mb-6">
-        <button
-          onClick={() => setUseDebitCard(true)}
-          className={`flex-1 px-4 py-3 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 ${
-            useDebitCard
-              ? 'bg-blue-600 text-white'
-              : 'bg-slate-700 text-slate-400'
-          }`}
-        >
-          <CreditCard className="w-5 h-5" />
-          Debit/Credit Cards
-        </button>
-        <button
-          onClick={() => setUseDebitCard(false)}
-          className={`flex-1 px-4 py-3 rounded-2xl font-semibold transition-all ${
-            !useDebitCard
-              ? 'bg-blue-600 text-white'
-              : 'bg-slate-700 text-slate-400'
-          }`}
-        >
-          MonCash
-        </button>
-      </div>
+
 
       {error && (
         <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-xl flex gap-2 text-red-400 text-sm">
@@ -166,39 +137,37 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
         </div>
 
         {/* Card Details */}
-        {useDebitCard && (
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Card Details</label>
-            <div className="bg-white rounded-2xl p-4 space-y-3">
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-2">Card Details</label>
+          <div className="bg-white rounded-2xl p-4 space-y-3">
+            <Input
+              type="text"
+              placeholder="Card number"
+              value={formatCardNumber(cardNumber)}
+              onChange={(e) => setCardNumber(e.target.value)}
+              maxLength="19"
+              className="text-slate-900 border-slate-300"
+            />
+            <div className="grid grid-cols-2 gap-3">
               <Input
                 type="text"
-                placeholder="Card number"
-                value={formatCardNumber(cardNumber)}
-                onChange={(e) => setCardNumber(e.target.value)}
-                maxLength="19"
+                placeholder="MM/YY"
+                value={formatExpiry(expiry)}
+                onChange={(e) => setExpiry(e.target.value)}
+                maxLength="5"
                 className="text-slate-900 border-slate-300"
               />
-              <div className="grid grid-cols-2 gap-3">
-                <Input
-                  type="text"
-                  placeholder="MM/YY"
-                  value={formatExpiry(expiry)}
-                  onChange={(e) => setExpiry(e.target.value)}
-                  maxLength="5"
-                  className="text-slate-900 border-slate-300"
-                />
-                <Input
-                  type="text"
-                  placeholder="CVV"
-                  value={cvv}
-                  onChange={(e) => setCvv(e.target.value.slice(0, 4))}
-                  maxLength="4"
-                  className="text-slate-900 border-slate-300"
-                />
-              </div>
+              <Input
+                type="text"
+                placeholder="CVV"
+                value={cvv}
+                onChange={(e) => setCvv(e.target.value.slice(0, 4))}
+                maxLength="4"
+                className="text-slate-900 border-slate-300"
+              />
             </div>
           </div>
-        )}
+        </div>
 
         {/* Info Box */}
         <div className="bg-blue-500/20 border border-blue-500/50 rounded-2xl p-4">

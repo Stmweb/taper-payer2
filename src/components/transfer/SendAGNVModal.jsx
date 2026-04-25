@@ -108,7 +108,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             
             const timeout = setTimeout(() => {
               reject(new Error('Square SDK load timeout'));
-            }, 10000);
+            }, 20000);
             
             document.head.appendChild(script);
             

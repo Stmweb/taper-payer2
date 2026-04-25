@@ -30,8 +30,8 @@ Deno.serve(async (req) => {
     // Amount in cents
     const amountCents = Math.round(amount * 100);
 
-    // Create Square Order first
-    const orderRes = await fetch(`https://connect.squareup.com/v2/orders`, {
+    // Create Square Payment Link
+    const paymentLinkRes = await fetch('https://connect.squareup.com/v2/payment-links', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${squareAccessToken}`,
@@ -39,60 +39,35 @@ Deno.serve(async (req) => {
         'Square-Version': '2024-04-17',
       },
       body: JSON.stringify({
-        idempotency_key: `agnv-order-${user.id}-${Date.now()}`,
-        location_id: squareLocationId,
-        line_items: [
-          {
-            name: 'AGNV Account Funding',
-            quantity: '1',
-            base_price_money: {
-              amount: amountCents,
-              currency: 'USD',
-            },
+        idempotency_key: `agnv-fund-${user.id}-${Date.now()}`,
+        description: 'AGNV Account Funding',
+        order_id: undefined,
+        quick_pay: {
+          name: 'AGNV Account Funding',
+          price_money: {
+            amount: amountCents,
+            currency: 'USD',
           },
-        ],
-        reference_id: `user-${user.id}`,
+        },
+        checkout_options: {
+          redirect_url: `${appUrl || 'https://taperpayer.com'}/TaperPayerHome?funding=success`,
+        },
       }),
     });
 
-    const orderData = await orderRes.json();
+    const paymentLinkData = await paymentLinkRes.json();
 
-    if (!orderRes.ok) {
-      console.error('Square order error:', orderData);
+    if (!paymentLinkRes.ok) {
+      console.error('Square payment link error:', paymentLinkData);
       return Response.json(
-        { error: orderData.errors?.[0]?.detail || 'Failed to create order' },
-        { status: 400 }
-      );
-    }
-
-    // Create Checkout with order ID
-    const checkoutRes = await fetch(`https://connect.squareup.com/v2/locations/${squareLocationId}/checkouts`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${squareAccessToken}`,
-        'Content-Type': 'application/json',
-        'Square-Version': '2024-04-17',
-      },
-      body: JSON.stringify({
-        idempotency_key: `agnv-checkout-${user.id}-${Date.now()}`,
-        order_id: orderData.order.id,
-        redirect_url: `${appUrl || 'https://taperpayer.com'}/TaperPayerHome?funding=success`,
-      }),
-    });
-
-    const checkoutData = await checkoutRes.json();
-
-    if (!checkoutRes.ok) {
-      console.error('Square checkout error:', checkoutData);
-      return Response.json(
-        { error: checkoutData.errors?.[0]?.detail || 'Failed to create checkout' },
+        { error: paymentLinkData.errors?.[0]?.detail || 'Failed to create payment link' },
         { status: 400 }
       );
     }
 
     return Response.json({
       success: true,
-      checkoutUrl: checkoutData.checkout?.checkout_page_url,
+      checkoutUrl: paymentLinkData.payment_link?.url,
       amount,
     });
   } catch (error) {

@@ -28,9 +28,15 @@ Deno.serve(async (req) => {
 
       const message = `✅ Your AGNV transfer has been approved!\n\nRecipient: ${transaction.recipient_name}\nAmount: $${transaction.amount_usd} USD = ${transaction.amount_agnv} AGNV\n\nThe funds will be transferred shortly.`;
 
-      const toPhone = `whatsapp:${transaction.recipient_phone}`;
+      // Format phone: ensure it starts with + and contains country code (e.g., +12025551234)
+      let formattedPhone = transaction.recipient_phone.trim();
+      if (!formattedPhone.startsWith('+')) {
+        formattedPhone = '+' + formattedPhone.replace(/\D/g, '');
+      }
+      const toPhone = `whatsapp:${formattedPhone}`;
 
       try {
+        console.log('Sending WhatsApp to:', toPhone);
         const response = await fetch(
           `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
           {
@@ -47,11 +53,10 @@ Deno.serve(async (req) => {
           }
         );
 
-        if (!response.ok) {
-          console.warn('WhatsApp notification failed:', await response.text());
-        }
+        const result = await response.json();
+        console.log('WhatsApp sent:', result.sid || 'pending');
       } catch (err) {
-        console.warn('Failed to send WhatsApp notification:', err.message);
+        console.error('Failed to send WhatsApp notification:', err.message);
       }
     }
 

@@ -19,8 +19,12 @@ export default function AdminAGNVTransactions() {
   const fetchTransactions = async () => {
     try {
       setLoading(true);
-      const query = filter === 'all' ? {} : { status: filter };
-      const txs = await base44.entities.AgnvTransaction.filter(query, '-created_date', 100);
+      let txs;
+      if (filter === 'all') {
+        txs = await base44.asServiceRole.entities.AgnvTransaction.list('-created_date', 100);
+      } else {
+        txs = await base44.asServiceRole.entities.AgnvTransaction.filter({ status: filter }, '-created_date', 100);
+      }
       setTransactions(txs);
     } catch (error) {
       console.error('Failed to fetch transactions:', error);

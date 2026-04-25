@@ -10,8 +10,6 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 
 const STEPS = [
   { id: 'auth',    label: 'Login/Sign Up'   },
-  { id: 'kyc',     label: 'Verify Identity' },
-  { id: 'fund',    label: 'Fund Account'    },
   { id: 'send',    label: 'Send AGNV'       },
   { id: 'done',    label: 'Complete'        },
 ];
@@ -72,44 +70,10 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   useEffect(() => {
     if (!isOpen) return;
     // Skip auth step if user already logged in via header
-    setStep(appUser ? 'kyc' : 'auth');
+    setStep(appUser ? 'send' : 'auth');
   }, [isOpen, appUser]);
 
-  // KYC check
-  useEffect(() => {
-    if (step !== 'kyc' || !appUser) return;
-    
-    const checkKYC = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const freshUser = await base44.auth.me();
-        
-        if (freshUser?.cybrid_customer_id) {
-          setKycStatus('verified');
-          setLoading(false);
-          return;
-        }
 
-        // Create Veriff session
-        const res = await base44.functions.invoke('veriffKYC', {
-          action: 'createSession',
-        });
-
-        if (res.data?.error) throw new Error(res.data.error);
-
-        setVeriffSessionId(res.data?.sessionId);
-        setVeriffUrl(res.data?.url);
-        setKycStatus('unverified');
-      } catch (err) {
-        setError(err.message || 'Failed to create KYC session');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkKYC();
-  }, [step, kycRefreshKey, appUser]);
 
   const handleFundingSuccess = (amount) => {
     setFundedAmount(parseFloat(amount) || 0);
@@ -228,50 +192,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             </div>
           )}
 
-          {/* Step 2: KYC */}
-          {step === 'kyc' && (
-            <div className="space-y-4">
-              {loading ? (
-                <div className="flex flex-col items-center py-8 gap-4">
-                  <Loader2 className="w-12 h-12 animate-spin text-purple-500" />
-                  <p className="font-semibold text-slate-800">Checking KYC status…</p>
-                </div>
-              ) : kycStatus === 'verified' ? (
-                <div className="flex flex-col items-center py-8 gap-4 text-center">
-                  <CheckCircle className="w-16 h-16 text-green-500" />
-                  <p className="font-semibold text-slate-800">Identity Verified</p>
-                  <p className="text-sm text-slate-600">You're ready to send AGNV</p>
-                  <Button
-                    onClick={() => setStep('fund')}
-                    className="w-full"
-                    style={{ backgroundColor: '#7c3aed' }}
-                  >
-                    Continue to Funding
-                  </Button>
-                </div>
-              ) : veriffUrl ? (
-                <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center space-y-3">
-                  <div className="text-3xl">🪪</div>
-                  <p className="font-semibold text-slate-800">Identity Verification</p>
-                  <p className="text-sm text-slate-600">
-                    Verification session created. Check your email for instructions or refresh to check status.
-                  </p>
-                  <div className="space-y-2">
-                    <Button
-                      onClick={() => setKycRefreshKey(k => k + 1)}
-                      className="w-full"
-                      style={{ backgroundColor: '#7c3aed' }}
-                    >
-                      <RefreshCw className="w-4 h-4 mr-2" /> Check Verification Status
-                    </Button>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          )}
-
-          {/* Step 3: Fund */}
-          {step === 'fund' && (
+          {/* Step 2: Send */}
+          {step === 'send' && !success && (
             <div className="space-y-4">
               <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-3">
@@ -332,13 +254,13 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             </div>
           )}
 
-          {/* Step 4: Send */}
+          {/* Step 2: Send */}
           {step === 'send' && !success && (
             <div className="space-y-4">
               <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4 mb-5">
                 <div className="flex items-center gap-1 mb-3">
                   <Info className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-semibold text-purple-700">Step 4: Send AGNV</span>
+                  <span className="text-sm font-semibold text-purple-700">Send AGNV</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center text-sm mb-3">
                   <div className="bg-white rounded-xl p-2 shadow-sm">
@@ -432,9 +354,9 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
         {/* Signup Modal */}
         {showSignup && (
-          <SignupModal isOpen={showSignup} onClose={() => setShowSignup(false)} onSuccess={() => {
+          <SignupModal isOpen={showSignup} onClose={() => setShowSignup(false)} onSignupSuccess={() => {
             setShowSignup(false);
-            setStep('kyc');
+            setStep('send');
           }} />
         )}
       </motion.div>

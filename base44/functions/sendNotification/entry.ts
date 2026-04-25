@@ -27,6 +27,33 @@ async function sendEmail(opts) {
   return JSON.parse(body);
 }
 
+async function sendWhatsAppTemplate(opts) {
+  const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
+  const token = Deno.env.get('TWILIO_AUTH_TOKEN');
+  const whatsappNumber = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || '+14155238886';
+
+  const params = new URLSearchParams({
+    From: `whatsapp:${whatsappNumber}`,
+    To: opts.to,
+    ContentSid: opts.contentSid,
+    ContentVariables: JSON.stringify(opts.variables),
+  });
+
+  const auth = toBase64(`${sid}:${token}`);
+  const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${auth}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params,
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(`Twilio template error ${res.status}: ${data.message || JSON.stringify(data)}`);
+  return data;
+}
+
 async function sendSMS(opts) {
   const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
   const token = Deno.env.get('TWILIO_AUTH_TOKEN');
@@ -90,12 +117,22 @@ Deno.serve(async (req) => {
         ${senderPhone ? `<p style="color:#64748b;">Contact: ${senderPhone}</p>` : ''}
         <a href="${shareUrl}" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#3D7BB7;color:white;border-radius:8px;text-decoration:none;">View & Pay Request</a>
       </div>`;
-      const recipientName = recipient || 'there';
-      const smsBody = `Hi ${recipientName}, you've received a payment request of ${amount} ${currency} from ${senderName} via Taper Payer.${senderPhone ? ` Contact: ${senderPhone}.` : ''} Pay now: ${shareUrl}`;
+      const recipientName = 'there';
+      const smsBody = `Hi, you've received a payment request of ${amount} ${currency} from ${senderName} via Taper Payer.${senderPhone ? ` Contact: ${senderPhone}.` : ''} Pay now: ${shareUrl}`;
 
       const phone = normalizePhone(recipient);
       if (deliveryMethod === 'whatsapp') {
-        results.whatsapp = await sendSMS({ to: `whatsapp:${phone}`, body: smsBody });
+        results.whatsapp = await sendWhatsAppTemplate({
+          to: `whatsapp:${phone}`,
+          contentSid: 'HX9f760178320a35eb582d6463a18a8fec',
+          variables: {
+            '1': recipientName,
+            '2': senderName,
+            '3': String(amount),
+            '4': currency,
+            '5': note || '',
+          }
+        });
       } else {
         results.sms = await sendSMS({ to: phone, body: smsBody });
       }

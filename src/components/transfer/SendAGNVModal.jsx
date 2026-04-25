@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
@@ -58,12 +58,17 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
   // Funding & sending
   const [fundedAmount, setFundedAmount] = useState(0);
+  const [fundAmount, setFundAmount] = useState('');
   const [sendAmount, setSendAmount] = useState('');
   const [recipientName, setRecipientName] = useState('');
   const [recipientPhone, setRecipientPhone] = useState('');
   const [recipientCountry, setRecipientCountry] = useState('');
   const [success, setSuccess] = useState(false);
   const [txHash, setTxHash] = useState('');
+  const [squareReady, setSquareReady] = useState(false);
+  const cardContainerRef = useRef(null);
+  const webPaymentsRef = useRef(null);
+  const cardRef = useRef(null);
 
   const agnvAmount = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_AGNV).toFixed(2) : '';
   const htgEquiv = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_HTG).toFixed(2) : '';
@@ -75,12 +80,95 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setStep(appUser ? 'fund' : 'auth');
   }, [isOpen, appUser]);
 
+  // Initialize Square Web Payments when funding step is active
+  useEffect(() => {
+    if (step !== 'fund' || squareReady) return;
+
+    const initSquare = async () => {
+      try {
+        // Load Square Web Payments SDK
+        if (!window.Square) {
+          const script = document.createElement('script');
+          script.src = 'https://web-payments-sdk.squareup.com/sq.js';
+          script.async = true;
+          document.head.appendChild(script);
+          
+          await new Promise((resolve, reject) => {
+            script.onload = resolve;
+            script.onerror = reject;
+          });
+        }
+
+        const config = await base44.functions.invoke('getSquareConfig', {});
+        const { squareApplicationId } = config.data;
+
+        const payments = await window.Square.payments(squareApplicationId, 'US');
+        webPaymentsRef.current = payments;
+
+        const card = await payments.card();
+        cardRef.current = card;
+
+        if (cardContainerRef.current) {
+          await card.attach(cardContainerRef.current);
+          setSquareReady(true);
+        }
+      } catch (err) {
+        console.error('Square initialization error:', err);
+        setError('Failed to load payment form. Please try again.');
+      }
+    };
+
+    initSquare();
+  }, [step, squareReady]);
+
 
 
   const handleFundingSuccess = (amount) => {
     setFundedAmount(parseFloat(amount) || 0);
+    setFundAmount('');
     setStep('send');
     setSendAmount('');
+  };
+
+  const handleFundingSubmit = async (e, amount) => {
+    e.preventDefault();
+    setError('');
+
+    const fundValue = parseFloat(amount || fundAmount);
+    if (!fundValue || fundValue <= 0) {
+      setError('Please enter a valid amount');
+      return;
+    }
+
+    if (!cardRef.current) {
+      setError('Payment form not ready. Please refresh the page.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Request tokenization
+      const result = await webPaymentsRef.current.card.tokenize();
+      if (result.status !== 'OK') {
+        throw new Error(result.errors?.[0]?.message || 'Failed to tokenize card');
+      }
+
+      // Process payment
+      const paymentRes = await base44.functions.invoke('processSquarePayment', {
+        amount: fundValue,
+        sourceToken: result.token,
+      });
+
+      if (paymentRes.data?.success) {
+        handleFundingSuccess(fundValue);
+      } else {
+        setError(paymentRes.data?.error || 'Payment failed');
+      }
+    } catch (err) {
+      setError(err.message || 'Payment processing failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAmountChange = (value) => {
@@ -128,6 +216,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const handleClose = () => {
     setStep('auth');
     setFundedAmount(0);
+    setFundAmount('');
     setSendAmount('');
     setRecipientName('');
     setRecipientPhone('');
@@ -207,52 +296,60 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                   Add funds to your account using Square. This amount will be available to send as AGNV.
                 </p>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-semibold">$</span>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        min="1"
-                        placeholder="0.00"
-                        className="pl-8 border-slate-300"
-                      />
-                    </div>
-                  </div>
+                <form className="space-y-4">
+                   <div>
+                     <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
+                     <div className="relative">
+                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-semibold">$</span>
+                       <Input
+                         type="number"
+                         step="0.01"
+                         min="1"
+                         placeholder="0.00"
+                         value={fundAmount}
+                         onChange={(e) => setFundAmount(e.target.value)}
+                         className="pl-8 border-slate-300"
+                         disabled={loading}
+                       />
+                     </div>
+                   </div>
 
-                  {/* Quick amounts */}
-                  <div>
-                    <label className="block text-xs font-medium text-slate-600 mb-2">Quick Select</label>
-                    <div className="grid grid-cols-4 gap-2">
-                      {[25, 50, 100, 250].map(amount => (
-                        <button
-                          key={amount}
-                          className="px-3 py-2 rounded-lg text-sm font-semibold border transition-all"
-                          style={{ 
-                            backgroundColor: '#7c3aed',
-                            color: 'white',
-                            borderColor: '#7c3aed'
-                          }}
-                        >
-                          ${amount}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                   {/* Quick amounts */}
+                   <div>
+                     <label className="block text-xs font-medium text-slate-600 mb-2">Quick Select</label>
+                     <div className="grid grid-cols-4 gap-2">
+                       {[25, 50, 100, 250].map(amount => (
+                         <button
+                           key={amount}
+                           type="button"
+                           onClick={(e) => handleFundingSubmit(e, amount)}
+                           disabled={loading || !squareReady}
+                           className="px-3 py-2 rounded-lg text-sm font-semibold border transition-all disabled:opacity-50"
+                           style={{ 
+                             backgroundColor: '#7c3aed',
+                             color: 'white',
+                             borderColor: '#7c3aed'
+                           }}
+                         >
+                           ${amount}
+                         </button>
+                       ))}
+                     </div>
+                   </div>
 
-                  <div id="card-container" className="border border-slate-300 rounded-lg p-4 bg-white min-h-[60px]"></div>
+                   <div ref={cardContainerRef} className="border border-slate-300 rounded-lg p-4 bg-white min-h-[60px]" />
 
-                  <Button
-                    onClick={() => handleFundingSuccess(100)}
-                    className="w-full py-3 text-white font-semibold"
-                    style={{ backgroundColor: '#7c3aed' }}
-                  >
-                    {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
-                    {loading ? 'Processing...' : 'Fund Account'}
-                  </Button>
-                </div>
+                   <Button
+                     type="submit"
+                     onClick={(e) => handleFundingSubmit(e, fundAmount)}
+                     disabled={loading || !squareReady}
+                     className="w-full py-3 text-white font-semibold"
+                     style={{ backgroundColor: '#7c3aed' }}
+                   >
+                     {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
+                     {loading ? 'Processing...' : squareReady ? 'Fund Account' : 'Loading...'}
+                   </Button>
+                 </form>
               </div>
               </div>
               )}

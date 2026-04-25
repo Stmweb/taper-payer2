@@ -31,6 +31,22 @@ Deno.serve(async (req) => {
     const amountCents = Math.round(amount * 100);
 
     // Create Square Payment Link
+    const paymentLinkPayload = {
+      quick_pay: {
+        name: 'AGNV Account Funding',
+        price_money: {
+          amount: amountCents,
+          currency: 'USD',
+        },
+        location_id: squareLocationId,
+      },
+      checkout_options: {
+        ask_for_shipping_address: false,
+      },
+    };
+
+    console.log('Payment link payload:', JSON.stringify(paymentLinkPayload));
+
     const paymentLinkRes = await fetch('https://connect.squareup.com/v2/online-checkout/payment-links', {
       method: 'POST',
       headers: {
@@ -38,18 +54,7 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json',
         'Square-Version': '2024-04-17',
       },
-      body: JSON.stringify({
-        quick_pay: {
-          name: 'AGNV Account Funding',
-          price_money: {
-            amount: amountCents,
-            currency: 'USD',
-          },
-        },
-        checkout_options: {
-          ask_for_shipping_address: false,
-        },
-      }),
+      body: JSON.stringify(paymentLinkPayload),
     });
 
     const paymentLinkData = await paymentLinkRes.json();

@@ -401,7 +401,7 @@ export default function TaperPayerHome() {
             { id: 'topup', label: 'Mobile Top-Up', icon: PhoneCall, color: '#F88F2B', bg: '#fff3e0', desc: 'Recharge instantly' },
             { id: 'request', label: 'Request Money', icon: HandCoins, color: '#61AF39', bg: '#e8f5e9', desc: 'Ask to get paid' },
             { id: 'requesttopup', label: 'Request Top-Up', icon: PhoneOutgoing, color: '#e91e8c', bg: '#fce4ec', desc: 'Ask someone to top up' },
-            { id: 'sendagnv', label: 'Send AGNV', icon: null, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV', image: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/07b27ff60_AGNVNEWLogo.jpeg' },
+            { id: 'sendagnv', label: 'Send AGNV', icon: null, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV', emoji: '🇭🇹' },
             { id: 'splitbills', label: 'Split Bills', icon: DollarSign, color: '#FF6B6B', bg: '#ffe0e0', desc: 'Divide expenses' },
             { id: 'favorites', label: 'Favorites', icon: Users, color: '#4ECDC4', bg: '#e0f7f6', desc: 'Quick contacts' },
             { id: 'groupwallet', label: 'Group Wallet', icon: Users, color: '#95E1D3', bg: '#e8f9f7', desc: 'Shared account' },
@@ -422,12 +422,8 @@ export default function TaperPayerHome() {
                 }}
                 className="flex flex-col items-center gap-3 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
               >
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: action.bg }}>
-                  {action.image ? (
-                    <img src={action.image} alt={action.label} className="w-7 h-7 rounded-lg" />
-                  ) : (
-                    <Icon className="w-7 h-7" style={{ color: action.color }} />
-                  )}
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style={{ backgroundColor: action.bg }}>
+                  {action.emoji ? action.emoji : <Icon className="w-7 h-7" style={{ color: action.color }} />}
                 </div>
                 <div className="text-center">
                   <p className="text-slate-800 font-semibold text-sm">{action.label}</p>

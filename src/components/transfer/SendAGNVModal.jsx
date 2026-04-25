@@ -277,6 +277,9 @@ export default function SendAGNVModal({ isOpen, onClose }) {
         exit={{ y: '100%' }}
         transition={{ type: 'spring', damping: 30, stiffness: 300 }}
         className="relative bg-white rounded-t-3xl w-full max-h-[90vh] overflow-y-auto"
+        style={{
+          background: 'linear-gradient(135deg, rgba(0, 61, 165, 0.02) 0%, rgba(206, 17, 38, 0.02) 100%)'
+        }}
       >
         <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2" />
         <button onClick={handleClose} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">✕</button>

@@ -30,27 +30,21 @@ Deno.serve(async (req) => {
     // Amount in cents
     const amountCents = Math.round(amount * 100);
 
-    // Create Square Payment Link
-    const paymentLinkRes = await fetch('https://connect.squareup.com/v2/payment-links', {
+    // Create Square Payment Link using the Web Payments SDK
+    const paymentLinkRes = await fetch('https://connect.squareup.com/v2/checkout/payment-links', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${squareAccessToken}`,
         'Content-Type': 'application/json',
-        'Square-Version': '2024-04-17',
       },
       body: JSON.stringify({
         idempotency_key: `agnv-fund-${user.id}-${Date.now()}`,
-        description: 'AGNV Account Funding',
-        order_id: undefined,
         quick_pay: {
           name: 'AGNV Account Funding',
           price_money: {
             amount: amountCents,
             currency: 'USD',
           },
-        },
-        checkout_options: {
-          redirect_url: `${appUrl || 'https://taperpayer.com'}/TaperPayerHome?funding=success`,
         },
       }),
     });

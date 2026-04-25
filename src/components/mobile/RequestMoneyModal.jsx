@@ -10,6 +10,7 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 const CURRENCIES = ['USD', 'HTG', 'NGN', 'GHS', 'JMD', 'KES', 'BRL', 'MXN'];
 
 const COUNTRIES = [
+  { name: 'United States', flag: '🇺🇸', dial: '+1' },
   { name: 'Brazil', flag: '🇧🇷', dial: '+55' },
   { name: 'Canada', flag: '🇨🇦', dial: '+1' },
   { name: 'Ghana', flag: '🇬🇭', dial: '+233' },
@@ -19,7 +20,6 @@ const COUNTRIES = [
   { name: 'Mexico', flag: '🇲🇽', dial: '+52' },
   { name: 'Nigeria', flag: '🇳🇬', dial: '+234' },
   { name: 'United Kingdom', flag: '🇬🇧', dial: '+44' },
-  { name: 'United States', flag: '🇺🇸', dial: '+1' },
 ];
 
 export default function RequestMoneyModal({ isOpen, onClose }) {

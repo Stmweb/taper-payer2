@@ -30,22 +30,7 @@ import { usePageConfig } from '@/hooks/usePageConfig';
 import PromoCarousel from '@/components/topup/PromoCarousel';
 import { useAuth } from '@/lib/AuthContext';
 import { useAppAuth } from '@/lib/AppAuthContext';
-import { loadStripe } from '@stripe/stripe-js';
 import SignupModal from '@/components/SignupModal';
-
-let stripePromise;
-
-async function preloadStripe() {
-  if (!stripePromise) {
-    try {
-      const res = await base44.functions.invoke('getStripeKey', {});
-      stripePromise = loadStripe(res.data.publicKey);
-    } catch (e) {
-      console.error('Failed to preload Stripe:', e);
-    }
-  }
-  return stripePromise;
-}
 
 function createPageUrl(page) {
   return `/${page}`;
@@ -138,10 +123,6 @@ export default function TaperPayerHome() {
   useEffect(() => {
     if (sendTo) fetchExchangeRate();
   }, [sendTo]);
-
-  useEffect(() => {
-    preloadStripe();
-  }, []);
 
   if (isMobile) {
     return <MobileHomeScreen />;

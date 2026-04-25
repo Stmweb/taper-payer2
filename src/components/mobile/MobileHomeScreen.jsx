@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import {
   Send, Smartphone, Globe, ChevronRight, Bell, Settings,
-  TrendingUp, ArrowUpRight, Zap, Shield, PhoneCall, HandCoins, PhoneOutgoing
+  TrendingUp, ArrowUpRight, Zap, Shield, PhoneCall, HandCoins, PhoneOutgoing, DollarSign, Users
 } from 'lucide-react';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
@@ -24,14 +24,6 @@ const quickActions = [
     color: '#3D7BB7',
     bg: '#e3f2fd',
     description: 'Transfer globally',
-  },
-  {
-    id: 'sendagnv',
-    label: 'Send AGNV',
-    icon: Send,
-    color: '#7c3aed',
-    bg: '#ede9fe',
-    description: 'Send tokens',
   },
   {
     id: 'topup',
@@ -57,9 +49,42 @@ const quickActions = [
     bg: '#fce4ec',
     description: 'Ask someone to top up',
   },
+  {
+    id: 'sendagnv',
+    label: 'Send AGNV',
+    icon: Globe,
+    color: '#7c3aed',
+    bg: '#ede9fe',
+    description: 'Send via AGNV',
+  },
+  {
+    id: 'splitbills',
+    label: 'Split Bills',
+    icon: DollarSign,
+    color: '#FF6B6B',
+    bg: '#ffe0e0',
+    description: 'Divide expenses',
+  },
+  {
+    id: 'favorites',
+    label: 'Favorites',
+    icon: Users,
+    color: '#4ECDC4',
+    bg: '#e0f7f6',
+    description: 'Quick contacts',
+  },
+  {
+    id: 'groupwallet',
+    label: 'Group Wallet',
+    icon: Users,
+    color: '#95E1D3',
+    bg: '#e8f9f7',
+    description: 'Shared account',
+  },
 ];
 
 const destinations = [
+  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
@@ -108,7 +133,7 @@ export default function MobileHomeScreen() {
     else if (id === 'request') setShowRequestMoney(true);
     else if (id === 'requesttopup') setShowRequestTopUp(true);
     else if (id === 'sendagnv') setShowSendAGNV(true);
-    else if (id === 'send') setShowComingSoon(true);
+    else setShowComingSoon(true);
   };
 
   const handleCountryTap = (country) => {

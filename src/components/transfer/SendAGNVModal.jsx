@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CheckCircle, AlertCircle, Loader2, Info, ArrowLeft } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import AGNVFundingModal from './AGNVFundingModal';
 
 const RATES = {
   USD_TO_AGNV: 10,   // 1 USD = 10 AGNV
@@ -14,7 +15,6 @@ const RATES = {
 
 export default function SendAGNVModal({ isOpen, onClose }) {
   const [step, setStep] = useState('fund'); // 'fund' or 'send'
-  const [fundingAmount, setFundingAmount] = useState('');
   const [amountUSD, setAmountUSD] = useState('');
   const [recipientName, setRecipientName] = useState('');
   const [recipientPhone, setRecipientPhone] = useState('');
@@ -27,29 +27,10 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const agnvAmount = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_AGNV).toFixed(2) : '';
   const htgEquiv = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_HTG).toFixed(2) : '';
 
-  const handleFundingSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    if (!fundingAmount) {
-      setError('Please enter an amount');
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await base44.functions.invoke('processAGNVFunding', {
-        amount: parseFloat(fundingAmount),
-      });
-      if (res.data.checkoutUrl) {
-        window.open(res.data.checkoutUrl, '_blank');
-        setFundingComplete(true);
-        setStep('send');
-        setAmountUSD(fundingAmount);
-      }
-    } catch (err) {
-      setError(err.message || 'Payment failed');
-    } finally {
-      setLoading(false);
-    }
+  const handleFundingSuccess = (fundedAmount) => {
+    setFundingComplete(true);
+    setStep('send');
+    setAmountUSD(fundedAmount?.toString() || '');
   };
 
   const handleSendSubmit = async (e) => {
@@ -83,7 +64,6 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
   const handleClose = () => {
     setStep('fund');
-    setFundingAmount('');
     setAmountUSD('');
     setRecipientName('');
     setRecipientPhone('');
@@ -141,45 +121,10 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               </div>
 
               {step === 'fund' ? (
-                <>
-                  {/* Fund Account Step */}
-                  <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-5">
-                    <div className="flex items-center gap-1 mb-3">
-                      <Info className="w-4 h-4 text-blue-500" />
-                      <span className="text-sm font-semibold text-blue-700">Step 1: Fund Your Account</span>
-                    </div>
-                  </div>
-
-                  {error && (
-                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex gap-2 text-red-700 text-sm">
-                      <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                      {error}
-                    </div>
-                  )}
-
-                  <form onSubmit={handleFundingSubmit} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">Funding Amount (USD) <span className="text-red-500">*</span></label>
-                      <Input
-                        type="number"
-                        placeholder="0.00"
-                        value={fundingAmount}
-                        onChange={(e) => setFundingAmount(e.target.value)}
-                        required
-                        style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full py-3 text-white"
-                      style={{ backgroundColor: '#7c3aed' }}
-                    >
-                      {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</> : 'Fund Account'}
-                    </Button>
-                  </form>
-                </>
+                <AGNVFundingModal
+                  onSuccess={() => handleFundingSuccess()}
+                  onClose={onClose}
+                />
               ) : (
                 <>
                   {/* Send AGNV Step */}

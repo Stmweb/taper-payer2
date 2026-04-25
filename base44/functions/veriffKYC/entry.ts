@@ -23,17 +23,19 @@ Deno.serve(async (req) => {
 
     // Create session
     if (action === 'createSession') {
+      const timestamp = new Date().toISOString();
       const payload = {
         verification: {
           targetPersonas: ['natural_person'],
           vendorData: user.id,
-          timestamp: new Date().toISOString(),
+          timestamp: timestamp,
         },
       };
 
-      const signature = await signPayload(JSON.stringify(payload), apiSecret);
-      console.log('Veriff request payload:', JSON.stringify(payload));
-      console.log('Veriff API key:', apiKey ? 'set' : 'not set');
+      const bodyString = JSON.stringify(payload);
+      const signature = await signPayload(bodyString, apiSecret);
+      console.log('Veriff request body:', bodyString);
+      console.log('Veriff signature:', signature);
 
       const res = await fetch('https://stationapi.veriff.com/v1/sessions', {
         method: 'POST',
@@ -42,23 +44,22 @@ Deno.serve(async (req) => {
           'X-HMAC-SIGNATURE': signature,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: bodyString,
       });
 
-      const data = await res.json();
-      console.log('Veriff response status:', res.status, 'data:', JSON.stringify(data));
+      const responseText = await res.text();
+      console.log('Veriff response status:', res.status, 'body:', responseText);
+      
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = { raw: responseText };
+      }
 
       if (!res.ok) {
         console.error('Veriff API error:', res.status, data);
-        // Fallback to mock for testing
-        const mockSessionId = 'mock_' + Date.now();
-        if (!user.cybrid_customer_id) {
-          await base44.auth.updateMe({ cybrid_customer_id: mockSessionId });
-        }
-        return Response.json({
-          sessionId: mockSessionId,
-          url: `https://veriff.me/verify/${mockSessionId}`,
-        });
+        throw new Error(`Veriff API returned ${res.status}: ${responseText}`);
       }
 
       return Response.json({

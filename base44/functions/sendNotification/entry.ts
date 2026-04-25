@@ -32,12 +32,11 @@ async function sendWhatsAppTemplate(opts) {
   const token = Deno.env.get('TWILIO_AUTH_TOKEN');
   const whatsappNumber = Deno.env.get('TWILIO_WHATSAPP_NUMBER') || '+14155238886';
 
-  const params = new URLSearchParams({
-    From: `whatsapp:${whatsappNumber}`,
-    To: opts.to,
-    ContentSid: opts.contentSid,
-    ContentVariables: JSON.stringify(opts.variables),
-  });
+  const params = new URLSearchParams();
+  params.append('From', `whatsapp:${whatsappNumber}`);
+  params.append('To', opts.to);
+  params.append('ContentSid', opts.contentSid);
+  params.append('ContentVariables', JSON.stringify(opts.variables));
 
   const auth = toBase64(`${sid}:${token}`);
   const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
@@ -130,7 +129,7 @@ Deno.serve(async (req) => {
             '2': senderName,
             '3': String(amount),
             '4': currency,
-            '5': note || '',
+            '5': note || 'No note provided',
           }
         });
       } else {

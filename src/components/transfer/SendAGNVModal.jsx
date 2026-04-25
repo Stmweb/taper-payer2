@@ -570,24 +570,56 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
               <div className="flex gap-2 justify-center">
                 <button
-                  onClick={() => {
-                    const message = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount Sent: $${sendAmount} USD\nReceiver Gets: ${agnvAmount} AGNV = ${htgEquiv} HTG\nStatus: Pending Processing\nDate: ${new Date().toLocaleString()}\nID: ${txHash}`;
-                    const whatsappUrl = `https://wa.me/${recipientPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-                    window.open(whatsappUrl, '_blank');
+                  onClick={async () => {
+                    setLoading(true);
+                    try {
+                      await base44.functions.invoke('sendAGNVReceiptViaTwilio', {
+                        recipientPhone,
+                        senderName: appUser?.full_name,
+                        recipientName,
+                        sendAmount,
+                        agnvAmount,
+                        htgEquiv,
+                        transactionId: txHash,
+                        method: 'whatsapp',
+                      });
+                    } catch (err) {
+                      setError('Failed to send WhatsApp receipt');
+                    } finally {
+                      setLoading(false);
+                    }
                   }}
-                  className="flex-1 px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold text-sm flex items-center justify-center gap-2"
+                  disabled={loading}
+                  className="flex-1 px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  <span>💬</span> WhatsApp
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <span>💬</span>}
+                  WhatsApp
                 </button>
                 <button
-                  onClick={() => {
-                    const message = `AGNV Transfer Receipt: $${sendAmount} USD = ${agnvAmount} AGNV to ${recipientName}. Date: ${new Date().toLocaleString()}`;
-                    const smsUrl = `sms:${recipientPhone.replace(/\D/g, '')}?body=${encodeURIComponent(message)}`;
-                    window.location.href = smsUrl;
+                  onClick={async () => {
+                    setLoading(true);
+                    try {
+                      await base44.functions.invoke('sendAGNVReceiptViaTwilio', {
+                        recipientPhone,
+                        senderName: appUser?.full_name,
+                        recipientName,
+                        sendAmount,
+                        agnvAmount,
+                        htgEquiv,
+                        transactionId: txHash,
+                        method: 'sms',
+                      });
+                    } catch (err) {
+                      setError('Failed to send SMS receipt');
+                    } finally {
+                      setLoading(false);
+                    }
                   }}
-                  className="flex-1 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm flex items-center justify-center gap-2"
+                  disabled={loading}
+                  className="flex-1 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  <span>📱</span> SMS
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <span>📱</span>}
+                  SMS
                 </button>
               </div>
 

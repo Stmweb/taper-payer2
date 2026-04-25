@@ -26,9 +26,8 @@ Deno.serve(async (req) => {
       const timestamp = new Date().toISOString();
       const payload = {
         verification: {
-          targetPersonas: ['natural_person'],
-          vendorData: user.id,
           timestamp: timestamp,
+          vendorData: user.id,
         },
       };
 
@@ -150,5 +149,6 @@ async function signPayload(payload, secret) {
     ['sign']
   );
   const signature = await crypto.subtle.sign('HMAC', key, data);
-  return btoa(String.fromCharCode(...new Uint8Array(signature)));
+  const hashArray = Array.from(new Uint8Array(signature));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }

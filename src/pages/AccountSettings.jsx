@@ -61,7 +61,8 @@ export default function AccountSettings() {
   const handleSaveField = async (field) => {
     try {
       await base44.auth.updateMe({ [field === 'full_name' ? 'full_name' : field]: formData[field] });
-      const updatedUser = { ...user, [field]: formData[field] };
+      // Fetch fresh user data from server
+      const updatedUser = await base44.auth.me();
       setUser(updatedUser);
       // Sync to AppAuth context
       login(updatedUser, appUser?.jwt, appUser?.cybrid_customer_id);

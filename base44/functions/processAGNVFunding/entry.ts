@@ -45,6 +45,7 @@ Deno.serve(async (req) => {
             amount: amountCents,
             currency: 'USD',
           },
+          location_id: squareLocationId,
         },
       }),
     });

@@ -60,7 +60,7 @@ export default function AccountSettings() {
 
   const handleSaveField = async (field) => {
     try {
-      await base44.auth.updateMe({ [field === 'full_name' ? 'full_name' : field]: formData[field] });
+      await base44.auth.updateMe({ [field]: formData[field] });
       // Fetch fresh user data from server
       const updatedUser = await base44.auth.me();
       setUser(updatedUser);
@@ -69,6 +69,7 @@ export default function AccountSettings() {
       setEditingField(null);
       toast.success('Profile updated successfully');
     } catch (e) {
+      console.error('Update error:', e);
       toast.error('Failed to update profile');
     }
   };

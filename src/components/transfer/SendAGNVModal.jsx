@@ -284,8 +284,13 @@ export default function SendAGNVModal({ isOpen, onClose }) {
         <div className="p-6 pt-4">
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#ede9fe' }}>
-              <span className="text-2xl font-bold" style={{ color: '#7c3aed' }}>A</span>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center relative overflow-hidden">
+              <div className="absolute inset-0 flex">
+                <div className="flex-1 bg-blue-600"></div>
+                <div className="flex-1 bg-white"></div>
+                <div className="flex-1 bg-red-600"></div>
+              </div>
+              <span className="text-2xl font-bold text-white relative z-10">A</span>
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-900">Send AGNV</h2>

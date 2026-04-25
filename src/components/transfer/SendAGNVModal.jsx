@@ -88,6 +88,17 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setError('');
     
     try {
+      // Wait for Square SDK to load
+      let attempts = 0;
+      while (!window.Square && attempts < 50) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+      }
+      
+      if (!window.Square) {
+        throw new Error('Square SDK failed to load');
+      }
+
       const config = await base44.functions.invoke('getSquareConfig', {});
       if (!config.data?.squareApplicationId) {
         throw new Error('Square configuration missing');

@@ -324,9 +324,22 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                 </p>
 
                 {error && (
-                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex gap-2 items-center text-red-700 text-sm">
-                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                    <span>{error}</span>
+                  <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex flex-col gap-2 text-red-700 text-sm">
+                    <div className="flex gap-2 items-start">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                      <span>{error}</span>
+                    </div>
+                    {error.includes('Square SDK') && (
+                      <div className="ml-6 text-xs text-red-600 space-y-1 mt-2">
+                        <p className="font-semibold">Try these steps:</p>
+                        <ul className="list-disc list-inside space-y-0.5">
+                          <li>Try in an incognito/private window</li>
+                          <li>Disable ad blockers or browser extensions</li>
+                          <li>Check if behind a corporate firewall</li>
+                          <li>Refresh and try again</li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -373,16 +386,30 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
                    <div ref={cardContainerRef} className="border border-slate-300 rounded-lg p-4 bg-white min-h-[60px]" />
 
-                   <Button
-                     type="submit"
-                     onClick={(e) => handleFundingSubmit(e, fundAmount)}
-                     disabled={loading || !squareReady}
-                     className="w-full py-3 text-white font-semibold"
-                     style={{ backgroundColor: '#7c3aed' }}
-                   >
-                     {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
-                     {loading ? 'Processing...' : squareReady ? 'Fund Account' : 'Loading...'}
-                   </Button>
+                   <div className="space-y-2">
+                     <Button
+                       type="submit"
+                       onClick={(e) => handleFundingSubmit(e, fundAmount)}
+                       disabled={loading || !squareReady}
+                       className="w-full py-3 text-white font-semibold"
+                       style={{ backgroundColor: '#7c3aed' }}
+                     >
+                       {loading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : null}
+                       {loading ? 'Processing...' : squareReady ? 'Fund Account' : 'Loading...'}
+                     </Button>
+                     {error && error.includes('Square SDK') && (
+                       <Button
+                         type="button"
+                         onClick={() => initSquare()}
+                         disabled={loading}
+                         className="w-full py-2 text-sm"
+                         variant="outline"
+                       >
+                         <RefreshCw className="w-4 h-4 mr-2" />
+                         Retry Loading Payment Form
+                       </Button>
+                     )}
+                   </div>
                  </form>
               </div>
               </div>

@@ -77,13 +77,13 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
   };
 
   return (
-    <div className="p-6 w-full max-w-md">
+    <div className="p-4 md:p-6 w-full max-w-md mx-auto">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-100">
-          <span className="text-2xl font-bold text-blue-600">+</span>
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#e3f2fd' }}>
+          <span className="text-2xl font-bold" style={{ color: '#3D7BB7' }}>+</span>
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">Add Funds</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900">Add Funds</h2>
           <p className="text-sm text-slate-500">Fund your AGNV account</p>
         </div>
       </div>
@@ -91,27 +91,28 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
 
 
       {error && (
-        <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-xl flex gap-2 text-red-400 text-sm">
+        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl flex gap-2 text-red-600 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-          {error}
+          <span>{error}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
         {/* Quick Select */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-3">Quick Select</label>
-          <div className="flex gap-2 flex-wrap">
+          <label className="block text-sm font-medium text-slate-700 mb-3">Quick Select</label>
+          <div className="grid grid-cols-3 gap-2 md:flex md:gap-2 md:flex-wrap">
             {QUICK_AMOUNTS.map((val) => (
               <button
                 key={val}
                 type="button"
                 onClick={() => handleQuickSelect(val)}
-                className={`px-4 py-2 rounded-2xl font-semibold transition-all border ${
+                className={`px-3 md:px-4 py-2 rounded-lg font-semibold transition-all border text-sm md:text-base ${
                   amount === val.toString()
-                    ? 'bg-blue-600 text-white border-blue-500'
-                    : 'border-slate-600 text-slate-400 hover:border-slate-500'
+                    ? 'text-white border-transparent'
+                    : 'border-slate-300 text-slate-600 hover:border-slate-400'
                 }`}
+                style={amount === val.toString() ? { backgroundColor: '#3D7BB7', borderColor: '#3D7BB7' } : {}}
               >
                 ${val}
               </button>
@@ -121,9 +122,9 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
 
         {/* Amount Input */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Amount (USD)</label>
+          <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-semibold">$</span>
             <Input
               type="number"
               step="0.01"
@@ -131,22 +132,23 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="pl-8 bg-slate-700 border-slate-600 text-white"
+              className="pl-8 border-slate-300 text-slate-900 placeholder-slate-400 focus:border-blue-500"
+              style={{ '--ring-color': '#3D7BB7' }}
             />
           </div>
         </div>
 
         {/* Card Details */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Card Details</label>
-          <div className="bg-white rounded-2xl p-4 space-y-3">
+          <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
+          <div className="bg-slate-50 rounded-2xl p-4 md:p-5 space-y-3 border border-slate-200">
             <Input
               type="text"
               placeholder="Card number"
               value={formatCardNumber(cardNumber)}
               onChange={(e) => setCardNumber(e.target.value)}
               maxLength="19"
-              className="text-slate-900 border-slate-300"
+              className="text-slate-900 border-slate-300 placeholder-slate-400"
             />
             <div className="grid grid-cols-2 gap-3">
               <Input
@@ -155,7 +157,7 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
                 value={formatExpiry(expiry)}
                 onChange={(e) => setExpiry(e.target.value)}
                 maxLength="5"
-                className="text-slate-900 border-slate-300"
+                className="text-slate-900 border-slate-300 placeholder-slate-400"
               />
               <Input
                 type="text"
@@ -163,17 +165,17 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
                 value={cvv}
                 onChange={(e) => setCvv(e.target.value.slice(0, 4))}
                 maxLength="4"
-                className="text-slate-900 border-slate-300"
+                className="text-slate-900 border-slate-300 placeholder-slate-400"
               />
             </div>
           </div>
         </div>
 
         {/* Info Box */}
-        <div className="bg-blue-500/20 border border-blue-500/50 rounded-2xl p-4">
-          <p className="text-sm text-blue-300">
-            <CreditCard className="w-4 h-4 inline mr-2" />
-            Enter your card details securely. Your wallet is credited immediately upon successful payment.
+        <div className="rounded-2xl p-4 border" style={{ backgroundColor: '#e3f2fd', borderColor: '#3D7BB7' }}>
+          <p className="text-sm flex items-start gap-2" style={{ color: '#3D7BB7' }}>
+            <CreditCard className="w-4 h-4 flex-shrink-0 mt-0.5" />
+            <span>Enter your card details securely. Your wallet is credited immediately upon successful payment.</span>
           </p>
         </div>
 
@@ -181,10 +183,11 @@ export default function AGNVFundingModal({ onSuccess, onClose }) {
         <Button
           type="submit"
           disabled={loading || !amount}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg font-semibold flex items-center justify-center gap-2"
+          className="w-full text-white py-3 md:py-4 text-base md:text-lg font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50"
+          style={{ backgroundColor: '#3D7BB7' }}
         >
           {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CreditCard className="w-5 h-5" />}
-          {loading ? 'Processing...' : `Pay $${parseFloat(amount || 0).toFixed(2)} With Card`}
+          {loading ? 'Processing...' : `Pay $${parseFloat(amount || 0).toFixed(2)}`}
         </Button>
       </form>
     </div>

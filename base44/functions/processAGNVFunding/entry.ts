@@ -45,7 +45,6 @@ Deno.serve(async (req) => {
             amount: amountCents,
             currency: 'USD',
           },
-          location_id: squareLocationId,
         },
         checkout_options: {
           ask_for_shipping_address: false,

@@ -75,21 +75,6 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Session ID required' }, { status: 400 });
       }
 
-      // Mock mode: auto-verify if session is mock
-      if (sessionId.startsWith('mock_')) {
-        const freshUser = await base44.auth.me();
-        if (!freshUser.cybrid_customer_id) {
-          await base44.auth.updateMe({
-            cybrid_customer_id: `veriff_${sessionId}`,
-          });
-        }
-        return Response.json({
-          status: 'approved',
-          isVerified: true,
-          decision: { code: 'approved' },
-        });
-      }
-
       console.log('Checking status for session:', sessionId);
 
       const timestamp = new Date().toISOString();

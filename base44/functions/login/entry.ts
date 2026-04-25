@@ -14,6 +14,11 @@ async function generateJWT(user) {
 }
 
 Deno.serve(async (req) => {
+  // Only allow POST
+  if (req.method !== 'POST') {
+    return Response.json({ error: 'Method not allowed' }, { status: 405 });
+  }
+
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();

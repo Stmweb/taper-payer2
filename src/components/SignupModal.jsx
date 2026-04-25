@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
-import { appParams } from '@/lib/app-params';
 import { Loader2, AlertCircle, CheckCircle, ChevronDown } from 'lucide-react';
 
 const US_STATES = [
@@ -113,22 +112,12 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
     setLoading(true);
 
     try {
-      // Fetch via direct HTTP to bypass SDK auth requirement for public login endpoint
-      const response = await fetch(`${appParams.appBaseUrl}/api/v1/functions/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+      const res = await base44.functions.invoke('login', {
+        email: formData.email,
+        password: formData.password,
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Login failed');
-      }
-
-      const { jwt, user, cybrid_customer_id } = await response.json();
+      
+      const { jwt, user, cybrid_customer_id } = res.data;
       
       localStorage.setItem('auth_token', jwt);
       localStorage.setItem('user', JSON.stringify(user));
@@ -136,7 +125,7 @@ export default function SignupModal({ isOpen, onClose, onSignupSuccess }) {
       
       onSignupSuccess({ ...user, jwt, cybrid_customer_id });
     } catch (err) {
-      setError(err.message || 'Login failed. Try again.');
+      setError(err.response?.data?.error || 'Login failed. Try again.');
     } finally {
       setLoading(false);
     }

@@ -82,88 +82,79 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setStep(appUser ? 'kyc' : 'auth');
   }, [isOpen, appUser]);
 
-  // Load Square SDK dynamically
-  const loadSquare = useCallback(() => {
-    return new Promise((resolve, reject) => {
-      // Check if already loaded
-      if (window.Square && window.Square.payments) {
-        resolve(window.Square);
-        return;
-      }
-
-      // Check if script already exists
-      const existingScript = document.querySelector('script[src="https://web-payments-sdk.squareup.com/sq.js"]');
-      if (existingScript) {
-        const checkInterval = setInterval(() => {
-          if (window.Square && window.Square.payments) {
-            clearInterval(checkInterval);
-            resolve(window.Square);
-          }
-        }, 100);
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://web-payments-sdk.squareup.com/sq.js';
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-
-      script.onload = () => {
-        let attempts = 0;
-        const waitForSquare = setInterval(() => {
-          if (window.Square && window.Square.payments) {
-            clearInterval(waitForSquare);
-            resolve(window.Square);
-          } else if (attempts++ > 50) {
-            clearInterval(waitForSquare);
-            reject(new Error('Square SDK loaded but payments module not available'));
-          }
-        }, 100);
-      };
-
-      script.onerror = () => reject(new Error('Failed to download Square SDK from CDN'));
-
-      document.body.appendChild(script);
-    });
-  }, []);
-
   // Initialize Square Web Payments
   const initSquare = useCallback(async () => {
+    if (!cardContainerRef.current) return;
+    
     setSquareLoading(true);
     setError('');
     
     try {
-      const Square = await loadSquare();
-
       const config = await base44.functions.invoke('getSquareConfig', {});
-      if (!config.data?.squareApplicationId) {
+      if (!config.data?.squareApplicationId || !config.data?.squareLocationId) {
         throw new Error('Square configuration missing');
       }
 
-      const { squareApplicationId } = config.data;
-      const payments = await Square.payments(squareApplicationId, 'US');
+      const { squareApplicationId, squareLocationId } = config.data;
+      
+      if (!window.Square) {
+        throw new Error('Square SDK not loaded');
+      }
+
+      const payments = await window.Square.payments(squareApplicationId, squareLocationId);
       webPaymentsRef.current = payments;
 
+      cardContainerRef.current.innerHTML = '';
       const card = await payments.card();
       cardRef.current = card;
-
-      if (cardContainerRef.current) {
-        await card.attach(cardContainerRef.current);
-        setSquareReady(true);
-      }
+      await card.attach(cardContainerRef.current);
+      
+      setSquareReady(true);
     } catch (err) {
       console.error('Square init failed:', err);
       setError(err.message || 'Payment form unavailable. Please refresh the page and try again.');
     } finally {
       setSquareLoading(false);
     }
-  }, [loadSquare]);
+  }, []);
+
+  // Load Square SDK
+  const loadSquareScript = useCallback(() => {
+    const existing = document.querySelector('script[src*="squarecdn.com"]');
+    if (existing) {
+      existing.remove();
+      delete window.Square;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://web.squarecdn.com/v1/square.js';
+    script.async = true;
+    script.onload = initSquare;
+    script.onerror = () => setError('Failed to load payment SDK. Please refresh and try again.');
+    document.body.appendChild(script);
+  }, [initSquare]);
 
   // Load Square SDK when funding step is active
   useEffect(() => {
-    if (step !== 'fund' || squareReady) return;
-    initSquare();
-  }, [step, squareReady]);
+    if (step !== 'fund') return;
+
+    let cancelled = false;
+
+    const timer = setTimeout(() => {
+      if (!cancelled && cardContainerRef.current) {
+        if (window.Square) {
+          initSquare();
+        } else {
+          loadSquareScript();
+        }
+      }
+    }, 150);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [step, initSquare, loadSquareScript]);
 
 
 

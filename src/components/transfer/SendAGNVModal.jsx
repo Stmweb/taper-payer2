@@ -197,7 +197,6 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-900">Send AGNV</h2>
-              <p className="text-slate-500 text-sm">Global token transfers</p>
             </div>
           </div>
 

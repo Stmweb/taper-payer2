@@ -27,7 +27,7 @@ function StepIndicator({ currentStep }) {
   return (
     <div className="flex items-center gap-1 mb-5 overflow-x-auto pb-1">
       {STEPS.map((s, i) => (
-        <React.Fragment key={s.id}>
+        <div key={s.id} className="flex items-center gap-1">
           <div className={`flex flex-col items-center min-w-0 ${i <= idx ? 'opacity-100' : 'opacity-40'}`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
               i < idx ? 'bg-green-500 text-white' :
@@ -40,7 +40,7 @@ function StepIndicator({ currentStep }) {
           {i < STEPS.length - 1 && (
             <div className={`flex-1 h-0.5 min-w-[8px] ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
           )}
-        </React.Fragment>
+        </div>
       ))}
     </div>
   );

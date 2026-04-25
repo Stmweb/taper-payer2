@@ -71,13 +71,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   // Check auth on mount
   useEffect(() => {
     if (!isOpen) return;
-    
-    if (appUser) {
-      setStep('kyc');
-    } else {
-      setStep('auth');
-    }
-  }, [isOpen, appUser]);
+    setStep('auth');
+  }, [isOpen]);
 
   // KYC check
   useEffect(() => {

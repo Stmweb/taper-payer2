@@ -39,9 +39,12 @@ export default function SendAGNVModal({ isOpen, onClose }) {
       const res = await base44.functions.invoke('processAGNVFunding', {
         amount: parseFloat(fundingAmount),
       });
-      setFundingComplete(true);
-      setStep('send');
-      setAmountUSD(fundingAmount);
+      if (res.data.paymentLink) {
+        window.open(res.data.paymentLink, '_blank');
+        setFundingComplete(true);
+        setStep('send');
+        setAmountUSD(fundingAmount);
+      }
     } catch (err) {
       setError(err.message || 'Payment failed');
     } finally {

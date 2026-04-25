@@ -121,18 +121,18 @@ Deno.serve(async (req) => {
 
       const phone = normalizePhone(recipient);
       if (deliveryMethod === 'whatsapp') {
-        results.whatsapp = await sendWhatsAppTemplate({
-          to: `whatsapp:${phone}`,
-          contentSid: 'HX9f760178320a35eb582d6463a18a8fec',
-          variables: {
-            '1': recipientName,
-            '2': senderName,
-            '3': String(amount),
-            '4': currency,
-            '5': note || 'No note provided',
-            '6': shareUrl,
-          }
-        });
+      results.whatsapp = await sendWhatsAppTemplate({
+        to: `whatsapp:${phone}`,
+        contentSid: 'HXa6395fe438633d5751a31ca95d5e2c8e',
+        variables: {
+          '1': recipientName,
+          '2': senderName,
+          '3': String(amount),
+          '4': currency,
+          '5': note || 'No note provided',
+          '6': shareUrl,
+        }
+      });
       } else {
         results.sms = await sendSMS({ to: phone, body: smsBody });
       }

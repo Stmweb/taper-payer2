@@ -571,7 +571,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               <div className="flex gap-2 justify-center">
                 <button
                   onClick={() => {
-                    const message = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount: $${sendAmount} USD = ${agnvAmount} AGNV\nDate: ${new Date().toLocaleString()}\n\nStatus: Pending Processing`;
+                    const message = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount Sent: $${sendAmount} USD\nReceiver Gets: ${agnvAmount} AGNV = ${htgEquiv} HTG\nStatus: Pending Processing\nDate: ${new Date().toLocaleString()}\nID: ${txHash}`;
                     const whatsappUrl = `https://wa.me/${recipientPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
                   }}

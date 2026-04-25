@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CheckCircle, AlertCircle, Loader2, Info, ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
+import { CheckCircle, AlertCircle, Loader2, Info, ArrowLeft, ExternalLink, RefreshCw, Share2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import SignupModal from '@/components/SignupModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
@@ -588,6 +588,25 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                   className="flex-1 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm flex items-center justify-center gap-2"
                 >
                   <span>📱</span> SMS
+                </button>
+                <button
+                  onClick={() => {
+                    const receiptText = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount Sent: $${sendAmount} USD\nReceiver Gets: ${agnvAmount} AGNV = ${htgEquiv} HTG\nStatus: Pending Processing\nDate: ${new Date().toLocaleString()}\nID: ${txHash}`;
+                    
+                    if (navigator.share) {
+                      navigator.share({
+                        title: 'AGNV Transfer Receipt',
+                        text: receiptText,
+                      }).catch(err => console.log('Share cancelled:', err));
+                    } else {
+                      // Fallback: copy to clipboard
+                      navigator.clipboard.writeText(receiptText);
+                      alert('Receipt copied to clipboard!');
+                    }
+                  }}
+                  className="flex-1 px-4 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-semibold text-sm flex items-center justify-center gap-2"
+                >
+                  <Share2 className="w-4 h-4" /> Share
                 </button>
               </div>
 

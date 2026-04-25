@@ -82,28 +82,40 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setStep(appUser ? 'kyc' : 'auth');
   }, [isOpen, appUser]);
 
+  // Load Square SDK dynamically
+  const loadSquare = useCallback(() => {
+    return new Promise((resolve, reject) => {
+      if (window.Square) {
+        resolve(window.Square);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://web-payments-sdk.squareup.com/sq.js';
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+
+      script.onload = () => {
+        if (window.Square) {
+          resolve(window.Square);
+        } else {
+          reject(new Error('Square SDK loaded but window.Square is undefined'));
+        }
+      };
+
+      script.onerror = () => reject(new Error('Failed to load Square SDK'));
+
+      document.head.appendChild(script);
+    });
+  }, []);
+
   // Initialize Square Web Payments
   const initSquare = useCallback(async () => {
     setSquareLoading(true);
     setError('');
     
     try {
-      // Wait for Square SDK to load
-      let attempts = 0;
-      while (!window.Square && attempts < 100) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-      }
-      
-      if (!window.Square) {
-        console.error('Square SDK not found after waiting. window.Square:', window.Square);
-        throw new Error('Square SDK is not available. Please refresh the page and try again.');
-      }
-      
-      if (!window.Square.payments) {
-        console.error('Square.payments not available');
-        throw new Error('Square payments module is not available.');
-      }
+      const Square = await loadSquare();
 
       const config = await base44.functions.invoke('getSquareConfig', {});
       if (!config.data?.squareApplicationId) {
@@ -111,7 +123,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
       }
 
       const { squareApplicationId } = config.data;
-      const payments = await window.Square.payments(squareApplicationId, 'US');
+      const payments = await Square.payments(squareApplicationId, 'US');
       webPaymentsRef.current = payments;
 
       const card = await payments.card();
@@ -127,7 +139,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     } finally {
       setSquareLoading(false);
     }
-  }, []);
+  }, [loadSquare]);
 
   // Load Square SDK when funding step is active
   useEffect(() => {

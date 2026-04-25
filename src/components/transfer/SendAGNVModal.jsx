@@ -10,6 +10,7 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 
 const STEPS = [
   { id: 'auth',    label: 'Login/Sign Up'   },
+  { id: 'kyc',     label: 'Verify Identity' },
   { id: 'fund',    label: 'Fund Account'    },
   { id: 'send',    label: 'Send AGNV'       },
   { id: 'done',    label: 'Complete'        },
@@ -77,7 +78,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   useEffect(() => {
     if (!isOpen) return;
     // Skip auth step if user already logged in via header
-    setStep(appUser ? 'fund' : 'auth');
+    setStep(appUser ? 'kyc' : 'auth');
   }, [isOpen, appUser]);
 
   // Initialize Square Web Payments when funding step is active
@@ -303,13 +304,31 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               </div>
               )}
 
-              {/* Step 2: Fund */}
+              {/* Step 2: KYC */}
+              {step === 'kyc' && (
+                <div className="text-center py-8 space-y-4">
+                  <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto">
+                    <span className="text-3xl">✓</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900">Identity Verification</h3>
+                  <p className="text-slate-600 text-sm">We need to verify your identity for security purposes.</p>
+                  <Button
+                    onClick={() => setStep('fund')}
+                    className="w-full"
+                    style={{ backgroundColor: '#7c3aed' }}
+                  >
+                    Proceed to Verification
+                  </Button>
+                </div>
+              )}
+
+              {/* Step 3: Fund */}
               {step === 'fund' && (
               <div className="space-y-4">
               <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Info className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-semibold text-purple-700">Step 2: Fund Your Account</span>
+                  <span className="text-sm font-semibold text-purple-700">Step 3: Fund Your Account</span>
                 </div>
                 <p className="text-sm text-slate-600 mb-4">
                   Add funds to your account using Square. This amount will be available to send as AGNV.
@@ -373,13 +392,13 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               </div>
               )}
 
-              {/* Step 3: Send */}
+              {/* Step 4: Send */}
               {step === 'send' && !success && (
             <div className="space-y-4">
               <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4 mb-5">
                 <div className="flex items-center gap-1 mb-3">
                   <Info className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-semibold text-purple-700">Step 3: Send AGNV</span>
+                  <span className="text-sm font-semibold text-purple-700">Step 4: Send AGNV</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center text-sm mb-3">
                   <div className="bg-white rounded-xl p-2 shadow-sm">
@@ -469,7 +488,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
             </div>
           )}
 
-          {/* Step 5: Done */}
+          {/* Step 5: Complete */}
           {step === 'done' && success && (
             <div className="text-center py-8 space-y-4">
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
@@ -486,8 +505,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
         {/* Signup Modal */}
         {showSignup && (
           <SignupModal isOpen={showSignup} onClose={() => setShowSignup(false)} onSignupSuccess={() => {
-            setShowSignup(false);
-            setStep('send');
+          setShowSignup(false);
+          setStep('kyc');
           }} />
         )}
       </motion.div>

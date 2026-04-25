@@ -10,6 +10,7 @@ import {
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
+import SendAGNVModal from '@/components/transfer/SendAGNVModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
@@ -23,6 +24,14 @@ const quickActions = [
     color: '#3D7BB7',
     bg: '#e3f2fd',
     description: 'Transfer globally',
+  },
+  {
+    id: 'sendagnv',
+    label: 'Send AGNV',
+    icon: Send,
+    color: '#7c3aed',
+    bg: '#ede9fe',
+    description: 'Send tokens',
   },
   {
     id: 'topup',
@@ -91,12 +100,14 @@ export default function MobileHomeScreen() {
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [showRequestMoney, setShowRequestMoney] = useState(false);
   const [showRequestTopUp, setShowRequestTopUp] = useState(false);
+  const [showSendAGNV, setShowSendAGNV] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const handleAction = (id) => {
     if (id === 'topup') setShowTopup(true);
     else if (id === 'request') setShowRequestMoney(true);
     else if (id === 'requesttopup') setShowRequestTopUp(true);
+    else if (id === 'sendagnv') setShowSendAGNV(true);
     else if (id === 'send') setShowComingSoon(true);
   };
 
@@ -318,6 +329,11 @@ export default function MobileHomeScreen() {
             <CybridTransferModal amount="100" country={selectedCountry} onClose={() => setShowTransfer(false)} />
           </motion.div>
         </div>,
+        document.body
+      )}
+
+      {showSendAGNV && createPortal(
+        <SendAGNVModal isOpen={showSendAGNV} onClose={() => setShowSendAGNV(false)} />,
         document.body
       )}
 

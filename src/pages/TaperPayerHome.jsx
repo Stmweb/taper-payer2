@@ -401,7 +401,7 @@ export default function TaperPayerHome() {
             { id: 'topup', label: 'Mobile Top-Up', icon: PhoneCall, color: '#F88F2B', bg: '#fff3e0', desc: 'Recharge instantly' },
             { id: 'request', label: 'Request Money', icon: HandCoins, color: '#61AF39', bg: '#e8f5e9', desc: 'Ask to get paid' },
             { id: 'requesttopup', label: 'Request Top-Up', icon: PhoneOutgoing, color: '#e91e8c', bg: '#fce4ec', desc: 'Ask someone to top up' },
-            { id: 'sendagnv', label: 'Send AGNV', icon: Globe, color: '#7c3aed', bg: '#ede9fe', desc: 'Send via AGNV' },
+            { id: 'sendagnv', label: 'Send AGNV', icon: Globe, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV' },
             { id: 'splitbills', label: 'Split Bills', icon: DollarSign, color: '#FF6B6B', bg: '#ffe0e0', desc: 'Divide expenses' },
             { id: 'favorites', label: 'Favorites', icon: Users, color: '#4ECDC4', bg: '#e0f7f6', desc: 'Quick contacts' },
             { id: 'groupwallet', label: 'Group Wallet', icon: Users, color: '#95E1D3', bg: '#e8f9f7', desc: 'Shared account' },

@@ -53,8 +53,8 @@ const quickActions = [
     id: 'sendagnv',
     label: 'Send AGNV',
     icon: Globe,
-    color: '#7c3aed',
-    bg: '#ede9fe',
+    color: '#003DA5',
+    bg: '#e8f2ff',
     description: 'Send via AGNV',
   },
   {

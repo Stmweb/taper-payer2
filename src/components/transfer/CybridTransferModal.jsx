@@ -82,7 +82,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
 
   const invoke = async (action, p = {}) => {
     try {
-      const res = await base44.functions.invoke('cybridTransfer', { action, _jwt: jwt || '', appUserId: appUser?.id || '', ...p });
+      const res = await base44.functions.invoke('cybridTransfer', { action, ...p });
       if (res.data?.error) throw new Error(res.data.error);
       return res;
     } catch (e) {

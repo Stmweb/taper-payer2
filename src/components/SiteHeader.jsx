@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import SignupModal from '@/components/SignupModal';
 
 export default function SiteHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   return (
     <nav className="bg-white dark:bg-slate-900 border-b dark:border-slate-700 sticky top-0 z-50 shadow-sm">
@@ -36,9 +38,14 @@ export default function SiteHeader() {
             <Link to="/TaperPayerRates" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Exchange Rates</Link>
             <Link to="/TaperPayerTopUp" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Taper Mobile</Link>
             <Link to="/TaperPayerContact" className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Contact</Link>
-            <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50">Login</Button>
-            </a>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setShowSignupModal(true)}
+              className="text-slate-700 border-slate-300 hover:bg-slate-50"
+            >
+              Login
+            </Button>
             <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
               <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button>
             </a>
@@ -58,16 +65,31 @@ export default function SiteHeader() {
             <Link to="/TaperPayerTopUp" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Taper Mobile</Link>
             <Link to="/TaperPayerContact" className="block text-white/90 font-medium hover:text-white transition-colors py-2">Contact</Link>
             <div className="pt-3 space-y-3">
-              <a href="https://bluepaycard.wwcnyotm.com/UnitedStates/en-US/Ghana/MTS/Account/Login" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20">Login</Button>
-              </a>
-              <a href="https://bluepaycard.wwcnyotm.com/gb/en/gb/MTS/Account/Register" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full bg-white text-blue-600 hover:bg-gray-100">Sign up</Button>
-              </a>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowSignupModal(true)}
+                className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20"
+              >
+                Login
+              </Button>
+              <Button 
+                onClick={() => setShowSignupModal(true)}
+                className="w-full bg-white text-blue-600 hover:bg-gray-100"
+              >
+                Sign up
+              </Button>
             </div>
           </div>
         )}
       </div>
+      <SignupModal 
+        isOpen={showSignupModal} 
+        onClose={() => setShowSignupModal(false)}
+        onSignupSuccess={() => {
+          setShowSignupModal(false);
+          window.location.reload();
+        }}
+      />
     </nav>
   );
 }

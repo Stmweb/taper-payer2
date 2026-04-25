@@ -13,9 +13,9 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { amount, cardNumber, expiry, cvv } = await req.json();
+    const { amount, sourceToken } = await req.json();
 
-    if (!amount || amount <= 0 || !cardNumber || !expiry || !cvv) {
+    if (!amount || amount <= 0 || !sourceToken) {
       return Response.json({ error: 'Missing required payment details' }, { status: 400 });
     }
 
@@ -26,26 +26,18 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Square configuration missing' }, { status: 500 });
     }
 
-    const [month, year] = expiry.split('/');
     const amountCents = Math.round(amount * 100);
 
     console.log('Creating payment with amount:', amountCents);
 
-    // Create the payment using the card details directly
+    // Create the payment using the token from Square Web Payments
     const paymentPayload = {
       idempotency_key: crypto.randomUUID(),
       amount_money: {
         amount: amountCents,
         currency: 'USD',
       },
-      card_details: {
-        card: {
-          card_number: cardNumber,
-          expiration_month: parseInt(month),
-          expiration_year: parseInt(`20${year}`),
-          cvc: cvv,
-        },
-      },
+      source_id: sourceToken,
       location_id: squareLocationId,
       note: `AGNV Account Funding - ${user.email}`,
     };

@@ -141,7 +141,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
               {step === 'fund' ? (
                 <AGNVFundingModal
-                  onSuccess={() => handleFundingSuccess()}
+                  onSuccess={(amount) => handleFundingSuccess(amount)}
                   onClose={onClose}
                 />
               ) : (

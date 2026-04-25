@@ -13,10 +13,13 @@ const RATES = {
 
 export default function SendAGNVModal({ isOpen, onClose }) {
   const [amountUSD, setAmountUSD] = useState('');
+  const [recipientName, setRecipientName] = useState('');
   const [recipientPhone, setRecipientPhone] = useState('');
+  const [recipientWallet, setRecipientWallet] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [txHash, setTxHash] = useState('');
 
   const agnvAmount = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_AGNV).toFixed(2) : '';
   const htgEquiv = amountUSD ? (parseFloat(amountUSD) * RATES.USD_TO_HTG).toFixed(2) : '';
@@ -24,23 +27,41 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!amountUSD || !recipientPhone) {
+    if (!amountUSD || !recipientName || !recipientPhone || !recipientWallet) {
       setError('Please fill in all required fields.');
       return;
     }
     setLoading(true);
-    // Placeholder — wire up actual AGNV transfer logic here
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const res = await fetch('/api/sendAGNV', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amountUSD: parseFloat(amountUSD),
+          recipientName,
+          recipientPhone,
+          recipientWallet,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Transfer failed');
+      setTxHash(data.txHash);
       setSuccess(true);
-    }, 1500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClose = () => {
     setAmountUSD('');
+    setRecipientName('');
     setRecipientPhone('');
+    setRecipientWallet('');
     setSuccess(false);
     setError('');
+    setTxHash('');
     onClose();
   };
 
@@ -63,8 +84,9 @@ export default function SendAGNVModal({ isOpen, onClose }) {
           {success ? (
             <div className="text-center py-8">
               <CheckCircle className="w-16 h-16 text-purple-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Transfer Initiated!</h3>
-              <p className="text-slate-500 text-sm">Your AGNV transfer of {agnvAmount} AGNV (${amountUSD} USD) has been submitted.</p>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Transfer Successful!</h3>
+              <p className="text-slate-500 text-sm mb-4">Your AGNV transfer of {agnvAmount} AGNV (${amountUSD} USD) to {recipientName} has been completed.</p>
+              {txHash && <p className="text-xs text-slate-400 break-all mb-4">TX: {txHash}</p>}
               <Button onClick={handleClose} className="mt-6 w-full" style={{ backgroundColor: '#7c3aed' }}>Done</Button>
             </div>
           ) : (
@@ -129,15 +151,40 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Recipient Phone / Wallet <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Recipient Name <span className="text-red-500">*</span></label>
                   <Input
                     type="text"
-                    placeholder="Phone number or wallet address"
+                    placeholder="Full name"
+                    value={recipientName}
+                    onChange={(e) => setRecipientName(e.target.value)}
+                    required
+                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Recipient Phone <span className="text-red-500">*</span></label>
+                  <Input
+                    type="tel"
+                    placeholder="Phone number"
                     value={recipientPhone}
                     onChange={(e) => setRecipientPhone(e.target.value)}
                     required
                     style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">BNB Smart Chain Wallet Address <span className="text-red-500">*</span></label>
+                  <Input
+                    type="text"
+                    placeholder="0x..."
+                    value={recipientWallet}
+                    onChange={(e) => setRecipientWallet(e.target.value)}
+                    required
+                    style={{ color: '#1e293b', backgroundColor: '#ffffff' }}
+                  />
+                  <p className="text-xs text-slate-400 mt-1">Recipient's BNB Smart Chain wallet address to receive AGNV</p>
                 </div>
 
                 <Button

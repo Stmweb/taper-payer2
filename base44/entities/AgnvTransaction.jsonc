@@ -1,0 +1,55 @@
+{
+  "name": "AgnvTransaction",
+  "type": "object",
+  "properties": {
+    "sender_id": {
+      "type": "string",
+      "description": "ID of the user initiating the transfer"
+    },
+    "recipient_name": {
+      "type": "string",
+      "description": "Name of the AGNV recipient"
+    },
+    "recipient_phone": {
+      "type": "string",
+      "description": "Phone number of the AGNV recipient"
+    },
+    "recipient_wallet": {
+      "type": "string",
+      "description": "BNB Smart Chain wallet address of the recipient"
+    },
+    "amount_usd": {
+      "type": "number",
+      "description": "Amount sent in USD"
+    },
+    "amount_agnv": {
+      "type": "number",
+      "description": "Amount of AGNV tokens transferred"
+    },
+    "usdc_tx_hash": {
+      "type": "string",
+      "description": "Transaction hash for USDC to AGNV swap"
+    },
+    "agnv_tx_hash": {
+      "type": "string",
+      "description": "Transaction hash for AGNV transfer to recipient"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Transaction status"
+    }
+  },
+  "required": [
+    "sender_id",
+    "recipient_wallet",
+    "amount_usd",
+    "amount_agnv",
+    "status"
+  ]
+}

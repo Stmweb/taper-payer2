@@ -88,36 +88,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setError('');
     
     try {
-      // Check if Square SDK already loaded
       if (!window.Square) {
-        console.log('Loading Square SDK from CDN...');
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = 'https://web-payments-sdk.squareup.com/sq.js';
-          script.async = true;
-          
-          const timeout = setTimeout(() => {
-            reject(new Error('Square SDK loading took too long. Please try again.'));
-          }, 15000);
-          
-          script.onload = () => {
-            clearTimeout(timeout);
-            console.log('Square SDK loaded successfully');
-            resolve();
-          };
-          
-          script.onerror = (e) => {
-            clearTimeout(timeout);
-            console.error('Square SDK load error:', e);
-            reject(new Error('Unable to load payment form. Please refresh the page and try again.'));
-          };
-          
-          document.head.appendChild(script);
-        });
-      }
-
-      if (!window.Square) {
-        throw new Error('Square SDK not available');
+        throw new Error('Square SDK not available. Please refresh the page.');
       }
 
       const config = await base44.functions.invoke('getSquareConfig', {});
@@ -138,7 +110,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
       }
     } catch (err) {
       console.error('Square init failed:', err);
-      setError(err.message || 'Payment form unavailable. Please refresh and try again.');
+      setError(err.message || 'Payment form unavailable. Please refresh the page and try again.');
     } finally {
       setSquareLoading(false);
     }

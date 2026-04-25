@@ -347,18 +347,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                 {error && (
                   <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex gap-2 items-center text-red-700 text-sm">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                    <span className="flex-1">{error}</span>
-                    {!squareReady && (
-                      <Button
-                        type="button"
-                        onClick={initSquare}
-                        disabled={squareLoading}
-                        size="sm"
-                        className="bg-red-600 hover:bg-red-700 text-white ml-2"
-                      >
-                        {squareLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Retry'}
-                      </Button>
-                    )}
+                    <span>{error}</span>
                   </div>
                 )}
 

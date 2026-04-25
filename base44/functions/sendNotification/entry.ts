@@ -130,6 +130,7 @@ Deno.serve(async (req) => {
             '3': String(amount),
             '4': currency,
             '5': note || 'No note provided',
+            '6': shareUrl,
           }
         });
       } else {

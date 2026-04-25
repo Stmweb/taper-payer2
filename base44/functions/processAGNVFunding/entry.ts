@@ -30,43 +30,47 @@ Deno.serve(async (req) => {
     // Amount in cents
     const amountCents = Math.round(amount * 100);
 
-    // Create Square Payment Link
-    const paymentLinkRes = await fetch('https://connect.squareup.com/v2/checkout/payment-links', {
+    // Create Square Checkout
+    const checkoutRes = await fetch(`https://connect.squareup.com/v2/locations/${squareLocationId}/checkouts`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${squareAccessToken}`,
         'Content-Type': 'application/json',
+        'Square-Version': '2024-04-17',
       },
       body: JSON.stringify({
         idempotency_key: `agnv-fund-${user.id}-${Date.now()}`,
-        quick_pay: {
-          name: 'AGNV Account Funding',
-          price_money: {
-            amount: amountCents,
-            currency: 'USD',
-          },
-          description: `Fund AGNV account with ${amount} USD`,
+        order: {
+          location_id: squareLocationId,
+          line_items: [
+            {
+              name: 'AGNV Account Funding',
+              quantity: '1',
+              base_price_money: {
+                amount: amountCents,
+                currency: 'USD',
+              },
+            },
+          ],
+          reference_id: `user-${user.id}`,
         },
-        checkout_options: {
-          redirect_url: `${appUrl || 'https://taperpayer.com'}/TaperPayerHome?funding=success`,
-        },
-        note: `AGNV Funding for user ${user.email}`,
+        redirect_url: `${appUrl || 'https://taperpayer.com'}/TaperPayerHome?funding=success`,
       }),
     });
 
-    const paymentLinkData = await paymentLinkRes.json();
+    const checkoutData = await checkoutRes.json();
 
-    if (!paymentLinkRes.ok) {
-      console.error('Square payment link error:', paymentLinkData);
+    if (!checkoutRes.ok) {
+      console.error('Square checkout error:', checkoutData);
       return Response.json(
-        { error: paymentLinkData.errors?.[0]?.detail || 'Failed to create payment link' },
+        { error: checkoutData.errors?.[0]?.detail || 'Failed to create checkout' },
         { status: 400 }
       );
     }
 
     return Response.json({
       success: true,
-      paymentLink: paymentLinkData.payment_link?.url,
+      checkoutUrl: checkoutData.checkout?.checkout_page_url,
       amount,
     });
   } catch (error) {

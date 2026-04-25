@@ -90,13 +90,19 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     try {
       // Wait for Square SDK to load
       let attempts = 0;
-      while (!window.Square && attempts < 50) {
+      while (!window.Square && attempts < 100) {
         await new Promise(resolve => setTimeout(resolve, 100));
         attempts++;
       }
       
       if (!window.Square) {
-        throw new Error('Square SDK failed to load');
+        console.error('Square SDK not found after waiting. window.Square:', window.Square);
+        throw new Error('Square SDK is not available. Please refresh the page and try again.');
+      }
+      
+      if (!window.Square.payments) {
+        console.error('Square.payments not available');
+        throw new Error('Square payments module is not available.');
       }
 
       const config = await base44.functions.invoke('getSquareConfig', {});

@@ -22,6 +22,7 @@ import StructuredData from '@/components/StructuredData';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
+import SendAGNVModal from '@/components/transfer/SendAGNVModal';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import PINModal from '@/components/PINModal';
@@ -97,6 +98,7 @@ export default function TaperPayerHome() {
    const [showSignupModal, setShowSignupModal] = useState(false);
    const [showRequestMoney, setShowRequestMoney] = useState(false);
    const [showRequestTopUp, setShowRequestTopUp] = useState(false);
+   const [showSendAGNV, setShowSendAGNV] = useState(false);
 
    const toggleDarkMode = () => {
      setIsDark(!isDark);
@@ -431,7 +433,7 @@ export default function TaperPayerHome() {
                   else if (action.id === 'topup') setShowTaperConnect(true);
                   else if (action.id === 'request') setShowRequestMoney(true);
                   else if (action.id === 'requesttopup') setShowRequestTopUp(true);
-                  else if (action.id === 'sendagnv') setShowComingSoon(true);
+                  else if (action.id === 'sendagnv') setShowSendAGNV(true);
                 }}
                 className="flex flex-col items-center gap-3 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
               >
@@ -737,6 +739,9 @@ export default function TaperPayerHome() {
 
       {/* Request Top-Up Modal */}
       <RequestTopUpModal isOpen={showRequestTopUp} onClose={() => setShowRequestTopUp(false)} />
+
+      {/* Send AGNV Modal */}
+      <SendAGNVModal isOpen={showSendAGNV} onClose={() => setShowSendAGNV(false)} />
 
       {/* Signup Modal */}
       <SignupModal

@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 import bcrypt from 'npm:bcryptjs@2.4.3';
 
 async function generateJWT(user) {
@@ -24,8 +24,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing email or password' }, { status: 400 });
     }
 
-    // Find user using service role (no auth required for login)
-    const users = await base44.asServiceRole.entities.AppUser.filter({ email });
+    // Find user using service role
+    const users = await base44.asServiceRole.entities.AppUser.filter({ email: email.toLowerCase().trim() });
     if (!users || users.length === 0) {
       return Response.json({ error: 'Invalid credentials' }, { status: 401 });
     }
@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
       cybrid_customer_id: user.cybrid_customer_id,
     });
   } catch (error) {
-    console.error('Login error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Login error:', error.message);
+    return Response.json({ error: error.message || 'Login failed' }, { status: 500 });
   }
 });

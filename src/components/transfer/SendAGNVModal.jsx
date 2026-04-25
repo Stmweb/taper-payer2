@@ -238,7 +238,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
       
       if (res.data?.error) throw new Error(res.data.error);
       
-      setTxHash(res.data?.txHash || '');
+      setTxHash(res.data?.transactionId || '');
       setSuccess(true);
       setStep('done');
     } catch (err) {

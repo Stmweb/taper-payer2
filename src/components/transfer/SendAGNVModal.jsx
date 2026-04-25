@@ -149,22 +149,19 @@ export default function SendAGNVModal({ isOpen, onClose }) {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/sendAGNV', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amountUSD: parseFloat(sendAmount),
-          recipientName,
-          recipientPhone,
-        }),
+      const res = await base44.functions.invoke('sendAGNV', {
+        amountUSD: amount,
+        recipientName,
+        recipientPhone,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Transfer failed');
-      setTxHash(data.txHash);
+      
+      if (res.data?.error) throw new Error(res.data.error);
+      
+      setTxHash(res.data?.txHash || '');
       setSuccess(true);
       setStep('done');
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Transfer failed');
     } finally {
       setLoading(false);
     }

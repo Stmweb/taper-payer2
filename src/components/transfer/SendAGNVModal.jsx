@@ -85,8 +85,21 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   // Load Square SDK dynamically
   const loadSquare = useCallback(() => {
     return new Promise((resolve, reject) => {
-      if (window.Square) {
+      // Check if already loaded
+      if (window.Square && window.Square.payments) {
         resolve(window.Square);
+        return;
+      }
+
+      // Check if script already exists
+      const existingScript = document.querySelector('script[src="https://web-payments-sdk.squareup.com/sq.js"]');
+      if (existingScript) {
+        const checkInterval = setInterval(() => {
+          if (window.Square && window.Square.payments) {
+            clearInterval(checkInterval);
+            resolve(window.Square);
+          }
+        }, 100);
         return;
       }
 
@@ -96,16 +109,21 @@ export default function SendAGNVModal({ isOpen, onClose }) {
       script.crossOrigin = 'anonymous';
 
       script.onload = () => {
-        if (window.Square) {
-          resolve(window.Square);
-        } else {
-          reject(new Error('Square SDK loaded but window.Square is undefined'));
-        }
+        let attempts = 0;
+        const waitForSquare = setInterval(() => {
+          if (window.Square && window.Square.payments) {
+            clearInterval(waitForSquare);
+            resolve(window.Square);
+          } else if (attempts++ > 50) {
+            clearInterval(waitForSquare);
+            reject(new Error('Square SDK loaded but payments module not available'));
+          }
+        }, 100);
       };
 
-      script.onerror = () => reject(new Error('Failed to load Square SDK'));
+      script.onerror = () => reject(new Error('Failed to download Square SDK from CDN'));
 
-      document.head.appendChild(script);
+      document.body.appendChild(script);
     });
   }, []);
 

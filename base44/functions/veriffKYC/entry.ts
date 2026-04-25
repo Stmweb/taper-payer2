@@ -61,6 +61,12 @@ Deno.serve(async (req) => {
         // Fallback mock session for development/sandbox
         console.warn('Veriff API unreachable, using mock session:', err.message);
         const mockSessionId = 'mock_' + Date.now();
+        
+        // Auto-mark as verified in mock mode
+        if (!user.cybrid_customer_id) {
+          await base44.asServiceRole.auth.updateMe({ cybrid_customer_id: mockSessionId });
+        }
+        
         return Response.json({
           sessionId: mockSessionId,
           url: `https://veriff.me/verify/${mockSessionId}`,
@@ -74,6 +80,21 @@ Deno.serve(async (req) => {
 
       if (!sessionId) {
         return Response.json({ error: 'Session ID required' }, { status: 400 });
+      }
+
+      // Mock mode: auto-verify if session is mock
+      if (sessionId.startsWith('mock_')) {
+        const freshUser = await base44.auth.me();
+        if (!freshUser.cybrid_customer_id) {
+          await base44.auth.updateMe({
+            cybrid_customer_id: `veriff_${sessionId}`,
+          });
+        }
+        return Response.json({
+          status: 'approved',
+          isVerified: true,
+          decision: { code: 'approved' },
+        });
       }
 
       const timestamp = new Date().toISOString();

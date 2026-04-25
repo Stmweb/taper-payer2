@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
@@ -24,6 +24,32 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const [error, setError] = useState('');
   const [txHash, setTxHash] = useState('');
   const [fundingComplete, setFundingComplete] = useState(false);
+  const [user, setUser] = useState(null);
+  const [checkingKYC, setCheckingKYC] = useState(true);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const checkUserKYC = async () => {
+      try {
+        const currentUser = await base44.auth.me();
+        if (!currentUser) {
+          setError('Please login to send AGNV');
+          setUser(null);
+        } else {
+          setUser(currentUser);
+          setError('');
+        }
+      } catch (err) {
+        setError('Failed to verify user. Please login.');
+        setUser(null);
+      } finally {
+        setCheckingKYC(false);
+      }
+    };
+
+    checkUserKYC();
+  }, [isOpen]);
 
   const agnvAmount = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_AGNV).toFixed(2) : '';
   const htgEquiv = sendAmount ? (parseFloat(sendAmount) * RATES.USD_TO_HTG).toFixed(2) : '';
@@ -48,6 +74,16 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     e.preventDefault();
     setError('');
     const amount = parseFloat(sendAmount);
+    
+    if (!user) {
+      setError('You must be logged in to send AGNV.');
+      return;
+    }
+
+    if (!user.cybrid_customer_id) {
+      setError('You must complete KYC verification before sending AGNV.');
+      return;
+    }
     
     if (!sendAmount || !recipientName || !recipientPhone) {
       setError('Please fill in all required fields.');
@@ -109,7 +145,26 @@ export default function SendAGNVModal({ isOpen, onClose }) {
         <button onClick={handleClose} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">✕</button>
 
         <div className="p-6 pt-4">
-          {success ? (
+          {checkingKYC ? (
+            <div className="text-center py-8">
+              <Loader2 className="w-8 h-8 animate-spin text-purple-500 mx-auto mb-4" />
+              <p className="text-slate-600">Verifying your account...</p>
+            </div>
+          ) : !user ? (
+            <div className="text-center py-8">
+              <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Login Required</h3>
+              <p className="text-slate-600 text-sm mb-4">You must be logged in to send AGNV.</p>
+              <Button onClick={onClose} className="w-full" style={{ backgroundColor: '#7c3aed' }}>Close</Button>
+            </div>
+          ) : !user.cybrid_customer_id ? (
+            <div className="text-center py-8">
+              <AlertCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+              <h3 className="text-lg font-bold text-slate-900 mb-2">KYC Verification Required</h3>
+              <p className="text-slate-600 text-sm mb-4">Complete identity verification to send AGNV.</p>
+              <Button onClick={onClose} className="w-full" style={{ backgroundColor: '#7c3aed' }}>Close</Button>
+            </div>
+          ) : success ? (
             <div className="text-center py-8">
               <CheckCircle className="w-16 h-16 text-purple-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-slate-900 mb-2">Transfer Successful!</h3>

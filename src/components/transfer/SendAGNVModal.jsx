@@ -67,6 +67,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const [success, setSuccess] = useState(false);
   const [txHash, setTxHash] = useState('');
   const [squareReady, setSquareReady] = useState(false);
+  const [squareLoading, setSquareLoading] = useState(false);
   const cardContainerRef = useRef(null);
   const webPaymentsRef = useRef(null);
   const cardRef = useRef(null);
@@ -81,67 +82,72 @@ export default function SendAGNVModal({ isOpen, onClose }) {
     setStep(appUser ? 'kyc' : 'auth');
   }, [isOpen, appUser]);
 
-  // Initialize Square Web Payments when funding step is active
+  // Initialize Square Web Payments
+  const initSquare = async () => {
+    setSquareLoading(true);
+    setError('');
+    
+    try {
+      // Check if Square SDK already loaded
+      if (!window.Square) {
+        console.log('Loading Square SDK from CDN...');
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://web-payments-sdk.squareup.com/sq.js';
+          script.async = true;
+          script.crossOrigin = 'anonymous';
+          
+          const timeout = setTimeout(() => {
+            reject(new Error('Square SDK loading took too long. Please check your internet connection.'));
+          }, 30000);
+          
+          script.onload = () => {
+            clearTimeout(timeout);
+            console.log('Square SDK loaded successfully');
+            resolve();
+          };
+          
+          script.onerror = (e) => {
+            clearTimeout(timeout);
+            console.error('Square SDK load error:', e);
+            reject(new Error('Unable to load Square payment SDK. Please check your internet connection.'));
+          };
+          
+          document.head.appendChild(script);
+        });
+      }
+
+      if (!window.Square) {
+        throw new Error('Square SDK not available');
+      }
+
+      const config = await base44.functions.invoke('getSquareConfig', {});
+      if (!config.data?.squareApplicationId) {
+        throw new Error('Square configuration missing');
+      }
+
+      const { squareApplicationId } = config.data;
+      const payments = await window.Square.payments(squareApplicationId, 'US');
+      webPaymentsRef.current = payments;
+
+      const card = await payments.card();
+      cardRef.current = card;
+
+      if (cardContainerRef.current) {
+        await card.attach(cardContainerRef.current);
+        setSquareReady(true);
+      }
+    } catch (err) {
+      console.error('Square init failed:', err);
+      setError(err.message || 'Payment form unavailable. Please refresh and try again.');
+    } finally {
+      setSquareLoading(false);
+    }
+  };
+
+  // Load Square SDK when funding step is active
   useEffect(() => {
     if (step !== 'fund' || squareReady) return;
-
-    const initSquare = async () => {
-      try {
-        // Check if Square SDK already loaded
-        if (!window.Square) {
-          console.log('Loading Square SDK from CDN...');
-          await new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://web-payments-sdk.squareup.com/sq.js';
-            script.async = true;
-            script.crossOrigin = 'anonymous';
-            
-            const timeout = setTimeout(() => {
-              reject(new Error('Square SDK loading took too long. Please check your internet connection.'));
-            }, 30000);
-            
-            script.onload = () => {
-              clearTimeout(timeout);
-              console.log('Square SDK loaded successfully');
-              resolve();
-            };
-            
-            script.onerror = (e) => {
-              clearTimeout(timeout);
-              console.error('Square SDK load error:', e);
-              reject(new Error('Unable to load Square payment SDK. Please check your internet connection.'));
-            };
-            
-            document.head.appendChild(script);
-          });
-        }
-
-        if (!window.Square) {
-          throw new Error('Square SDK not available');
-        }
-
-        const config = await base44.functions.invoke('getSquareConfig', {});
-        if (!config.data?.squareApplicationId) {
-          throw new Error('Square configuration missing');
-        }
-
-        const { squareApplicationId } = config.data;
-        const payments = await window.Square.payments(squareApplicationId, 'US');
-        webPaymentsRef.current = payments;
-
-        const card = await payments.card();
-        cardRef.current = card;
-
-        if (cardContainerRef.current) {
-          await card.attach(cardContainerRef.current);
-          setSquareReady(true);
-        }
-      } catch (err) {
-        console.error('Square init failed:', err);
-        setError(err.message || 'Payment form unavailable. Please refresh and try again.');
-      }
-    };
-
     initSquare();
   }, [step, squareReady]);
 
@@ -338,6 +344,24 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                   Add funds to your account using Square. This amount will be available to send as AGNV.
                 </p>
 
+                {error && (
+                  <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex gap-2 items-center text-red-700 text-sm">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    <span className="flex-1">{error}</span>
+                    {!squareReady && (
+                      <Button
+                        type="button"
+                        onClick={initSquare}
+                        disabled={squareLoading}
+                        size="sm"
+                        className="bg-red-600 hover:bg-red-700 text-white ml-2"
+                      >
+                        {squareLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Retry'}
+                      </Button>
+                    )}
+                  </div>
+                )}
+
                 <form className="space-y-4">
                    <div>
                      <label className="block text-sm font-medium text-slate-700 mb-2">Amount (USD)</label>
@@ -351,7 +375,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                          value={fundAmount}
                          onChange={(e) => setFundAmount(e.target.value)}
                          className="pl-8 border-slate-300"
-                         disabled={loading}
+                         disabled={loading || !squareReady}
                        />
                      </div>
                    </div>

@@ -12,18 +12,14 @@ export default function AdminAGNVTransactions() {
   const [rejectionReason, setRejectionReason] = useState('');
   const [filter, setFilter] = useState('pending');
 
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
-
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (currentFilter) => {
     try {
       setLoading(true);
       let txs;
-      if (filter === 'all') {
+      if (currentFilter === 'all') {
         txs = await base44.asServiceRole.entities.AgnvTransaction.list('-created_date', 100);
       } else {
-        txs = await base44.asServiceRole.entities.AgnvTransaction.filter({ status: filter }, '-created_date', 100);
+        txs = await base44.asServiceRole.entities.AgnvTransaction.filter({ status: currentFilter }, '-created_date', 100);
       }
       setTransactions(txs);
     } catch (error) {
@@ -33,13 +29,17 @@ export default function AdminAGNVTransactions() {
     }
   };
 
+  useEffect(() => {
+    fetchTransactions(filter);
+  }, [filter]);
+
   const handleApprove = async (txId) => {
     try {
       await base44.functions.invoke('approveAGNVTransaction', {
         transactionId: txId,
         approved: true,
       });
-      fetchTransactions();
+      fetchTransactions(filter);
       setSelectedTx(null);
     } catch (error) {
       console.error('Approval failed:', error);
@@ -53,7 +53,7 @@ export default function AdminAGNVTransactions() {
         approved: false,
         rejectionReason,
       });
-      fetchTransactions();
+      fetchTransactions(filter);
       setSelectedTx(null);
       setRejectionReason('');
     } catch (error) {
@@ -78,10 +78,7 @@ export default function AdminAGNVTransactions() {
           {['pending', 'completed', 'failed', 'all'].map(status => (
             <button
               key={status}
-              onClick={() => {
-                setFilter(status);
-                fetchTransactions();
-              }}
+              onClick={() => setFilter(status)}
               className={`px-4 py-2 rounded-lg font-medium transition-all capitalize ${
                 filter === status
                   ? 'bg-purple-600 text-white'

@@ -28,7 +28,7 @@ export default function AccountSettings() {
   const { user: appUser, login } = useAppAuth();
   const [user, setUser] = useState(null);
   const [editingField, setEditingField] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ full_name: '', email: '', phone: '' });
 
   useEffect(() => {
     // This app uses a custom AppUser entity, load from localStorage

@@ -161,13 +161,13 @@ export default function AccountSettings() {
                 </div>
                 {editingField === 'full_name' ? (
                   <div className="flex gap-2 w-full sm:w-auto">
-                    <Button size="sm" onClick={() => handleSaveField('full_name')} className="flex-1 sm:flex-none">Save</Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)} className="flex-1 sm:flex-none">Cancel</Button>
+                    <button type="button" onClick={() => handleSaveField('full_name')} className="flex-1 sm:flex-none px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90">Save</button>
+                    <button type="button" onClick={() => setEditingField(null)} className="flex-1 sm:flex-none px-4 py-2 rounded-md border border-input bg-background text-sm font-medium hover:bg-accent">Cancel</button>
                   </div>
                 ) : (
-                  <Button variant="ghost" size="sm" onClick={() => setEditingField('full_name')} className="w-full sm:w-auto dark:text-gray-300 text-blue-600 font-semibold">
+                  <button type="button" onClick={() => setEditingField('full_name')} className="w-full sm:w-auto px-4 py-2 rounded-md text-sm font-semibold text-blue-600 hover:bg-accent dark:text-gray-300">
                     Edit
-                  </Button>
+                  </button>
                 )}
               </div>
 
@@ -198,13 +198,13 @@ export default function AccountSettings() {
                 </div>
                 {editingField === 'phone' ? (
                   <div className="flex gap-2 w-full sm:w-auto">
-                    <Button size="sm" onClick={() => handleSaveField('phone')} className="flex-1 sm:flex-none">Save</Button>
-                    <Button size="sm" variant="outline" onClick={() => setEditingField(null)} className="flex-1 sm:flex-none">Cancel</Button>
+                    <button type="button" onClick={() => handleSaveField('phone')} className="flex-1 sm:flex-none px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90">Save</button>
+                    <button type="button" onClick={() => setEditingField(null)} className="flex-1 sm:flex-none px-4 py-2 rounded-md border border-input bg-background text-sm font-medium hover:bg-accent">Cancel</button>
                   </div>
                 ) : (
-                  <Button variant="ghost" size="sm" onClick={() => setEditingField('phone')} className="w-full sm:w-auto dark:text-gray-300 text-orange-600 font-semibold">
+                  <button type="button" onClick={() => setEditingField('phone')} className="w-full sm:w-auto px-4 py-2 rounded-md text-sm font-semibold text-orange-600 hover:bg-accent dark:text-gray-300">
                     Edit
-                  </Button>
+                  </button>
                 )}
               </div>
             </div>

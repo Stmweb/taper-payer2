@@ -9,17 +9,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { filter, showTest } = await req.json();
-
-    const query = {};
-    if (filter && filter !== 'all') query.status = filter;
-    if (showTest) query.is_sample = true;
+    const { filter } = await req.json();
 
     let txs;
-    if (Object.keys(query).length === 0) {
+    if (!filter || filter === 'all') {
       txs = await base44.asServiceRole.entities.AgnvTransaction.list('-created_date', 100);
     } else {
-      txs = await base44.asServiceRole.entities.AgnvTransaction.filter(query, '-created_date', 100);
+      txs = await base44.asServiceRole.entities.AgnvTransaction.filter({ status: filter }, '-created_date', 100);
     }
 
     return Response.json({ transactions: txs });

@@ -31,20 +31,16 @@ export default function AccountSettings() {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const currentUser = await base44.auth.me();
-        setUser(currentUser);
-        setFormData({
-          full_name: currentUser?.full_name || '',
-          email: currentUser?.email || '',
-          phone: currentUser?.phone || ''
-        });
-      } catch (e) {
-        console.error('Failed to load user:', e);
-      }
-    };
-    loadUser();
+    // This app uses a custom AppUser entity, load from localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    if (storedUser?.id) {
+      setUser(storedUser);
+      setFormData({
+        full_name: storedUser?.full_name || '',
+        email: storedUser?.email || '',
+        phone: storedUser?.phone || ''
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -60,11 +56,17 @@ export default function AccountSettings() {
 
   const handleSaveField = async (field) => {
     try {
-      await base44.auth.updateMe({ [field]: formData[field] });
-      // Fetch fresh user data from server
-      const updatedUser = await base44.auth.me();
+      // Update the AppUser entity directly (this app uses a custom auth system)
+      const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!storedUser?.id) {
+        toast.error('Could not find user record');
+        return;
+      }
+      await base44.entities.AppUser.update(storedUser.id, { [field]: formData[field] });
+      // Update local state
+      const updatedUser = { ...storedUser, [field]: formData[field] };
       setUser(updatedUser);
-      // Sync to AppAuth context with stored values
+      // Sync to AppAuth context and localStorage
       const storedJwt = localStorage.getItem('auth_token');
       const storedCybridId = localStorage.getItem('cybrid_customer_id');
       login(updatedUser, storedJwt, storedCybridId);

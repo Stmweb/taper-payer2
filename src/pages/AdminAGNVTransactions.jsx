@@ -11,11 +11,12 @@ export default function AdminAGNVTransactions() {
   const [selectedTx, setSelectedTx] = useState(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [filter, setFilter] = useState('pending');
+  const [showTest, setShowTest] = useState(false);
 
   const fetchTransactions = async (currentFilter) => {
     try {
       setLoading(true);
-      const res = await base44.functions.invoke('getAGNVTransactions', { filter: currentFilter || 'all' });
+      const res = await base44.functions.invoke('getAGNVTransactions', { filter: currentFilter || 'all', showTest });
       setTransactions(res.data?.transactions || []);
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
@@ -26,7 +27,7 @@ export default function AdminAGNVTransactions() {
 
   useEffect(() => {
     fetchTransactions(filter);
-  }, [filter]);
+  }, [filter, showTest]);
 
   const handleApprove = async (txId) => {
     try {
@@ -69,7 +70,8 @@ export default function AdminAGNVTransactions() {
         <p className="text-slate-600 mb-6">Review and approve AGNV transfers</p>
 
         {/* Filters */}
-        <div className="flex gap-3 mb-6">
+        <div className="flex flex-wrap gap-3 mb-6 items-center justify-between">
+        <div className="flex gap-3 flex-wrap">
           {['pending', 'completed', 'failed', 'all'].map(status => (
             <button
               key={status}
@@ -83,6 +85,17 @@ export default function AdminAGNVTransactions() {
               {status}
             </button>
           ))}
+        </div>
+        <button
+          onClick={() => setShowTest(prev => !prev)}
+          className={`px-4 py-2 rounded-lg font-medium transition-all text-sm ${
+            showTest
+              ? 'bg-amber-500 text-white'
+              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+          }`}
+        >
+          {showTest ? '🧪 Test Mode ON' : '🧪 View Test'}
+        </button>
         </div>
 
         {/* Transactions Table */}

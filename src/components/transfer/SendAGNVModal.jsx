@@ -340,17 +340,75 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               {step === 'kyc' && (
                 <div className="text-center py-8 space-y-4">
                   <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto">
-                    <span className="text-3xl">✓</span>
+                    <span className="text-3xl">🪪</span>
                   </div>
                   <h3 className="text-lg font-bold text-slate-900">Identity Verification</h3>
-                  <p className="text-slate-600 text-sm">We need to verify your identity for security purposes.</p>
-                  <Button
-                    onClick={() => setStep('fund')}
-                    className="w-full"
-                    style={{ backgroundColor: '#7c3aed' }}
-                  >
-                    Proceed to Verification
-                  </Button>
+                  <p className="text-slate-600 text-sm">We need to verify your identity before you can send AGNV. This takes about 2 minutes.</p>
+
+                  {kycStatus === 'approved' && (
+                    <div className="p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium">
+                      ✅ Identity verified! You can proceed.
+                    </div>
+                  )}
+                  {kycStatus && kycStatus !== 'approved' && kycStatus !== 'created' && kycStatus !== 'started' && (
+                    <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-yellow-700 text-sm">
+                      Status: <strong>{kycStatus}</strong>. Please complete verification.
+                    </div>
+                  )}
+                  {veriffSessionId && !kycStatus && (
+                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm flex items-center gap-2 justify-center">
+                      <Loader2 className="w-4 h-4 animate-spin" /> Checking verification status…
+                    </div>
+                  )}
+
+                  {kycStatus !== 'approved' ? (
+                    <Button
+                      onClick={async () => {
+                        setLoading(true);
+                        setError('');
+                        try {
+                          const res = await base44.functions.invoke('veriffKYC', { action: 'createSession' });
+                          if (res.data?.error) throw new Error(res.data.error);
+                          const { sessionId, url } = res.data;
+                          setVeriffSessionId(sessionId);
+                          setVeriffUrl(url);
+                          // Open Veriff in new tab
+                          window.open(url, '_blank');
+                          // Poll for status every 5s
+                          const interval = setInterval(async () => {
+                            try {
+                              const statusRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
+                              const { status, isVerified } = statusRes.data;
+                              setKycStatus(status);
+                              if (isVerified) {
+                                clearInterval(interval);
+                              }
+                            } catch {}
+                          }, 5000);
+                          // Stop polling after 10 minutes
+                          setTimeout(() => clearInterval(interval), 600000);
+                        } catch (err) {
+                          setError(err.message || 'Failed to start verification');
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                      disabled={loading}
+                      className="w-full"
+                      style={{ backgroundColor: '#7c3aed' }}
+                    >
+                      {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                      {veriffSessionId ? 'Re-open Verification' : 'Start Verification'}
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => setStep('fund')}
+                      className="w-full"
+                      style={{ backgroundColor: '#7c3aed' }}
+                    >
+                      Continue to Fund Account →
+                    </Button>
+                  )}
                 </div>
               )}
 

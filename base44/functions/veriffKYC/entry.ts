@@ -99,11 +99,12 @@ Deno.serve(async (req) => {
       }
 
       const status = data.verification.status;
-      const isVerified = status === 'approved';
+      // submitted/review = user completed the flow, advance them even if final decision is pending
+      const isVerified = ['approved', 'submitted', 'review'].includes(status);
 
       // Update user with KYC status
       if (isVerified) {
-        console.log('Marking user as verified');
+        console.log('Marking user as verified, status:', status);
         await base44.auth.updateMe({
           cybrid_customer_id: `veriff_${sessionId}`,
         });

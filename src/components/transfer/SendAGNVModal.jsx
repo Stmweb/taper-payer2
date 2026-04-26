@@ -369,56 +369,81 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                     </div>
                   )}
 
-                  {kycStatus !== 'approved' ? (
-                    <Button
-                      onClick={async () => {
-                        setLoading(true);
-                        setError('');
-                        try {
-                          const res = await base44.functions.invoke('veriffKYC', { action: 'createSession' });
-                          if (res.data?.error) throw new Error(res.data.error);
-                          const { sessionId, url } = res.data;
-                          setVeriffSessionId(sessionId);
-                          setVeriffUrl(url);
-                          // Open Veriff in new tab
-                          const popup = window.open(url, '_blank');
-                          // Poll for status every 5s
-                          const interval = setInterval(async () => {
-                            try {
-                              const statusRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
-                              const { status, isVerified } = statusRes.data;
-                              setKycStatus(status);
-                              if (isVerified) {
+                  {!['approved','submitted','review'].includes(kycStatus) ? (
+                    <div className="space-y-3 w-full">
+                      <Button
+                        onClick={async () => {
+                          setLoading(true);
+                          setError('');
+                          try {
+                            const res = await base44.functions.invoke('veriffKYC', { action: 'createSession' });
+                            if (res.data?.error) throw new Error(res.data.error);
+                            const { sessionId, url } = res.data;
+                            setVeriffSessionId(sessionId);
+                            setVeriffUrl(url);
+                            // Open Veriff in new tab
+                            const popup = window.open(url, '_blank');
+                            // Poll for status every 5s
+                            const interval = setInterval(async () => {
+                              // Check if popup closed
+                              if (popup && popup.closed) {
                                 clearInterval(interval);
-                                setStep('fund');
+                                try {
+                                  const finalRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
+                                  setKycStatus(finalRes.data.status);
+                                  if (finalRes.data.isVerified) setStep('fund');
+                                } catch {}
+                                return;
                               }
-                            } catch {}
-                            // Also check if popup closed (user returned via redirect)
-                            if (popup && popup.closed) {
-                              clearInterval(interval);
-                              // Do one final check
                               try {
-                                const finalRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
-                                setKycStatus(finalRes.data.status);
-                                if (finalRes.data.isVerified) setStep('fund');
+                                const statusRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
+                                const { status, isVerified } = statusRes.data;
+                                setKycStatus(status);
+                                if (isVerified) {
+                                  clearInterval(interval);
+                                  setStep('fund');
+                                }
                               } catch {}
+                            }, 3000);
+                            // Stop polling after 10 minutes
+                            setTimeout(() => clearInterval(interval), 600000);
+                          } catch (err) {
+                            setError(err.message || 'Failed to start verification');
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}
+                        disabled={loading}
+                        className="w-full"
+                        style={{ backgroundColor: '#7c3aed' }}
+                      >
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                        {veriffSessionId ? 'Re-open Verification' : 'Start Verification'}
+                      </Button>
+                      {veriffSessionId && (
+                        <Button
+                          variant="outline"
+                          className="w-full text-purple-700 border-purple-300"
+                          onClick={async () => {
+                            setLoading(true);
+                            try {
+                              const statusRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId: veriffSessionId });
+                              setKycStatus(statusRes.data.status);
+                              if (statusRes.data.isVerified) setStep('fund');
+                              else setError('Verification not complete yet. Please finish the Veriff process first.');
+                            } catch (err) {
+                              setError('Failed to check status');
+                            } finally {
+                              setLoading(false);
                             }
-                          }, 5000);
-                          // Stop polling after 10 minutes
-                          setTimeout(() => clearInterval(interval), 600000);
-                        } catch (err) {
-                          setError(err.message || 'Failed to start verification');
-                        } finally {
-                          setLoading(false);
-                        }
-                      }}
-                      disabled={loading}
-                      className="w-full"
-                      style={{ backgroundColor: '#7c3aed' }}
-                    >
-                      {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                      {veriffSessionId ? 'Re-open Verification' : 'Start Verification'}
-                    </Button>
+                          }}
+                          disabled={loading}
+                        >
+                          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                          I've completed verification →
+                        </Button>
+                      )}
+                    </div>
                   ) : (
                     <Button
                       onClick={() => setStep('fund')}

@@ -25,22 +25,20 @@ const RATES = {
 function StepIndicator({ currentStep }) {
   const idx = STEPS.findIndex(s => s.id === currentStep);
   return (
-    <div className="flex items-center gap-1 mb-5 overflow-x-auto pb-1">
+    <div className="flex items-center w-full mb-5">
       {STEPS.map((s, i) => (
-        <div key={s.id} className="flex items-center gap-1">
-          <div className={`flex flex-col items-center min-w-0 ${i <= idx ? 'opacity-100' : 'opacity-40'}`}>
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-              i < idx ? 'bg-green-500 text-white' :
-              i === idx ? 'bg-purple-600 text-white' :
-              'bg-slate-200 text-slate-500'
-            }`}>
-              {i < idx ? '✓' : i + 1}
-            </div>
+        <React.Fragment key={s.id}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
+            i < idx ? 'bg-green-500 text-white' :
+            i === idx ? 'bg-purple-600 text-white' :
+            'bg-slate-200 text-slate-400'
+          }`}>
+            {i < idx ? '✓' : i + 1}
           </div>
           {i < STEPS.length - 1 && (
-            <div className={`flex-1 h-0.5 min-w-[8px] ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
+            <div className={`flex-1 h-0.5 ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
           )}
-        </div>
+        </React.Fragment>
       ))}
     </div>
   );

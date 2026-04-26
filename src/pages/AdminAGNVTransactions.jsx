@@ -15,13 +15,8 @@ export default function AdminAGNVTransactions() {
   const fetchTransactions = async (currentFilter) => {
     try {
       setLoading(true);
-      let txs;
-      if (currentFilter === 'all') {
-        txs = await base44.asServiceRole.entities.AgnvTransaction.list('-created_date', 100);
-      } else {
-        txs = await base44.asServiceRole.entities.AgnvTransaction.filter({ status: currentFilter }, '-created_date', 100);
-      }
-      setTransactions(txs);
+      const res = await base44.functions.invoke('getAGNVTransactions', { filter: currentFilter || 'all' });
+      setTransactions(res.data?.transactions || []);
     } catch (error) {
       console.error('Failed to fetch transactions:', error);
     } finally {
@@ -39,7 +34,7 @@ export default function AdminAGNVTransactions() {
         transactionId: txId,
         approved: true,
       });
-      fetchTransactions(filter);
+      await fetchTransactions(filter);
       setSelectedTx(null);
     } catch (error) {
       console.error('Approval failed:', error);
@@ -53,7 +48,7 @@ export default function AdminAGNVTransactions() {
         approved: false,
         rejectionReason,
       });
-      fetchTransactions(filter);
+      await fetchTransactions(filter);
       setSelectedTx(null);
       setRejectionReason('');
     } catch (error) {

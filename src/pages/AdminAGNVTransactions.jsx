@@ -114,7 +114,7 @@ export default function AdminAGNVTransactions() {
                         <span className="text-sm font-medium capitalize text-slate-900">{tx.status}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-700">{tx.created_by}</td>
+                    <td className="px-6 py-4 text-sm text-slate-700">{tx.sender_name || tx.created_by}</td>
                     <td className="px-6 py-4 text-sm text-slate-700">{tx.recipient_name}</td>
                     <td className="px-6 py-4 text-sm font-medium text-slate-900">${tx.amount_usd}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{new Date(tx.created_date).toLocaleDateString()}</td>
@@ -156,12 +156,30 @@ export default function AdminAGNVTransactions() {
           >
             <h2 className="text-xl font-bold text-slate-900 mb-4">{selectedTx.status === 'completed' ? 'Transaction Details' : 'Review Transaction'}</h2>
 
-            <div className="bg-slate-50 rounded-lg p-4 mb-6 space-y-2">
-              <p><span className="font-medium text-slate-700">From:</span> {selectedTx.created_by}</p>
+            <div className="bg-slate-50 rounded-lg p-4 mb-6 space-y-2 text-sm">
+              <p><span className="font-medium text-slate-700">From:</span> {selectedTx.sender_name || selectedTx.created_by || '—'}{selectedTx.sender_email && selectedTx.sender_email !== selectedTx.sender_name ? ` (${selectedTx.sender_email})` : ''}</p>
               <p><span className="font-medium text-slate-700">To:</span> {selectedTx.recipient_name}</p>
               <p><span className="font-medium text-slate-700">Phone:</span> {selectedTx.recipient_phone}</p>
-              <p><span className="font-medium text-slate-700">Amount:</span> ${selectedTx.amount_usd} USD = {selectedTx.amount_agnv} AGNV</p>
               <p><span className="font-medium text-slate-700">Date:</span> {new Date(selectedTx.created_date).toLocaleString()}</p>
+
+              <hr className="border-slate-200 my-2" />
+
+              {(() => {
+                const gross = parseFloat(selectedTx.amount_usd) || 0;
+                const fee = parseFloat((gross * 0.1).toFixed(2));
+                const net = parseFloat((gross - fee).toFixed(2));
+                const agnv = selectedTx.amount_agnv || net * 10;
+                const htg = (net * 131.08).toFixed(2);
+                return (
+                  <>
+                    <p><span className="font-medium text-slate-700">Amount Sent:</span> ${gross.toFixed(2)} USD</p>
+                    <p><span className="font-medium text-slate-700">Fee (10%):</span> -${fee.toFixed(2)} USD</p>
+                    <p><span className="font-medium text-slate-700">Net Amount:</span> ${net.toFixed(2)} USD</p>
+                    <p><span className="font-medium text-slate-700">Rate:</span> 1 USD = 10 AGNV</p>
+                    <p className="font-semibold text-purple-700"><span className="font-medium text-slate-700">Total Payout:</span> {agnv} AGNV ≈ {htg} HTG</p>
+                  </>
+                );
+              })()}
             </div>
 
             {selectedTx.status === 'pending' && (

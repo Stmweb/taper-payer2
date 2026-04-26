@@ -76,11 +76,19 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const agnvAmount = amountAfterFee ? (amountAfterFee * RATES.USD_TO_AGNV).toFixed(2) : '';
   const htgEquiv = amountAfterFee ? (amountAfterFee * RATES.USD_TO_HTG).toFixed(2) : '';
 
-  // Check auth on mount
+  // Check auth on mount + handle return from Veriff redirect
   useEffect(() => {
     if (!isOpen) return;
-    // Skip auth step if user already logged in via header
     setStep(appUser ? 'kyc' : 'auth');
+
+    // If user returned from Veriff redirect, auto-check status
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('kyc') === 'done' && appUser) {
+      setStep('kyc');
+      // Clean up URL param
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, '', newUrl);
+    }
   }, [isOpen, appUser]);
 
   // Initialize Square Web Payments
@@ -373,7 +381,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                           setVeriffSessionId(sessionId);
                           setVeriffUrl(url);
                           // Open Veriff in new tab
-                          window.open(url, '_blank');
+                          const popup = window.open(url, '_blank');
                           // Poll for status every 5s
                           const interval = setInterval(async () => {
                             try {
@@ -382,8 +390,19 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                               setKycStatus(status);
                               if (isVerified) {
                                 clearInterval(interval);
+                                setStep('fund');
                               }
                             } catch {}
+                            // Also check if popup closed (user returned via redirect)
+                            if (popup && popup.closed) {
+                              clearInterval(interval);
+                              // Do one final check
+                              try {
+                                const finalRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
+                                setKycStatus(finalRes.data.status);
+                                if (finalRes.data.isVerified) setStep('fund');
+                              } catch {}
+                            }
                           }, 5000);
                           // Stop polling after 10 minutes
                           setTimeout(() => clearInterval(interval), 600000);

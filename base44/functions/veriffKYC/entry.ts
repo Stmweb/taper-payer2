@@ -24,10 +24,12 @@ Deno.serve(async (req) => {
     // Create session
     if (action === 'createSession') {
       const timestamp = new Date().toISOString();
+      const appUrl = Deno.env.get('APP_URL') || 'https://taperpayer.com';
       const payload = {
         verification: {
           timestamp: timestamp,
           vendorData: user.id,
+          redirectUrl: `${appUrl}/TaperPayerHome?kyc=done`,
         },
       };
 

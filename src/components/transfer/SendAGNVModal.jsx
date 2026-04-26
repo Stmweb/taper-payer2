@@ -661,7 +661,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                   <p><span className="font-medium">To:</span> {recipientName}</p>
                   <p><span className="font-medium">Phone:</span> {recipientPhone}</p>
                   <p><span className="font-medium">Amount Sent:</span> ${sendAmount} USD</p>
-                  <p><span className="font-medium">Receiver Gets:</span> {agnvAmount} AGNV = {htgEquiv} HTG</p>
+                  <p><span className="font-medium">AGNV Tokens:</span> {agnvAmount} AGNV = {htgEquiv} HTG</p>
                   <p><span className="font-medium">Status:</span> Pending Processing</p>
                   <p><span className="font-medium">Date:</span> {new Date().toLocaleString()}</p>
                   {txHash && <p><span className="font-medium">ID:</span> {txHash}</p>}
@@ -671,7 +671,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
               <div className="flex gap-2 justify-center">
                 <button
                   onClick={() => {
-                    const message = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount Sent: $${sendAmount} USD\nReceiver Gets: ${agnvAmount} AGNV = ${htgEquiv} HTG\nStatus: Pending Processing\nDate: ${new Date().toLocaleString()}\nID: ${txHash}`;
+                    const message = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount Sent: $${sendAmount} USD\nAGNV Tokens: ${agnvAmount} AGNV = ${htgEquiv} HTG\nStatus: Pending Processing\nDate: ${new Date().toLocaleString()}\nID: ${txHash}`;
                     const whatsappUrl = `https://wa.me/${recipientPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
                   }}
@@ -681,7 +681,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                 </button>
                 <button
                   onClick={() => {
-                    const message = `AGNV Transfer Receipt: $${sendAmount} USD = ${agnvAmount} AGNV to ${recipientName}. Date: ${new Date().toLocaleString()}. ID: ${txHash}`;
+                    const message = `AGNV Transfer Receipt: $${sendAmount} USD | AGNV Tokens: ${agnvAmount} AGNV = ${htgEquiv} HTG to ${recipientName}. Date: ${new Date().toLocaleString()}. ID: ${txHash}`;
                     const smsUrl = `sms:${recipientPhone.replace(/\D/g, '')}?body=${encodeURIComponent(message)}`;
                     window.location.href = smsUrl;
                   }}
@@ -691,7 +691,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                 </button>
                 <button
                   onClick={() => {
-                    const receiptText = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount Sent: $${sendAmount} USD\nReceiver Gets: ${agnvAmount} AGNV = ${htgEquiv} HTG\nStatus: Pending Processing\nDate: ${new Date().toLocaleString()}\nID: ${txHash}`;
+                    const receiptText = `💸 AGNV Transfer Receipt\n\nFrom: ${appUser?.full_name}\nTo: ${recipientName}\nPhone: ${recipientPhone}\nAmount Sent: $${sendAmount} USD\nAGNV Tokens: ${agnvAmount} AGNV = ${htgEquiv} HTG\nStatus: Pending Processing\nDate: ${new Date().toLocaleString()}\nID: ${txHash}`;
                     
                     if (navigator.share) {
                       navigator.share({

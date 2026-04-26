@@ -56,13 +56,18 @@ export default function AccountSettings() {
 
   const handleSaveField = async (field) => {
     try {
-      // Update the AppUser entity directly (this app uses a custom auth system)
       const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-      if (!storedUser?.id) {
-        toast.error('Could not find user record');
+      if (!storedUser?.email) {
+        toast.error('Could not find user session');
         return;
       }
-      await base44.entities.AppUser.update(storedUser.id, { [field]: formData[field] });
+      // Use backend function to update (finds user by email server-side)
+      const res = await base44.functions.invoke('updateUserProfile', {
+        email: storedUser.email,
+        field,
+        value: formData[field],
+      });
+      if (res.data?.error) throw new Error(res.data.error);
       // Update local state
       const updatedUser = { ...storedUser, [field]: formData[field] };
       setUser(updatedUser);

@@ -168,13 +168,13 @@ export default function GlobeVisualization() {
             borderRadius: 12, padding: '8px 12px',
           }}
         >
-          <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>Live Transfers</div>
+          <div style={{ color: '#3D7BB7', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>Live Transfers</div>
           <motion.div
             animate={{ opacity: [1, 0.6, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
             style={{ color: '#61AF39', fontSize: 16, fontWeight: 700, fontFamily: 'monospace' }}
           >$2.4M</motion.div>
-          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 8 }}>in last 60s</div>
+          <div style={{ color: '#3D7BB7', fontSize: 8 }}>in last 60s</div>
         </motion.div>
 
         <motion.div
@@ -188,13 +188,13 @@ export default function GlobeVisualization() {
             textAlign: 'right',
           }}
         >
-          <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>Active Routes</div>
+          <div style={{ color: '#3D7BB7', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>Active Routes</div>
           <motion.div
             animate={{ opacity: [1, 0.7, 1] }}
             transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
             style={{ color: '#3D7BB7', fontSize: 16, fontWeight: 700, fontFamily: 'monospace' }}
           >{ROUTES.length}</motion.div>
-          <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 8 }}>global corridors</div>
+          <div style={{ color: '#3D7BB7', fontSize: 8 }}>global corridors</div>
         </motion.div>
       </div>
 

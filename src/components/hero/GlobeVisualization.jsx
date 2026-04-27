@@ -25,7 +25,7 @@ const CURRENCIES = [
   { currency: 'NGN',  color: '#F88F2B' },
   { currency: 'INR',  color: '#2479C2' },
   { currency: 'USDC', color: '#61AF39' },
-  { currency: 'AGNV', color: '#003DA5' },
+  { currency: 'AGNV', color: '#F88F2B' },
 ];
 
 function latLonToXY(lat, lon, rx, ry, rotation = 0) {

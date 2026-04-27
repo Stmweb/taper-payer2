@@ -208,9 +208,9 @@ export default function GlobeVisualization() {
       >
         <defs>
           <radialGradient id="globeGradTP" cx="38%" cy="32%" r="65%">
-            <stop offset="0%" stopColor="#1a3a5c" stopOpacity="0.95" />
-            <stop offset="55%" stopColor="#0d1f35" stopOpacity="0.98" />
-            <stop offset="100%" stopColor="#050e1a" stopOpacity="1" />
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+            <stop offset="55%" stopColor="#e8f0f8" stopOpacity="0.98" />
+            <stop offset="100%" stopColor="#c8ddef" stopOpacity="1" />
           </radialGradient>
           <radialGradient id="rimGlowTP" cx="50%" cy="50%" r="50%">
             <stop offset="75%" stopColor="#3D7BB7" stopOpacity="0" />

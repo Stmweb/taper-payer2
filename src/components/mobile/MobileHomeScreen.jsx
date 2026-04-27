@@ -15,6 +15,7 @@ import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
+import GlobeVisualization from '@/components/hero/GlobeVisualization';
 
 const quickActions = [
   {
@@ -183,6 +184,11 @@ export default function MobileHomeScreen() {
             ))}
           </div>
         </motion.div>
+      </div>
+
+      {/* Globe Visualization */}
+      <div className="mx-5 mb-4 rounded-3xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f172a, #1e1b4b)' }}>
+        <GlobeVisualization />
       </div>
 
       {/* Quick Actions */}

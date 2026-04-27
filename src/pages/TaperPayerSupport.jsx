@@ -65,22 +65,22 @@ export default function TaperPayerSupport() {
     <div className="min-h-screen bg-gray-50">
 
       {/* Header */}
-      <div style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }} className="px-6 py-16 text-center">
+      <div className="bg-white px-6 py-16 text-center border-b border-slate-100">
         <Link to="/" className="inline-block mb-8">
           <img
             src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/35021d500_ChatGPTImageDec29202501_48_52PM.png"
             alt="Taper Payer"
-            className="h-20 w-auto mx-auto mix-blend-multiply"
+            className="h-20 w-auto mx-auto"
           />
         </Link>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold text-white mb-4"
+          className="text-4xl font-bold text-slate-900 mb-4"
         >
           How can we help?
         </motion.h1>
-        <p className="text-white/80 text-lg max-w-xl mx-auto">
+        <p className="text-slate-500 text-lg max-w-xl mx-auto">
           Find answers, get support, and learn how to get the most out of Taper Payer.
         </p>
       </div>

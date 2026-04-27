@@ -45,7 +45,7 @@ const faqs = [
   },
   {
     question: 'How do I contact customer support?',
-    answer: 'You can reach us by email at support@taperpayer.com, by phone at +1 (800) 123-4567 (Mon–Fri, 9am–6pm ET), or via WhatsApp. We typically respond within 1 business day.'
+    answer: 'You can reach us by email at support@taperpayer.com, by phone at 404-994-0766 (Mon–Fri, 9am–6pm ET), or via WhatsApp. We typically respond within 1 business day.'
   },
 ];
 
@@ -101,11 +101,11 @@ export default function TaperPayerSupport() {
             {
               icon: Phone,
               label: 'Phone Support',
-              value: '+1 (800) 123-4567',
+              value: '404-994-0766',
               sub: 'Mon–Fri, 9am–6pm ET',
               color: '#61AF39',
               bg: '#e8f5e9',
-              href: 'tel:+18001234567'
+              href: 'tel:+14049940766'
             },
             {
               icon: MessageCircle,
@@ -114,7 +114,7 @@ export default function TaperPayerSupport() {
               sub: 'Quick responses via WhatsApp',
               color: '#25D366',
               bg: '#e8f9e8',
-              href: 'https://wa.me/18001234567'
+              href: 'https://wa.me/14049940766'
             },
           ].map(({ icon: Icon, label, value, sub, color, bg, href }) => (
             <motion.a
@@ -199,7 +199,7 @@ export default function TaperPayerSupport() {
               <MapPin className="w-5 h-5" style={{ color: '#3D7BB7' }} />
             </div>
             <div>
-              <p className="font-semibold text-slate-800 mb-1">Taper Payer LLC</p>
+              <p className="font-semibold text-slate-800 mb-1">Taper Payer INC</p>
               <p className="text-slate-500 text-sm">United States</p>
               <p className="text-slate-500 text-sm">support@taperpayer.com</p>
             </div>
@@ -230,7 +230,7 @@ export default function TaperPayerSupport() {
 
       {/* Footer */}
       <div className="text-center pb-10 text-slate-400 text-sm">
-        © {new Date().getFullYear()} Taper Payer LLC. All rights reserved.
+        © {new Date().getFullYear()} Taper Payer INC. All rights reserved.
       </div>
     </div>
   );

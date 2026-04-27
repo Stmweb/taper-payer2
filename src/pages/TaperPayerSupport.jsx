@@ -68,7 +68,7 @@ export default function TaperPayerSupport() {
       <div style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }} className="px-6 py-16 text-center">
         <Link to="/" className="inline-block mb-8">
           <img
-            src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
+            src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2b84754a9_ChatGPTImageDec29202501_48_52PM.png"
             alt="Taper Payer"
             className="h-36 w-auto mx-auto"
             style={{ imageRendering: 'crisp-edges', WebkitFontSmoothing: 'antialiased' }}

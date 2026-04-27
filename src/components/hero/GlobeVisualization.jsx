@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { base44 } from '@/api/base44Client';
 
 const HUBS = [
   { id: 'nyc',  lat: 40.7,  lon: -74.0,  label: 'New York',          currency: 'USD',  color: '#3D7BB7' },
@@ -53,6 +54,22 @@ export default function GlobeVisualization() {
   const dotsRef = useRef([]);
   const timeRef = useRef(0);
   const RX = 140, RY = 140;
+  const [liveTotal, setLiveTotal] = useState(null);
+
+  useEffect(() => {
+    const fetchTotal = async () => {
+      try {
+        const txs = await base44.entities.AgnvTransaction.filter({ status: 'completed' }, '-created_date', 500);
+        const total = txs.reduce((sum, tx) => sum + (parseFloat(tx.amount_usd) || 0), 0);
+        setLiveTotal(total);
+      } catch {
+        setLiveTotal(null);
+      }
+    };
+    fetchTotal();
+    const interval = setInterval(fetchTotal, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     dotsRef.current = ROUTES.map((route, i) => ({
@@ -173,7 +190,7 @@ export default function GlobeVisualization() {
             animate={{ opacity: [1, 0.6, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
             style={{ color: '#61AF39', fontSize: 16, fontWeight: 700, fontFamily: 'monospace' }}
-          >$2.4M</motion.div>
+          >{liveTotal === null ? '...' : liveTotal >= 1000000 ? `$${(liveTotal/1000000).toFixed(2)}M` : liveTotal >= 1000 ? `$${(liveTotal/1000).toFixed(1)}K` : `$${liveTotal.toFixed(0)}`}</motion.div>
           <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 8 }}>in last 60s</div>
         </motion.div>
 

@@ -71,7 +71,7 @@ export default function TaperPayerSupport() {
             src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2b84754a9_ChatGPTImageDec29202501_48_52PM.png"
             alt="Taper Payer"
             className="h-36 w-auto mx-auto"
-            style={{ imageRendering: 'crisp-edges', WebkitFontSmoothing: 'antialiased' }}
+            style={{ mixBlendMode: 'multiply' }}
           />
         </Link>
         <motion.h1

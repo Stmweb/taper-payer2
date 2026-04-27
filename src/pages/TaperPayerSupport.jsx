@@ -70,7 +70,7 @@ export default function TaperPayerSupport() {
           <img
             src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/35021d500_ChatGPTImageDec29202501_48_52PM.png"
             alt="Taper Payer"
-            className="h-20 w-auto mx-auto"
+            className="h-20 w-auto mx-auto mix-blend-multiply"
           />
         </Link>
         <motion.h1

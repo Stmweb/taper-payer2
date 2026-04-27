@@ -486,8 +486,181 @@ export default function AppStoreAssets() {
         </div>
       </div>
 
+      {/* iOS Screenshots */}
+      <IOSScreenshotsSection />
+
       {/* 10-inch Tablet Screenshots */}
       <Tablet10Section />
+    </div>
+  );
+}
+
+// ---------- iOS Screenshots Upload Section ----------
+
+const IOS_SIZES = [
+  { label: 'iPhone XS Max / 6.5" Portrait', width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688', filename: 'ios-iphone-xs-max-portrait' },
+  { label: 'iPhone XS Max / 6.5" Landscape', width: 2688, height: 1242, ratio: '19.5:9', badge: '2688×1242', filename: 'ios-iphone-xs-max-landscape' },
+  { label: 'iPhone 12 Pro Max / 6.7" Portrait', width: 1284, height: 2778, ratio: '19.5:9', badge: '1284×2778', filename: 'ios-iphone-12-pro-max-portrait' },
+  { label: 'iPhone 12 Pro Max / 6.7" Landscape', width: 2778, height: 1284, ratio: '2.17:1', badge: '2778×1284', filename: 'ios-iphone-12-pro-max-landscape' },
+];
+
+function validateIOSScreenshot(file, requiredWidth, requiredHeight) {
+  return new Promise((resolve) => {
+    if (!['image/png', 'image/jpeg'].includes(file.type)) {
+      resolve({ ok: false, error: 'File must be PNG or JPEG.' });
+      return;
+    }
+    if (file.size > 500 * 1024 * 1024) {
+      resolve({ ok: false, error: 'File exceeds 500 MB.' });
+      return;
+    }
+    const img = new window.Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      if (w !== requiredWidth || h !== requiredHeight) {
+        resolve({ ok: false, error: `Must be exactly ${requiredWidth}×${requiredHeight} px (got ${w}×${h}).` });
+        return;
+      }
+      resolve({ ok: true, width: w, height: h });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve({ ok: false, error: 'Could not read image.' }); };
+    img.src = url;
+  });
+}
+
+function IOSSlot({ sizeSpec, index }) {
+  const inputRef = useRef(null);
+  const [validating, setValidating] = useState(false);
+  const [entry, setEntry] = useState(null);
+
+  const isLandscape = sizeSpec.width > sizeSpec.height;
+
+  const handleFile = async (file) => {
+    if (!file) return;
+    setValidating(true);
+    const result = await validateIOSScreenshot(file, sizeSpec.width, sizeSpec.height);
+    setValidating(false);
+    if (!result.ok) {
+      setEntry({ error: result.error });
+      return;
+    }
+    const previewUrl = URL.createObjectURL(file);
+    setEntry({ file, previewUrl, width: result.width, height: result.height, error: null });
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  };
+
+  return (
+    <Card className="overflow-hidden">
+      <div
+        className={`relative flex items-center justify-center overflow-hidden cursor-pointer transition-colors ${
+          entry?.error ? 'bg-red-50' : entry?.previewUrl ? 'bg-slate-100' : 'bg-slate-50 hover:bg-slate-100'
+        }`}
+        style={{ aspectRatio: isLandscape ? '2688/1242' : '1242/2688', maxHeight: isLandscape ? 140 : 340 }}
+        onClick={() => !validating && inputRef.current?.click()}
+        onDrop={handleDrop}
+        onDragOver={e => e.preventDefault()}
+      >
+        {entry?.previewUrl ? (
+          <>
+            <img src={entry.previewUrl} alt={sizeSpec.label} className="w-full h-full object-contain" />
+            <button
+              className="absolute top-1.5 right-1.5 bg-black/60 hover:bg-black/80 text-white rounded-full p-0.5 z-10"
+              onClick={e => { e.stopPropagation(); if (entry?.previewUrl) URL.revokeObjectURL(entry.previewUrl); setEntry(null); }}
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </>
+        ) : validating ? (
+          <div className="flex flex-col items-center gap-1 text-slate-400 p-4 text-center">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <p className="text-xs">Validating…</p>
+          </div>
+        ) : entry?.error ? (
+          <div className="flex flex-col items-center gap-1 p-4 text-center">
+            <AlertCircle className="w-5 h-5 text-red-500" />
+            <p className="text-xs text-red-600 leading-tight">{entry.error}</p>
+            <p className="text-xs text-slate-400 mt-1">Click to retry</p>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-1 text-slate-400 p-4 text-center">
+            <Upload className="w-6 h-6" />
+            <p className="text-xs font-medium">{sizeSpec.badge}</p>
+            <p className="text-xs">{sizeSpec.width}×{sizeSpec.height} px</p>
+            <p className="text-xs opacity-70">Click or drop PNG/JPEG</p>
+          </div>
+        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/png,image/jpeg"
+          className="hidden"
+          onChange={e => handleFile(e.target.files[0])}
+        />
+      </div>
+      <div className="px-3 py-2 space-y-1.5">
+        <p className="text-xs font-semibold text-slate-700 truncate">{sizeSpec.label}</p>
+        {entry?.previewUrl && !entry.error && (
+          <div className="flex items-center gap-1 text-green-600 text-xs">
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            <span>{entry.width}×{entry.height} px · {(entry.file.size / 1024 / 1024).toFixed(1)} MB</span>
+          </div>
+        )}
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" className="flex-1 gap-1 text-xs" onClick={() => inputRef.current?.click()} disabled={validating}>
+            <Upload className="w-3 h-3" /> {entry?.previewUrl ? 'Replace' : 'Upload'}
+          </Button>
+          {entry?.previewUrl && (
+            <Button size="sm" variant="outline" className="gap-1 text-xs" onClick={() => {
+              const a = document.createElement('a');
+              a.href = entry.previewUrl;
+              a.download = `taper-payer-${sizeSpec.filename}.png`;
+              a.click();
+            }}>
+              <Download className="w-3 h-3" />
+            </Button>
+          )}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function IOSScreenshotsSection() {
+  return (
+    <div>
+      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+        <Smartphone className="w-5 h-5" style={{ color: '#61AF39' }} /> iOS Phone Screenshots
+        <Badge className="ml-2 text-xs" style={{ backgroundColor: '#61AF39' }}>Required · App Store</Badge>
+      </h3>
+      <p className="text-slate-500 text-sm mb-2">Apple-required exact dimensions · PNG or JPEG · up to 500 MB each</p>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-xs text-blue-700 mb-5 flex items-start gap-2">
+        <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+        <span>Each screenshot is validated against the exact pixel dimensions required by Apple. Upload must match precisely — no tolerance for off-sizes.</span>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {IOS_SIZES.map((sizeSpec, i) => (
+          <IOSSlot key={i} sizeSpec={sizeSpec} index={i} />
+        ))}
+      </div>
+
+      <div className="mt-4 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-xs text-slate-500 space-y-1">
+        <p className="font-semibold text-slate-700 mb-1">Apple App Store Requirements</p>
+        <p>• <strong>1242 × 2688 px</strong> — iPhone XS Max / 6.5" Portrait</p>
+        <p>• <strong>2688 × 1242 px</strong> — iPhone XS Max / 6.5" Landscape</p>
+        <p>• <strong>1284 × 2778 px</strong> — iPhone 12 Pro Max / 6.7" Portrait</p>
+        <p>• <strong>2778 × 1284 px</strong> — iPhone 12 Pro Max / 6.7" Landscape</p>
+        <p className="mt-2 text-slate-400">Tip: You only need to upload one size per orientation — Apple reuses them across similar display sizes.</p>
+      </div>
     </div>
   );
 }

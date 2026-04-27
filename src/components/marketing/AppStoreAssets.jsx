@@ -498,10 +498,61 @@ export default function AppStoreAssets() {
 // ---------- iOS Screenshots Upload Section ----------
 
 const IOS_SIZES = [
-  { label: 'iPhone XS Max / 6.5" Portrait', width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688', filename: 'ios-iphone-xs-max-portrait' },
-  { label: 'iPhone XS Max / 6.5" Landscape', width: 2688, height: 1242, ratio: '19.5:9', badge: '2688×1242', filename: 'ios-iphone-xs-max-landscape' },
-  { label: 'iPhone 12 Pro Max / 6.7" Portrait', width: 1284, height: 2778, ratio: '19.5:9', badge: '1284×2778', filename: 'ios-iphone-12-pro-max-portrait' },
-  { label: 'iPhone 12 Pro Max / 6.7" Landscape', width: 2778, height: 1284, ratio: '2.17:1', badge: '2778×1284', filename: 'ios-iphone-12-pro-max-landscape' },
+  {
+    label: 'iPhone XS Max / 6.5" Portrait',
+    width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
+    filename: 'ios-iphone-xs-max-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. This is for the Apple App Store listing — it must look polished, modern, and professional.
+${BRAND_CONTEXT}
+Screen: App home dashboard. Clean white (#FFFFFF) background.
+Top: Taper Payer logo centered. Status bar with signal/battery icons.
+Hero section: Bold headline "Send Money Home" in large slate-900 text. Subtext "Fast · Secure · Zero Hidden Fees" in slate-600.
+Quick actions row: Four circular icon buttons — Send Money (blue), Mobile Top-Up (orange), Request Money (green), Send AGNV (navy).
+Send To section: Country flags in cards — 🇬🇭 Ghana · 🇰🇪 Kenya · 🇸🇳 Senegal · 🇩🇴 Dominican Republic.
+Features strip: Three pills — ⚡ Instant · 🛡 Secure · 💲 No Fees — on a green gradient.
+Bottom: Large blue "Get Started" CTA button.
+Style: iPhone-native clean UI, generous padding, rounded corners on cards.`,
+  },
+  {
+    label: 'iPhone XS Max / 6.5" Landscape',
+    width: 2688, height: 1242, ratio: '19.5:9', badge: '2688×1242',
+    filename: 'ios-iphone-xs-max-landscape',
+    aspect: 'landscape',
+    prompt: `Create a premium iPhone app screenshot in wide landscape format (19.5:9 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Money transfer flow. Clean white (#FFFFFF) background.
+Left panel (45%): Taper Payer logo top-left. Transfer form — "You Send" $200 USD input · "Recipient Gets" 272,000 GHS in bold green · "1 USD = 13.60 GHS". Large blue "Send to Ghana Now" CTA button. Badge "⭐ Best Rate Today" in #F88F2B.
+Right panel (55%): Stylized globe with glowing transfer route USA → Ghana in brand blue and green. Destination pin pulsing over Ghana.
+Style: Clean two-column layout, iPhone landscape native UI feel, generous typography.`,
+  },
+  {
+    label: 'iPhone 12 Pro Max / 6.7" Portrait',
+    width: 1284, height: 2778, ratio: '19.5:9', badge: '1284×2778',
+    filename: 'ios-iphone-12-pro-max-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Mobile Top-Up feature. Clean white (#FFFFFF) background.
+Top: Taper Payer logo. Bold headline "Mobile Top-Up" in large slate-900. Subtext "Recharge any phone worldwide — instantly" in slate-600.
+Center: Large phone illustration with signal bars, showing a successful top-up confirmation: "✅ +$10 Airtime Added" in bold green on the phone screen.
+Country flags row: 🇬🇭 🇰🇪 🇸🇳 🇩🇴 with "+150 more" label.
+Features list: ⚡ Instant delivery · 📶 Any carrier · 🌍 150+ countries.
+Bottom: Large orange "Top-Up Now" CTA button.
+Style: Tall iPhone native UI, clean, premium fintech look with lots of whitespace.`,
+  },
+  {
+    label: 'iPhone 12 Pro Max / 6.7" Landscape',
+    width: 2778, height: 1284, ratio: '2.17:1', badge: '2778×1284',
+    filename: 'ios-iphone-12-pro-max-landscape',
+    aspect: 'landscape',
+    prompt: `Create a premium iPhone app screenshot in wide landscape format (2.17:1 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Live exchange rates dashboard. Clean white (#FFFFFF) background.
+Left panel (40%): Taper Payer logo top-left. Heading "Live Exchange Rates" bold slate-900. Three rate cards stacked: 🇬🇭 GHS 13.60 ↑ · 🇰🇪 KES 130.50 ↑ · 🇸🇳 XOF 615.00 →. Each with small green trend arrow. Large blue "Send Money Now" button at bottom.
+Right panel (60%): Clean rate trend chart showing exchange rate lines in brand blue and green over 30 days. "Rates updated live" label in slate-500.
+Style: Wide two-column finance dashboard, clean charts, premium data visualization feel.`,
+  },
 ];
 
 function validateIOSScreenshot(file, requiredWidth, requiredHeight) {
@@ -531,103 +582,80 @@ function validateIOSScreenshot(file, requiredWidth, requiredHeight) {
   });
 }
 
-function IOSSlot({ sizeSpec, index }) {
-  const inputRef = useRef(null);
-  const [validating, setValidating] = useState(false);
-  const [entry, setEntry] = useState(null);
-
+function IOSScreenshotCard({ sizeSpec }) {
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [error, setError] = useState(null);
   const isLandscape = sizeSpec.width > sizeSpec.height;
 
-  const handleFile = async (file) => {
-    if (!file) return;
-    setValidating(true);
-    const result = await validateIOSScreenshot(file, sizeSpec.width, sizeSpec.height);
-    setValidating(false);
-    if (!result.ok) {
-      setEntry({ error: result.error });
-      return;
+  const generate = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await base44.functions.invoke('generateFlyer', { prompt: sizeSpec.prompt, existing_image_urls: [LOGO_URL] });
+      setImageUrl(res.data.url);
+    } catch (e) {
+      setError('Generation failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    const previewUrl = URL.createObjectURL(file);
-    setEntry({ file, previewUrl, width: result.width, height: result.height, error: null });
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
   };
 
   return (
     <Card className="overflow-hidden">
       <div
-        className={`relative flex items-center justify-center overflow-hidden cursor-pointer transition-colors ${
-          entry?.error ? 'bg-red-50' : entry?.previewUrl ? 'bg-slate-100' : 'bg-slate-50 hover:bg-slate-100'
-        }`}
-        style={{ aspectRatio: isLandscape ? '2688/1242' : '1242/2688', maxHeight: isLandscape ? 140 : 340 }}
-        onClick={() => !validating && inputRef.current?.click()}
-        onDrop={handleDrop}
-        onDragOver={e => e.preventDefault()}
+        className="relative bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden"
+        style={{
+          aspectRatio: isLandscape ? '2.17/1' : '9/19.5',
+          maxHeight: isLandscape ? 180 : 420,
+        }}
       >
-        {entry?.previewUrl ? (
-          <>
-            <img src={entry.previewUrl} alt={sizeSpec.label} className="w-full h-full object-contain" />
-            <button
-              className="absolute top-1.5 right-1.5 bg-black/60 hover:bg-black/80 text-white rounded-full p-0.5 z-10"
-              onClick={e => { e.stopPropagation(); if (entry?.previewUrl) URL.revokeObjectURL(entry.previewUrl); setEntry(null); }}
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </>
-        ) : validating ? (
-          <div className="flex flex-col items-center gap-1 text-slate-400 p-4 text-center">
-            <Loader2 className="w-6 h-6 animate-spin" />
-            <p className="text-xs">Validating…</p>
-          </div>
-        ) : entry?.error ? (
-          <div className="flex flex-col items-center gap-1 p-4 text-center">
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-xs text-red-600 leading-tight">{entry.error}</p>
-            <p className="text-xs text-slate-400 mt-1">Click to retry</p>
-          </div>
+        {imageUrl ? (
+          <img src={imageUrl} alt={sizeSpec.label} className="w-full h-full object-cover" />
         ) : (
-          <div className="flex flex-col items-center gap-1 text-slate-400 p-4 text-center">
-            <Upload className="w-6 h-6" />
-            <p className="text-xs font-medium">{sizeSpec.badge}</p>
-            <p className="text-xs">{sizeSpec.width}×{sizeSpec.height} px</p>
-            <p className="text-xs opacity-70">Click or drop PNG/JPEG</p>
+          <div className="flex flex-col items-center gap-2 text-slate-400 p-6 text-center">
+            <Smartphone className="w-8 h-8" />
+            <p className="text-sm font-medium">{sizeSpec.badge}</p>
+            <p className="text-xs">{sizeSpec.label}</p>
           </div>
         )}
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/png,image/jpeg"
-          className="hidden"
-          onChange={e => handleFile(e.target.files[0])}
-        />
+        {loading && (
+          <div className="absolute inset-0 bg-white/80 dark:bg-slate-900/80 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+          </div>
+        )}
       </div>
-      <div className="px-3 py-2 space-y-1.5">
-        <p className="text-xs font-semibold text-slate-700 truncate">{sizeSpec.label}</p>
-        {entry?.previewUrl && !entry.error && (
-          <div className="flex items-center gap-1 text-green-600 text-xs">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>{entry.width}×{entry.height} px · {(entry.file.size / 1024 / 1024).toFixed(1)} MB</span>
+      <div className="p-4 space-y-3">
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <p className="font-semibold text-slate-900 dark:text-white text-sm">{sizeSpec.label}</p>
+            <p className="text-xs text-slate-500 mt-0.5">{sizeSpec.width} × {sizeSpec.height} px · {isLandscape ? 'Landscape' : 'Portrait'}</p>
           </div>
-        )}
+          <Badge variant="outline" className="text-xs flex-shrink-0">{sizeSpec.badge}</Badge>
+        </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline" className="flex-1 gap-1 text-xs" onClick={() => inputRef.current?.click()} disabled={validating}>
-            <Upload className="w-3 h-3" /> {entry?.previewUrl ? 'Replace' : 'Upload'}
+          <Button
+            size="sm"
+            onClick={generate}
+            disabled={loading}
+            className="flex-1 gap-1.5 text-xs"
+            style={{ backgroundColor: '#61AF39' }}
+          >
+            {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : imageUrl ? <RefreshCw className="w-3.5 h-3.5" /> : <Wand2 className="w-3.5 h-3.5" />}
+            {loading ? 'Generating…' : imageUrl ? 'Regenerate' : 'Generate with AI'}
           </Button>
-          {entry?.previewUrl && (
-            <Button size="sm" variant="outline" className="gap-1 text-xs" onClick={() => {
-              const a = document.createElement('a');
-              a.href = entry.previewUrl;
-              a.download = `taper-payer-${sizeSpec.filename}.png`;
-              a.click();
-            }}>
-              <Download className="w-3 h-3" />
+          {imageUrl && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1.5 text-xs"
+              onClick={() => downloadImage(imageUrl, `taper-payer-${sizeSpec.filename}.png`)}
+            >
+              <Download className="w-3.5 h-3.5" /> Download
             </Button>
           )}
         </div>
+        {error && <p className="text-red-500 text-xs">{error}</p>}
       </div>
     </Card>
   );
@@ -640,16 +668,16 @@ function IOSScreenshotsSection() {
         <Smartphone className="w-5 h-5" style={{ color: '#61AF39' }} /> iOS Phone Screenshots
         <Badge className="ml-2 text-xs" style={{ backgroundColor: '#61AF39' }}>Required · App Store</Badge>
       </h3>
-      <p className="text-slate-500 text-sm mb-2">Apple-required exact dimensions · PNG or JPEG · up to 500 MB each</p>
+      <p className="text-slate-500 text-sm mb-2">Apple-required exact dimensions — generate with AI, then download as PNG</p>
 
       <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-xs text-blue-700 mb-5 flex items-start gap-2">
         <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-        <span>Each screenshot is validated against the exact pixel dimensions required by Apple. Upload must match precisely — no tolerance for off-sizes.</span>
+        <span>Generate each screenshot with AI, download as PNG, then upload to App Store Connect. Apple accepts PNG/JPEG up to 500 MB.</span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {IOS_SIZES.map((sizeSpec, i) => (
-          <IOSSlot key={i} sizeSpec={sizeSpec} index={i} />
+          <IOSScreenshotCard key={i} sizeSpec={sizeSpec} />
         ))}
       </div>
 
@@ -659,7 +687,7 @@ function IOSScreenshotsSection() {
         <p>• <strong>2688 × 1242 px</strong> — iPhone XS Max / 6.5" Landscape</p>
         <p>• <strong>1284 × 2778 px</strong> — iPhone 12 Pro Max / 6.7" Portrait</p>
         <p>• <strong>2778 × 1284 px</strong> — iPhone 12 Pro Max / 6.7" Landscape</p>
-        <p className="mt-2 text-slate-400">Tip: You only need to upload one size per orientation — Apple reuses them across similar display sizes.</p>
+        <p className="mt-2 text-slate-400">Tip: You only need one size per orientation — Apple reuses them across similar display sizes.</p>
       </div>
     </div>
   );

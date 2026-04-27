@@ -37,15 +37,15 @@ function createPageUrl(page) {
 }
 
 const countries = [
-  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
-  { name: 'Nigeria', flag: '🇳🇬', code: 'NGN' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
+  { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
+  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
+  { name: 'Nigeria', flag: '🇳🇬', code: 'NGN' },
   { name: 'Angola', flag: '🇦🇴', code: 'AOA' },
   { name: 'Cameroon', flag: '🇨🇲', code: 'XAF' },
   { name: 'Morocco', flag: '🇲🇦', code: 'MAD' },
-  { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
   { name: 'Jamaica', flag: '🇯🇲', code: 'JMD' },
   { name: 'Brazil', flag: '🇧🇷', code: 'BRL' },
   { name: 'Chile', flag: '🇨🇱', code: 'CLP' },

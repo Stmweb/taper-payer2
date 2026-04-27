@@ -52,33 +52,15 @@ export default function TaperPayerAppStoreLanding() {
   return (
     <div className="min-h-screen bg-white font-sans">
 
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-b border-white/10 px-6 py-4 flex items-center justify-between">
-        <Link to="/">
-          <img src={LOGO} alt="Taper Payer" className="h-10 w-auto" />
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link to="/support" className="text-white/70 text-sm font-medium hover:text-white hidden sm:block">Support</Link>
-          <Link to="/TaperPayerTerms" className="text-white/70 text-sm font-medium hover:text-white hidden sm:block">Terms</Link>
-          <a
-            href="#download"
-            className="px-5 py-2 rounded-full text-white text-sm font-semibold"
-            style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}
-          >
-            Download App
-          </a>
-        </div>
-      </nav>
-
       {/* Hero */}
-      <section className="pt-28 pb-20 px-6 text-center" style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f2d1a 100%)' }}>
+      <section className="pt-16 pb-20 px-6 text-center bg-white border-b border-slate-100">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
           <img src={LOGO} alt="Taper Payer" className="h-20 w-auto mx-auto mb-8" />
-          <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-6 max-w-4xl mx-auto">
+          <h1 className="text-5xl md:text-6xl font-black text-slate-900 leading-tight mb-6 max-w-4xl mx-auto">
             Send Money Home.<br />
             <span style={{ color: '#61AF39' }}>Fast.</span> <span style={{ color: '#F88F2B' }}>Safe.</span> <span style={{ color: '#3D7BB7' }}>Simple.</span>
           </h1>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto mb-10">
+          <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-10">
             Taper Payer is the global money transfer app built for the diaspora. Send money, top up mobiles, and support your family — all in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" id="download">

@@ -28,6 +28,7 @@ import ComingSoonModal from '@/components/ComingSoonModal';
 import PINModal from '@/components/PINModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
 import PromoCarousel from '@/components/topup/PromoCarousel';
+import GlobeVisualization from '@/components/hero/GlobeVisualization';
 import { useAuth } from '@/lib/AuthContext';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import SignupModal from '@/components/SignupModal';
@@ -227,7 +228,8 @@ export default function TaperPayerHome() {
         </div>
 
         <div className="container mx-auto relative" style={{ zIndex: 2 }}>
-          <div className="grid lg:grid-cols-2 gap-12 items-center md:gap-4">
+          <div className="grid lg:grid-cols-3 gap-8 items-center">
+            {/* Left: headline + CTA */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -256,13 +258,24 @@ export default function TaperPayerHome() {
               </div>
             </motion.div>
 
+            {/* Center: Globe */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, delay: 0.2, ease: 'easeOut' }}
+              className="flex items-center justify-center"
+            >
+              <GlobeVisualization />
+            </motion.div>
+
+            {/* Right: Transfer card */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.9, delay: 0.3, ease: 'easeOut' }}
             >
-              <Card className="p-8 shadow-2xl dark:bg-slate-800" style={{ backgroundColor: 'rgba(255, 255, 255, 0.85)' }}>
-                <h3 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Money Transfer</h3>
+              <Card className="p-6 shadow-2xl dark:bg-slate-800" style={{ backgroundColor: 'rgba(255, 255, 255, 0.88)' }}>
+                <h3 className="text-xl font-bold mb-4 text-slate-900 dark:text-white">Money Transfer</h3>
                 
                 <div className="space-y-4">
                   <div>
@@ -327,14 +340,11 @@ export default function TaperPayerHome() {
                           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                         </button>
                       </div>
-                      <div className="text-2xl font-bold text-slate-900">
+                      <div className="text-xl font-bold text-slate-900">
                         1 USD = {exchangeRate.rate?.toFixed(2)} {exchangeRate.currency_code}
                       </div>
                       <div className="text-sm text-slate-600 mt-1">
-                        {amount && `You send: $${amount} USD → Recipient gets: ${(parseFloat(amount) * exchangeRate.rate).toFixed(2)} ${exchangeRate.currency_code}`}
-                      </div>
-                      <div className="text-xs text-slate-500 mt-2">
-                        {exchangeRate.last_updated && `Updated: ${exchangeRate.last_updated}`}
+                        {amount && `$${amount} → ${(parseFloat(amount) * exchangeRate.rate).toFixed(2)} ${exchangeRate.currency_code}`}
                       </div>
                     </motion.div>
                   )}
@@ -354,7 +364,6 @@ export default function TaperPayerHome() {
                         if (!user) { 
                           setShowSignupModal(true); 
                         } else { 
-                          // Show PIN first for all countries
                           setShowPINModal(true);
                         } 
                       } 

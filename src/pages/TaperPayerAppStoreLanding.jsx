@@ -6,7 +6,7 @@ import {
   ArrowRight, Check, Users, TrendingUp, Lock, PhoneCall
 } from 'lucide-react';
 
-const LOGO = 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png';
+const LOGO = 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f99e44de6_ChatGPTImageDec29202501_48_52PM.png';
 
 const features = [
   { icon: Zap, title: 'Instant Transfers', desc: 'Send money in seconds to family and friends worldwide with real-time delivery.', color: '#F88F2B', bg: '#fff3e0' },
@@ -53,13 +53,13 @@ export default function TaperPayerAppStoreLanding() {
     <div className="min-h-screen bg-white font-sans">
 
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-b border-white/10 px-6 py-4 flex items-center justify-between">
         <Link to="/">
           <img src={LOGO} alt="Taper Payer" className="h-10 w-auto" />
         </Link>
         <div className="flex items-center gap-4">
-          <Link to="/support" className="text-slate-600 text-sm font-medium hover:text-blue-600 hidden sm:block">Support</Link>
-          <Link to="/TaperPayerTerms" className="text-slate-600 text-sm font-medium hover:text-blue-600 hidden sm:block">Terms</Link>
+          <Link to="/support" className="text-white/70 text-sm font-medium hover:text-white hidden sm:block">Support</Link>
+          <Link to="/TaperPayerTerms" className="text-white/70 text-sm font-medium hover:text-white hidden sm:block">Terms</Link>
           <a
             href="#download"
             className="px-5 py-2 rounded-full text-white text-sm font-semibold"
@@ -74,10 +74,6 @@ export default function TaperPayerAppStoreLanding() {
       <section className="pt-28 pb-20 px-6 text-center" style={{ background: 'linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f2d1a 100%)' }}>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
           <img src={LOGO} alt="Taper Payer" className="h-20 w-auto mx-auto mb-8" />
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/80 text-sm font-medium mb-6">
-            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-            Rated 4.9 · 50,000+ Transfers Completed
-          </div>
           <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-6 max-w-4xl mx-auto">
             Send Money Home.<br />
             <span style={{ color: '#61AF39' }}>Fast.</span> <span style={{ color: '#F88F2B' }}>Safe.</span> <span style={{ color: '#3D7BB7' }}>Simple.</span>

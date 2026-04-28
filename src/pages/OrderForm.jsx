@@ -282,8 +282,8 @@ Date Signed: ${form.date_signed}
                   <tr><td colSpan={3} className="bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 border border-slate-200">United States</td></tr>
                   <tr>
                     <TableCell className="font-semibold">Platform fee</TableCell>
-                    <TableCell>Tier 1: USA Monthly Minimum — 1 month free after launching, then $1,500/mo for 3 months</TableCell>
-                    <TableCell className="font-bold text-green-700">$1,500.00</TableCell>
+                    <TableCell>Tier 1: USA Monthly Minimum — 1 month free after launching, then $1,500/mo for 3 months, then $3,500/mo</TableCell>
+                    <TableCell className="font-bold text-green-700">$3,500.00</TableCell>
                   </tr>
                   <tr><td colSpan={3} className="bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 border border-slate-200">Canada</td></tr>
                   <tr>

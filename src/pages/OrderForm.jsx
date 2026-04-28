@@ -339,9 +339,16 @@ Date Signed: ${form.date_signed}
               </div>
 
               {/* Total */}
-              <div className="flex items-center justify-between rounded-xl px-5 py-4 border-2" style={{ borderColor: '#61AF39', background: '#f0faf0' }}>
-                <span className="text-sm font-bold text-slate-800">White Label One-Time Fee</span>
-                <span className="text-2xl font-black" style={{ color: '#61AF39' }}>$25,000.00</span>
+              <div className="rounded-xl border-2 overflow-hidden" style={{ borderColor: '#61AF39' }}>
+                <div className="flex items-center justify-between px-5 py-4" style={{ background: '#f0faf0' }}>
+                  <span className="text-sm font-bold text-slate-800">White Label One-Time Fee</span>
+                  <span className="text-2xl font-black" style={{ color: '#61AF39' }}>$25,000.00</span>
+                </div>
+                <div className="px-5 py-3 bg-white border-t" style={{ borderColor: '#c8edb5' }}>
+                  <p className="text-xs text-slate-600">
+                    <span className="font-semibold text-slate-800">Payment flexibility:</span> Your choice — pay in full or in instalments. Minimum deposit of <span className="font-bold" style={{ color: '#61AF39' }}>20% ($5,000.00)</span> required to get started.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

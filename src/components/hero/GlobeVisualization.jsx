@@ -69,7 +69,7 @@ export default function GlobeVisualization() {
 
     const animate = () => {
       timeRef.current += 1;
-      rot = (rot + 0.1) % 360;
+      rot = (rot + 0.4) % 360;
 
       const positions = {};
       HUBS.forEach(hub => { positions[hub.id] = latLonToXY(hub.lat, hub.lon, RX, RY, rot); });

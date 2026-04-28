@@ -160,6 +160,102 @@ Date Signed: ${form.date_signed}
           <p className="text-slate-500 text-sm mt-2">Please fill out all required fields. Our team will follow up within 1–2 business days.</p>
         </div>
 
+        {/* ── WHY NOW: Urgency + Profit Projections ── */}
+        <div className="mb-8 rounded-2xl overflow-hidden border-2" style={{ borderColor: '#3D7BB7' }}>
+          {/* Urgency Header */}
+          <div className="px-6 py-5 text-white" style={{ background: 'linear-gradient(135deg, #0f172a, #1e3a5f)' }}>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-2xl">🚀</span>
+              <h2 className="text-xl font-black">Why Start a Money Remittance Business NOW?</h2>
+            </div>
+            <p className="text-white/70 text-sm leading-relaxed">The global remittance market is a <strong className="text-white">$900 Billion+</strong> industry — and it's growing every year. Millions of diaspora families send money home monthly. The window to capture your share is <strong className="text-yellow-300">open today</strong>.</p>
+          </div>
+
+          {/* Urgency Points */}
+          <div className="px-6 py-5 bg-white grid grid-cols-1 sm:grid-cols-3 gap-4 border-b border-slate-100">
+            {[
+              { icon: '🌍', title: '$900B+ Market', body: 'Global remittance flows hit record highs every year. Demand isn\'t slowing — it\'s accelerating.' },
+              { icon: '📈', title: 'Diaspora is Growing', body: 'Over 270 million migrants worldwide send money home every month. Your customers already exist.' },
+              { icon: '⚡', title: 'First-Mover Advantage', body: 'In your community, being first means building brand loyalty that is nearly impossible to displace.' },
+            ].map(({ icon, title, body }) => (
+              <div key={title} className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{icon}</span>
+                  <span className="font-bold text-slate-900 text-sm">{title}</span>
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">{body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Profit Projections */}
+          <div className="px-6 py-5 bg-slate-50">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-lg">💰</span>
+              <h3 className="text-base font-black text-slate-900">Projected Partner Profit — Year 1 to Year 3</h3>
+            </div>
+            <p className="text-xs text-slate-500 mb-4">Based on conservative assumptions: avg. transaction $300 USD, 2.5% markup on FX spread, growing customer base month over month.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                {
+                  year: 'Year 1',
+                  color: '#3D7BB7',
+                  bg: '#e3f2fd',
+                  txVol: '$1.2M – $2.4M',
+                  revenue: '$30,000 – $60,000',
+                  platformCost: '~$42,000',
+                  netProfit: 'Break-even to +$18,000',
+                  note: 'Build your brand, acquire your first 500–1,000 customers.',
+                },
+                {
+                  year: 'Year 2',
+                  color: '#61AF39',
+                  bg: '#e8f5e9',
+                  txVol: '$3M – $6M',
+                  revenue: '$75,000 – $150,000',
+                  platformCost: '~$42,000',
+                  netProfit: '+$33,000 – +$108,000',
+                  note: 'Word of mouth kicks in. Repeat customers drive volume.',
+                },
+                {
+                  year: 'Year 3',
+                  color: '#F88F2B',
+                  bg: '#fff3e0',
+                  txVol: '$6M – $15M',
+                  revenue: '$150,000 – $375,000',
+                  platformCost: '~$42,000',
+                  netProfit: '+$108,000 – +$333,000',
+                  note: 'Scale to multiple corridors, mobile top-ups, and B2B.',
+                },
+              ].map(({ year, color, bg, txVol, revenue, platformCost, netProfit, note }) => (
+                <div key={year} className="rounded-xl border overflow-hidden" style={{ borderColor: color }}>
+                  <div className="px-4 py-2 text-white font-black text-sm" style={{ backgroundColor: color }}>{year}</div>
+                  <div className="px-4 py-3 space-y-2" style={{ backgroundColor: bg }}>
+                    <div>
+                      <p className="text-xs text-slate-500">Transaction Volume</p>
+                      <p className="text-sm font-bold text-slate-800">{txVol}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Gross Revenue (FX Markup)</p>
+                      <p className="text-sm font-bold text-slate-800">{revenue}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500">Platform Cost (Taper Payer)</p>
+                      <p className="text-sm font-semibold text-slate-600">{platformCost}</p>
+                    </div>
+                    <div className="border-t pt-2" style={{ borderColor: color + '40' }}>
+                      <p className="text-xs text-slate-500">Estimated Net Profit</p>
+                      <p className="text-base font-black" style={{ color }}>{netProfit}</p>
+                    </div>
+                    <p className="text-xs text-slate-400 italic">{note}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-slate-400 mt-3">* Projections are illustrative estimates based on industry averages. Actual results depend on marketing, customer acquisition, and transaction volumes. Not financial advice.</p>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-8">
 
           {/* ── 1. Partner Information ── */}

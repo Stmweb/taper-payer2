@@ -213,7 +213,7 @@ Date Signed: ${form.date_signed}
                   bg: '#e8f5e9',
                   txVol: '$3M – $6M',
                   revenue: '$150,000 – $300,000',
-                  platformCost: '$42,000',
+                  platformCost: 'Ongoing platform fees',
                   netProfit: '+$108,000 – +$258,000',
                   note: 'Word of mouth kicks in. Repeat customers drive volume.',
                 },
@@ -223,7 +223,7 @@ Date Signed: ${form.date_signed}
                   bg: '#fff3e0',
                   txVol: '$6M – $15M',
                   revenue: '$300,000 – $750,000',
-                  platformCost: '$42,000',
+                  platformCost: 'Ongoing platform fees',
                   netProfit: '+$258,000 – +$708,000',
                   note: 'Scale to multiple corridors, mobile top-ups, and B2B.',
                 },
@@ -240,7 +240,7 @@ Date Signed: ${form.date_signed}
                       <p className="text-sm font-bold text-slate-800">{revenue}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-slate-500">Platform Cost (Taper Payer)</p>
+                      <p className="text-xs text-slate-500">Platform Cost</p>
                       <p className="text-sm font-semibold text-slate-600">{platformCost}</p>
                     </div>
                     <div className="border-t pt-2" style={{ borderColor: color + '40' }}>

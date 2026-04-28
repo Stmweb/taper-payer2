@@ -29,6 +29,11 @@
     "source": {
       "type": "string",
       "description": "How they subscribed (e.g. website, import)"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional description or notes for this subscriber"
     }
   },
   "required": [

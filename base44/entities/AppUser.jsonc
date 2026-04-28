@@ -45,6 +45,11 @@
     "reset_otp_expires": {
       "type": "string",
       "description": "Expiry timestamp for the reset OTP"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional notes or description for this user"
     }
   },
   "required": [

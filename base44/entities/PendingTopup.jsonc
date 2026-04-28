@@ -42,6 +42,11 @@
     "error_message": {
       "type": "string",
       "description": "Error details if top-up failed"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional description or notes for this top-up"
     }
   },
   "required": [

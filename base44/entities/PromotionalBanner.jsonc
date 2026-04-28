@@ -37,6 +37,11 @@
       "type": "number",
       "default": 0,
       "description": "Order of display in carousel"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional description or notes for this banner"
     }
   },
   "required": [

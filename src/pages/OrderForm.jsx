@@ -344,10 +344,27 @@ Date Signed: ${form.date_signed}
                   <span className="text-sm font-bold text-slate-800">White Label One-Time Fee</span>
                   <span className="text-2xl font-black" style={{ color: '#61AF39' }}>$25,000.00</span>
                 </div>
-                <div className="px-5 py-3 bg-white border-t" style={{ borderColor: '#c8edb5' }}>
-                  <p className="text-xs text-slate-600">
-                    <span className="font-semibold text-slate-800">Payment flexibility:</span> Your choice — pay in full or in instalments. Minimum deposit of <span className="font-bold" style={{ color: '#61AF39' }}>20% ($5,000.00)</span> required to get started.
-                  </p>
+                <div className="px-5 py-4 bg-white border-t space-y-3" style={{ borderColor: '#c8edb5' }}>
+                  <p className="text-xs font-semibold text-slate-800">Payment flexibility — your choice on how you want to proceed:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="flex items-start gap-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>1</span>
+                      <p className="text-xs text-slate-700"><span className="font-bold">Pay in Full</span> — $25,000.00 upfront, best value.</p>
+                    </div>
+                    <div className="flex items-start gap-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>2</span>
+                      <p className="text-xs text-slate-700"><span className="font-bold">50/50</span> — 50% ($12,500) to start, then 50% ($12,500) at launch.</p>
+                    </div>
+                    <div className="flex items-start gap-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>3</span>
+                      <p className="text-xs text-slate-700"><span className="font-bold">30/30/30</span> — 30% ($7,500) to start, 30% ($7,500) mid-project, 30% ($7,500) at launch.</p>
+                    </div>
+                    <div className="flex items-start gap-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>4</span>
+                      <p className="text-xs text-slate-700"><span className="font-bold">20% Instalments</span> — 20% ($5,000) every 20 months × 5 payments.</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-500">Minimum deposit of <span className="font-bold" style={{ color: '#61AF39' }}>20% ($5,000.00)</span> required to get started.</p>
                 </div>
               </div>
             </div>

@@ -199,15 +199,15 @@ Date Signed: ${form.date_signed}
                 <Input value={form.billing_contact_phone} onChange={set('billing_contact_phone')} placeholder="+1 555 000 0000" required />
               </div>
               <div>
-                <FieldLabel>Implementation Lead</FieldLabel>
+                <FieldLabel>Partner Lead</FieldLabel>
                 <Input value={form.implementation_lead} onChange={set('implementation_lead')} placeholder="Full name" />
               </div>
               <div>
-                <FieldLabel>Implementation Lead Email</FieldLabel>
+                <FieldLabel>Partner Lead Email</FieldLabel>
                 <Input type="email" value={form.implementation_lead_email} onChange={set('implementation_lead_email')} placeholder="lead@company.com" />
               </div>
               <div>
-                <FieldLabel>Implementation Phone</FieldLabel>
+                <FieldLabel>Partner Lead Phone</FieldLabel>
                 <Input value={form.implementation_phone} onChange={set('implementation_phone')} placeholder="+1 555 000 0000" />
               </div>
             </div>

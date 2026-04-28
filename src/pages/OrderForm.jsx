@@ -204,7 +204,7 @@ Date Signed: ${form.date_signed}
                   txVol: '$1.2M – $2.4M',
                   revenue: '$60,000 – $120,000',
                   platformCost: '$25,000 (White Label)',
-                  netProfit: '+$18,000 – +$78,000',
+                  netProfit: '+$35,000 – +$95,000',
                   note: 'Build your brand, acquire your first 500–1,000 customers.',
                 },
                 {

@@ -90,7 +90,7 @@ export default function TaperPayerPartnerTerms() {
       <div style={{ background: 'linear-gradient(to right, #2479C2, #61AF39)' }} className="py-16">
         <div className="container mx-auto px-6 text-center text-white">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Partner Terms</h1>
-          <p className="text-blue-100">Last updated: April 28, 2026</p>
+          <p className="text-blue-100">Last updated: January 28, 2026</p>
         </div>
       </div>
 

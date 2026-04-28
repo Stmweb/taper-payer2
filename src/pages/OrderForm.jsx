@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Check, Loader2, ChevronRight } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-const LOGO = 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/f99e44de6_ChatGPTImageDec29202501_48_52PM.png';
+const LOGO = 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png';
 
 const INITIAL = {
   // 1. Partner Info
@@ -150,14 +150,14 @@ Date Signed: ${form.date_signed}
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 py-8 px-4">
+    <div className="min-h-screen bg-white py-8 px-4">
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
         <div className="text-center mb-8">
           <img src={LOGO} alt="Taper Payer" className="h-24 w-auto mx-auto mb-4" />
-          <h1 className="text-3xl font-black text-white">Taper Payer INC Order Form</h1>
-          <p className="text-white/60 text-sm mt-2">Please fill out all required fields. Our team will follow up within 1–2 business days.</p>
+          <h1 className="text-3xl font-black text-slate-900">Taper Payer INC Order Form</h1>
+          <p className="text-slate-500 text-sm mt-2">Please fill out all required fields. Our team will follow up within 1–2 business days.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">

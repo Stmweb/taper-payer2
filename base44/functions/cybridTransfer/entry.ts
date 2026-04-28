@@ -2,10 +2,10 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const CYBRID_CLIENT_ID = Deno.env.get('CYBRID_CLIENT_ID');
 const CYBRID_CLIENT_SECRET = Deno.env.get('CYBRID_CLIENT_SECRET');
-const CYBRID_BASE = 'https://bank.sandbox.cybrid.app';
-const CYBRID_ID_BASE = 'https://id.sandbox.cybrid.app';
-const CYBRID_ORG_BASE = 'https://organization.sandbox.cybrid.app';
-const CYBRID_BANK_GUID = 'db3d2566bb70d62919e879e6074eaa0c';
+const CYBRID_BASE = 'https://bank.cybrid.app';
+const CYBRID_ID_BASE = 'https://id.cybrid.app';
+const CYBRID_ORG_BASE = 'https://organization.cybrid.app';
+const CYBRID_BANK_GUID = 'fad33d102be9598598a81ff53a8bcffa';
 
 async function getBankToken() {
   console.log('CLIENT_ID:', CYBRID_CLIENT_ID);
@@ -145,7 +145,7 @@ Deno.serve(async (req) => {
         },
         body: JSON.stringify({
           name: 'TaperPayer Bank',
-          type: 'sandbox',
+          type: 'production',
           supported_trading_symbols: ['USDC-USD', 'USDC_SOL-USD'],
           supported_fiat_account_assets: ['USD'],
           supported_country_codes: ['US'],
@@ -420,7 +420,6 @@ Deno.serve(async (req) => {
         type: 'counterparty',
         method: 'watchlists',
         counterparty_guid: cpGuid,
-        expected_behaviours: ['passed_immediately'],
       });
 
       // Poll until completed
@@ -514,7 +513,6 @@ Deno.serve(async (req) => {
           method: 'account_ownership',
           customer_guid: customerGuid,
           external_bank_account_guid: eba.guid,
-          expected_behaviours: ['passed_immediately'],
         });
         // Poll until verification completes
         let ivResult = iv;
@@ -554,7 +552,6 @@ Deno.serve(async (req) => {
           method: 'account_ownership',
           customer_guid: customerGuid,
           external_bank_account_guid: eba.guid,
-          expected_behaviours: ['passed_immediately'],
         });
         let ivResult = iv;
         for (let i = 0; i < 15; i++) {

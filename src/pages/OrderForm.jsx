@@ -313,12 +313,27 @@ Date Signed: ${form.date_signed}
               <div className="rounded-xl border border-slate-200 overflow-hidden">
                 <div className="px-4 py-3 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
                   <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-black flex-shrink-0">3</span>
-                  <h4 className="text-sm font-bold text-white">All Taper Payer Quick Actions Features</h4>
+                  <h4 className="text-sm font-bold text-white">Platform Features (Quick Actions)</h4>
                 </div>
-                <div className="px-4 py-4">
-                  <p className="text-xs text-slate-700 leading-relaxed">
-                    Your platform will include all of Taper Payer's proprietary Quick Actions features — the same powerful tools our customers use daily, fully rebranded under your company name.
-                  </p>
+                <div className="px-4 py-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {[
+                    { label: 'Send Money', sub: 'Transfer globally' },
+                    { label: 'Mobile Top-Up', sub: 'Recharge instantly' },
+                    { label: 'Request Money', sub: 'Ask to get paid' },
+                    { label: 'Request Top-Up', sub: 'Ask someone to top up' },
+                    { label: 'Split Bills', sub: 'Divide expenses' },
+                    { label: 'Favorites', sub: 'Quick contacts' },
+                    { label: 'Group Wallet', sub: 'Shared account' },
+                    { label: 'Send AGNV', sub: 'Send via AGNV' },
+                  ].map(({ label, sub }) => (
+                    <div key={label} className="flex flex-col items-center text-center bg-slate-50 rounded-xl py-3 px-2 border border-slate-100">
+                      <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mb-2" style={{ backgroundColor: '#e8f5e9' }}>
+                        <svg className="w-2.5 h-2.5" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#61AF39" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                      <p className="text-xs font-bold text-slate-800">{label}</p>
+                      <p className="text-xs text-slate-400">{sub}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
 

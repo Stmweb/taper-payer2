@@ -214,7 +214,7 @@ Date Signed: ${form.date_signed}
                   txVol: '$3M – $6M',
                   revenue: '$150,000 – $300,000',
                   platformCost: '$25,000 (White Label)',
-                  netProfit: '+$108,000 – +$258,000',
+                  netProfit: '+$125,000 – +$275,000',
                   note: 'Word of mouth kicks in. Repeat customers drive volume.',
                 },
                 {
@@ -224,7 +224,7 @@ Date Signed: ${form.date_signed}
                   txVol: '$6M – $15M',
                   revenue: '$300,000 – $750,000',
                   platformCost: '$25,000 (White Label)',
-                  netProfit: '+$258,000 – +$708,000',
+                  netProfit: '+$275,000 – +$725,000',
                   note: 'Scale to multiple corridors, mobile top-ups, and B2B.',
                 },
               ].map(({ year, color, bg, txVol, revenue, platformCost, netProfit, note }) => (

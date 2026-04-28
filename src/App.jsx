@@ -39,6 +39,7 @@ import TaperPayerCybridCompliance from './pages/TaperPayerCybridCompliance';
 import AdminAGNVTransactions from './pages/AdminAGNVTransactions';
 import TaperPayerSupport from './pages/TaperPayerSupport';
 import TaperPayerAppStoreLanding from './pages/TaperPayerAppStoreLanding';
+import TaperPayerPartnerTerms from './pages/TaperPayerPartnerTerms';
 import OrderForm from './pages/OrderForm';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -198,6 +199,7 @@ const AuthenticatedApp = () => {
         <Route path="/AdminAGNVTransactions" element={<AdminAGNVTransactions />} />
         <Route path="/support" element={<TaperPayerSupport />} />
         <Route path="/app" element={<TaperPayerAppStoreLanding />} />
+        <Route path="/legal/partner-terms" element={<TaperPayerPartnerTerms />} />
         <Route path="/OrderForm" element={<OrderForm />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>

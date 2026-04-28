@@ -285,6 +285,7 @@ Date Signed: ${form.date_signed}
                     'Dedicated project manager',
                     'Advanced security features',
                     'Performance monitoring',
+                    '1 domain name for 1 year (if needed)',
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-2 text-xs text-slate-700">
                       <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#e8f5e9' }}>

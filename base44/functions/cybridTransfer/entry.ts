@@ -2,9 +2,9 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
 const CYBRID_CLIENT_ID = Deno.env.get('CYBRID_CLIENT_ID');
 const CYBRID_CLIENT_SECRET = Deno.env.get('CYBRID_CLIENT_SECRET');
-const CYBRID_BASE = 'https://bank.cybrid.app';
-const CYBRID_ID_BASE = 'https://id.cybrid.app';
-const CYBRID_ORG_BASE = 'https://organization.cybrid.app';
+const CYBRID_BASE = 'https://bank.production.cybrid.app';
+const CYBRID_ID_BASE = 'https://id.production.cybrid.app';
+const CYBRID_ORG_BASE = 'https://organization.production.cybrid.app';
 const CYBRID_BANK_GUID = '88b2eedffe7d95f6fea7482c5dcf0b92';
 
 async function getBankToken() {

@@ -32,6 +32,7 @@ import GlobeVisualization from '@/components/hero/GlobeVisualization';
 import { useAuth } from '@/lib/AuthContext';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import SignupModal from '@/components/SignupModal';
+import KYCStatusBanner from '@/components/KYCStatusBanner';
 
 function createPageUrl(page) {
   return `/${page}`;
@@ -190,6 +191,13 @@ export default function TaperPayerHome() {
           )}
         </div>
       </nav>
+
+      {/* KYC Status Banner */}
+      {user && (
+        <div className="container mx-auto px-4 md:px-6 pt-4">
+          <KYCStatusBanner user={user} />
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 py-20">

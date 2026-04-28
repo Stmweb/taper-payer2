@@ -150,14 +150,14 @@ Date Signed: ${form.date_signed}
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 py-8 px-4">
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
         <div className="text-center mb-8">
-          <img src={LOGO} alt="Taper Payer" className="h-14 w-auto mx-auto mb-4" />
-          <h1 className="text-3xl font-black text-slate-900">Taper Payer INC Order Form</h1>
-          <p className="text-slate-500 text-sm mt-2">Please fill out all required fields. Our team will follow up within 1–2 business days.</p>
+          <img src={LOGO} alt="Taper Payer" className="h-24 w-auto mx-auto mb-4" />
+          <h1 className="text-3xl font-black text-white">Taper Payer INC Order Form</h1>
+          <p className="text-white/60 text-sm mt-2">Please fill out all required fields. Our team will follow up within 1–2 business days.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">

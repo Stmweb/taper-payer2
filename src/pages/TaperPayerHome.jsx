@@ -263,9 +263,23 @@ export default function TaperPayerHome() {
               initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.2, ease: 'easeOut' }}
-              className="flex items-center justify-center"
+              className="flex flex-col items-center justify-center gap-3"
             >
               <GlobeVisualization />
+              <div className="flex gap-3">
+                {countries.map((c) => (
+                  <motion.div
+                    key={c.name}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2 }}
+                    className="flex flex-col items-center gap-1 bg-white/15 backdrop-blur-sm border border-white/25 rounded-xl px-3 py-2"
+                  >
+                    <span className="text-2xl">{c.flag}</span>
+                    <span className="text-white text-xs font-medium">{c.name.split(' ')[0]}</span>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
 
             {/* Right: Transfer card */}

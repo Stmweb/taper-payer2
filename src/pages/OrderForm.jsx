@@ -155,7 +155,7 @@ Date Signed: ${form.date_signed}
 
         {/* Header */}
         <div className="text-center mb-8">
-          <img src={LOGO} alt="Taper Payer" className="h-24 w-auto mx-auto mb-4" />
+          <img src={LOGO} alt="Taper Payer" className="h-40 w-auto mx-auto mb-4" />
           <h1 className="text-3xl font-black text-slate-900">Taper Payer INC Order Form</h1>
           <p className="text-slate-500 text-sm mt-2">Please fill out all required fields. Our team will follow up within 1–2 business days.</p>
         </div>

@@ -232,7 +232,7 @@ Date Signed: ${form.date_signed}
                   <div className="px-4 py-2 text-white font-black text-sm" style={{ backgroundColor: color }}>{year}</div>
                   <div className="px-4 py-3 space-y-2" style={{ backgroundColor: bg }}>
                     <div>
-                      <p className="text-xs text-slate-500">Transaction Volume</p>
+                      <p className="text-xs text-slate-500">Transaction Volume (below-average)</p>
                       <p className="text-sm font-bold text-slate-800">{txVol}</p>
                     </div>
                     <div>

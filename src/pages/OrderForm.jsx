@@ -754,9 +754,7 @@ Date Signed: ${form.date_signed}
             {loading ? 'Submitting Order Form…' : 'Submit Order Form to Taper Payer INC'}
           </button>
 
-          <p className="text-center text-xs text-slate-400 pb-4">
-            By submitting, you agree to our <a href="/TaperPayerTerms" className="underline">Terms of Service</a> and <a href="/TaperPayerPrivacy" className="underline">Privacy Policy</a>.
-          </p>
+
         </form>
       </div>
     </div>

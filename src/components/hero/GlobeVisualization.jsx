@@ -198,14 +198,58 @@ export default function GlobeVisualization() {
         </motion.div>
       </div>
 
-      {/* Globe SVG */}
-      <svg
-        ref={svgRef}
-        width={RX * 2}
-        height={RY * 2}
-        viewBox={`0 0 ${RX * 2} ${RY * 2}`}
-        style={{ overflow: 'visible', position: 'relative', zIndex: 2 }}
-      >
+      {/* Orbiting country flags */}
+      <div className="relative z-10" style={{ width: RX * 2, height: RY * 2 }}>
+        {[
+          { flag: '🇬🇭', name: 'Ghana',    angle: 0   },
+          { flag: '🇰🇪', name: 'Kenya',    angle: 90  },
+          { flag: '🇸🇳', name: 'Senegal',  angle: 180 },
+          { flag: '🇩🇴', name: 'Dominican', angle: 270 },
+        ].map(({ flag, name, angle }, idx) => (
+          <motion.div
+            key={name}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'linear', delay: 0 }}
+            style={{
+              position: 'absolute',
+              top: '50%', left: '50%',
+              width: RX * 2 + 60,
+              height: RY * 2 + 60,
+              marginTop: -(RY + 30),
+              marginLeft: -(RX + 30),
+              transformOrigin: 'center center',
+              rotate: angle,
+            }}
+          >
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 12, repeat: Infinity, ease: 'linear', delay: 0 }}
+              style={{
+                position: 'absolute',
+                top: 0, left: '50%',
+                transform: 'translateX(-50%)',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+                background: 'rgba(255,255,255,0.18)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.3)',
+                borderRadius: 10,
+                padding: '4px 8px',
+              }}
+            >
+              <span style={{ fontSize: 18, lineHeight: 1 }}>{flag}</span>
+              <span style={{ color: '#fff', fontSize: 8, fontWeight: 700 }}>{name}</span>
+            </motion.div>
+          </motion.div>
+        ))}
+
+        {/* Globe SVG */}
+        <svg
+          ref={svgRef}
+          width={RX * 2}
+          height={RY * 2}
+          viewBox={`0 0 ${RX * 2} ${RY * 2}`}
+          style={{ overflow: 'visible', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
+        >
         <defs>
           <radialGradient id="globeGradTP" cx="38%" cy="32%" r="65%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
@@ -292,6 +336,7 @@ export default function GlobeVisualization() {
         {/* Shine */}
         <ellipse cx={RX*0.65} cy={RY*0.55} rx={35} ry={20} fill="white" style={{ opacity:0.04 }} />
       </svg>
+      </div>
 
       {/* Currency pill */}
       <motion.div

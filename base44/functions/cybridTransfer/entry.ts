@@ -5,7 +5,7 @@ const CYBRID_CLIENT_SECRET = Deno.env.get('CYBRID_CLIENT_SECRET');
 const CYBRID_BASE = 'https://bank.production.cybrid.app';
 const CYBRID_ID_BASE = 'https://id.production.cybrid.app';
 const CYBRID_ORG_BASE = 'https://organization.production.cybrid.app';
-const CYBRID_BANK_GUID = '88b2eedffe7d95f6fea7482c5dcf0b92';
+const CYBRID_BANK_GUID = 'fad33d102be9598598a81ff53a8bcffa';
 
 async function getBankToken() {
   console.log('CLIENT_ID:', CYBRID_CLIENT_ID);
@@ -664,6 +664,12 @@ Deno.serve(async (req) => {
     if (action === 'getBankInfo') {
       const bank = await cybridApi(token, 'GET', `/api/banks/${CYBRID_BANK_GUID}`);
       return Response.json({ bank });
+    }
+
+    // ── DEBUG: List all banks to find production bank GUID ───────────────────
+    if (action === 'listBanks') {
+      const banks = await cybridApi(token, 'GET', '/api/banks');
+      return Response.json({ banks });
     }
 
     return Response.json({ error: 'Unknown action' }, { status: 400 });

@@ -261,6 +261,75 @@ Date Signed: ${form.date_signed}
             </div>
           </div>
 
+          {/* ── NEW: White Label Fee Breakdown ── */}
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <SectionHeader number="★" title="White Label Fee Breakdown — $25,000.00" />
+            <p className="text-sm text-slate-500 mb-5">Your one-time white label investment covers everything you need to launch a fully branded Money Remittance Company — with no ongoing license fees.</p>
+
+            <div className="space-y-5">
+              {/* Item 1 */}
+              <div className="rounded-xl border border-slate-200 overflow-hidden">
+                <div className="px-4 py-3 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                  <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-black flex-shrink-0">1</span>
+                  <h4 className="text-sm font-bold text-white">Full Front End / Back End Web &amp; App Application</h4>
+                </div>
+                <div className="px-4 py-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    'Custom web application',
+                    'Mobile app development',
+                    'Custom integrations & API',
+                    'Database design',
+                    'User authentication system',
+                    'Payment gateway integration',
+                    '1 year priority support',
+                    'Dedicated project manager',
+                    'Advanced security features',
+                    'Performance monitoring',
+                  ].map((item) => (
+                    <div key={item} className="flex items-center gap-2 text-xs text-slate-700">
+                      <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#e8f5e9' }}>
+                        <svg className="w-2.5 h-2.5" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#61AF39" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Item 2 */}
+              <div className="rounded-xl border border-slate-200 overflow-hidden">
+                <div className="px-4 py-3 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                  <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-black flex-shrink-0">2</span>
+                  <h4 className="text-sm font-bold text-white">No License Fees to Operate</h4>
+                </div>
+                <div className="px-4 py-4">
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    <strong>Zero ongoing license fees</strong> to operate your own fully branded Money Remittance Company. Own your platform outright with no recurring royalty or licensing costs eating into your margins.
+                  </p>
+                </div>
+              </div>
+
+              {/* Item 3 */}
+              <div className="rounded-xl border border-slate-200 overflow-hidden">
+                <div className="px-4 py-3 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>
+                  <span className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-black flex-shrink-0">3</span>
+                  <h4 className="text-sm font-bold text-white">All Taper Payer Quick Actions Features</h4>
+                </div>
+                <div className="px-4 py-4">
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    Your platform will include all of Taper Payer's proprietary Quick Actions features — the same powerful tools our customers use daily, fully rebranded under your company name.
+                  </p>
+                </div>
+              </div>
+
+              {/* Total */}
+              <div className="flex items-center justify-between rounded-xl px-5 py-4 border-2" style={{ borderColor: '#61AF39', background: '#f0faf0' }}>
+                <span className="text-sm font-bold text-slate-800">White Label One-Time Fee</span>
+                <span className="text-2xl font-black" style={{ color: '#61AF39' }}>$25,000.00</span>
+              </div>
+            </div>
+          </div>
+
           {/* ── 2. Taper Payer INC Monthly Fees ── */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
             <SectionHeader number="2" title="Taper Payer INC Monthly Fees" />

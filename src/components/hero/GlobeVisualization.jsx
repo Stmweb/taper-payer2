@@ -198,58 +198,14 @@ export default function GlobeVisualization() {
         </motion.div>
       </div>
 
-      {/* Orbiting country flags */}
-      <div className="relative z-10" style={{ width: RX * 2, height: RY * 2 }}>
-        {[
-          { flag: '🇬🇭', name: 'Ghana',    angle: 0   },
-          { flag: '🇰🇪', name: 'Kenya',    angle: 90  },
-          { flag: '🇸🇳', name: 'Senegal',  angle: 180 },
-          { flag: '🇩🇴', name: 'Dominican', angle: 270 },
-        ].map(({ flag, name, angle }, idx) => (
-          <motion.div
-            key={name}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'linear', delay: 0 }}
-            style={{
-              position: 'absolute',
-              top: '50%', left: '50%',
-              width: RX * 2 + 60,
-              height: RY * 2 + 60,
-              marginTop: -(RY + 30),
-              marginLeft: -(RX + 30),
-              transformOrigin: 'center center',
-              rotate: angle,
-            }}
-          >
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 12, repeat: Infinity, ease: 'linear', delay: 0 }}
-              style={{
-                position: 'absolute',
-                top: 0, left: '50%',
-                transform: 'translateX(-50%)',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-                background: 'rgba(255,255,255,0.18)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                borderRadius: 10,
-                padding: '4px 8px',
-              }}
-            >
-              <span style={{ fontSize: 18, lineHeight: 1 }}>{flag}</span>
-              <span style={{ color: '#fff', fontSize: 8, fontWeight: 700 }}>{name}</span>
-            </motion.div>
-          </motion.div>
-        ))}
-
-        {/* Globe SVG */}
-        <svg
-          ref={svgRef}
-          width={RX * 2}
-          height={RY * 2}
-          viewBox={`0 0 ${RX * 2} ${RY * 2}`}
-          style={{ overflow: 'visible', position: 'absolute', top: 0, left: 0, zIndex: 2 }}
-        >
+      {/* Globe SVG */}
+      <svg
+        ref={svgRef}
+        width={RX * 2}
+        height={RY * 2}
+        viewBox={`0 0 ${RX * 2} ${RY * 2}`}
+        style={{ overflow: 'visible', position: 'relative', zIndex: 2 }}
+      >
         <defs>
           <radialGradient id="globeGradTP" cx="38%" cy="32%" r="65%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
@@ -335,8 +291,34 @@ export default function GlobeVisualization() {
 
         {/* Shine */}
         <ellipse cx={RX*0.65} cy={RY*0.55} rx={35} ry={20} fill="white" style={{ opacity:0.04 }} />
+
+        {/* Country flag satellite bubbles */}
+        {[
+          { flag: '🇬🇭', name: 'Ghana',      dx:  0,   dy: -1   },
+          { flag: '🇰🇪', name: 'Kenya',      dx:  1,   dy:  0.2 },
+          { flag: '🇸🇳', name: 'Senegal',    dx: -1,   dy:  0.2 },
+          { flag: '🇩🇴', name: 'Dominican',  dx:  0,   dy:  1   },
+        ].map(({ flag, name, dx, dy }) => {
+          const bubbleR = 32;
+          const orbitR = RX + 55;
+          const cx2 = RX + dx * orbitR;
+          const cy2 = RY + dy * orbitR;
+          // Line from globe edge to bubble edge
+          const angle = Math.atan2(dy, dx);
+          const x1 = RX + Math.cos(angle) * (RX - 2);
+          const y1 = RY + Math.sin(angle) * (RY - 2);
+          const x2 = cx2 - Math.cos(angle) * bubbleR;
+          const y2 = cy2 - Math.sin(angle) * bubbleR;
+          return (
+            <g key={name}>
+              <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeDasharray="3 3" />
+              <circle cx={cx2} cy={cy2} r={bubbleR} fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
+              <text x={cx2} y={cy2 - 6} textAnchor="middle" dominantBaseline="middle" fontSize="20">{flag}</text>
+              <text x={cx2} y={cy2 + 16} textAnchor="middle" fontSize="7" fontWeight="700" fill="white" fontFamily="sans-serif">{name}</text>
+            </g>
+          );
+        })}
       </svg>
-      </div>
 
       {/* Currency pill */}
       <motion.div

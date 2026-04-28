@@ -445,7 +445,7 @@ Date Signed: ${form.date_signed}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div className="flex items-start gap-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
                       <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>1</span>
-                      <p className="text-xs text-slate-700"><span className="font-bold">Pay in Full</span> — $25,000.00 upfront, best value.</p>
+                      <p className="text-xs text-slate-700"><span className="font-bold">Pay in Full</span> — $25,000.00 upfront, fast launching 30 days.</p>
                     </div>
                     <div className="flex items-start gap-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
                       <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5" style={{ background: 'linear-gradient(135deg, #3D7BB7, #61AF39)' }}>2</span>

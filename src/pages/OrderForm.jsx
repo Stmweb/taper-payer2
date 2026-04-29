@@ -117,7 +117,7 @@ Date Signed: ${form.date_signed}
       `.trim();
 
       await base44.integrations.Core.SendEmail({
-        to: 'ficusaureallc@gmail.com',
+        to: 'support@taperpayer.com',
         subject: `Taper Payer INC Order Form: ${form.partner_name}`,
         body,
       });

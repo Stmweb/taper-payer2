@@ -609,7 +609,7 @@ Date Signed: ${form.date_signed}
             <SectionHeader number="5" title="Terms Applicable To All Orders" />
             <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700 leading-relaxed">
               <li>This <strong>Order Form</strong> is made and entered into as of the date of signing, by and between the partner named above ("<strong>Partner</strong>") and <strong>Taper Payer INC</strong>. This <strong>Order Form</strong> is issued under, and subject to, the <strong>Partner Terms</strong> available at: <a href="https://taperpayer.com/legal/partner-terms" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://taperpayer.com/legal/partner-terms</a>, which, altogether are the "<strong>Agreement</strong>".</li>
-              <li>Initial funding of <strong>Refundable Deposit Account</strong>: <strong>Partner</strong> shall fund with $10,000 USD.</li>
+              <li>Initial funding of <strong>Refundable Deposit Account</strong>: <strong>Partner</strong> shall fund with $10,000 USD <span className="text-slate-500 font-normal">(optional: $5,000 – $10,000)</span>.</li>
               <li>Any prior <strong>Order Form</strong> entered into by the parties is superseded and replaced in its entirety by this <strong>Agreement</strong>.</li>
               <li>This <strong>Order Form</strong> is binding and effective upon signing by <strong>Partner</strong> (provided that no changes were made to the provided form of agreement), with billing to start on the <strong>Billing Start Date</strong>.</li>
             </ol>

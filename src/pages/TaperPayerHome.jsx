@@ -54,7 +54,7 @@ export default function TaperPayerHome() {
 
    const { config, isElementHidden, isSectionHidden, getContentOverride } = usePageConfig('TaperPayerHome');
    const { isAuthenticated, navigateToLogin } = useAuth();
-   const { user, login } = useAppAuth();
+   const { user, login, logout } = useAppAuth();
    const isMobile = useIsMobile();
 
    const [amount, setAmount] = useState('100');
@@ -153,13 +153,17 @@ export default function TaperPayerHome() {
               <Link to={createPageUrl('TaperPayerRates')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Exchange Rates</Link>
               <Link to={createPageUrl('TaperPayerTopUp')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Taper Mobile</Link>
               <Link to={createPageUrl('TaperPayerContact')} className="text-slate-700 dark:text-gray-200 text-sm lg:text-base font-medium hover:text-[#3D7BB7] transition-colors">Contact</Link>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-slate-700 border-slate-300 hover:bg-slate-50"
-                onClick={() => window.location.href = '/TaperPayerLogin'}
-              >Login</Button>
-              <Link to="/TaperPayerSignup"><Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button></Link>
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-slate-700 font-medium">👋 {user.full_name || user.email}</span>
+                  <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50" onClick={() => { logout(); window.location.href = '/TaperPayerHome'; }}>Logout</Button>
+                </div>
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50" onClick={() => window.location.href = '/TaperPayerLogin'}>Login</Button>
+                  <Link to="/TaperPayerSignup"><Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button></Link>
+                </>
+              )}
             </div>
 
             {/* Spacer for Mobile to Balance Layout */}

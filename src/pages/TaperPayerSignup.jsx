@@ -12,6 +12,7 @@ import CountryDrawer from '@/components/mobile/CountryDrawer';
 import { useIsMobile } from '@/hooks/use-mobile';
 import SignupModal from '@/components/SignupModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
+import { base44 } from '@/api/base44Client';
 
 export default function TaperPayerSignup() {
   const isMobile = useIsMobile();
@@ -36,23 +37,53 @@ export default function TaperPayerSignup() {
   const [showStateDrawer, setShowStateDrawer] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const states = [
-    'Alabama', 'Alaska', 'Arizona', 'California', 'Colorado', 'Connecticut',
-    'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana',
-    'Maryland', 'New York'
+    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
+    'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
+    'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+    'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+    'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+    'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma',
+    'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+    'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
+    'West Virginia', 'Wisconsin', 'Wyoming'
   ];
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMsg('Passwords do not match.');
+      return;
+    }
+    if (!sendSMS) {
+      setErrorMsg('Please agree to the User Agreement.');
+      return;
+    }
     setIsSubmitting(true);
     setSubmitStatus(null);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMsg('');
+    try {
+      const res = await base44.functions.invoke('signup', {
+        email: formData.email,
+        password: formData.password,
+        full_name: `${formData.firstName}${formData.middleName ? ' ' + formData.middleName : ''} ${formData.lastName}`.trim(),
+        phone: formData.mobile,
+        country: formData.country,
+        state: formData.state,
+        referral_code: formData.referralCode,
+      });
+      const { jwt, user, cybrid_customer_id } = res.data;
+      login(user, jwt, cybrid_customer_id);
       setSubmitStatus('success');
-    }, 800);
+      setTimeout(() => { window.location.href = '/TaperPayerHome'; }, 1500);
+    } catch (err) {
+      setErrorMsg(err.response?.data?.error || 'Registration failed. Please try again.');
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -522,6 +553,11 @@ export default function TaperPayerSignup() {
             {submitStatus === 'success' && (
               <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm text-center">
                 ✓ Account created! Redirecting…
+              </div>
+            )}
+            {errorMsg && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center">
+                {errorMsg}
               </div>
             )}
             <Button

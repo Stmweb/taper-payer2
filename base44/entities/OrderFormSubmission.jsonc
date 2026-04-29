@@ -1,0 +1,71 @@
+{
+  "name": "OrderFormSubmission",
+  "type": "object",
+  "properties": {
+    "partner_name": {
+      "type": "string"
+    },
+    "billing_address": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "project_sponsor": {
+      "type": "string"
+    },
+    "sponsor_email": {
+      "type": "string"
+    },
+    "billing_contact_name": {
+      "type": "string"
+    },
+    "billing_contact_email": {
+      "type": "string"
+    },
+    "billing_contact_phone": {
+      "type": "string"
+    },
+    "implementation_lead": {
+      "type": "string"
+    },
+    "implementation_lead_email": {
+      "type": "string"
+    },
+    "implementation_phone": {
+      "type": "string"
+    },
+    "implementation_billing_start_date": {
+      "type": "string"
+    },
+    "monthly_minimum_platform_fee_start_date": {
+      "type": "string"
+    },
+    "monthly_minimum_tier": {
+      "type": "string"
+    },
+    "signatory_name": {
+      "type": "string"
+    },
+    "email_address": {
+      "type": "string"
+    },
+    "date_signed": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "in_review",
+        "approved",
+        "rejected"
+      ],
+      "default": "new"
+    }
+  },
+  "required": [
+    "partner_name",
+    "sponsor_email"
+  ]
+}

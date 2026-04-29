@@ -122,6 +122,28 @@ Date Signed: ${form.date_signed}
         body,
       });
 
+      // Save to database
+      await base44.entities.OrderFormSubmission.create({
+        partner_name: form.partner_name,
+        billing_address: form.billing_address,
+        country: form.country,
+        project_sponsor: form.project_sponsor,
+        sponsor_email: form.sponsor_email,
+        billing_contact_name: form.billing_contact_name,
+        billing_contact_email: form.billing_contact_email,
+        billing_contact_phone: form.billing_contact_phone,
+        implementation_lead: form.implementation_lead,
+        implementation_lead_email: form.implementation_lead_email,
+        implementation_phone: form.implementation_phone,
+        implementation_billing_start_date: form.implementation_billing_start_date,
+        monthly_minimum_platform_fee_start_date: form.monthly_minimum_platform_fee_start_date,
+        monthly_minimum_tier: form.monthly_minimum_tier,
+        signatory_name: form.signatory_name,
+        email_address: form.email_address,
+        date_signed: form.date_signed,
+        status: 'new',
+      });
+
       // Confirmation email to the partner
       const confirmationBody = `
 Dear ${form.partner_name},

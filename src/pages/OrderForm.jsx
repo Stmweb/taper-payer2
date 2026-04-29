@@ -606,7 +606,7 @@ Date Signed: ${form.date_signed}
 
           {/* ── 6. Terms ── */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-            <SectionHeader number="6" title="Terms Applicable To All Orders" />
+            <SectionHeader number="5" title="Terms Applicable To All Orders" />
             <ol className="list-decimal list-inside space-y-3 text-sm text-slate-700 leading-relaxed">
               <li>This <strong>Order Form</strong> is made and entered into as of the date of signing, by and between the partner named above ("<strong>Partner</strong>") and <strong>Taper Payer INC</strong>. This <strong>Order Form</strong> is issued under, and subject to, the <strong>Partner Terms</strong> available at: <a href="https://taperpayer.com/legal/partner-terms" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://taperpayer.com/legal/partner-terms</a>, which, altogether are the "<strong>Agreement</strong>".</li>
               <li>Initial funding of <strong>Refundable Deposit Account</strong>: <strong>Partner</strong> shall fund with $10,000 USD.</li>
@@ -617,7 +617,7 @@ Date Signed: ${form.date_signed}
 
           {/* ── 7. Partner Signature ── */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-            <SectionHeader number="7" title="Partner Signature" />
+            <SectionHeader number="6" title="Partner Signature" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <FieldLabel required>Name of Authorised Signatory</FieldLabel>

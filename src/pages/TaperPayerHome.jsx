@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import {
   ArrowRight, Shield, Zap, DollarSign, Globe, Users, TrendingUp,
   RefreshCw, ChevronRight, MapPin, CreditCard, Smartphone, Menu, X, Moon, Sun, Instagram,
-  Send, PhoneCall, HandCoins, PhoneOutgoing
+  Send, PhoneCall, HandCoins, PhoneOutgoing, Settings
 } from 'lucide-react';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
@@ -156,6 +156,12 @@ export default function TaperPayerHome() {
               {user ? (
                 <div className="flex items-center gap-3">
                   <span className="text-sm text-slate-700 font-medium">👋 {user.full_name || user.email}</span>
+                  <Link to="/AccountSettings">
+                    <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50 gap-1">
+                      <Settings className="w-4 h-4" />
+                      Settings
+                    </Button>
+                  </Link>
                   <Button variant="outline" size="sm" className="text-slate-700 border-slate-300 hover:bg-slate-50" onClick={() => { logout(); window.location.href = '/TaperPayerHome'; }}>Logout</Button>
                 </div>
               ) : (

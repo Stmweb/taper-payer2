@@ -43,19 +43,7 @@ export default function TaperPayerSignup() {
     'Maryland', 'New York'
   ];
 
-  // On mobile, show the SignupModal instead of the old form
-  if (isMobile) {
-    return (
-      <SignupModal
-        isOpen={true}
-        onClose={() => window.history.back()}
-        onSignupSuccess={(userData) => {
-          login(userData, userData.jwt, userData.cybrid_customer_id);
-          window.location.href = '/TaperPayerHome';
-        }}
-      />
-    );
-  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

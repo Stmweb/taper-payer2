@@ -314,6 +314,15 @@ export default function TaperPayerSignup() {
             </h2>
           </div>
 
+          {/* World Cup Banner - mobile only */}
+          <div className="lg:hidden mb-6 rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/adbf945ac_TaperPayerBanner.png"
+              alt="World Cup Raffle 2026"
+              className="w-full h-auto"
+            />
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <div className="relative">

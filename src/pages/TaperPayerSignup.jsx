@@ -496,29 +496,20 @@ export default function TaperPayerSignup() {
               </ul>
             </div>
 
-            {/* Checkboxes */}
-            <div className="space-y-3">
-              <div className="flex items-start gap-2">
-                <Checkbox
-                  id="sms"
-                  checked={sendSMS}
-                  onCheckedChange={setSendSMS}
-                />
-                <label htmlFor="sms" className="text-sm text-slate-600 leading-tight">
-                  Send me OTP (One Time Password) via SMS to complete registration
-                </label>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <Checkbox
-                  id="promo"
-                  checked={sendPromo}
-                  onCheckedChange={setSendPromo}
-                />
-                <label htmlFor="promo" className="text-sm text-slate-600 leading-tight">
-                  Send me Email / SMS about Notifications, Offers, and Promotions.
-                </label>
-              </div>
+            {/* User Agreement */}
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="agreement"
+                checked={sendSMS}
+                onCheckedChange={setSendSMS}
+                required
+              />
+              <label htmlFor="agreement" className="text-sm text-slate-600 leading-tight">
+                I agree to the{' '}
+                <a href="/OperatingAgreement" target="_blank" className="text-blue-600 hover:underline font-semibold">User Agreement</a>
+                {' '}and{' '}
+                <a href="/TaperPayerPrivacy" target="_blank" className="text-blue-600 hover:underline font-semibold">Privacy Policy</a>
+              </label>
             </div>
 
             {submitStatus === 'success' && (

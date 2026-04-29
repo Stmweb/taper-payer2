@@ -506,9 +506,7 @@ export default function TaperPayerSignup() {
               />
               <label htmlFor="agreement" className="text-sm text-slate-600 leading-tight">
                 I agree to the{' '}
-                <a href="/OperatingAgreement" target="_blank" className="text-blue-600 hover:underline font-semibold">User Agreement</a>
-                {' '}and{' '}
-                <a href="/TaperPayerPrivacy" target="_blank" className="text-blue-600 hover:underline font-semibold">Privacy Policy</a>
+                <a href="https://cdn.prod.website-files.com/691c3ed36cbe630ffe6844b3/696ea2d4c3253c82181f6aca_250505%20Cybrid%20User%20Agreement.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-semibold">User Agreement</a>
               </label>
             </div>
 

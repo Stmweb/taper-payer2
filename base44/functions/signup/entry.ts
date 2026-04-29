@@ -1,12 +1,8 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
-import { crypto } from 'https://deno.land/std@0.208.0/crypto/mod.ts';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
+import bcrypt from 'npm:bcryptjs@2.4.3';
 
 async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return bcrypt.hashSync(password, 10);
 }
 
 Deno.serve(async (req) => {
@@ -14,15 +10,16 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
     
-    const { email, password, full_name, phone } = body;
+    const { email, password, full_name, phone, country, state, referral_code } = body;
+    const normalizedEmail = (email || '').toLowerCase().trim();
 
     // Validate input
-    if (!email || !password || !full_name || !phone) {
+    if (!normalizedEmail || !password || !full_name || !phone) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // Check if user already exists
-    const existing = await base44.asServiceRole.entities.AppUser.filter({ email });
+    const existing = await base44.asServiceRole.entities.AppUser.filter({ email: normalizedEmail });
     if (existing && existing.length > 0) {
       return Response.json({ error: 'Email already registered' }, { status: 409 });
     }
@@ -72,10 +69,12 @@ Deno.serve(async (req) => {
 
     // Create user in AppUser
     const user = await base44.asServiceRole.entities.AppUser.create({
-      email,
+      email: normalizedEmail,
       password_hash,
       full_name,
       phone,
+      country: country || '',
+      state: state || '',
       cybrid_customer_id,
     });
 

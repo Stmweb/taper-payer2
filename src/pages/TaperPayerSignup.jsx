@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { User, Mail, Lock, Phone, MapPin, Eye, EyeOff, ChevronRight } from 'lucide-react';
+import { User, Mail, Lock, Phone, MapPin, Eye, EyeOff, ChevronRight, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
@@ -303,7 +303,10 @@ export default function TaperPayerSignup() {
       </div>
 
       {/* Right Side - Registration Form */}
-      <div className="w-full lg:w-1/2 flex items-start justify-center px-5 pt-4 pb-28 bg-white dark:bg-slate-900 lg:items-center lg:pt-8 lg:pb-8 overflow-y-auto">
+      <div className="w-full lg:w-1/2 flex items-start justify-center px-5 pt-4 pb-28 bg-white dark:bg-slate-900 lg:items-center lg:pt-8 lg:pb-8 overflow-y-auto relative">
+        <Link to={createPageUrl('TaperPayerHome')} className="hidden lg:flex absolute top-6 right-6 w-9 h-9 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-500 dark:text-slate-300 transition-colors z-10">
+          <X className="w-5 h-5" />
+        </Link>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

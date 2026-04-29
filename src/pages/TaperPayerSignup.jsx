@@ -392,6 +392,7 @@ export default function TaperPayerSignup() {
                   <option value="Ghana">Ghana</option>
                   <option value="Haiti">Haiti</option>
                   <option value="Kenya">Kenya</option>
+                  <option value="India">India</option>
                   <option value="Senegal">Senegal</option>
                 </select>
               </div>

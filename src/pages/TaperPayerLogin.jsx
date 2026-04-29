@@ -245,7 +245,7 @@ export default function TaperPayerLogin() {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/adbf945ac_TaperPayerBanner.png"
+              src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/cd20725cb_A5D49075-7B3C-46FA-9202-6E68DF5CFC46.png"
               alt="World Cup Raffle 2026"
               className="w-full h-auto"
             />
@@ -300,6 +300,15 @@ export default function TaperPayerLogin() {
             <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
               Welcome, please login to your account
             </h2>
+          </div>
+
+          {/* World Cup Banner - mobile only */}
+          <div className="lg:hidden mb-6 rounded-2xl overflow-hidden shadow-lg">
+            <img
+              src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/cd20725cb_A5D49075-7B3C-46FA-9202-6E68DF5CFC46.png"
+              alt="World Cup Raffle 2026"
+              className="w-full h-auto"
+            />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

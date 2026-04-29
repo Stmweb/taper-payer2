@@ -159,7 +159,7 @@ export default function TaperPayerHome() {
                 className="text-slate-700 border-slate-300 hover:bg-slate-50"
                 onClick={() => window.location.href = '/TaperPayerLogin'}
               >Login</Button>
-              <Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90" onClick={() => setShowSignupModal(true)}>Sign up</Button>
+              <Link to="/TaperPayerSignup"><Button size="sm" style={{ backgroundColor: '#3D7BB7' }} className="hover:opacity-90">Sign up</Button></Link>
             </div>
 
             {/* Spacer for Mobile to Balance Layout */}
@@ -181,10 +181,9 @@ export default function TaperPayerHome() {
                   className="w-full bg-white/10 text-white border-white/30 hover:bg-white/20"
                   onClick={() => window.location.href = '/TaperPayerLogin'}
                 >Login</Button>
-                <Button 
-                  className="w-full bg-white text-blue-600 hover:bg-gray-100"
-                  onClick={() => setShowSignupModal(true)}
-                >Sign up</Button>
+                <Link to="/TaperPayerSignup" className="w-full">
+                  <Button className="w-full bg-white text-blue-600 hover:bg-gray-100">Sign up</Button>
+                </Link>
               </div>
             </div>
           )}

@@ -121,6 +121,42 @@ Date Signed: ${form.date_signed}
         subject: `Taper Payer INC Order Form: ${form.partner_name}`,
         body,
       });
+
+      // Confirmation email to the partner
+      const confirmationBody = `
+Dear ${form.partner_name},
+
+Thank you for submitting your Order Form to Taper Payer INC! We have received your information and our team will review it and reach out within 1–2 business days.
+
+Here is a summary of your submission:
+
+Partner Name: ${form.partner_name}
+Billing Address: ${form.billing_address}
+Country: ${form.country}
+Project Sponsor: ${form.project_sponsor}
+Sponsor Email: ${form.sponsor_email}
+Billing Contact: ${form.billing_contact_name} (${form.billing_contact_email})
+Implementation Billing Start Date: ${form.implementation_billing_start_date}
+Monthly Minimum Platform Fee Start Date: ${form.monthly_minimum_platform_fee_start_date}
+Monthly Minimum Tier & Jurisdiction: ${form.monthly_minimum_tier}
+Signed By: ${form.signatory_name}
+Date Signed: ${form.date_signed}
+
+If you have any questions in the meantime, please contact us at support@taperpayer.com or call 404-994-0766.
+
+Welcome to the Taper Payer family!
+
+Best regards,
+The Taper Payer INC Team
+https://taperpayer.com
+      `.trim();
+
+      await base44.integrations.Core.SendEmail({
+        to: form.sponsor_email,
+        subject: `Your Taper Payer INC Order Form Has Been Received`,
+        body: confirmationBody,
+      });
+
       setSubmitted(true);
     } catch (err) {
       setError('Something went wrong. Please try again.');

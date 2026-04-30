@@ -139,7 +139,7 @@ export default function TaperPayerHome() {
             {/* Logo - Centered on Mobile, Left on Desktop */}
             <Link to={createPageUrl('TaperPayerHome')} className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
               <img 
-                src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
+                src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
                 alt="Taper Payer"
                 className="h-36 md:h-36 w-auto"
               />

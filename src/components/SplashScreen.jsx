@@ -11,7 +11,7 @@ export default function SplashScreen({ onComplete }) {
     <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white">
       {/* Logo with bounce-in + pulse */}
       <motion.img
-        src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/4b81ac0a6_TPGT.png"
+        src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
         alt="Taper Payer"
         className="w-80"
         initial={{ scale: 0, opacity: 0, rotate: -10 }}

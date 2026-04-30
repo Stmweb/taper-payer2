@@ -23,7 +23,7 @@ const sections = [
     color: '#61AF39',
     rows: [
       { fn: 'cybridTransfer', apis: 'Cybrid API (full production) — customer KYC, accounts, Plaid, ACH, trades, remittances' },
-      { fn: 'haitiTransfer', apis: 'DTone, Transak, Coinbase (sandbox)' },
+      { fn: 'haitiTransfer', apis: 'DTone' },
     ],
   },
   {
@@ -32,16 +32,11 @@ const sections = [
     rows: [
       { fn: 'dtoneTopUp', apis: 'DTone DVS API' },
       { fn: 'dingTopUp', apis: 'Ding Connect API' },
-      { fn: 'reloadlyTopUp', apis: 'Reloadly API' },
       { fn: 'processTopUp', apis: 'DTone + Twilio (confirmation SMS)' },
-      { fn: 'processDtonePayment', apis: 'Stripe + DTone' },
-      { fn: 'processDingPayment', apis: 'Stripe + Ding Connect' },
-      { fn: 'processReloadlyPayment', apis: 'Stripe + Reloadly' },
-      { fn: 'processRSAPayment', apis: 'Reloadly (exchange rate) + RSA Pay API' },
-      { fn: 'processTopupAfterPayment', apis: 'Reloadly + Twilio' },
+      { fn: 'processDtonePayment', apis: 'DTone' },
+      { fn: 'processDingPayment', apis: 'Ding Connect' },
+      { fn: 'processRSAPayment', apis: 'RSA Pay API' },
       { fn: 'prepayNation', apis: 'PrepayNation / ValueTopUp API' },
-      { fn: 'getReloadlyProducts', apis: 'Reloadly' },
-      { fn: 'detectOperator', apis: 'Reloadly' },
     ],
   },
   {
@@ -99,7 +94,7 @@ const sections = [
     color: '#475569',
     rows: [
       { fn: 'veriffKYC', apis: 'Veriff API (identity verification)' },
-      { fn: 'getStripeDashboard', apis: 'Stripe API' },
+
       { fn: 'generateFlyer', apis: 'Base44 GenerateImage AI' },
       { fn: 'getExchangeRate', apis: 'open.er-api.com (free, no auth)' },
       { fn: 'createPaymentRequest', apis: 'Base44 entities + Twilio' },

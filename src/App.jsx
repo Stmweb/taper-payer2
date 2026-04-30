@@ -42,6 +42,7 @@ import TaperPayerAppStoreLanding from './pages/TaperPayerAppStoreLanding';
 import TaperPayerPartnerTerms from './pages/TaperPayerPartnerTerms';
 import OrderForm from './pages/OrderForm';
 import AdminOrderForms from './pages/AdminOrderForms';
+import BackendAPIDocs from './pages/BackendAPIDocs';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -203,6 +204,7 @@ const AuthenticatedApp = () => {
         <Route path="/legal/partner-terms" element={<TaperPayerPartnerTerms />} />
         <Route path="/OrderForm" element={<OrderForm />} />
         <Route path="/AdminOrderForms" element={<AdminOrderForms />} />
+        <Route path="/BackendAPIDocs" element={<BackendAPIDocs />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

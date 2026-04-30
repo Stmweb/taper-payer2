@@ -38,6 +38,7 @@ function createPageUrl(page) {
 }
 
 const countries = [
+  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },

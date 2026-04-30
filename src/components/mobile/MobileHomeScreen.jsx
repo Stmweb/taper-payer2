@@ -243,7 +243,7 @@ export default function MobileHomeScreen() {
             View all <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
-        <div className="grid grid-cols-6 gap-1.5">
+        <div className="grid grid-cols-3 gap-3">
           {destinations.map((dest, i) => (
             <motion.button
               key={dest.name}

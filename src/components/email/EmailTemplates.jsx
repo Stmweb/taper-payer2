@@ -6,12 +6,13 @@ export const EMAIL_TEMPLATES = [
     category: 'Money Transfer',
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
-  <div style="background:#ffffff;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;border-bottom:3px solid #3D7BB7;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 20px auto;" />
+  <div style="background:#ffffff;padding:40px 30px;text-align:center;">
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:220px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <div style="border-top:3px solid #3D7BB7;margin-bottom:24px;"></div>
     <h1 style="color:#1e293b;font-size:28px;margin:0;font-weight:bold;">Welcome to Taper Payer!</h1>
     <p style="color:#64748b;font-size:16px;margin-top:10px;">Your trusted partner for global money transfers</p>
   </div>
-  <div style="padding:40px 30px;background:#ffffff;">
+  <div style="padding:0 30px 40px;background:#ffffff;">
     <p style="font-size:16px;color:#334155;line-height:1.7;">Hello,</p>
     <p style="font-size:16px;color:#334155;line-height:1.7;">Welcome to <strong>Taper Payer</strong> – the fast, secure, and affordable way to send money to your loved ones anywhere in the world.</p>
     <div style="background:#f0f9ff;border-left:4px solid #3D7BB7;padding:20px;border-radius:0 8px 8px 0;margin:25px 0;">
@@ -28,7 +29,7 @@ export const EMAIL_TEMPLATES = [
     </div>
     <p style="font-size:14px;color:#64748b;line-height:1.7;">Questions? Our support team is available 24/7. Reply to this email or call us at <strong>404-994-0766</strong>.</p>
   </div>
-  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e2e8f0;">
+  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-top:1px solid #e2e8f0;">
     <p style="color:#94a3b8;font-size:12px;margin:0;">© 2026 Taper Payer LLC · <a href="https://taperpayer.com" style="color:#3D7BB7;text-decoration:none;">taperpayer.com</a> · support@taperpayer.com</p>
   </div>
 </div>`
@@ -40,13 +41,14 @@ export const EMAIL_TEMPLATES = [
     category: 'Money Transfer',
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
-  <div style="background:#ffffff;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;border-bottom:3px solid #F88F2B;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 20px auto;object-fit:contain;" />
+  <div style="background:#ffffff;padding:40px 30px;text-align:center;">
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:220px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <div style="border-top:3px solid #F88F2B;margin-bottom:24px;"></div>
     <div style="background:#F88F2B;color:#ffffff;font-size:13px;font-weight:bold;padding:6px 16px;border-radius:20px;display:inline-block;margin-bottom:16px;">LIMITED TIME OFFER</div>
     <h1 style="color:#1e293b;font-size:32px;margin:0;">Send Money with <span style="color:#F88F2B;">ZERO Fees</span></h1>
     <p style="color:#64748b;font-size:15px;margin-top:10px;">This week only – for all money transfers worldwide</p>
   </div>
-  <div style="padding:40px 30px;background:#ffffff;">
+  <div style="padding:0 30px 40px;background:#ffffff;">
     <p style="font-size:16px;color:#334155;line-height:1.7;">Great news! For a limited time, you can send money to your family and friends with <strong>absolutely zero transfer fees</strong>.</p>
     <div style="background:#fef9ee;border:2px dashed #F88F2B;border-radius:12px;padding:25px;text-align:center;margin:25px 0;">
       <p style="font-size:14px;color:#92400e;margin:0 0 8px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Use promo code</p>
@@ -74,7 +76,7 @@ export const EMAIL_TEMPLATES = [
       <a href="https://taperpayer.com/TaperPayerHome" style="background:#F88F2B;color:#ffffff;padding:16px 36px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-block;">Claim Your Free Transfer →</a>
     </div>
   </div>
-  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e2e8f0;">
+  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-top:1px solid #e2e8f0;">
     <p style="color:#94a3b8;font-size:12px;margin:0;">© 2026 Taper Payer LLC · <a href="https://taperpayer.com" style="color:#3D7BB7;text-decoration:none;">taperpayer.com</a> · support@taperpayer.com</p>
   </div>
 </div>`
@@ -86,13 +88,14 @@ export const EMAIL_TEMPLATES = [
     category: 'Mobile Top-Up',
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
-  <div style="background:#ffffff;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;border-bottom:3px solid #06b6d4;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 20px auto;" />
+  <div style="background:#ffffff;padding:40px 30px;text-align:center;">
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:220px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <div style="border-top:3px solid #06b6d4;margin-bottom:24px;"></div>
     <div style="font-size:48px;margin-bottom:10px;">📱</div>
     <h1 style="color:#1e293b;font-size:28px;margin:0;">Introducing Taper Mobile</h1>
     <p style="color:#64748b;font-size:16px;margin-top:10px;">Instant airtime top-ups to 150+ countries in seconds</p>
   </div>
-  <div style="padding:40px 30px;background:#ffffff;">
+  <div style="padding:0 30px 40px;background:#ffffff;">
     <p style="font-size:16px;color:#334155;line-height:1.7;">Say goodbye to complicated mobile recharges. With <strong>Taper Mobile</strong>, you can top up any phone in the world instantly – from Nigeria to Haiti and everywhere in between.</p>
     <div style="display:grid;gap:16px;margin:25px 0;">
       <div style="display:flex;align-items:flex-start;gap:16px;background:#f8fafc;border-radius:10px;padding:16px;">
@@ -112,7 +115,7 @@ export const EMAIL_TEMPLATES = [
       <a href="https://taperpayer.com/TaperPayerTopUp" style="background:linear-gradient(135deg,#06b6d4,#3b82f6);color:#ffffff;padding:16px 36px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-block;">Top Up a Phone Now →</a>
     </div>
   </div>
-  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e2e8f0;">
+  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-top:1px solid #e2e8f0;">
     <p style="color:#94a3b8;font-size:12px;margin:0;">© 2026 Taper Payer LLC · <a href="https://taperpayer.com" style="color:#3D7BB7;text-decoration:none;">taperpayer.com</a> · support@taperpayer.com</p>
   </div>
 </div>`
@@ -124,12 +127,13 @@ export const EMAIL_TEMPLATES = [
     category: 'Mobile Top-Up',
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
-  <div style="background:#ffffff;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;border-bottom:3px solid #F88F2B;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 20px auto;" />
+  <div style="background:#ffffff;padding:40px 30px;text-align:center;">
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:220px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <div style="border-top:3px solid #F88F2B;margin-bottom:24px;"></div>
     <h1 style="color:#1e293b;font-size:26px;margin:0;">Stay Connected With<br/>Your Loved Ones 🤝</h1>
     <p style="color:#64748b;font-size:15px;margin-top:10px;">A quick top-up keeps the conversation going</p>
   </div>
-  <div style="padding:40px 30px;background:#ffffff;">
+  <div style="padding:0 30px 40px;background:#ffffff;">
     <p style="font-size:16px;color:#334155;line-height:1.7;">We know how important it is to stay in touch with family back home. With <strong>Taper Mobile</strong>, a 30-second top-up ensures they're never unreachable.</p>
     <div style="background:#fef3c7;border-radius:12px;padding:25px;margin:25px 0;text-align:center;">
       <p style="font-size:18px;font-weight:bold;color:#92400e;margin:0 0 8px;">Top Up Popular Countries</p>
@@ -145,7 +149,7 @@ export const EMAIL_TEMPLATES = [
       <a href="https://taperpayer.com/TaperPayerTopUp" style="background:#F88F2B;color:#ffffff;padding:16px 36px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-block;">Send Airtime Now →</a>
     </div>
   </div>
-  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e2e8f0;">
+  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-top:1px solid #e2e8f0;">
     <p style="color:#94a3b8;font-size:12px;margin:0;">© 2026 Taper Payer LLC · <a href="https://taperpayer.com" style="color:#3D7BB7;text-decoration:none;">taperpayer.com</a> · support@taperpayer.com</p>
   </div>
 </div>`
@@ -157,12 +161,13 @@ export const EMAIL_TEMPLATES = [
     category: 'Newsletter',
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
-  <div style="background:#ffffff;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;border-bottom:3px solid #3D7BB7;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 20px auto;object-fit:contain;" />
+  <div style="background:#ffffff;padding:40px 30px;text-align:center;">
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:220px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <div style="border-top:3px solid #3D7BB7;margin-bottom:24px;"></div>
     <p style="color:#64748b;font-size:13px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px;">Monthly Newsletter</p>
     <h1 style="color:#1e293b;font-size:26px;margin:0;">What's New at Taper Payer</h1>
   </div>
-  <div style="padding:40px 30px;background:#ffffff;">
+  <div style="padding:0 30px 40px;background:#ffffff;">
     <div style="border-radius:10px;overflow:hidden;margin-bottom:24px;">
       <div style="background:#3D7BB7;padding:14px 20px;"><h3 style="color:#fff;margin:0;font-size:16px;">💸 Money Transfer Update</h3></div>
       <div style="background:#f8fafc;padding:20px;"><p style="color:#475569;line-height:1.7;margin:0;">We've added 12 new countries to our money transfer network! Send money faster than ever to Africa, the Caribbean, and Southeast Asia with our lowest fees of the year.</p></div>
@@ -186,7 +191,7 @@ export const EMAIL_TEMPLATES = [
       <a href="https://taperpayer.com/TaperPayerTopUp" style="background:#61AF39;color:#ffffff;padding:14px 28px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:15px;display:inline-block;">Top Up Mobile</a>
     </div>
   </div>
-  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e2e8f0;">
+  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-top:1px solid #e2e8f0;">
     <p style="color:#94a3b8;font-size:12px;margin:0;">© 2026 Taper Payer LLC · <a href="https://taperpayer.com" style="color:#3D7BB7;text-decoration:none;">taperpayer.com</a> · support@taperpayer.com</p>
   </div>
 </div>`
@@ -198,13 +203,14 @@ export const EMAIL_TEMPLATES = [
     category: 'Re-engagement',
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
-  <div style="background:#ffffff;padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;border-bottom:3px solid #7c3aed;">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 20px auto;" />
+  <div style="background:#ffffff;padding:40px 30px;text-align:center;">
+    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer" style="width:220px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <div style="border-top:3px solid #7c3aed;margin-bottom:24px;"></div>
     <div style="font-size:48px;margin-bottom:8px;">👋</div>
     <h1 style="color:#1e293b;font-size:28px;margin:0;">We Miss You!</h1>
     <p style="color:#64748b;font-size:15px;margin-top:10px;">It's been a while – here's what's new</p>
   </div>
-  <div style="padding:40px 30px;background:#ffffff;">
+  <div style="padding:0 30px 40px;background:#ffffff;">
     <p style="font-size:16px;color:#334155;line-height:1.7;">We've been busy building new features while you were away. Here's what you've been missing at Taper Payer:</p>
     <div style="margin:25px 0;">
       <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#faf5ff;border-radius:8px;margin-bottom:12px;">
@@ -225,7 +231,7 @@ export const EMAIL_TEMPLATES = [
       <a href="https://taperpayer.com/TaperPayerHome" style="background:linear-gradient(135deg,#7c3aed,#db2777);color:#ffffff;padding:16px 36px;border-radius:50px;text-decoration:none;font-weight:bold;font-size:16px;display:inline-block;">Come Back & Save →</a>
     </div>
   </div>
-  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-radius:0 0 12px 12px;border-top:1px solid #e2e8f0;">
+  <div style="background:#f8fafc;padding:20px 30px;text-align:center;border-top:1px solid #e2e8f0;">
     <p style="color:#94a3b8;font-size:12px;margin:0;">© 2026 Taper Payer LLC · <a href="https://taperpayer.com" style="color:#3D7BB7;text-decoration:none;">taperpayer.com</a> · support@taperpayer.com</p>
   </div>
 </div>`

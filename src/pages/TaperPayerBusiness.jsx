@@ -27,9 +27,9 @@ export default function TaperPayerBusiness() {
             {/* Logo */}
             <Link to={createPageUrl('TaperPayerHome')} className="absolute left-1/2 -translate-x-1/2 md:relative md:left-0 md:translate-x-0 flex-shrink-0">
               <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695c31d62d68bbb4ef8cc5b3/ab6777bfd_ChatGPTImageJan11202608_58_36PM.png"
+                src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
                 alt="Taper Payer"
-                className="h-40 md:h-24 w-auto"
+                className="h-40 md:h-24 w-auto mix-blend-multiply"
               />
             </Link>
             
@@ -222,7 +222,7 @@ export default function TaperPayerBusiness() {
               <div className="relative h-full p-8 flex flex-col justify-between text-white">
                 <div className="flex justify-between items-start">
                   <img 
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png"
+                    src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
                     alt="Taper Payer"
                     className="h-20 brightness-0 invert"
                   />
@@ -289,7 +289,7 @@ export default function TaperPayerBusiness() {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/50986bd44_ChatGPTImageJan5202603_27_37PM.png" alt="Taper Payer Logo" className="w-48 h-auto mb-4 brightness-110" />
+              <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png" alt="Taper Payer Logo" className="w-48 h-auto mb-4 brightness-0 invert" />
               <p className="text-slate-300 text-lg">Trusted global money transfer service with over 20 years of excellence.</p>
             </div>
 

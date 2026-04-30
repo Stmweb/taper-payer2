@@ -97,7 +97,7 @@ const DEFAULT_SECTIONS = [
       { fn: 'generateFlyer', apis: 'Base44 GenerateImage AI' },
       { fn: 'getExchangeRate', apis: 'open.er-api.com (free, no auth)' },
       { fn: 'createPaymentRequest', apis: 'Base44 entities + Twilio' },
-      { fn: 'testReloadlyAuth', apis: 'Reloadly (debug)' },
+
     ],
   },
 ];

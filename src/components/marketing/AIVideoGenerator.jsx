@@ -357,8 +357,9 @@ export default function AIVideoGenerator() {
       setIsSpeaking(false);
       return;
     }
-    
-    const speak = () => {
+
+    try {
+      window.speechSynthesis.cancel(); // clear any queued speech first
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 0.95;
       utterance.pitch = 1;
@@ -369,13 +370,8 @@ export default function AIVideoGenerator() {
       speechRef.current = utterance;
       window.speechSynthesis.speak(utterance);
       setIsSpeaking(true);
-    };
-
-    // Ensure voices are loaded
-    if (window.speechSynthesis.getVoices().length === 0) {
-      window.speechSynthesis.onvoiceschanged = speak;
-    } else {
-      speak();
+    } catch (e) {
+      setIsSpeaking(false);
     }
   };
 

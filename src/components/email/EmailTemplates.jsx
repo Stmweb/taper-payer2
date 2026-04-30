@@ -7,7 +7,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#ffffff;padding:40px 30px;text-align:center;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/29ebe04ba_TaperPayerNoBackground.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/8decf8a0d_ic_app_icon.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
     <div style="border-top:3px solid #3D7BB7;margin-bottom:24px;"></div>
     <h1 style="color:#1e293b;font-size:28px;margin:0;font-weight:bold;">Welcome to Taper Payer!</h1>
     <p style="color:#64748b;font-size:16px;margin-top:10px;">Your trusted partner for global money transfers</p>
@@ -42,7 +42,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#ffffff;padding:40px 30px;text-align:center;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/29ebe04ba_TaperPayerNoBackground.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/8decf8a0d_ic_app_icon.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
     <div style="border-top:3px solid #F88F2B;margin-bottom:24px;"></div>
     <div style="background:#F88F2B;color:#ffffff;font-size:13px;font-weight:bold;padding:6px 16px;border-radius:20px;display:inline-block;margin-bottom:16px;">LIMITED TIME OFFER</div>
     <h1 style="color:#1e293b;font-size:32px;margin:0;">Send Money with <span style="color:#F88F2B;">ZERO Fees</span></h1>
@@ -89,7 +89,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#ffffff;padding:40px 30px;text-align:center;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/29ebe04ba_TaperPayerNoBackground.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/8decf8a0d_ic_app_icon.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
     <div style="border-top:3px solid #06b6d4;margin-bottom:24px;"></div>
     <div style="font-size:48px;margin-bottom:10px;">📱</div>
     <h1 style="color:#1e293b;font-size:28px;margin:0;">Introducing Taper Mobile</h1>
@@ -128,7 +128,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#ffffff;padding:40px 30px;text-align:center;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/29ebe04ba_TaperPayerNoBackground.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/8decf8a0d_ic_app_icon.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
     <div style="border-top:3px solid #F88F2B;margin-bottom:24px;"></div>
     <h1 style="color:#1e293b;font-size:26px;margin:0;">Stay Connected With<br/>Your Loved Ones 🤝</h1>
     <p style="color:#64748b;font-size:15px;margin-top:10px;">A quick top-up keeps the conversation going</p>
@@ -162,7 +162,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#ffffff;padding:40px 30px;text-align:center;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/29ebe04ba_TaperPayerNoBackground.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/8decf8a0d_ic_app_icon.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
     <div style="border-top:3px solid #3D7BB7;margin-bottom:24px;"></div>
     <p style="color:#64748b;font-size:13px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px;">Monthly Newsletter</p>
     <h1 style="color:#1e293b;font-size:26px;margin:0;">What's New at Taper Payer</h1>
@@ -204,7 +204,7 @@ export const EMAIL_TEMPLATES = [
     body_html: `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;">
   <div style="background:#ffffff;padding:40px 30px;text-align:center;">
-    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/29ebe04ba_TaperPayerNoBackground.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
+    <img src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/8decf8a0d_ic_app_icon.png" alt="Taper Payer" style="width:320px;height:auto;display:block;margin:0 auto 24px auto;" />
     <div style="border-top:3px solid #7c3aed;margin-bottom:24px;"></div>
     <div style="font-size:48px;margin-bottom:8px;">👋</div>
     <h1 style="color:#1e293b;font-size:28px;margin:0;">We Miss You!</h1>

@@ -86,6 +86,7 @@ const quickActions = [
 
 const destinations = [
   { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
+  { name: 'USA', flag: '🇺🇸', code: 'USD' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
@@ -242,7 +243,7 @@ export default function MobileHomeScreen() {
             View all <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-6 gap-1.5">
           {destinations.map((dest, i) => (
             <motion.button
               key={dest.name}

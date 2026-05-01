@@ -57,10 +57,10 @@ const STEPS = [
 function StepIndicator({ currentStep }) {
   const idx = STEPS.findIndex(s => s.id === currentStep);
   return (
-    <div className="flex items-center w-full mb-5">
+    <div className="flex items-center w-full mb-5 gap-2">
       {STEPS.map((s, i) => (
-        <div key={s.id} className="flex items-center">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
+        <div key={s.id} className="flex items-center flex-1 gap-2">
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold shrink-0 flex-shrink-0 ${
             i < idx ? 'bg-green-500 text-white' :
             i === idx ? 'bg-blue-500 text-white' :
             'bg-slate-200 text-slate-400'
@@ -68,7 +68,7 @@ function StepIndicator({ currentStep }) {
             {i < idx ? '✓' : i + 1}
           </div>
           {i < STEPS.length - 1 && (
-            <div className={`flex-1 h-0.5 ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
+            <div className={`h-0.5 flex-1 ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
           )}
         </div>
       ))}

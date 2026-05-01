@@ -176,9 +176,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
             <span className="text-4xl">{config.flag}</span>
             <div>
               <h2 className="text-xl font-bold text-slate-900">Send to {config.name}</h2>
-              <p className="text-sm text-slate-500">{config.description}</p>
             </div>
-            <img src="https://www.moonpay.com/favicon.ico" alt="MoonPay" className="w-6 h-6 ml-auto rounded" />
           </div>
 
           <StepIndicator currentStep={step} />

@@ -79,16 +79,31 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   // Check auth on mount + handle return from Veriff redirect
   useEffect(() => {
     if (!isOpen) return;
-    setStep(appUser ? 'kyc' : 'auth');
 
-    // If user returned from Veriff redirect, auto-check status
+    // If user returned from Veriff (same-tab redirect), auto-check status
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('kyc') === 'done' && appUser) {
+    const returnedSessionId = urlParams.get('veriff_session');
+    if (returnedSessionId && appUser) {
+      // Clean URL immediately
+      window.history.replaceState({}, '', window.location.pathname);
+      setVeriffSessionId(returnedSessionId);
       setStep('kyc');
-      // Clean up URL param
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, '', newUrl);
+      // Auto-check status after a short delay
+      setTimeout(async () => {
+        try {
+          const statusRes = await base44.functions.invoke('veriffKYC', {
+            action: 'checkStatus',
+            sessionId: returnedSessionId,
+            userId: appUser.id || appUser.email,
+          });
+          setKycStatus(statusRes.data.status);
+          if (statusRes.data.isVerified) setStep('fund');
+        } catch {}
+      }, 1500);
+      return;
     }
+
+    setStep(appUser ? 'kyc' : 'auth');
   }, [isOpen, appUser]);
 
   // Initialize Square Web Payments
@@ -376,37 +391,56 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                           setLoading(true);
                           setError('');
                           try {
-                            const res = await base44.functions.invoke('veriffKYC', { action: 'createSession' });
+                            const res = await base44.functions.invoke('veriffKYC', {
+                              action: 'createSession',
+                              userId: appUser?.id || appUser?.email || 'guest',
+                            });
                             if (res.data?.error) throw new Error(res.data.error);
                             const { sessionId, url } = res.data;
                             setVeriffSessionId(sessionId);
                             setVeriffUrl(url);
-                            // Open Veriff in new tab
-                            const popup = window.open(url, '_blank');
-                            // Poll for status every 5s
-                            const interval = setInterval(async () => {
-                              // Check if popup closed
-                              if (popup && popup.closed) {
-                                clearInterval(interval);
-                                try {
-                                  const finalRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
-                                  setKycStatus(finalRes.data.status);
-                                  if (finalRes.data.isVerified) setStep('fund');
-                                } catch {}
-                                return;
-                              }
-                              try {
-                                const statusRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId });
-                                const { status, isVerified } = statusRes.data;
-                                setKycStatus(status);
-                                if (isVerified) {
+
+                            // Detect mobile — on mobile use same-tab redirect with return URL
+                            const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+                            const returnUrl = `${window.location.origin}${window.location.pathname}?veriff_session=${sessionId}`;
+
+                            if (isMobile) {
+                              // Same-tab: Veriff will redirect back to returnUrl after completion
+                              window.location.href = url + (url.includes('?') ? '&' : '?') + `redirect_to=${encodeURIComponent(returnUrl)}`;
+                            } else {
+                              // Desktop: open popup and poll
+                              const popup = window.open(url, '_blank');
+                              const interval = setInterval(async () => {
+                                if (popup && popup.closed) {
                                   clearInterval(interval);
-                                  setStep('fund');
+                                  try {
+                                    const finalRes = await base44.functions.invoke('veriffKYC', {
+                                      action: 'checkStatus',
+                                      sessionId,
+                                      userId: appUser?.id || appUser?.email,
+                                    });
+                                    setKycStatus(finalRes.data.status);
+                                    if (finalRes.data.isVerified) setStep('fund');
+                                    else setError('Verification not complete yet. Please try "I\'ve completed verification" below.');
+                                  } catch {}
+                                  return;
                                 }
-                              } catch {}
-                            }, 3000);
-                            // Stop polling after 10 minutes
-                            setTimeout(() => clearInterval(interval), 600000);
+                                try {
+                                  const statusRes = await base44.functions.invoke('veriffKYC', {
+                                    action: 'checkStatus',
+                                    sessionId,
+                                    userId: appUser?.id || appUser?.email,
+                                  });
+                                  const { status, isVerified } = statusRes.data;
+                                  setKycStatus(status);
+                                  if (isVerified) {
+                                    clearInterval(interval);
+                                    setStep('fund');
+                                  }
+                                } catch {}
+                              }, 4000);
+                              setTimeout(() => clearInterval(interval), 600000);
+                            }
                           } catch (err) {
                             setError(err.message || 'Failed to start verification');
                           } finally {
@@ -426,13 +460,18 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                           className="w-full text-purple-700 border-purple-300"
                           onClick={async () => {
                             setLoading(true);
+                            setError('');
                             try {
-                              const statusRes = await base44.functions.invoke('veriffKYC', { action: 'checkStatus', sessionId: veriffSessionId });
+                              const statusRes = await base44.functions.invoke('veriffKYC', {
+                                action: 'checkStatus',
+                                sessionId: veriffSessionId,
+                                userId: appUser?.id || appUser?.email,
+                              });
                               setKycStatus(statusRes.data.status);
                               if (statusRes.data.isVerified) setStep('fund');
                               else setError('Verification not complete yet. Please finish the Veriff process first.');
                             } catch (err) {
-                              setError('Failed to check status');
+                              setError('Failed to check status. Please try again.');
                             } finally {
                               setLoading(false);
                             }

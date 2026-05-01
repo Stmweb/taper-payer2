@@ -7,13 +7,16 @@ Deno.serve(async (req) => {
 
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
+    const body = await req.json();
+    const { action, userId, userEmail, ...params } = body;
 
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Accept either Base44 auth OR explicit userId passed from app auth
+    let resolvedUserId = userId || userEmail || 'anonymous';
+    try {
+      const user = await base44.auth.me();
+      if (user) resolvedUserId = user.id;
+    } catch {}
 
-    const { action, ...params } = await req.json();
     const apiKey = Deno.env.get('VERIFF_API_KEY');
     const apiSecret = Deno.env.get('VERIFF_API_SECRET');
 
@@ -26,15 +29,14 @@ Deno.serve(async (req) => {
       const timestamp = new Date().toISOString();
       const payload = {
         verification: {
-          timestamp: timestamp,
-          vendorData: user.id,
+          timestamp,
+          vendorData: resolvedUserId,
         },
       };
 
       const bodyString = JSON.stringify(payload);
       const signature = await signPayload(bodyString, apiSecret);
-      console.log('Veriff request body:', bodyString);
-      console.log('Veriff signature:', signature);
+      console.log('[veriffKYC] Creating session for user:', resolvedUserId);
 
       const res = await fetch('https://stationapi.veriff.com/v1/sessions', {
         method: 'POST',
@@ -47,8 +49,8 @@ Deno.serve(async (req) => {
       });
 
       const responseText = await res.text();
-      console.log('Veriff response status:', res.status, 'body:', responseText);
-      
+      console.log('[veriffKYC] Response:', res.status, responseText);
+
       let data;
       try {
         data = JSON.parse(responseText);
@@ -57,7 +59,6 @@ Deno.serve(async (req) => {
       }
 
       if (!res.ok) {
-        console.error('Veriff API error:', res.status, data);
         throw new Error(`Veriff API returned ${res.status}: ${responseText}`);
       }
 
@@ -75,7 +76,7 @@ Deno.serve(async (req) => {
         return Response.json({ error: 'Session ID required' }, { status: 400 });
       }
 
-      console.log('Checking status for session:', sessionId);
+      console.log('[veriffKYC] Checking status for session:', sessionId);
 
       const timestamp = new Date().toISOString();
       const signature = await signPayload(timestamp, apiSecret);
@@ -99,27 +100,17 @@ Deno.serve(async (req) => {
       }
 
       const status = data.verification.status;
-      // submitted/review = user completed the flow, advance them even if final decision is pending
+      // submitted/review = user completed the flow — advance them
       const isVerified = ['approved', 'submitted', 'review'].includes(status);
 
-      // Update user with KYC status
-      if (isVerified) {
-        console.log('Marking user as verified, status:', status);
-        await base44.auth.updateMe({
-          cybrid_customer_id: `veriff_${sessionId}`,
-        });
-      }
+      console.log('[veriffKYC] Status:', status, '| isVerified:', isVerified);
 
-      return Response.json({
-        status,
-        isVerified,
-        decision: data.verification.decision,
-      });
+      return Response.json({ status, isVerified, decision: data.verification.decision });
     }
 
     return Response.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
-    console.error('veriffKYC error:', error.message, error.stack);
+    console.error('[veriffKYC] Error:', error.message);
     return Response.json({ error: error.message || 'KYC processing failed' }, { status: 500 });
   }
 });
@@ -135,6 +126,5 @@ async function signPayload(payload, secret) {
     ['sign']
   );
   const signature = await crypto.subtle.sign('HMAC', key, data);
-  const hashArray = Array.from(new Uint8Array(signature));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
 }

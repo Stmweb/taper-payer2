@@ -3,12 +3,11 @@
  *
  * Full automated pipeline:
  *  1. Buy USDC via Coinbase Advanced Trade API (market order USD → USDC)
- *  2. Withdraw USDC from Coinbase to our BNB wallet
+ *  2. Withdraw USDC from Coinbase to the company master BNB wallet
  *  3. Approve PancakeSwap router to spend USDC
- *  4. Swap USDC → AGNV on PancakeSwap (BNB Smart Chain)
- *  5. Transfer AGNV to recipient wallet
- *  6. Update AgnvTransaction record to "completed"
- *  7. Notify recipient via WhatsApp + email
+ *  4. Swap USDC → AGNV via PancakeSwap, sending output DIRECTLY to recipient wallet
+ *  5. Update AgnvTransaction record to "completed"
+ *  6. Notify recipient via WhatsApp + email receipt
  *
  * Called internally after a successful Square payment in sendAGNV.
  * Admin-only (or called from trusted backend context with transactionId).
@@ -138,85 +137,76 @@ Deno.serve(async (req) => {
     const wallet = new ethers.Wallet(WALLET_PRIVATE_KEY, walletProvider);
     const ourWalletAddress = wallet.address;
 
-    // Send USDC from Coinbase to our BNB Smart Chain wallet
+    // ── Step 2: Withdraw USDC from Coinbase to our master BNB wallet ─────────
+    console.log(`[AGNV] Step 2: Withdrawing ${usdcBought} USDC to master wallet ${ourWalletAddress}...`);
+
     const withdrawal = await coinbaseFetch('POST', `/v2/accounts/${usdcAccount.id}/transactions`, {
       type: 'send',
       to: ourWalletAddress,
       amount: usdcBought.toFixed(6),
       currency: 'USDC',
-      network: 'bsc', // BNB Smart Chain
+      network: 'bsc',
     }, COINBASE_API_KEY, COINBASE_API_SECRET);
 
-    console.log(`[AGNV] Withdrawal initiated: ${withdrawal.data?.id}`);
+    console.log(`[AGNV] Withdrawal initiated: ${withdrawal.data?.id}. Waiting for on-chain confirmation...`);
 
-    // Wait for on-chain arrival (poll USDC balance, max 5 min)
+    // Poll until USDC lands in master wallet (max 5 min)
     const usdcContract = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, wallet);
     const usdcDecimals = await usdcContract.decimals();
-    const expectedUsdc = ethers.parseUnits(usdcBought.toFixed(6), usdcDecimals);
+    const usdcAmountToSwap = ethers.parseUnits(usdcBought.toFixed(6), usdcDecimals);
 
-    console.log('[AGNV] Waiting for USDC to arrive on BNB chain...');
     let arrived = false;
     for (let i = 0; i < 60; i++) {
       await new Promise(r => setTimeout(r, 5000));
       const balance = await usdcContract.balanceOf(ourWalletAddress);
-      if (balance >= expectedUsdc / 2n) { // at least half arrived
+      if (balance >= usdcAmountToSwap) {
         arrived = true;
-        console.log(`[AGNV] USDC arrived: ${ethers.formatUnits(balance, usdcDecimals)}`);
+        console.log(`[AGNV] USDC confirmed on-chain: ${ethers.formatUnits(balance, usdcDecimals)}`);
         break;
       }
     }
+    if (!arrived) throw new Error('USDC did not arrive in master wallet within timeout');
 
-    if (!arrived) {
-      throw new Error('USDC did not arrive on BNB chain within timeout');
-    }
-
-    const usdcBalance = await usdcContract.balanceOf(ourWalletAddress);
-    const usdcAmountToSwap = usdcBalance < expectedUsdc ? usdcBalance : expectedUsdc;
-
-    // ── Step 3: Approve PancakeSwap to spend USDC ───────────────────────────
+    // ── Step 3: Approve PancakeSwap to spend exact USDC amount ──────────────
     console.log('[AGNV] Step 3: Approving PancakeSwap router...');
     const approveTx = await usdcContract.approve(PANCAKESWAP_ROUTER, usdcAmountToSwap);
     await approveTx.wait();
     console.log('[AGNV] Approval confirmed.');
 
-    // ── Step 4: Swap USDC → AGNV on PancakeSwap ─────────────────────────────
-    console.log('[AGNV] Step 4: Swapping USDC → AGNV on PancakeSwap...');
+    // ── Step 4: Swap USDC → AGNV, send directly to recipient wallet ─────────
+    console.log(`[AGNV] Step 4: Swapping USDC → AGNV → sending directly to ${recipientWallet}...`);
     const router = new ethers.Contract(PANCAKESWAP_ROUTER, PANCAKESWAP_ROUTER_ABI, wallet);
 
     const path = [USDC_ADDRESS, AGNV_ADDRESS];
     const amounts = await router.getAmountsOut(usdcAmountToSwap, path);
     const amountOutMin = amounts[1] * 95n / 100n; // 5% slippage tolerance
-    const deadline = Math.floor(Date.now() / 1000) + 300; // 5 min
+    const deadline = Math.floor(Date.now() / 1000) + 300;
 
+    // Swap directly into recipient's wallet — no intermediate transfer needed
     const swapTx = await router.swapExactTokensForTokens(
       usdcAmountToSwap,
       amountOutMin,
       path,
-      ourWalletAddress, // receive AGNV to our wallet first
+      recipientWallet, // ← AGNV lands directly in recipient wallet
       deadline
     );
     const swapReceipt = await swapTx.wait();
     const usdcTxHash = swapReceipt.hash;
-    console.log(`[AGNV] Swap complete. Tx: ${usdcTxHash}`);
+    console.log(`[AGNV] Swap+transfer complete. Tx: ${usdcTxHash}`);
 
-    // ── Step 5: Transfer AGNV to recipient wallet ────────────────────────────
-    console.log(`[AGNV] Step 5: Transferring AGNV to ${recipientWallet}...`);
+    // Derive actual AGNV received from swap output amounts
     const agnvContract = new ethers.Contract(AGNV_ADDRESS, ERC20_ABI, wallet);
     const agnvDecimals = await agnvContract.decimals();
-    const agnvBalance = await agnvContract.balanceOf(ourWalletAddress);
-
-    const transferTx = await agnvContract.transfer(recipientWallet, agnvBalance);
-    const transferReceipt = await transferTx.wait();
-    const agnvTxHash = transferReceipt.hash;
-    const amountAGNV = parseFloat(ethers.formatUnits(agnvBalance, agnvDecimals));
+    const amountAGNV = parseFloat(ethers.formatUnits(amounts[1], agnvDecimals));
+    const agnvTxHash = usdcTxHash; // same tx — swap sends directly to recipient
 
     console.log(`[AGNV] Transfer complete. AGNV sent: ${amountAGNV}. Tx: ${agnvTxHash}`);
 
-    // ── Step 6: Update transaction record ───────────────────────────────────
+    // ── Step 5: Update transaction record ───────────────────────────────────
     await base44.asServiceRole.entities.AgnvTransaction.update(transactionId, {
       status: 'completed',
       usdc_tx_hash: usdcTxHash,
-      agnv_tx_hash: agnvTxHash,
+      agnv_tx_hash: usdcTxHash, // same tx — swap delivers directly to recipient
       amount_agnv: amountAGNV,
       recipient_wallet: recipientWallet,
     });

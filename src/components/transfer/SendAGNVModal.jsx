@@ -400,47 +400,28 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                             setVeriffSessionId(sessionId);
                             setVeriffUrl(url);
 
-                            // Detect mobile — on mobile use same-tab redirect with return URL
-                            const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-                            const returnUrl = `${window.location.origin}${window.location.pathname}?veriff_session=${sessionId}`;
-
-                            if (isMobile) {
-                              // Same-tab: Veriff will redirect back to returnUrl after completion
-                              window.location.href = url + (url.includes('?') ? '&' : '?') + `redirect_to=${encodeURIComponent(returnUrl)}`;
-                            } else {
-                              // Desktop: open popup and poll
-                              const popup = window.open(url, '_blank');
-                              const interval = setInterval(async () => {
-                                if (popup && popup.closed) {
+                            // Open Veriff in a new tab and poll for status
+                            const popup = window.open(url, '_blank');
+                            const interval = setInterval(async () => {
+                              try {
+                                const statusRes = await base44.functions.invoke('veriffKYC', {
+                                  action: 'checkStatus',
+                                  sessionId,
+                                  userId: appUser?.id || appUser?.email,
+                                });
+                                const { status, isVerified } = statusRes.data;
+                                setKycStatus(status);
+                                if (isVerified) {
                                   clearInterval(interval);
-                                  try {
-                                    const finalRes = await base44.functions.invoke('veriffKYC', {
-                                      action: 'checkStatus',
-                                      sessionId,
-                                      userId: appUser?.id || appUser?.email,
-                                    });
-                                    setKycStatus(finalRes.data.status);
-                                    if (finalRes.data.isVerified) setStep('fund');
-                                    else setError('Verification not complete yet. Please try "I\'ve completed verification" below.');
-                                  } catch {}
-                                  return;
+                                  setStep('fund');
                                 }
-                                try {
-                                  const statusRes = await base44.functions.invoke('veriffKYC', {
-                                    action: 'checkStatus',
-                                    sessionId,
-                                    userId: appUser?.id || appUser?.email,
-                                  });
-                                  const { status, isVerified } = statusRes.data;
-                                  setKycStatus(status);
-                                  if (isVerified) {
-                                    clearInterval(interval);
-                                    setStep('fund');
-                                  }
-                                } catch {}
-                              }, 4000);
-                              setTimeout(() => clearInterval(interval), 600000);
-                            }
+                              } catch {}
+                              // Also stop polling if popup was closed manually
+                              if (popup && popup.closed) {
+                                clearInterval(interval);
+                              }
+                            }, 4000);
+                            setTimeout(() => clearInterval(interval), 600000);
                           } catch (err) {
                             setError(err.message || 'Failed to start verification');
                           } finally {

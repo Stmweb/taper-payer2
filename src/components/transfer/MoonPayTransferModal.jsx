@@ -127,18 +127,8 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
     setLoading(true);
     setError('');
     try {
-      await loadMoonPaySDK();
-      
-      const moonPayWidget = new window.MoonPay({
-        apiKey: moonpayKey,
-        theme: 'dark',
-        baseCurrencyCode: 'usd',
-        baseCurrencyAmount: amount,
-        defaultCurrencyCode: config.currencyCode,
-        externalTransactionId: `tp-${country}-${Date.now()}`,
-      });
-
-      moonPayWidget.show();
+      const paylinkUrl = `https://moonpay.hel.io/pay/69f50b1536f1aaacf43960f8?baseCurrencyAmount=${amount}&externalTransactionId=tp-${country}-${Date.now()}`;
+      window.open(paylinkUrl, '_blank');
       setStep('widget');
     } catch (err) {
       setError('Failed to launch payment. Please try again.');

@@ -171,14 +171,6 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                 </div>
               </div>
 
-              {/* How it works */}
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800 space-y-1">
-                <p className="font-semibold mb-2">How it works:</p>
-                <p>1️⃣ Pay with card or bank via MoonPay</p>
-                <p>2️⃣ USDC is purchased on your behalf</p>
-                <p>3️⃣ Funds delivered to {config.name} recipient</p>
-              </div>
-
               <Button
                 type="submit"
                 disabled={loading}

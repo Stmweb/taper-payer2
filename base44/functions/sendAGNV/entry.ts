@@ -30,13 +30,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { amountUSD, recipientName, recipientPhone } = await req.json();
+    const { amountUSD, recipientName, recipientPhone, recipientWallet, recipientEmail } = await req.json();
 
     if (!amountUSD || !recipientName || !recipientPhone) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Calculate AGNV amount (1 USD = 10 AGNV)
+    // Calculate AGNV amount (1 USD = 10 AGNV, used as estimate until swap completes)
     const agnvAmount = amountUSD * 10;
 
     // Record transaction request in AgnvTransaction entity
@@ -45,13 +45,26 @@ Deno.serve(async (req) => {
         sender_id: user.id,
         recipient_name: recipientName,
         recipient_phone: recipientPhone,
-        recipient_wallet: '', // Empty for now, will be set later
+        recipient_wallet: recipientWallet || '',
         amount_usd: amountUSD,
         amount_agnv: agnvAmount,
         usdc_tx_hash: '',
         agnv_tx_hash: '',
         status: 'pending',
       });
+
+      // ── Auto-execute on-chain swap if recipient wallet is provided ──────────
+      if (recipientWallet) {
+        console.log('[sendAGNV] Recipient wallet provided — triggering automated swap...');
+        base44.functions.invoke('executeAGNVSwap', {
+          transactionId: transaction.id,
+          amountUSD,
+          recipientWallet,
+          recipientName,
+          recipientPhone,
+          recipientEmail: recipientEmail || user.email,
+        }).catch(e => console.error('[sendAGNV] executeAGNVSwap failed:', e.message));
+      }
 
       // Send email receipt to sender via Mailgun
       if (user.email) {

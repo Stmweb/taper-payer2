@@ -305,45 +305,9 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                   {veriffSessionId ? 'Re-open Verification' : 'Start Verification'}
                 </Button>
                 {veriffSessionId && (
-                  <>
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm text-center">
-                      ✅ Verification window opened. Complete your ID check, then tap below.
-                    </div>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={async () => {
-                        setLoading(true);
-                        setError('');
-                        try {
-                          // Wait a bit for Veriff to process the submission
-                          await new Promise(r => setTimeout(r, 2000));
-                          
-                          const statusRes = await base44.functions.invoke('veriffKYC', {
-                            action: 'checkStatus',
-                            sessionId: veriffSessionId,
-                            userId: appUser?.id || appUser?.email,
-                          });
-                          setKycStatus(statusRes.data.status);
-                          if (statusRes.data.isVerified) {
-                            setStep('form');
-                          } else if (['submitted', 'review'].includes(statusRes.data.status)) {
-                            setError('Your verification is being reviewed. You can proceed in the meantime.');
-                            setStep('form');
-                          } else {
-                            setError('Verification not complete. Please check the verification window.');
-                          }
-                        } catch (err) {
-                          setError('Failed to check status. Please try again.');
-                        } finally {
-                          setLoading(false);
-                        }
-                      }}
-                      disabled={loading}
-                    >
-                      {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : 'I\'ve completed verification →'}
-                    </Button>
-                  </>
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm text-center">
+                    ✅ Verification window opened. Complete your ID check in the window above.
+                  </div>
                 )}
               </div>
               <button

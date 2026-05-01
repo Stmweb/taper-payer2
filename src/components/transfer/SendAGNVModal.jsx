@@ -413,7 +413,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                               veriffWindowRef.current = window.open(url, '_blank');
                             }
 
-                            // Poll for status every 4s; when popup closes, do one final check
+                            // Poll for status every 5s; when popup closes, do one final check
                             let popupWasClosed = false;
                             const interval = setInterval(async () => {
                               const isClosed = !veriffWindowRef.current || veriffWindowRef.current.closed;
@@ -430,12 +430,9 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                                   setKycStatus(finalRes.data.status);
                                   if (finalRes.data.isVerified) {
                                     setStep('fund');
-                                  } else {
-                                    setError('Verification pending — tap "I\'ve completed verification" to continue.');
                                   }
-                                } catch (err) {
-                                  setError(err?.response?.data?.error || 'Could not check verification status. Tap "I\'ve completed verification" below.');
-                                }
+                                  // If not verified yet, just show the button — no error needed
+                                } catch {}
                                 return;
                               }
                               // Background polling while popup is open
@@ -454,7 +451,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                                   }
                                 } catch {}
                               }
-                            }, 3000);
+                            }, 5000);
                             setTimeout(() => clearInterval(interval), 600000);
                           } catch (err) {
                             setError(err.message || 'Failed to start verification');
@@ -468,8 +465,12 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                       >
                         {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                         {veriffSessionId ? 'Re-open Verification' : 'Start Verification'}
-                      </Button>
-                      {veriffSessionId && (
+                        </Button>
+                        {veriffSessionId && (
+                        <>
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm text-center">
+                          ✅ Verification window opened. Complete your ID check, then tap the button below.
+                        </div>
                         <Button
                           variant="outline"
                           className="w-full text-purple-700 border-purple-300"
@@ -484,7 +485,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                               });
                               setKycStatus(statusRes.data.status);
                               if (statusRes.data.isVerified) setStep('fund');
-                              else setError('Verification not complete yet. Please finish the Veriff process first.');
+                              else setError('Verification not complete yet. Please finish the ID check in the other window first.');
                             } catch (err) {
                               setError('Failed to check status. Please try again.');
                             } finally {
@@ -493,10 +494,10 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                           }}
                           disabled={loading}
                         >
-                          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                          I've completed verification →
+                          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : 'I\'ve completed verification →'}
                         </Button>
-                      )}
+                        </>
+                        )}
                     </div>
                   ) : (
                     <Button

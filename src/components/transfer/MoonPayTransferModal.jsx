@@ -128,8 +128,19 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
     setError('');
     try {
       const paylinkUrl = `https://moonpay.hel.io/pay/69f50b1536f1aaacf43960f8?baseCurrencyAmount=${amount}&externalTransactionId=tp-${country}-${Date.now()}`;
-      window.open(paylinkUrl, '_blank');
+      const paymentWindow = window.open(paylinkUrl, '_blank');
       setStep('widget');
+
+      // Poll for window close (payment completion)
+      const checkInterval = setInterval(() => {
+        if (!paymentWindow || paymentWindow.closed) {
+          clearInterval(checkInterval);
+          // Wait 3 seconds then redirect
+          setTimeout(() => {
+            window.location.href = 'https://taperpayer.moonpay.com';
+          }, 3000);
+        }
+      }, 500);
     } catch (err) {
       setError('Failed to launch payment. Please try again.');
     } finally {

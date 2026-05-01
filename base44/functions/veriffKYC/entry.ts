@@ -27,12 +27,10 @@ Deno.serve(async (req) => {
     // Create session
     if (action === 'createSession') {
       const timestamp = new Date().toISOString();
-      const appUrl = Deno.env.get('APP_URL') || 'https://taperpayer.com';
       const payload = {
         verification: {
           timestamp,
           vendorData: resolvedUserId,
-          redirectUrl: `${appUrl}/?veriff_done=1`,
         },
       };
 
@@ -80,10 +78,10 @@ Deno.serve(async (req) => {
 
       console.log('[veriffKYC] Checking status for session:', sessionId);
 
-      // Veriff GET sessions endpoint requires HMAC of: apiKey + sessionId
+      // Veriff decision endpoint: GET /v1/sessions/{sessionId}/decision
       const signature = await signPayload(apiKey + sessionId, apiSecret);
 
-      const res = await fetch(`https://stationapi.veriff.com/v1/sessions/${sessionId}`, {
+      const res = await fetch(`https://stationapi.veriff.com/v1/sessions/${sessionId}/decision`, {
         method: 'GET',
         headers: {
           'X-AUTH-CLIENT': apiKey,
@@ -105,8 +103,8 @@ Deno.serve(async (req) => {
         );
       }
 
-      const status = data.verification?.status || 'created';
-      // submitted/review = user completed the flow — advance them
+      // Decision endpoint returns { verification: { status, decision } } or { status: 'fail' } if pending
+      const status = data.verification?.status || data.status || 'created';
       const isVerified = ['approved', 'submitted', 'review'].includes(status);
 
       console.log('[veriffKYC] Status:', status, '| isVerified:', isVerified);

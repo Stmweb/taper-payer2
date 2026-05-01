@@ -3,7 +3,7 @@ import React from 'react';
 const sections = [
   {
     title: '1. Acceptance of Terms',
-    content: 'By accessing or using Taper Payer\'s services, website, or mobile application, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services. Taper Payer LLC ("Taper Payer," "we," "our," or "us") reserves the right to update these terms at any time, with notice provided via email or in-app notification.'
+    content: 'By accessing or using Taper Payer\'s services, website, or mobile application, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services. Taper Payer INC ("Taper Payer," "we," "our," or "us") reserves the right to update these terms at any time, with notice provided via email or in-app notification.'
   },
   {
     title: '2. Eligibility',
@@ -39,7 +39,7 @@ const sections = [
   },
   {
     title: '10. Contact',
-    content: 'For questions regarding these Terms & Conditions, please contact us at Support@taperpayer.com or write to: Taper Payer LLC, 254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702.'
+    content: 'For questions regarding these Terms & Conditions, please contact us at Support@taperpayer.com or write to: Taper Payer INC, 254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702.'
   },
 ];
 

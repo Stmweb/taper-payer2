@@ -39,7 +39,7 @@ const sections = [
   },
   {
     title: '10. Contact Us',
-    content: 'If you have questions or concerns about this Privacy Policy, please contact us at Support@taperpayer.com or write to: Taper Payer LLC, 254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702.'
+    content: 'If you have questions or concerns about this Privacy Policy, please contact us at Support@taperpayer.com or write to: Taper Payer INC, 254 Chapman Rd, Ste 208 #26415, Newark, Delaware 19702.'
   },
 ];
 

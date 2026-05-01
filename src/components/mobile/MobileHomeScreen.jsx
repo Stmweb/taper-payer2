@@ -261,11 +261,8 @@ export default function MobileHomeScreen() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + i * 0.05 }}
               onClick={() => handleCountryTap(dest)}
-              className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 active:bg-slate-100 transition-colors shadow-sm border border-slate-100 relative"
+              className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 active:bg-slate-100 transition-colors shadow-sm border border-slate-100"
             >
-              {dest.moonpay && (
-                <span className="absolute -top-1.5 -right-1.5 bg-blue-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">MP</span>
-              )}
               <span className="text-2xl">{dest.flag}</span>
               <span className="text-slate-700 text-xs font-medium text-center leading-tight">{dest.name}</span>
             </motion.button>

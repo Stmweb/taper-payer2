@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 
-const MOONPAY_PK = 'pk_live_1aZShnRjeKKdaIahWOGZ5WJCuz8cvum';
+const MOONPAY_PK = 'pk_live_1aZShnRjeKKdaIahWQGZ5WJCuz8cvum';
 
 const COUNTRY_CONFIG = {
   haiti: {

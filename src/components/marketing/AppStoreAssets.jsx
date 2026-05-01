@@ -21,16 +21,15 @@ STRICT BRAND REQUIREMENTS — apply to every element:
 - Do NOT include real people's faces
 `;
 
+const APP_ICON_EXAMPLE_URL = 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/e91dafe63_LogoIconTaperPayer.png';
+
 const APP_ICON_PROMPT = `Create a professional mobile app icon for "Taper Payer" fintech app. Perfectly square 512×512px.
-${BRAND_CONTEXT}
-CRITICAL DESIGN INSTRUCTION: The reference image provided shows the Taper Payer logo which features TWO GREEN DOLLAR BILLS fanned out. Reproduce those exact two dollar bills as the dominant centerpiece of this icon — faithfully copied from the reference image, same angle, same fanned layout, same green color.
-Background: Deep navy (#0F172A) or a strong blue-to-green diagonal gradient (#2479C2 → #61AF39).
-Center: The two fanned dollar bills from the logo, large and prominent, filling most of the icon space.
-Optionally add a subtle globe or arrow element behind the bills to hint at global transfer.
-No full company name text — keep it iconic and bold.
+The reference image provided is the EXACT Taper Payer logo to use as the style and design example. Recreate this logo faithfully as the app icon.
+The logo shows: two stylized dollar bills (one green, one blue) interleaved in a circular arrangement, surrounded by orange circular arrows indicating money transfer/exchange. Below the graphic, the text "Taper" in bold blue and "Payer" in bold green.
+CRITICAL: Reproduce this exact logo design — same dollar bills, same orange circular arrows, same color scheme (green bill, blue bill, orange arrows), same "Taper Payer" wordmark in blue and green.
+Background: Clean white (#FFFFFF) — same as the reference image.
 Corners: Slightly rounded for iOS.
-Style: Premium fintech, clean, minimal. Looks great at all sizes.
-Do NOT add shadows, borders, or outer glows.`;
+Style: Match the reference image exactly — bold, colorful, 3D-style illustrated fintech icon. No dark backgrounds.`;
 
 const FEATURE_GRAPHIC_PROMPT = `Create a stunning Google Play Store feature graphic for "Taper Payer" fintech app. Landscape banner exactly 1024×500px.
 ${BRAND_CONTEXT}
@@ -321,7 +320,10 @@ function AssetCard({ title, subtitle, badge, prompt, filename, aspect }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await base44.functions.invoke('generateFlyer', { prompt, existing_image_urls: [LOGO_URL] });
+      const referenceUrls = filename === 'taper-payer-app-icon.png'
+        ? [APP_ICON_EXAMPLE_URL]
+        : [LOGO_URL];
+      const res = await base44.functions.invoke('generateFlyer', { prompt, existing_image_urls: referenceUrls });
       setImageUrl(res.data.url);
     } catch (e) {
       setError('Generation failed. Please try again.');

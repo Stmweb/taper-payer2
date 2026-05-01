@@ -80,34 +80,38 @@ Deno.serve(async (req) => {
 
       console.log('[veriffKYC] Checking status for session:', sessionId);
 
-      const timestamp = new Date().toISOString();
-      const signature = await signPayload(timestamp, apiSecret);
+      // Veriff GET sessions endpoint requires HMAC of: apiKey + sessionId
+      const signature = await signPayload(apiKey + sessionId, apiSecret);
 
       const res = await fetch(`https://stationapi.veriff.com/v1/sessions/${sessionId}`, {
         method: 'GET',
         headers: {
           'X-AUTH-CLIENT': apiKey,
           'X-HMAC-SIGNATURE': signature,
-          'X-TIMESTAMP': timestamp,
+          'Content-Type': 'application/json',
         },
       });
 
-      const data = await res.json();
+      const responseText = await res.text();
+      console.log('[veriffKYC] checkStatus response:', res.status, responseText);
+
+      let data;
+      try { data = JSON.parse(responseText); } catch { data = {}; }
 
       if (!res.ok) {
         return Response.json(
-          { error: data.error?.message || 'Failed to check status' },
+          { error: data.message || data.error || `Veriff returned ${res.status}` },
           { status: 400 }
         );
       }
 
-      const status = data.verification.status;
+      const status = data.verification?.status || 'created';
       // submitted/review = user completed the flow — advance them
       const isVerified = ['approved', 'submitted', 'review'].includes(status);
 
       console.log('[veriffKYC] Status:', status, '| isVerified:', isVerified);
 
-      return Response.json({ status, isVerified, decision: data.verification.decision });
+      return Response.json({ status, isVerified, decision: data.verification?.decision });
     }
 
     return Response.json({ error: 'Unknown action' }, { status: 400 });

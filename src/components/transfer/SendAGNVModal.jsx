@@ -433,8 +433,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                                   } else {
                                     setError('Verification pending — tap "I\'ve completed verification" to continue.');
                                   }
-                                } catch {
-                                  setError('Could not check verification status. Tap "I\'ve completed verification" below.');
+                                } catch (err) {
+                                  setError(err?.response?.data?.error || 'Could not check verification status. Tap "I\'ve completed verification" below.');
                                 }
                                 return;
                               }

@@ -503,147 +503,145 @@ const IOS_SIZES = [
     width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
     filename: 'ios-iphone-xs-max-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. This is for the Apple App Store listing — it must look polished, modern, and professional.
+    prompt: `Create a marketing image showing a full realistic iPhone (XS Max) phone mockup centered on a clean white (#FFFFFF) background. The phone must be fully visible — top to bottom, left to right — with realistic bezels, rounded corners, and a notch at the top. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: App home dashboard. Clean white (#FFFFFF) background.
+Phone screen content: App home dashboard.
 Top: Taper Payer logo centered. Status bar with signal/battery icons.
 Hero section: Bold headline "Send Money Home" in large slate-900 text. Subtext "Fast · Secure · Zero Hidden Fees" in slate-600.
 Quick actions row: Four circular icon buttons — Send Money (blue), Mobile Top-Up (orange), Request Money (green), Send AGNV (navy).
 Send To section: Country flags in cards — 🇬🇭 Ghana · 🇰🇪 Kenya · 🇸🇳 Senegal · 🇩🇴 Dominican Republic.
 Features strip: Three pills — ⚡ Instant · 🛡 Secure · 💲 No Fees — on a green gradient.
 Bottom: Large blue "Get Started" CTA button.
-Style: iPhone-native clean UI, generous padding, rounded corners on cards.`,
+The full phone including its outer casing must be visible. Clean white background behind the phone. Professional App Store marketing style.`,
   },
   {
     label: 'iPhone XS Max / 6.5" Landscape',
     width: 2688, height: 1242, ratio: '19.5:9', badge: '2688×1242',
     filename: 'ios-iphone-xs-max-landscape',
     aspect: 'landscape',
-    prompt: `Create a premium iPhone app screenshot in wide landscape format (19.5:9 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone (XS Max) phone mockup in landscape orientation, fully visible from edge to edge, centered on a clean white (#FFFFFF) background. The phone must show realistic bezels, rounded corners, and home indicator. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Money transfer flow. Clean white (#FFFFFF) background.
-Left panel (45%): Taper Payer logo top-left. Transfer form — "You Send" $200 USD input · "Recipient Gets" 272,000 GHS in bold green · "1 USD = 13.60 GHS". Large blue "Send to Ghana Now" CTA button. Badge "⭐ Best Rate Today" in #F88F2B.
-Right panel (55%): Stylized globe with glowing transfer route USA → Ghana in brand blue and green. Destination pin pulsing over Ghana.
-Style: Clean two-column layout, iPhone landscape native UI feel, generous typography.`,
+Phone screen content: Money transfer flow. Clean white background.
+Left panel (45%): Taper Payer logo top-left. Transfer form — "You Send" $200 USD · "Recipient Gets" 272,000 GHS in bold green · "1 USD = 13.60 GHS". Large blue "Send to Ghana Now" CTA. Badge "⭐ Best Rate Today" in #F88F2B.
+Right panel (55%): Stylized globe with glowing transfer route USA → Ghana in brand blue and green.
+The full phone including outer casing must be visible. Professional App Store marketing style.`,
   },
   {
     label: 'iPhone 12 Pro Max / 6.7" Portrait',
     width: 1284, height: 2778, ratio: '19.5:9', badge: '1284×2778',
     filename: 'ios-iphone-12-pro-max-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone 12 Pro Max phone mockup centered on a clean white (#FFFFFF) background. The entire phone must be fully visible — top to bottom — with realistic bezels, rounded corners, and a notch. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Mobile Top-Up feature. Clean white (#FFFFFF) background.
+Phone screen content: Mobile Top-Up feature.
 Top: Taper Payer logo. Bold headline "Mobile Top-Up" in large slate-900. Subtext "Recharge any phone worldwide — instantly" in slate-600.
-Center: Large phone illustration with signal bars, showing a successful top-up confirmation: "✅ +$10 Airtime Added" in bold green on the phone screen.
+Center: Large phone illustration showing "✅ +$10 Airtime Added" in bold green.
 Country flags row: 🇬🇭 🇰🇪 🇸🇳 🇩🇴 with "+150 more" label.
 Features list: ⚡ Instant delivery · 📶 Any carrier · 🌍 150+ countries.
 Bottom: Large orange "Top-Up Now" CTA button.
-Style: Tall iPhone native UI, clean, premium fintech look with lots of whitespace.`,
+The full phone including outer casing must be visible. Clean white background behind phone. Professional App Store marketing style.`,
   },
   {
     label: 'iPhone 12 Pro Max / 6.7" Landscape',
     width: 2778, height: 1284, ratio: '2.17:1', badge: '2778×1284',
     filename: 'ios-iphone-12-pro-max-landscape',
     aspect: 'landscape',
-    prompt: `Create a premium iPhone app screenshot in wide landscape format (2.17:1 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone 12 Pro Max phone mockup in landscape orientation, fully visible from edge to edge, centered on a clean white (#FFFFFF) background. Realistic bezels, rounded corners, and home indicator visible. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Live exchange rates dashboard. Clean white (#FFFFFF) background.
-Left panel (40%): Taper Payer logo top-left. Heading "Live Exchange Rates" bold slate-900. Three rate cards stacked: 🇬🇭 GHS 13.60 ↑ · 🇰🇪 KES 130.50 ↑ · 🇸🇳 XOF 615.00 →. Each with small green trend arrow. Large blue "Send Money Now" button at bottom.
-Right panel (60%): Clean rate trend chart showing exchange rate lines in brand blue and green over 30 days. "Rates updated live" label in slate-500.
-Style: Wide two-column finance dashboard, clean charts, premium data visualization feel.`,
+Phone screen content: Live exchange rates dashboard.
+Left panel (40%): Taper Payer logo top-left. Heading "Live Exchange Rates" bold. Three rate cards: 🇬🇭 GHS 13.60 ↑ · 🇰🇪 KES 130.50 ↑ · 🇸🇳 XOF 615.00 →. Large blue "Send Money Now" button.
+Right panel (60%): Rate trend chart in brand blue and green. "Rates updated live" label.
+The full phone including outer casing must be visible. Professional App Store marketing style.`,
   },
   {
     label: '🇭🇹 Haiti — Same Day · Portrait',
     width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
     filename: 'ios-haiti-same-day-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone phone mockup centered on a clean white (#FFFFFF) background. The entire phone must be fully visible — top to bottom, left to right — with realistic bezels, rounded corners, and notch. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Sending money to Haiti. Clean white (#FFFFFF) background.
+Phone screen content: Sending money to Haiti.
 Top: Taper Payer logo centered. Status bar.
 Hero: Haitian flag 🇭🇹 large and prominent. Bold headline "Send to Haiti Today" in large slate-900. Subtext "Fast and secure same-day delivery" in slate-600.
 Badge: "✅ Same-Day Guarantee" in #F88F2B.
 Bottom: Large blue "Send to Haiti Now" CTA button.
-Style: iPhone-native clean UI, generous padding, rounded corners.`,
+The full phone including outer casing must be visible. Clean white background behind phone. Professional App Store marketing style.`,
   },
   {
     label: '🇬🇭 Ghana — Best Rate · Portrait',
     width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
     filename: 'ios-ghana-best-rate-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone phone mockup centered on a clean white (#FFFFFF) background. The entire phone must be fully visible — top to bottom, left to right — with realistic bezels, rounded corners, and notch. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Sending money to Ghana. Clean white (#FFFFFF) background.
+Phone screen content: Sending money to Ghana.
 Top: Taper Payer logo centered. Status bar.
 Hero: Ghanaian flag 🇬🇭 large and prominent. Bold headline "Best Rate to Ghana" in large slate-900. Subtext "Competitive rates — zero hidden fees" in slate-600.
-Rate card: "1 USD = 15.40 GHS" in large bold green. Small upward trend arrow. "Best rate in 30 days" label.
+Rate card: "1 USD = 15.40 GHS" in large bold green with upward trend arrow.
 Badge: "⭐ Best Rate Guarantee" in #61AF39.
 Bottom: Large blue "Send to Ghana Now" CTA button.
-Style: iPhone-native clean UI, premium fintech look with whitespace.`,
+The full phone including outer casing must be visible. Professional App Store marketing style.`,
   },
   {
     label: '🇰🇪 Kenya — Instant M-Pesa · Portrait',
     width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
     filename: 'ios-kenya-mpesa-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone phone mockup centered on a clean white (#FFFFFF) background. The entire phone must be fully visible — top to bottom, left to right — with realistic bezels, rounded corners, and notch. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Sending money to Kenya via M-Pesa. Clean white (#FFFFFF) background.
+Phone screen content: Sending money to Kenya via M-Pesa.
 Top: Taper Payer logo centered. Status bar.
 Hero: Kenyan flag 🇰🇪 large and prominent. Bold headline "Instant M-Pesa Transfer" in large slate-900. Subtext "Delivered to M-Pesa in seconds" in slate-600.
 Speed stat: "🚀 Avg delivery: 8 seconds" in massive bold #2479C2 typography.
-Transfer preview: "You send $150 → Recipient gets 19,500 KES" in compact card.
 Badge: "⚡ Faster than any competitor" in #2479C2.
 Bottom: Large green "Send to Kenya Instantly" CTA button.
-Style: iPhone-native clean UI, speed-focused design, generous whitespace.`,
+The full phone including outer casing must be visible. Professional App Store marketing style.`,
   },
   {
     label: '🇸🇳 Senegal — Low Fees · Portrait',
     width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
     filename: 'ios-senegal-low-fees-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone phone mockup centered on a clean white (#FFFFFF) background. The entire phone must be fully visible — top to bottom, left to right — with realistic bezels, rounded corners, and notch. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Sending money to Senegal. Clean white (#FFFFFF) background.
+Phone screen content: Sending money to Senegal.
 Top: Taper Payer logo centered. Status bar.
 Hero: Senegalese flag 🇸🇳 large and prominent. Bold headline "Zero Hidden Fees" in large slate-900. Subtext "What you see is exactly what you pay" in slate-600.
-Fee comparison card: "Taper Payer: $0 fee vs Competitors: $8–15 fee" shown in a simple side-by-side visual. Taper Payer column highlighted in green.
+Fee comparison card: "Taper Payer: $0 fee vs Competitors: $8–15 fee" side-by-side. Taper Payer column highlighted in green.
 Badge: "💸 Save up to $15 per transfer" in #61AF39.
 Bottom: Large blue "Send to Senegal Now" CTA button.
-Style: iPhone-native clean UI, trust-building transparent pricing design.`,
+The full phone including outer casing must be visible. Professional App Store marketing style.`,
   },
   {
     label: '🇩🇴 Dominican Republic · Portrait',
     width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
     filename: 'ios-dominican-republic-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone phone mockup centered on a clean white (#FFFFFF) background. The entire phone must be fully visible — top to bottom, left to right — with realistic bezels, rounded corners, and notch. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Sending money to Dominican Republic. Clean white (#FFFFFF) background.
+Phone screen content: Sending money to Dominican Republic.
 Top: Taper Payer logo centered. Status bar.
-Hero: Dominican Republic flag 🇩🇴 large and prominent. Bold headline "Send to DR — Fast & Easy" in large slate-900. Subtext "Guaranteed delivery before the weekend" in slate-600.
-Delivery card: "⏰ Order by 5PM for Friday delivery" in bold #F88F2B on a warm orange card.
+Hero: Dominican Republic flag 🇩🇴 large and prominent. Bold headline "Send to DR — Fast & Easy" in large slate-900. Subtext "Guaranteed quick delivery" in slate-600.
 Transfer preview: "You send $300 → Recipient gets 17,400 DOP" in compact card.
-Badge: "🎉 Arrives Before the Weekend!" in #2479C2.
+Badge: "🎉 Fast & Reliable!" in #2479C2.
 Bottom: Large blue "Send to DR Now" CTA button.
-Style: iPhone-native clean UI, celebration urgency, generous whitespace.`,
+The full phone including outer casing must be visible. Professional App Store marketing style.`,
   },
   {
     label: '🌍 All Countries — Global Coverage · Portrait',
     width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
     filename: 'ios-global-coverage-portrait',
     aspect: 'portrait',
-    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+    prompt: `Create a marketing image showing a full realistic iPhone phone mockup centered on a clean white (#FFFFFF) background. The entire phone must be fully visible — top to bottom, left to right — with realistic bezels, rounded corners, and notch. The phone screen displays the "Taper Payer" fintech app.
 ${BRAND_CONTEXT}
-Screen: Global coverage showcase. Clean white (#FFFFFF) background.
+Phone screen content: Global coverage showcase.
 Top: Taper Payer logo centered. Status bar.
 Hero headline: "Send Money Worldwide" in large bold slate-900.
-Main visual: A large, beautifully rendered stylized globe centered on the Atlantic, showing Africa and the Americas. Glowing money transfer route lines from USA to: 🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya · 🇭🇹 Haiti · 🇸🇳 Senegal · 🇩🇴 DR in brand blue (#2479C2) and green (#61AF39).
-Destination row: Compact row of flags 🇳🇬 🇬🇭 🇰🇪 🇭🇹 🇸🇳 🇩🇴 with "+more" pill.
-Features strip: "⚡ Instant · 🛡 Secure · 💲 No Fees" in a blue-to-green gradient strip.
+Main visual: Large stylized globe centered on the Atlantic showing Africa and the Americas. Glowing transfer route lines from USA to: 🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya · 🇭🇹 Haiti · 🇸🇳 Senegal · 🇩🇴 DR in brand blue and green.
+Destination row: Compact flags 🇳🇬 🇬🇭 🇰🇪 🇭🇹 🇸🇳 🇩🇴 with "+more" pill.
+Features strip: "⚡ Instant · 🛡 Secure · 💲 No Fees" in blue-to-green gradient strip.
 Bottom: Large green "Choose Your Destination" CTA button.
-Style: iPhone-native clean UI, global premium fintech feel.`,
+The full phone including outer casing must be visible. Professional App Store marketing style.`,
   },
 ];
 

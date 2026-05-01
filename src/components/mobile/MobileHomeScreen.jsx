@@ -53,7 +53,7 @@ const quickActions = [
   {
     id: 'sendagnv',
     label: 'Send AGNV',
-    emoji: '🇭🇹',
+    logo: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png',
     color: '#003DA5',
     bg: '#e8f2ff',
     description: 'Send via AGNV',
@@ -209,7 +209,7 @@ export default function MobileHomeScreen() {
                     className="flex flex-col items-center gap-2"
                   >
                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={{ backgroundColor: action.bg }}>
-                      {action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
+                      {action.logo ? <img src={action.logo} alt={action.label} className="w-8 h-8 object-contain" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
                     </div>
                     <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
                   </motion.div>
@@ -226,7 +226,7 @@ export default function MobileHomeScreen() {
                 className="flex flex-col items-center gap-2"
               >
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={{ backgroundColor: action.bg }}>
-                  {action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
+                  {action.logo ? <img src={action.logo} alt={action.label} className="w-8 h-8 object-contain" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
                 </div>
                 <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
               </motion.button>

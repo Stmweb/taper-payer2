@@ -413,7 +413,7 @@ export default function TaperPayerHome() {
             { id: 'splitbills', label: 'Split Bills', icon: DollarSign, color: '#FF6B6B', bg: '#ffe0e0', desc: 'Divide expenses' },
             { id: 'favorites', label: 'Favorites', icon: Users, color: '#4ECDC4', bg: '#e0f7f6', desc: 'Quick contacts' },
             { id: 'groupwallet', label: 'Group Wallet', icon: Users, color: '#95E1D3', bg: '#e8f9f7', desc: 'Shared account' },
-            { id: 'sendagnv', label: 'Send AGNV', icon: null, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV', emoji: '🇭🇹' },
+            { id: 'sendagnv', label: 'Send AGNV', icon: null, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV', logo: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png' },
           ].map((action) => {
             const Icon = action.icon;
             return (
@@ -432,7 +432,7 @@ export default function TaperPayerHome() {
                 className="flex flex-col items-center gap-3 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
               >
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style={{ backgroundColor: action.bg }}>
-                  {action.emoji ? action.emoji : <Icon className="w-7 h-7" style={{ color: action.color }} />}
+                  {action.logo ? <img src={action.logo} alt={action.label} className="w-9 h-9 object-contain" /> : action.emoji ? action.emoji : <Icon className="w-7 h-7" style={{ color: action.color }} />}
                 </div>
                 <div className="text-center">
                   <p className="text-slate-800 font-semibold text-sm">{action.label}</p>

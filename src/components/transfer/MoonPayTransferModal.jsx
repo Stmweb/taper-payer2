@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import SignupModal from '@/components/SignupModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
+import { createVeriffFrame, MESSAGES } from '@veriff/incontext-sdk';
 
 // Load MoonPay SDK script
 const loadMoonPaySDK = () => {
@@ -89,7 +90,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
   const [showSignup, setShowSignup] = useState(false);
   const [kycStatus, setKycStatus] = useState(null);
   const [veriffSessionId, setVeriffSessionId] = useState(null);
-  const [veriffUrl, setVeriffUrl] = useState(null);
+  const veriffFrameRef = useRef(null);
 
   const config = COUNTRY_CONFIG[country] || COUNTRY_CONFIG.haiti;
 
@@ -102,9 +103,9 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
       setWidgetUrl('');
       setError('');
       setVeriffSessionId(null);
-      setVeriffUrl(null);
       setKycStatus(null);
       setShowSignup(false);
+      if (veriffFrameRef.current) veriffFrameRef.current.close();
     } else {
       setStep(appUser ? 'kyc' : 'auth');
 
@@ -227,25 +228,32 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                       if (res.data?.error) throw new Error(res.data.error);
                       const { sessionId, url } = res.data;
                       setVeriffSessionId(sessionId);
-                      setVeriffUrl(url);
 
-                      // Poll for verification status every 3 seconds
-                      const interval = setInterval(async () => {
-                        try {
-                          const statusRes = await base44.functions.invoke('veriffKYC', {
-                            action: 'checkStatus',
-                            sessionId,
-                            userId: appUser?.id || appUser?.email,
-                          });
-                          const { status, isVerified } = statusRes.data;
-                          setKycStatus(status);
-                          if (isVerified) {
-                            clearInterval(interval);
-                            setStep('form');
+                      // Initialize InContext SDK
+                      veriffFrameRef.current = createVeriffFrame({
+                        url,
+                        onEvent: (msg) => {
+                          if (msg === MESSAGES.FINISHED) {
+                            // Check verification status after completion
+                            setTimeout(async () => {
+                              try {
+                                const statusRes = await base44.functions.invoke('veriffKYC', {
+                                  action: 'checkStatus',
+                                  sessionId,
+                                  userId: appUser?.id || appUser?.email,
+                                });
+                                if (statusRes.data.isVerified) {
+                                  setStep('form');
+                                } else {
+                                  setKycStatus(statusRes.data.status);
+                                }
+                              } catch (err) {
+                                setError('Failed to verify status');
+                              }
+                            }, 1000);
                           }
-                        } catch {}
-                      }, 3000);
-                      setTimeout(() => clearInterval(interval), 600000);
+                        },
+                      });
                     } catch (err) {
                       setError(err.message || 'Failed to start verification');
                     } finally {
@@ -259,18 +267,6 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                   {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   Start Verification
                 </Button>
-                {veriffUrl && (
-                  <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 mt-4">
-                    <iframe
-                      src={veriffUrl}
-                      title="Veriff Verification"
-                      className="w-full"
-                      style={{ height: '700px', border: 'none' }}
-                      allow="camera; microphone; payment"
-                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-top-navigation"
-                    />
-                  </div>
-                )}
               </div>
               <button
                 onClick={() => {

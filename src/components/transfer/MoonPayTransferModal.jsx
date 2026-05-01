@@ -59,7 +59,7 @@ function StepIndicator({ currentStep }) {
   return (
     <div className="flex items-center w-full mb-5">
       {STEPS.map((s, i) => (
-        <React.Fragment key={s.id}>
+        <div key={s.id} className="flex items-center">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
             i < idx ? 'bg-green-500 text-white' :
             i === idx ? 'bg-blue-500 text-white' :
@@ -70,7 +70,7 @@ function StepIndicator({ currentStep }) {
           {i < STEPS.length - 1 && (
             <div className={`flex-1 h-0.5 ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
           )}
-        </React.Fragment>
+        </div>
       ))}
     </div>
   );

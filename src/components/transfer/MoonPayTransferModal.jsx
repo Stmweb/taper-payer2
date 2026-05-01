@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Loader2, X, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
+import SignupModal from '@/components/SignupModal';
+import { useAppAuth } from '@/lib/AppAuthContext';
 
 
 
@@ -29,8 +31,38 @@ const COUNTRY_CONFIG = {
   },
 };
 
+const STEPS = [
+  { id: 'auth', label: 'Login/Sign Up' },
+  { id: 'kyc', label: 'Verify Identity' },
+  { id: 'form', label: 'Send Money' },
+  { id: 'widget', label: 'Complete' },
+];
+
+function StepIndicator({ currentStep }) {
+  const idx = STEPS.findIndex(s => s.id === currentStep);
+  return (
+    <div className="flex items-center w-full mb-5">
+      {STEPS.map((s, i) => (
+        <React.Fragment key={s.id}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
+            i < idx ? 'bg-green-500 text-white' :
+            i === idx ? 'bg-blue-500 text-white' :
+            'bg-slate-200 text-slate-400'
+          }`}>
+            {i < idx ? '✓' : i + 1}
+          </div>
+          {i < STEPS.length - 1 && (
+            <div className={`flex-1 h-0.5 ${i < idx ? 'bg-green-400' : 'bg-slate-200'}`} />
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
 export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti' }) {
-  const [step, setStep] = useState('form'); // 'form' | 'widget'
+  const { user: appUser, login } = useAppAuth();
+  const [step, setStep] = useState('auth');
   const [recipientName, setRecipientName] = useState('');
   const [recipientPhone, setRecipientPhone] = useState('');
   const [amount, setAmount] = useState('');
@@ -38,25 +70,58 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [moonpayKey, setMoonpayKey] = useState('');
+  const [showSignup, setShowSignup] = useState(false);
+  const [kycStatus, setKycStatus] = useState(null);
+  const [veriffSessionId, setVeriffSessionId] = useState(null);
+  const veriffWindowRef = useRef(null);
 
   const config = COUNTRY_CONFIG[country] || COUNTRY_CONFIG.haiti;
 
   useEffect(() => {
     if (!isOpen) {
-      setStep('form');
+      setStep('auth');
       setRecipientName('');
       setRecipientPhone('');
       setAmount('');
       setWidgetUrl('');
       setError('');
-    } else if (!moonpayKey) {
-      base44.functions.invoke('getMoonPayKey', {}).then(res => {
-        setMoonpayKey(res.data.key);
-      }).catch(err => {
-        setError('Failed to load payment system.');
-      });
+      setVeriffSessionId(null);
+      setKycStatus(null);
+      setShowSignup(false);
+    } else {
+      const urlParams = new URLSearchParams(window.location.search);
+      const veriffDone = urlParams.get('veriff_done');
+      const savedSessionId = localStorage.getItem('veriff_session_id');
+      
+      if (veriffDone && savedSessionId && appUser) {
+        window.history.replaceState({}, '', window.location.pathname);
+        localStorage.removeItem('veriff_session_id');
+        setVeriffSessionId(savedSessionId);
+        setStep('kyc');
+        setTimeout(async () => {
+          try {
+            const statusRes = await base44.functions.invoke('veriffKYC', {
+              action: 'checkStatus',
+              sessionId: savedSessionId,
+              userId: appUser.id || appUser.email,
+            });
+            setKycStatus(statusRes.data.status);
+            if (statusRes.data.isVerified) setStep('form');
+          } catch {}
+        }, 1500);
+      } else {
+        setStep(appUser ? 'kyc' : 'auth');
+      }
+
+      if (!moonpayKey) {
+        base44.functions.invoke('getMoonPayKey', {}).then(res => {
+          setMoonpayKey(res.data.key);
+        }).catch(err => {
+          setError('Failed to load payment system.');
+        });
+      }
     }
-  }, [isOpen, moonpayKey]);
+  }, [isOpen, appUser, moonpayKey]);
 
   const handleLaunchWidget = async (e) => {
     e.preventDefault();
@@ -116,10 +181,149 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
             <img src="https://www.moonpay.com/favicon.ico" alt="MoonPay" className="w-6 h-6 ml-auto rounded" />
           </div>
 
+          <StepIndicator currentStep={step} />
+
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex gap-2 text-red-700 text-sm">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
+            </div>
+          )}
+
+          {step === 'auth' && (
+            <div className="text-center py-8 space-y-4">
+              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center mx-auto">
+                <span className="text-3xl">🔐</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900">Login Required</h3>
+              <p className="text-slate-600 text-sm">Sign in or create an account to send money</p>
+              <Button
+                onClick={() => setShowSignup(true)}
+                className="w-full"
+                style={{ backgroundColor: '#2479C2' }}
+              >
+                Login / Sign Up
+              </Button>
+            </div>
+          )}
+
+          {step === 'kyc' && (
+            <div className="text-center py-8 space-y-4">
+              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center mx-auto">
+                <span className="text-3xl">🪪</span>
+              </div>
+              <h3 className="text-lg font-bold text-slate-900">Identity Verification</h3>
+              <p className="text-slate-600 text-sm">We need to verify your identity before sending money.</p>
+
+              {kycStatus === 'approved' && (
+                <div className="p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium">
+                  ✅ Identity verified! You can proceed.
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <Button
+                  onClick={async () => {
+                    setLoading(true);
+                    setError('');
+                    veriffWindowRef.current = window.open('about:blank', '_blank');
+                    try {
+                      const res = await base44.functions.invoke('veriffKYC', {
+                        action: 'createSession',
+                        userId: appUser?.id || appUser?.email,
+                      });
+                      if (res.data?.error) throw new Error(res.data.error);
+                      const { sessionId, url } = res.data;
+                      setVeriffSessionId(sessionId);
+                      localStorage.setItem('veriff_session_id', sessionId);
+                      const popup = veriffWindowRef.current;
+                      if (popup && !popup.closed) {
+                        popup.location.href = url;
+                      } else {
+                        veriffWindowRef.current = window.open(url, '_blank');
+                      }
+                      let popupWasClosed = false;
+                      const interval = setInterval(async () => {
+                        const isClosed = !veriffWindowRef.current || veriffWindowRef.current.closed;
+                        if (isClosed && !popupWasClosed) {
+                          popupWasClosed = true;
+                          clearInterval(interval);
+                          try {
+                            const finalRes = await base44.functions.invoke('veriffKYC', {
+                              action: 'checkStatus',
+                              sessionId,
+                              userId: appUser?.id || appUser?.email,
+                            });
+                            setKycStatus(finalRes.data.status);
+                            if (finalRes.data.isVerified) {
+                              setStep('form');
+                            }
+                          } catch {}
+                          return;
+                        }
+                        if (!isClosed) {
+                          try {
+                            const statusRes = await base44.functions.invoke('veriffKYC', {
+                              action: 'checkStatus',
+                              sessionId,
+                              userId: appUser?.id || appUser?.email,
+                            });
+                            const { status, isVerified } = statusRes.data;
+                            setKycStatus(status);
+                            if (isVerified) {
+                              clearInterval(interval);
+                              setStep('form');
+                            }
+                          } catch {}
+                        }
+                      }, 5000);
+                      setTimeout(() => clearInterval(interval), 600000);
+                    } catch (err) {
+                      setError(err.message || 'Failed to start verification');
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={loading}
+                  className="w-full"
+                  style={{ backgroundColor: '#2479C2' }}
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                  {veriffSessionId ? 'Re-open Verification' : 'Start Verification'}
+                </Button>
+                {veriffSessionId && (
+                  <>
+                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm text-center">
+                      ✅ Verification window opened. Complete your ID check, then tap below.
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={async () => {
+                        setLoading(true);
+                        setError('');
+                        try {
+                          const statusRes = await base44.functions.invoke('veriffKYC', {
+                            action: 'checkStatus',
+                            sessionId: veriffSessionId,
+                            userId: appUser?.id || appUser?.email,
+                          });
+                          setKycStatus(statusRes.data.status);
+                          if (statusRes.data.isVerified) setStep('form');
+                          else setError('Verification not complete yet. Please finish the ID check first.');
+                        } catch (err) {
+                          setError('Failed to check status.');
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                      disabled={loading}
+                    >
+                      {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : 'I\'ve completed verification →'}
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           )}
 
@@ -214,6 +418,13 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
             </div>
           )}
         </div>
+
+        {showSignup && (
+          <SignupModal isOpen={showSignup} onClose={() => setShowSignup(false)} onSignupSuccess={() => {
+            setShowSignup(false);
+            setStep('kyc');
+          }} />
+        )}
       </motion.div>
     </div>,
     document.body

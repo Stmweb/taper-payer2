@@ -92,6 +92,8 @@ const destinations = [
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
   { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
+  { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
+  { name: 'India', flag: '🇮🇳', code: 'INR' },
 ];
 
 const features = [

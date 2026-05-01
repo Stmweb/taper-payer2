@@ -152,24 +152,38 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
     setLoading(true);
     setError('');
     try {
-      const paylinkUrl = `https://moonpay.hel.io/pay/69f50b1536f1aaacf43960f8?baseCurrencyAmount=${amount}&externalTransactionId=tp-${country}-${Date.now()}`;
-      const paymentWindow = window.open(paylinkUrl, '_blank');
-      setStep('widget');
-
-      // Poll for window close (payment completion)
-      const checkInterval = setInterval(() => {
-        if (!paymentWindow || paymentWindow.closed) {
-          clearInterval(checkInterval);
-          // Wait 3 seconds then redirect
-          setTimeout(() => {
-            window.location.href = 'https://taperpayer.moonpay.com';
-          }, 3000);
-        }
-      }, 500);
+      // Load Helio SDK
+      if (!window.Helio) {
+        const script = document.createElement('script');
+        script.src = 'https://js.hel.io/v1';
+        script.async = true;
+        script.onload = () => {
+          initializeHelioPayment();
+        };
+        script.onerror = () => {
+          setError('Failed to load payment widget. Please try again.');
+          setLoading(false);
+        };
+        document.head.appendChild(script);
+      } else {
+        initializeHelioPayment();
+      }
     } catch (err) {
       setError('Failed to launch payment. Please try again.');
-    } finally {
       setLoading(false);
+    }
+  };
+
+  const initializeHelioPayment = () => {
+    setStep('widget');
+    setLoading(false);
+    
+    // Initialize Helio.Pay with the payment ID
+    if (window.Helio) {
+      window.Helio.Pay({
+        paymentId: '69f50b1536f1aaacf43960f8',
+        amount: parseFloat(amount),
+      });
     }
   };
 
@@ -370,18 +384,15 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
           )}
 
           {step === 'widget' && (
-            <div className="text-center py-8 space-y-4">
-              <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center mx-auto">
-                <span className="text-3xl">💳</span>
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Payment Processing</h3>
+            <div className="py-4 space-y-4">
+              <h3 className="text-lg font-bold text-slate-900">Complete Payment</h3>
               <p className="text-slate-600 text-sm">
-                MoonPay payment window is open. Complete your payment to send <strong>${amount}</strong> to <strong>{recipientName}</strong>.
+                Sending <strong>${amount}</strong> to <strong>{recipientName}</strong>
               </p>
-              <p className="text-xs text-slate-400">You'll be redirected to confirmation after payment.</p>
+              <div id="helio-pay" className="w-full" />
               <button
                 onClick={() => setStep('form')}
-                className="text-sm text-slate-500 hover:text-slate-700 underline w-full text-center"
+                className="text-sm text-slate-500 hover:text-slate-700 underline w-full text-center pt-4"
               >
                 ← Cancel & go back
               </button>

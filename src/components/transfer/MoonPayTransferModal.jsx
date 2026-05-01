@@ -346,6 +346,17 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                   </>
                 )}
               </div>
+              <button
+                onClick={() => {
+                  setStep('auth');
+                  setVeriffSessionId(null);
+                  setKycStatus(null);
+                  setError('');
+                }}
+                className="text-sm text-slate-500 hover:text-slate-700 underline w-full text-center mt-6"
+              >
+                ← Back to login
+              </button>
             </div>
           )}
 

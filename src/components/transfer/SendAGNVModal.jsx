@@ -81,20 +81,20 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   useEffect(() => {
     if (!isOpen) return;
 
-    // If user returned from Veriff (same-tab redirect), auto-check status
+    // If user returned from Veriff redirect, auto-check status
     const urlParams = new URLSearchParams(window.location.search);
-    const returnedSessionId = urlParams.get('veriff_session');
-    if (returnedSessionId && appUser) {
-      // Clean URL immediately
+    const veriffDone = urlParams.get('veriff_done');
+    const savedSessionId = localStorage.getItem('veriff_session_id');
+    if (veriffDone && savedSessionId && appUser) {
       window.history.replaceState({}, '', window.location.pathname);
-      setVeriffSessionId(returnedSessionId);
+      localStorage.removeItem('veriff_session_id');
+      setVeriffSessionId(savedSessionId);
       setStep('kyc');
-      // Auto-check status after a short delay
       setTimeout(async () => {
         try {
           const statusRes = await base44.functions.invoke('veriffKYC', {
             action: 'checkStatus',
-            sessionId: returnedSessionId,
+            sessionId: savedSessionId,
             userId: appUser.id || appUser.email,
           });
           setKycStatus(statusRes.data.status);
@@ -402,6 +402,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                             const { sessionId, url } = res.data;
                             setVeriffSessionId(sessionId);
                             setVeriffUrl(url);
+                            // Save sessionId so we can retrieve it when the user returns from Veriff redirect
+                            localStorage.setItem('veriff_session_id', sessionId);
 
                             // Load Veriff URL into the pre-opened window
                             const popup = veriffWindowRef.current;

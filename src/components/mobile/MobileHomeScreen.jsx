@@ -208,8 +208,8 @@ export default function MobileHomeScreen() {
                     transition={{ delay: i * 0.08 }}
                     className="flex flex-col items-center gap-2"
                   >
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={{ backgroundColor: action.bg }}>
-                      {action.logo ? <img src={action.logo} alt={action.label} className="w-8 h-8 object-contain" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={action.logo ? {} : { backgroundColor: action.bg }}>
+                      {action.logo ? <img src={action.logo} alt={action.label} className="w-12 h-12 object-cover rounded-2xl" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
                     </div>
                     <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
                   </motion.div>
@@ -225,8 +225,8 @@ export default function MobileHomeScreen() {
                 onClick={() => handleAction(action.id)}
                 className="flex flex-col items-center gap-2"
               >
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={{ backgroundColor: action.bg }}>
-                  {action.logo ? <img src={action.logo} alt={action.label} className="w-8 h-8 object-contain" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={action.logo ? {} : { backgroundColor: action.bg }}>
+                  {action.logo ? <img src={action.logo} alt={action.label} className="w-12 h-12 object-cover rounded-2xl" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
                 </div>
                 <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
               </motion.button>

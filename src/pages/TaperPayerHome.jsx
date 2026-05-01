@@ -431,8 +431,8 @@ export default function TaperPayerHome() {
                 }}
                 className="flex flex-col items-center gap-3 bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
               >
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style={{ backgroundColor: action.bg }}>
-                  {action.logo ? <img src={action.logo} alt={action.label} className="w-9 h-9 object-contain" /> : action.emoji ? action.emoji : <Icon className="w-7 h-7" style={{ color: action.color }} />}
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style={action.logo ? {} : { backgroundColor: action.bg }}>
+                  {action.logo ? <img src={action.logo} alt={action.label} className="w-14 h-14 object-cover rounded-2xl" /> : action.emoji ? action.emoji : <Icon className="w-7 h-7" style={{ color: action.color }} />}
                 </div>
                 <div className="text-center">
                   <p className="text-slate-800 font-semibold text-sm">{action.label}</p>

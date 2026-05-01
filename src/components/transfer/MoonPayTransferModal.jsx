@@ -316,16 +316,25 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                         setLoading(true);
                         setError('');
                         try {
+                          // Wait a bit for Veriff to process the submission
+                          await new Promise(r => setTimeout(r, 2000));
+                          
                           const statusRes = await base44.functions.invoke('veriffKYC', {
                             action: 'checkStatus',
                             sessionId: veriffSessionId,
                             userId: appUser?.id || appUser?.email,
                           });
                           setKycStatus(statusRes.data.status);
-                          if (statusRes.data.isVerified) setStep('form');
-                          else setError('Verification not complete yet. Please finish the ID check first.');
+                          if (statusRes.data.isVerified) {
+                            setStep('form');
+                          } else if (['submitted', 'review'].includes(statusRes.data.status)) {
+                            setError('Your verification is being reviewed. You can proceed in the meantime.');
+                            setStep('form');
+                          } else {
+                            setError('Verification not complete. Please check the verification window.');
+                          }
                         } catch (err) {
-                          setError('Failed to check status.');
+                          setError('Failed to check status. Please try again.');
                         } finally {
                           setLoading(false);
                         }

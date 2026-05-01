@@ -69,6 +69,7 @@ export default function SendAGNVModal({ isOpen, onClose }) {
   const cardContainerRef = useRef(null);
   const webPaymentsRef = useRef(null);
   const cardRef = useRef(null);
+  const veriffWindowRef = useRef(null);
 
   const sendValue = parseFloat(sendAmount) || 0;
   const transactionFee = (sendValue * 0.1).toFixed(2);
@@ -390,6 +391,8 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                         onClick={async () => {
                           setLoading(true);
                           setError('');
+                          // Open blank window immediately (before async) to avoid popup blocker
+                          veriffWindowRef.current = window.open('about:blank', '_blank');
                           try {
                             const res = await base44.functions.invoke('veriffKYC', {
                               action: 'createSession',
@@ -401,7 +404,13 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                             setVeriffUrl(url);
 
                             // Open Veriff in a new tab and poll for status
-                            const popup = window.open(url, '_blank');
+                            // (window must already be opened before await to avoid popup blocker)
+                            const popup = veriffWindowRef.current;
+                            if (popup && !popup.closed) {
+                              popup.location.href = url;
+                            } else {
+                              window.open(url, '_blank');
+                            }
                             const interval = setInterval(async () => {
                               try {
                                 const statusRes = await base44.functions.invoke('veriffKYC', {

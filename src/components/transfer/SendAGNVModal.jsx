@@ -403,33 +403,56 @@ export default function SendAGNVModal({ isOpen, onClose }) {
                             setVeriffSessionId(sessionId);
                             setVeriffUrl(url);
 
-                            // Open Veriff in a new tab and poll for status
-                            // (window must already be opened before await to avoid popup blocker)
+                            // Load Veriff URL into the pre-opened window
                             const popup = veriffWindowRef.current;
                             if (popup && !popup.closed) {
                               popup.location.href = url;
                             } else {
-                              window.open(url, '_blank');
+                              veriffWindowRef.current = window.open(url, '_blank');
                             }
+
+                            // Poll for status every 4s; when popup closes, do one final check
+                            let popupWasClosed = false;
                             const interval = setInterval(async () => {
-                              try {
-                                const statusRes = await base44.functions.invoke('veriffKYC', {
-                                  action: 'checkStatus',
-                                  sessionId,
-                                  userId: appUser?.id || appUser?.email,
-                                });
-                                const { status, isVerified } = statusRes.data;
-                                setKycStatus(status);
-                                if (isVerified) {
-                                  clearInterval(interval);
-                                  setStep('fund');
-                                }
-                              } catch {}
-                              // Also stop polling if popup was closed manually
-                              if (popup && popup.closed) {
+                              const isClosed = !veriffWindowRef.current || veriffWindowRef.current.closed;
+                              if (isClosed && !popupWasClosed) {
+                                popupWasClosed = true;
                                 clearInterval(interval);
+                                // Final status check after popup closes
+                                try {
+                                  const finalRes = await base44.functions.invoke('veriffKYC', {
+                                    action: 'checkStatus',
+                                    sessionId,
+                                    userId: appUser?.id || appUser?.email,
+                                  });
+                                  setKycStatus(finalRes.data.status);
+                                  if (finalRes.data.isVerified) {
+                                    setStep('fund');
+                                  } else {
+                                    setError('Verification pending — tap "I\'ve completed verification" to continue.');
+                                  }
+                                } catch {
+                                  setError('Could not check verification status. Tap "I\'ve completed verification" below.');
+                                }
+                                return;
                               }
-                            }, 4000);
+                              // Background polling while popup is open
+                              if (!isClosed) {
+                                try {
+                                  const statusRes = await base44.functions.invoke('veriffKYC', {
+                                    action: 'checkStatus',
+                                    sessionId,
+                                    userId: appUser?.id || appUser?.email,
+                                  });
+                                  const { status, isVerified } = statusRes.data;
+                                  setKycStatus(status);
+                                  if (isVerified) {
+                                    clearInterval(interval);
+                                    setStep('fund');
+                                  }
+                                } catch {}
+                              }
+                            }, 3000);
                             setTimeout(() => clearInterval(interval), 600000);
                           } catch (err) {
                             setError(err.message || 'Failed to start verification');

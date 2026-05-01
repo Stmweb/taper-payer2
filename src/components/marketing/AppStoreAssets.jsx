@@ -562,7 +562,7 @@ Style: Wide two-column finance dashboard, clean charts, premium data visualizati
 ${BRAND_CONTEXT}
 Screen: Sending money to Haiti. Clean white (#FFFFFF) background.
 Top: Taper Payer logo centered. Status bar.
-Hero: Haitian flag 🇭🇹 large and prominent. Bold headline "Send to Haiti Today" in large slate-900. Subtext "Same-day delivery via MonCash mobile wallet" in slate-600.
+Hero: Haitian flag 🇭🇹 large and prominent. Bold headline "Send to Haiti Today" in large slate-900. Subtext "Fast and secure same-day delivery" in slate-600.
 Badge: "✅ Same-Day Guarantee" in #F88F2B.
 Bottom: Large blue "Send to Haiti Now" CTA button.
 Style: iPhone-native clean UI, generous padding, rounded corners.`,

@@ -563,7 +563,6 @@ ${BRAND_CONTEXT}
 Screen: Sending money to Haiti. Clean white (#FFFFFF) background.
 Top: Taper Payer logo centered. Status bar.
 Hero: Haitian flag 🇭🇹 large and prominent. Bold headline "Send to Haiti Today" in large slate-900. Subtext "Same-day delivery via MonCash mobile wallet" in slate-600.
-Confirmation card: "⏰ Arrives Today by 5PM" in bold green on a light green card.
 Transfer preview: "You send $200 → Recipient gets 26,400 HTG" in compact card.
 Badge: "✅ Same-Day Guarantee" in #F88F2B.
 Bottom: Large blue "Send to Haiti Now" CTA button.

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 
-const MOONPAY_PK = 'pk_live_1aZShnRjeKKdaIahWQGZ5WJCuz8cvum';
+
 
 const COUNTRY_CONFIG = {
   haiti: {
@@ -37,6 +37,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
   const [widgetUrl, setWidgetUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [moonpayKey, setMoonpayKey] = useState('');
 
   const config = COUNTRY_CONFIG[country] || COUNTRY_CONFIG.haiti;
 
@@ -48,8 +49,14 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
       setAmount('');
       setWidgetUrl('');
       setError('');
+    } else if (!moonpayKey) {
+      base44.functions.invoke('getMoonPayKey', {}).then(res => {
+        setMoonpayKey(res.data.key);
+      }).catch(err => {
+        setError('Failed to load payment system.');
+      });
     }
-  }, [isOpen]);
+  }, [isOpen, moonpayKey]);
 
   const handleLaunchWidget = async (e) => {
     e.preventDefault();
@@ -62,7 +69,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
     try {
       const baseUrl = 'https://buy.moonpay.com';
       const params = new URLSearchParams({
-        apiKey: MOONPAY_PK,
+        apiKey: moonpayKey,
         currencyCode: config.currencyCode,
         baseCurrencyAmount: amount,
         externalTransactionId: `tp-${country}-${Date.now()}`,

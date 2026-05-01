@@ -553,6 +553,100 @@ Left panel (40%): Taper Payer logo top-left. Heading "Live Exchange Rates" bold 
 Right panel (60%): Clean rate trend chart showing exchange rate lines in brand blue and green over 30 days. "Rates updated live" label in slate-500.
 Style: Wide two-column finance dashboard, clean charts, premium data visualization feel.`,
   },
+  {
+    label: '🇭🇹 Haiti — Same Day · Portrait',
+    width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
+    filename: 'ios-haiti-same-day-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Sending money to Haiti. Clean white (#FFFFFF) background.
+Top: Taper Payer logo centered. Status bar.
+Hero: Haitian flag 🇭🇹 large and prominent. Bold headline "Send to Haiti Today" in large slate-900. Subtext "Same-day delivery via MonCash mobile wallet" in slate-600.
+Confirmation card: "⏰ Arrives Today by 5PM" in bold green on a light green card.
+Transfer preview: "You send $200 → Recipient gets 26,400 HTG" in compact card.
+Badge: "✅ Same-Day Guarantee" in #F88F2B.
+Bottom: Large blue "Send to Haiti Now" CTA button.
+Style: iPhone-native clean UI, generous padding, rounded corners.`,
+  },
+  {
+    label: '🇬🇭 Ghana — Best Rate · Portrait',
+    width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
+    filename: 'ios-ghana-best-rate-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Sending money to Ghana. Clean white (#FFFFFF) background.
+Top: Taper Payer logo centered. Status bar.
+Hero: Ghanaian flag 🇬🇭 large and prominent. Bold headline "Best Rate to Ghana" in large slate-900. Subtext "Competitive rates — zero hidden fees" in slate-600.
+Rate card: "1 USD = 15.40 GHS" in large bold green. Small upward trend arrow. "Best rate in 30 days" label.
+Badge: "⭐ Best Rate Guarantee" in #61AF39.
+Bottom: Large blue "Send to Ghana Now" CTA button.
+Style: iPhone-native clean UI, premium fintech look with whitespace.`,
+  },
+  {
+    label: '🇰🇪 Kenya — Instant M-Pesa · Portrait',
+    width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
+    filename: 'ios-kenya-mpesa-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Sending money to Kenya via M-Pesa. Clean white (#FFFFFF) background.
+Top: Taper Payer logo centered. Status bar.
+Hero: Kenyan flag 🇰🇪 large and prominent. Bold headline "Instant M-Pesa Transfer" in large slate-900. Subtext "Delivered to M-Pesa in seconds" in slate-600.
+Speed stat: "🚀 Avg delivery: 8 seconds" in massive bold #2479C2 typography.
+Transfer preview: "You send $150 → Recipient gets 19,500 KES" in compact card.
+Badge: "⚡ Faster than any competitor" in #2479C2.
+Bottom: Large green "Send to Kenya Instantly" CTA button.
+Style: iPhone-native clean UI, speed-focused design, generous whitespace.`,
+  },
+  {
+    label: '🇸🇳 Senegal — Low Fees · Portrait',
+    width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
+    filename: 'ios-senegal-low-fees-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Sending money to Senegal. Clean white (#FFFFFF) background.
+Top: Taper Payer logo centered. Status bar.
+Hero: Senegalese flag 🇸🇳 large and prominent. Bold headline "Zero Hidden Fees" in large slate-900. Subtext "What you see is exactly what you pay" in slate-600.
+Fee comparison card: "Taper Payer: $0 fee vs Competitors: $8–15 fee" shown in a simple side-by-side visual. Taper Payer column highlighted in green.
+Badge: "💸 Save up to $15 per transfer" in #61AF39.
+Bottom: Large blue "Send to Senegal Now" CTA button.
+Style: iPhone-native clean UI, trust-building transparent pricing design.`,
+  },
+  {
+    label: '🇩🇴 Dominican Republic · Portrait',
+    width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
+    filename: 'ios-dominican-republic-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Sending money to Dominican Republic. Clean white (#FFFFFF) background.
+Top: Taper Payer logo centered. Status bar.
+Hero: Dominican Republic flag 🇩🇴 large and prominent. Bold headline "Send to DR — Fast & Easy" in large slate-900. Subtext "Guaranteed delivery before the weekend" in slate-600.
+Delivery card: "⏰ Order by 5PM for Friday delivery" in bold #F88F2B on a warm orange card.
+Transfer preview: "You send $300 → Recipient gets 17,400 DOP" in compact card.
+Badge: "🎉 Arrives Before the Weekend!" in #2479C2.
+Bottom: Large blue "Send to DR Now" CTA button.
+Style: iPhone-native clean UI, celebration urgency, generous whitespace.`,
+  },
+  {
+    label: '🌍 All Countries — Global Coverage · Portrait',
+    width: 1242, height: 2688, ratio: '9:19.5', badge: '1242×2688',
+    filename: 'ios-global-coverage-portrait',
+    aspect: 'portrait',
+    prompt: `Create a premium iPhone app screenshot in tall portrait format (9:19.5 aspect ratio) for "Taper Payer" fintech app. Apple App Store listing — polished, modern, professional.
+${BRAND_CONTEXT}
+Screen: Global coverage showcase. Clean white (#FFFFFF) background.
+Top: Taper Payer logo centered. Status bar.
+Hero headline: "Send Money Worldwide" in large bold slate-900.
+Main visual: A large, beautifully rendered stylized globe centered on the Atlantic, showing Africa and the Americas. Glowing money transfer route lines from USA to: 🇳🇬 Nigeria · 🇬🇭 Ghana · 🇰🇪 Kenya · 🇭🇹 Haiti · 🇸🇳 Senegal · 🇩🇴 DR in brand blue (#2479C2) and green (#61AF39).
+Destination row: Compact row of flags 🇳🇬 🇬🇭 🇰🇪 🇭🇹 🇸🇳 🇩🇴 with "+more" pill.
+Features strip: "⚡ Instant · 🛡 Secure · 💲 No Fees" in a blue-to-green gradient strip.
+Bottom: Large green "Choose Your Destination" CTA button.
+Style: iPhone-native clean UI, global premium fintech feel.`,
+  },
 ];
 
 function validateIOSScreenshot(file, requiredWidth, requiredHeight) {

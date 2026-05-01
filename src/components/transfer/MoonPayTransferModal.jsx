@@ -7,7 +7,22 @@ import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import SignupModal from '@/components/SignupModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
-import { createVeriffFrame, MESSAGES } from '@veriff/incontext-sdk';
+
+// Load Veriff SDK
+const loadVeriffSDK = () => {
+  return new Promise((resolve, reject) => {
+    if (window.Veriff) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.veriff.me/incontext/veriff-incontext.js';
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load Veriff SDK'));
+    document.head.appendChild(script);
+  });
+};
 
 // Load MoonPay SDK script
 const loadMoonPaySDK = () => {
@@ -221,6 +236,9 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                     setLoading(true);
                     setError('');
                     try {
+                      // Load Veriff SDK
+                      await loadVeriffSDK();
+
                       const res = await base44.functions.invoke('veriffKYC', {
                         action: 'createSession',
                         userId: appUser?.id || appUser?.email,
@@ -230,30 +248,32 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                       setVeriffSessionId(sessionId);
 
                       // Initialize InContext SDK
-                      veriffFrameRef.current = createVeriffFrame({
-                        url,
-                        onEvent: (msg) => {
-                          if (msg === MESSAGES.FINISHED) {
-                            // Check verification status after completion
-                            setTimeout(async () => {
-                              try {
-                                const statusRes = await base44.functions.invoke('veriffKYC', {
-                                  action: 'checkStatus',
-                                  sessionId,
-                                  userId: appUser?.id || appUser?.email,
-                                });
-                                if (statusRes.data.isVerified) {
-                                  setStep('form');
-                                } else {
-                                  setKycStatus(statusRes.data.status);
+                      if (window.Veriff) {
+                        veriffFrameRef.current = window.Veriff.createVeriffFrame({
+                          url,
+                          onEvent: (msg) => {
+                            if (msg === 'FINISHED') {
+                              // Check verification status after completion
+                              setTimeout(async () => {
+                                try {
+                                  const statusRes = await base44.functions.invoke('veriffKYC', {
+                                    action: 'checkStatus',
+                                    sessionId,
+                                    userId: appUser?.id || appUser?.email,
+                                  });
+                                  if (statusRes.data.isVerified) {
+                                    setStep('form');
+                                  } else {
+                                    setKycStatus(statusRes.data.status);
+                                  }
+                                } catch (err) {
+                                  setError('Failed to verify status');
                                 }
-                              } catch (err) {
-                                setError('Failed to verify status');
-                              }
-                            }, 1000);
-                          }
-                        },
-                      });
+                              }, 1000);
+                            }
+                          },
+                        });
+                      }
                     } catch (err) {
                       setError(err.message || 'Failed to start verification');
                     } finally {

@@ -31,6 +31,7 @@ Deno.serve(async (req) => {
         verification: {
           timestamp,
           vendorData: resolvedUserId,
+          callback: 'https://www.veriff.com/get-verified?navigation=slim',
         },
       };
 

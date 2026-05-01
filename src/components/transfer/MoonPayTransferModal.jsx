@@ -19,7 +19,11 @@ const loadVeriffSDK = () => {
     script.src = 'https://cdn.veriff.me/incontext/veriff-incontext.js';
     script.async = true;
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Failed to load Veriff SDK'));
+    script.onerror = (err) => {
+      console.error('Veriff SDK load error:', err);
+      reject(new Error('Failed to load identity verification. Please try again.'));
+    };
+    script.onabort = () => reject(new Error('Veriff SDK load cancelled'));
     document.head.appendChild(script);
   });
 };

@@ -216,61 +216,61 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
 
               <div className="space-y-3">
                 <Button
-                    onClick={async () => {
-                      setLoading(true);
-                      setError('');
-                      try {
-                        const res = await base44.functions.invoke('veriffKYC', {
-                          action: 'createSession',
-                          userId: appUser?.id || appUser?.email,
-                        });
-                        if (res.data?.error) throw new Error(res.data.error);
-                        const { sessionId, url } = res.data;
-                        setVeriffSessionId(sessionId);
-                        setVeriffUrl(url);
+                  onClick={async () => {
+                    setLoading(true);
+                    setError('');
+                    try {
+                      const res = await base44.functions.invoke('veriffKYC', {
+                        action: 'createSession',
+                        userId: appUser?.id || appUser?.email,
+                      });
+                      if (res.data?.error) throw new Error(res.data.error);
+                      const { sessionId, url } = res.data;
+                      setVeriffSessionId(sessionId);
+                      setVeriffUrl(url);
 
-                        // Poll for verification status
-                        const interval = setInterval(async () => {
-                          try {
-                            const statusRes = await base44.functions.invoke('veriffKYC', {
-                              action: 'checkStatus',
-                              sessionId,
-                              userId: appUser?.id || appUser?.email,
-                            });
-                            const { status, isVerified } = statusRes.data;
-                            setKycStatus(status);
-                            if (isVerified) {
-                              clearInterval(interval);
-                              setStep('form');
-                            }
-                          } catch {}
-                        }, 3000);
-                        setTimeout(() => clearInterval(interval), 600000);
-                      } catch (err) {
-                        setError(err.message || 'Failed to start verification');
-                      } finally {
-                        setLoading(false);
-                      }
-                    }}
-                    disabled={loading}
-                    className="w-full"
-                    style={{ backgroundColor: '#2479C2' }}
-                  >
-                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                    Start Verification
-                  </Button>
-                  {veriffUrl && (
-                    <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-                      <iframe
-                        src={veriffUrl}
-                        title="Veriff Verification"
-                        className="w-full rounded-lg"
-                        style={{ height: '600px' }}
-                        allow="camera; microphone"
-                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
-                      />
-                    </div>
-                  )}
+                      // Poll for verification status every 3 seconds
+                      const interval = setInterval(async () => {
+                        try {
+                          const statusRes = await base44.functions.invoke('veriffKYC', {
+                            action: 'checkStatus',
+                            sessionId,
+                            userId: appUser?.id || appUser?.email,
+                          });
+                          const { status, isVerified } = statusRes.data;
+                          setKycStatus(status);
+                          if (isVerified) {
+                            clearInterval(interval);
+                            setStep('form');
+                          }
+                        } catch {}
+                      }, 3000);
+                      setTimeout(() => clearInterval(interval), 600000);
+                    } catch (err) {
+                      setError(err.message || 'Failed to start verification');
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={loading}
+                  className="w-full"
+                  style={{ backgroundColor: '#2479C2' }}
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                  Start Verification
+                </Button>
+                {veriffUrl && (
+                  <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 mt-4">
+                    <iframe
+                      src={veriffUrl}
+                      title="Veriff Verification"
+                      className="w-full"
+                      style={{ height: '700px', border: 'none' }}
+                      allow="camera; microphone; payment"
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-top-navigation"
+                    />
+                  </div>
+                )}
               </div>
               <button
                 onClick={() => {

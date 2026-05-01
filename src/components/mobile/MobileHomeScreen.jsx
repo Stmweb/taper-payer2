@@ -53,7 +53,7 @@ const quickActions = [
   {
     id: 'sendagnv',
     label: 'Send AGNV',
-    logo: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png',
+    logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg',
     color: '#003DA5',
     bg: '#e8f2ff',
     description: 'Send via AGNV',

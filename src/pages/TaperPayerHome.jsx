@@ -413,7 +413,7 @@ export default function TaperPayerHome() {
             { id: 'splitbills', label: 'Split Bills', icon: DollarSign, color: '#FF6B6B', bg: '#ffe0e0', desc: 'Divide expenses' },
             { id: 'favorites', label: 'Favorites', icon: Users, color: '#4ECDC4', bg: '#e0f7f6', desc: 'Quick contacts' },
             { id: 'groupwallet', label: 'Group Wallet', icon: Users, color: '#95E1D3', bg: '#e8f9f7', desc: 'Shared account' },
-            { id: 'sendagnv', label: 'Send AGNV', icon: null, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV', logo: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/38da31918_ChatGPTImageJan5202603_27_37PM.png' },
+            { id: 'sendagnv', label: 'Send AGNV', icon: null, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV', logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg' },
           ].map((action) => {
             const Icon = action.icon;
             return (

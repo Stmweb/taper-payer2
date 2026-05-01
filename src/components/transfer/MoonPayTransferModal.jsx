@@ -267,6 +267,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                         className="w-full rounded-lg"
                         style={{ height: '600px' }}
                         allow="camera; microphone"
+                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"
                       />
                     </div>
                   )}

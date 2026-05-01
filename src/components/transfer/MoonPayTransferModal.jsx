@@ -8,15 +8,15 @@ import { base44 } from '@/api/base44Client';
 import SignupModal from '@/components/SignupModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
-// Load Veriff SDK
+// Load Veriff SDK from CDN
 const loadVeriffSDK = () => {
   return new Promise((resolve, reject) => {
-    if (window.Veriff) {
+    if (window.veriffSDK) {
       resolve();
       return;
     }
     const script = document.createElement('script');
-    script.src = 'https://cdn.veriff.me/incontext/veriff-incontext.js';
+    script.src = 'https://cdn.veriff.me/incontext/js/v2.5.0/veriff.js';
     script.async = true;
     script.onload = () => resolve();
     script.onerror = (err) => {
@@ -250,15 +250,15 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
 
                       const res = await base44.functions.invoke('veriffKYC', {
                         action: 'createSession',
-                        userId: appUser?.id || appUser?.email,
+                        userId: appUser?.email,
                       });
                       if (res.data?.error) throw new Error(res.data.error);
                       const { sessionId, url } = res.data;
                       setVeriffSessionId(sessionId);
 
-                      // Initialize InContext SDK
-                      if (window.Veriff) {
-                        veriffFrameRef.current = window.Veriff.createVeriffFrame({
+                      // Initialize InContext SDK using the global veriffSDK object
+                      if (window.veriffSDK) {
+                        veriffFrameRef.current = window.veriffSDK.createVeriffFrame({
                           url,
                           onEvent: (msg) => {
                             if (msg === 'FINISHED') {
@@ -268,12 +268,12 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                                   const statusRes = await base44.functions.invoke('veriffKYC', {
                                     action: 'checkStatus',
                                     sessionId,
-                                    userId: appUser?.id || appUser?.email,
+                                    userId: appUser?.email,
                                   });
-                                  if (statusRes.data.isVerified) {
+                                  if (statusRes.data?.isVerified) {
                                     setStep('form');
                                   } else {
-                                    setKycStatus(statusRes.data.status);
+                                    setKycStatus(statusRes.data?.status);
                                   }
                                 } catch (err) {
                                   setError('Failed to verify status');

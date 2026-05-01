@@ -122,7 +122,24 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
       setShowSignup(false);
       if (veriffFrameRef.current) veriffFrameRef.current.close();
     } else {
-      setStep(appUser ? 'kyc' : 'auth');
+      // Check if user is already KYC verified
+      if (appUser) {
+        base44.functions.invoke('veriffKYC', {
+          action: 'checkStatus',
+          userId: appUser?.id || appUser?.email,
+        }).then(res => {
+          if (res.data.isVerified) {
+            setStep('form');
+          } else {
+            setStep('kyc');
+            setKycStatus(res.data.status);
+          }
+        }).catch(err => {
+          setStep('kyc');
+        });
+      } else {
+        setStep('auth');
+      }
 
       if (!moonpayKey) {
         base44.functions.invoke('getMoonPayKey', {}).then(res => {

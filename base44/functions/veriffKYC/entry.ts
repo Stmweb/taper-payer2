@@ -78,8 +78,8 @@ Deno.serve(async (req) => {
 
       console.log('[veriffKYC] Checking status for session:', sessionId);
 
-      // Veriff decision endpoint: GET /v1/sessions/{sessionId}/decision
-      const signature = await signPayload(apiKey + sessionId, apiSecret);
+      // Veriff decision endpoint requires HMAC of sessionId only
+      const signature = await signPayload(sessionId, apiSecret);
 
       const res = await fetch(`https://stationapi.veriff.com/v1/sessions/${sessionId}/decision`, {
         method: 'GET',
@@ -103,8 +103,9 @@ Deno.serve(async (req) => {
         );
       }
 
-      // Decision endpoint returns { verification: { status, decision } } or { status: 'fail' } if pending
-      const status = data.verification?.status || data.status || 'created';
+      // Decision endpoint returns { status: 'success', verification: { status, decision } }
+      // If no decision yet, verification object may be absent or status may be 'created'
+      const status = data.verification?.status || 'created';
       const isVerified = ['approved', 'submitted', 'review'].includes(status);
 
       console.log('[veriffKYC] Status:', status, '| isVerified:', isVerified);

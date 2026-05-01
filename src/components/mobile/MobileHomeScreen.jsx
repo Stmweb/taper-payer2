@@ -11,6 +11,7 @@ import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper'
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import SendAGNVModal from '@/components/transfer/SendAGNVModal';
+import MoonPayTransferModal from '@/components/transfer/MoonPayTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
@@ -85,8 +86,8 @@ const quickActions = [
 ];
 
 const destinations = [
-  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
-  { name: 'USA', flag: '🇺🇸', code: 'USD' },
+  { name: 'Haiti', flag: '🇭🇹', code: 'HTG', moonpay: true },
+  { name: 'Angola', flag: '🇦🇴', code: 'AOA', moonpay: true },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
@@ -129,6 +130,8 @@ export default function MobileHomeScreen() {
   const [showRequestTopUp, setShowRequestTopUp] = useState(false);
   const [showSendAGNV, setShowSendAGNV] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [showMoonPay, setShowMoonPay] = useState(false);
+  const [moonPayCountry, setMoonPayCountry] = useState('haiti');
 
   const handleAction = (id) => {
     if (id === 'topup') setShowTopup(true);
@@ -140,8 +143,15 @@ export default function MobileHomeScreen() {
 
   const handleCountryTap = (country) => {
     setSelectedCountry(country.name);
-    if (country.name === 'Haiti') setShowHaiti(true);
-    else setShowTransfer(true);
+    if (country.name === 'Haiti') {
+      setMoonPayCountry('haiti');
+      setShowMoonPay(true);
+    } else if (country.name === 'Angola') {
+      setMoonPayCountry('angola');
+      setShowMoonPay(true);
+    } else {
+      setShowTransfer(true);
+    }
   };
 
   return (
@@ -251,8 +261,11 @@ export default function MobileHomeScreen() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 + i * 0.05 }}
               onClick={() => handleCountryTap(dest)}
-              className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 active:bg-slate-100 transition-colors shadow-sm border border-slate-100"
+              className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 active:bg-slate-100 transition-colors shadow-sm border border-slate-100 relative"
             >
+              {dest.moonpay && (
+                <span className="absolute -top-1.5 -right-1.5 bg-blue-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full leading-none">MP</span>
+              )}
               <span className="text-2xl">{dest.flag}</span>
               <span className="text-slate-700 text-xs font-medium text-center leading-tight">{dest.name}</span>
             </motion.button>
@@ -372,6 +385,7 @@ export default function MobileHomeScreen() {
       <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
       <RequestMoneyModal isOpen={showRequestMoney} onClose={() => setShowRequestMoney(false)} />
       <RequestTopUpModal isOpen={showRequestTopUp} onClose={() => setShowRequestTopUp(false)} />
+      <MoonPayTransferModal isOpen={showMoonPay} onClose={() => setShowMoonPay(false)} country={moonPayCountry} />
     </div>
   );
 }

@@ -8,6 +8,22 @@ import { base44 } from '@/api/base44Client';
 import SignupModal from '@/components/SignupModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
 
+// Load MoonPay SDK script
+const loadMoonPaySDK = () => {
+  return new Promise((resolve, reject) => {
+    if (window.MoonPay) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://buy.moonpay.com/webSdk.bundle.js';
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load MoonPay SDK'));
+    document.head.appendChild(script);
+  });
+};
+
 
 
 const COUNTRY_CONFIG = {
@@ -132,19 +148,18 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
     setLoading(true);
     setError('');
     try {
-      const baseUrl = 'https://buy.moonpay.com';
-      const params = new URLSearchParams({
+      await loadMoonPaySDK();
+      
+      const moonPayWidget = new window.MoonPay({
         apiKey: moonpayKey,
-        currencyCode: config.currencyCode,
+        theme: 'dark',
+        baseCurrencyCode: 'usd',
         baseCurrencyAmount: amount,
+        defaultCurrencyCode: config.currencyCode,
         externalTransactionId: `tp-${country}-${Date.now()}`,
-        redirectURL: window.location.origin + '/ThankYou',
       });
 
-      const urlToSign = `${baseUrl}?${params.toString()}`;
-
-      const res = await base44.functions.invoke('moonpaySign', { urlToSign });
-      setWidgetUrl(res.data.signedUrl);
+      moonPayWidget.show();
       setStep('widget');
     } catch (err) {
       setError('Failed to launch payment. Please try again.');
@@ -394,24 +409,21 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
             </form>
           )}
 
-          {step === 'widget' && widgetUrl && (
-            <div className="space-y-4">
-              <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-800">
-                ✅ Sending <strong>${amount}</strong> to <strong>{recipientName}</strong> ({recipientPhone})
+          {step === 'widget' && (
+            <div className="text-center py-8 space-y-4">
+              <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center mx-auto">
+                <span className="text-3xl">💳</span>
               </div>
-              <div className="rounded-2xl overflow-hidden border border-slate-200" style={{ height: '600px' }}>
-                <iframe
-                  src={widgetUrl}
-                  title="MoonPay"
-                  allow="accelerometer; autoplay; camera; gyroscope; payment"
-                  className="w-full h-full border-0"
-                />
-              </div>
+              <h3 className="text-lg font-bold text-slate-900">Payment Processing</h3>
+              <p className="text-slate-600 text-sm">
+                MoonPay payment window is open. Complete your payment to send <strong>${amount}</strong> to <strong>{recipientName}</strong>.
+              </p>
+              <p className="text-xs text-slate-400">You'll be redirected to confirmation after payment.</p>
               <button
                 onClick={() => setStep('form')}
                 className="text-sm text-slate-500 hover:text-slate-700 underline w-full text-center"
               >
-                ← Back to transfer details
+                ← Cancel & go back
               </button>
             </div>
           )}

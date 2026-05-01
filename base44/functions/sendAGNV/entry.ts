@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
       // ── Auto-execute on-chain swap if recipient wallet is provided ──────────
       if (recipientWallet) {
         console.log('[sendAGNV] Recipient wallet provided — triggering automated swap...');
-        base44.functions.invoke('executeAGNVSwap', {
+        base44.asServiceRole.functions.invoke('executeAGNVSwap', {
           transactionId: transaction.id,
           amountUSD,
           recipientWallet,

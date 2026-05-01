@@ -262,6 +262,10 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                           url,
                           onEvent: (msg) => {
                             if (msg === 'FINISHED') {
+                              // Close the frame
+                              if (veriffFrameRef.current?.close) {
+                                veriffFrameRef.current.close();
+                              }
                               // Check verification status after completion
                               setTimeout(async () => {
                                 try {
@@ -278,7 +282,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                                 } catch (err) {
                                   setError('Failed to verify status');
                                 }
-                              }, 1000);
+                              }, 500);
                             }
                           },
                         });

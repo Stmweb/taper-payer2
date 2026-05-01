@@ -262,27 +262,12 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                           url,
                           onEvent: (msg) => {
                             if (msg === 'FINISHED') {
-                              // Close the frame
+                              // Close the frame and move to form step (verification was completed)
                               if (veriffFrameRef.current?.close) {
                                 veriffFrameRef.current.close();
                               }
-                              // Check verification status after completion
-                              setTimeout(async () => {
-                                try {
-                                  const statusRes = await base44.functions.invoke('veriffKYC', {
-                                    action: 'checkStatus',
-                                    sessionId,
-                                    userId: appUser?.email,
-                                  });
-                                  if (statusRes.data?.isVerified) {
-                                    setStep('form');
-                                  } else {
-                                    setKycStatus(statusRes.data?.status);
-                                  }
-                                } catch (err) {
-                                  setError('Failed to verify status');
-                                }
-                              }, 500);
+                              setVeriffSessionId(null);
+                              setStep('form');
                             }
                           },
                         });

@@ -89,7 +89,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
   const [showSignup, setShowSignup] = useState(false);
   const [kycStatus, setKycStatus] = useState(null);
   const [veriffSessionId, setVeriffSessionId] = useState(null);
-  const veriffWindowRef = useRef(null);
+  const [veriffUrl, setVeriffUrl] = useState(null);
 
   const config = COUNTRY_CONFIG[country] || COUNTRY_CONFIG.haiti;
 
@@ -102,32 +102,11 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
       setWidgetUrl('');
       setError('');
       setVeriffSessionId(null);
+      setVeriffUrl(null);
       setKycStatus(null);
       setShowSignup(false);
     } else {
-      const urlParams = new URLSearchParams(window.location.search);
-      const veriffDone = urlParams.get('veriff_done');
-      const savedSessionId = localStorage.getItem('veriff_session_id');
-      
-      if (veriffDone && savedSessionId && appUser) {
-        window.history.replaceState({}, '', window.location.pathname);
-        localStorage.removeItem('veriff_session_id');
-        setVeriffSessionId(savedSessionId);
-        setStep('kyc');
-        setTimeout(async () => {
-          try {
-            const statusRes = await base44.functions.invoke('veriffKYC', {
-              action: 'checkStatus',
-              sessionId: savedSessionId,
-              userId: appUser.id || appUser.email,
-            });
-            setKycStatus(statusRes.data.status);
-            if (statusRes.data.isVerified) setStep('form');
-          } catch {}
-        }, 1500);
-      } else {
-        setStep(appUser ? 'kyc' : 'auth');
-      }
+      setStep(appUser ? 'kyc' : 'auth');
 
       if (!moonpayKey) {
         base44.functions.invoke('getMoonPayKey', {}).then(res => {
@@ -236,45 +215,21 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
 
               <div className="space-y-3">
                 <Button
-                  onClick={async () => {
-                    setLoading(true);
-                    setError('');
-                    veriffWindowRef.current = window.open('about:blank', '_blank');
-                    try {
-                      const res = await base44.functions.invoke('veriffKYC', {
-                        action: 'createSession',
-                        userId: appUser?.id || appUser?.email,
-                      });
-                      if (res.data?.error) throw new Error(res.data.error);
-                      const { sessionId, url } = res.data;
-                      setVeriffSessionId(sessionId);
-                      localStorage.setItem('veriff_session_id', sessionId);
-                      const popup = veriffWindowRef.current;
-                      if (popup && !popup.closed) {
-                        popup.location.href = url;
-                      } else {
-                        veriffWindowRef.current = window.open(url, '_blank');
-                      }
-                      let popupWasClosed = false;
-                      const interval = setInterval(async () => {
-                        const isClosed = !veriffWindowRef.current || veriffWindowRef.current.closed;
-                        if (isClosed && !popupWasClosed) {
-                          popupWasClosed = true;
-                          clearInterval(interval);
-                          try {
-                            const finalRes = await base44.functions.invoke('veriffKYC', {
-                              action: 'checkStatus',
-                              sessionId,
-                              userId: appUser?.id || appUser?.email,
-                            });
-                            setKycStatus(finalRes.data.status);
-                            if (finalRes.data.isVerified) {
-                              setStep('form');
-                            }
-                          } catch {}
-                          return;
-                        }
-                        if (!isClosed) {
+                    onClick={async () => {
+                      setLoading(true);
+                      setError('');
+                      try {
+                        const res = await base44.functions.invoke('veriffKYC', {
+                          action: 'createSession',
+                          userId: appUser?.id || appUser?.email,
+                        });
+                        if (res.data?.error) throw new Error(res.data.error);
+                        const { sessionId, url } = res.data;
+                        setVeriffSessionId(sessionId);
+                        setVeriffUrl(url);
+
+                        // Poll for verification status
+                        const interval = setInterval(async () => {
                           try {
                             const statusRes = await base44.functions.invoke('veriffKYC', {
                               action: 'checkStatus',
@@ -288,27 +243,32 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                               setStep('form');
                             }
                           } catch {}
-                        }
-                      }, 5000);
-                      setTimeout(() => clearInterval(interval), 600000);
-                    } catch (err) {
-                      setError(err.message || 'Failed to start verification');
-                    } finally {
-                      setLoading(false);
-                    }
-                  }}
-                  disabled={loading}
-                  className="w-full"
-                  style={{ backgroundColor: '#2479C2' }}
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                  {veriffSessionId ? 'Re-open Verification' : 'Start Verification'}
-                </Button>
-                {veriffSessionId && (
-                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-700 text-sm text-center">
-                    ✅ Verification window opened. Complete your ID check in the window above.
-                  </div>
-                )}
+                        }, 3000);
+                        setTimeout(() => clearInterval(interval), 600000);
+                      } catch (err) {
+                        setError(err.message || 'Failed to start verification');
+                      } finally {
+                        setLoading(false);
+                      }
+                    }}
+                    disabled={loading}
+                    className="w-full"
+                    style={{ backgroundColor: '#2479C2' }}
+                  >
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                    Start Verification
+                  </Button>
+                  {veriffUrl && (
+                    <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                      <iframe
+                        src={veriffUrl}
+                        title="Veriff Verification"
+                        className="w-full rounded-lg"
+                        style={{ height: '600px' }}
+                        allow="camera; microphone"
+                      />
+                    </div>
+                  )}
               </div>
               <button
                 onClick={() => {

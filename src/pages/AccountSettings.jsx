@@ -25,7 +25,7 @@ import {
 
 export default function AccountSettings() {
   const navigate = useNavigate();
-  const { user: appUser, login } = useAppAuth();
+  const { user: appUser, login, logout } = useAppAuth();
   const [user, setUser] = useState(null);
   const [editingField, setEditingField] = useState(null);
   const [formData, setFormData] = useState({ full_name: '', email: '', phone: '' });
@@ -50,8 +50,9 @@ export default function AccountSettings() {
     }
   }, []);
 
-  const handleLogout = async () => {
-    await base44.auth.logout('/TaperPayerHome');
+  const handleLogout = () => {
+    logout();
+    navigate('/TaperPayerHome', { replace: true });
   };
 
   const handleSaveField = async (field) => {

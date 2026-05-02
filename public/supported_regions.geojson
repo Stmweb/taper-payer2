@@ -1,0 +1,117 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "United States",
+        "code": "USA",
+        "currency": "USD",
+        "flag": "🇺🇸",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-95.7129, 37.0902]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Haiti",
+        "code": "HTI",
+        "currency": "HTG",
+        "flag": "🇭🇹",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-72.2852, 18.9712]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Angola",
+        "code": "AGO",
+        "currency": "AOA",
+        "flag": "🇦🇴",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.8739, -11.2027]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ghana",
+        "code": "GHA",
+        "currency": "GHS",
+        "flag": "🇬🇭",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.0232, 7.9465]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kenya",
+        "code": "KEN",
+        "currency": "KES",
+        "flag": "🇰🇪",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.9062, -0.0236]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Senegal",
+        "code": "SEN",
+        "currency": "XOF",
+        "flag": "🇸🇳",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-14.4524, 14.4974]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dominican Republic",
+        "code": "DOM",
+        "currency": "DOP",
+        "flag": "🇩🇴",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-70.1627, 18.7357]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mexico",
+        "code": "MEX",
+        "currency": "MXN",
+        "flag": "🇲🇽",
+        "supported": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-102.5528, 23.6345]
+      }
+    }
+  ]
+}

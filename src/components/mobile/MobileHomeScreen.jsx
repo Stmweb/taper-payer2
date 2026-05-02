@@ -11,7 +11,6 @@ import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper'
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import SendAGNVModal from '@/components/transfer/SendAGNVModal';
-import MoonPayTransferModal from '@/components/transfer/MoonPayTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
@@ -86,14 +85,14 @@ const quickActions = [
 ];
 
 const destinations = [
-  { name: 'Haiti', flag: '🇭🇹', code: 'HTG', moonpay: true },
-  { name: 'Angola', flag: '🇦🇴', code: 'AOA', moonpay: true },
+  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
+  { name: 'Angola', flag: '🇦🇴', code: 'AOA' },
   { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
   { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
   { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
   { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
   { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
-  { name: 'India', flag: '🇮🇳', code: 'INR' },
+  { name: 'USA', flag: '🇺🇸', code: 'USD' },
 ];
 
 const features = [
@@ -132,8 +131,7 @@ export default function MobileHomeScreen() {
   const [showRequestTopUp, setShowRequestTopUp] = useState(false);
   const [showSendAGNV, setShowSendAGNV] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [showMoonPay, setShowMoonPay] = useState(false);
-  const [moonPayCountry, setMoonPayCountry] = useState('haiti');
+
 
   const handleAction = (id) => {
     if (id === 'topup') setShowTopup(true);
@@ -145,15 +143,7 @@ export default function MobileHomeScreen() {
 
   const handleCountryTap = (country) => {
     setSelectedCountry(country.name);
-    if (country.name === 'Haiti') {
-      setMoonPayCountry('haiti');
-      setShowMoonPay(true);
-    } else if (country.name === 'Angola') {
-      setMoonPayCountry('angola');
-      setShowMoonPay(true);
-    } else {
-      setShowTransfer(true);
-    }
+    setShowTransfer(true);
   };
 
   return (
@@ -384,7 +374,7 @@ export default function MobileHomeScreen() {
       <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
       <RequestMoneyModal isOpen={showRequestMoney} onClose={() => setShowRequestMoney(false)} />
       <RequestTopUpModal isOpen={showRequestTopUp} onClose={() => setShowRequestTopUp(false)} />
-      <MoonPayTransferModal isOpen={showMoonPay} onClose={() => setShowMoonPay(false)} country={moonPayCountry} />
+
     </div>
   );
 }

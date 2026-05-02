@@ -23,7 +23,6 @@ import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import SendAGNVModal from '@/components/transfer/SendAGNVModal';
-import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import PINModal from '@/components/PINModal';
 import { usePageConfig } from '@/hooks/usePageConfig';
@@ -69,7 +68,6 @@ export default function TaperPayerHome() {
    const [showReloadForm, setShowReloadForm] = useState(false);
    const [showTaperConnect, setShowTaperConnect] = useState(false);
    const [showTransferModal, setShowTransferModal] = useState(false);
-   const [showHaitiModal, setShowHaitiModal] = useState(false);
    const [showPINModal, setShowPINModal] = useState(false);
    const [showComingSoon, setShowComingSoon] = useState(false);
    const [showSignupModal, setShowSignupModal] = useState(false);
@@ -744,12 +742,7 @@ export default function TaperPayerHome() {
         onSignupSuccess={(userData) => {
           login(userData, userData.jwt, userData.cybrid_customer_id);
           setShowSignupModal(false);
-          // Route Haiti to new modal, others to Cybrid
-          if (sendTo === 'Haiti') {
-            setShowHaitiModal(true);
-          } else {
-            setShowTransferModal(true);
-          }
+          setShowTransferModal(true);
         }}
       />
 
@@ -777,35 +770,12 @@ export default function TaperPayerHome() {
         isOpen={showPINModal}
         onSuccess={() => {
           setShowPINModal(false);
-          // Route to appropriate modal based on country
-          if (sendTo === 'Haiti') {
-            setShowHaitiModal(true);
-          } else {
-            setShowTransferModal(true);
-          }
+          setShowTransferModal(true);
         }}
         onClose={() => setShowPINModal(false)}
       />
 
-      {/* Haiti Transfer Modal */}
-      {showHaitiModal && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/50" onClick={() => setShowHaitiModal(false)} />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
-          >
-            <button onClick={() => setShowHaitiModal(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10">✕</button>
-            <HaitiTransferModal
-              amount={amount}
-              onClose={() => setShowHaitiModal(false)}
-            />
-          </motion.div>
-        </div>,
-        document.body
-      )}
+
       </div>
       );
       }

@@ -190,15 +190,19 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
   const initializeHelioPayment = () => {
     setStep('widget');
     setLoading(false);
-    
-    // Initialize Helio.Pay with the payment ID
-    if (window.Helio) {
-      window.Helio.Pay({
-        paymentId: '69f50b1536f1aaacf43960f8',
-        amount: parseFloat(amount),
-      });
-    }
   };
+
+  // Mount Helio widget after the div#helio-pay is in the DOM
+  useEffect(() => {
+    if (step === 'widget' && window.Helio) {
+      setTimeout(() => {
+        window.Helio.Pay({
+          paymentId: '69f50b1536f1aaacf43960f8',
+          amount: parseFloat(amount),
+        });
+      }, 100);
+    }
+  }, [step]);
 
   if (!isOpen) return null;
 

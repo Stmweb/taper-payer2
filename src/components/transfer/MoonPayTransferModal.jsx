@@ -128,20 +128,26 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
     } else {
       // If logged in, check if already verified
       if (appUser?.email) {
-        // Check Veriff status
-        base44.functions.invoke('veriffKYC', {
-          action: 'checkStatus',
-          sessionId: appUser.veriff_session_id || '',
-        }).then(res => {
-          if (res.data?.isVerified) {
-            setStep('form'); // Skip KYC, go straight to form
-            setKycStatus('approved');
-          } else {
-            setStep('kyc'); // Need to verify
-          }
-        }).catch(() => {
-          setStep('kyc'); // Default to kyc if check fails
-        });
+        const savedSessionId = localStorage.getItem('veriff_session_id');
+        if (savedSessionId) {
+          // Only check status if we have a real session ID
+          base44.functions.invoke('veriffKYC', {
+            action: 'checkStatus',
+            sessionId: savedSessionId,
+            userId: appUser.email,
+          }).then(res => {
+            if (res.data?.isVerified) {
+              setKycStatus('approved');
+              setStep('form');
+            } else {
+              setStep('kyc');
+            }
+          }).catch(() => {
+            setStep('kyc');
+          });
+        } else {
+          setStep('kyc');
+        }
       } else {
         setStep('auth');
       }
@@ -286,6 +292,7 @@ export default function MoonPayTransferModal({ isOpen, onClose, country = 'haiti
                       if (res.data?.error) throw new Error(res.data.error);
                       const { sessionId, url } = res.data;
                       setVeriffSessionId(sessionId);
+                      localStorage.setItem('veriff_session_id', sessionId);
 
                       // Initialize InContext SDK using the global veriffSDK object
                       if (window.veriffSDK) {

@@ -16,6 +16,7 @@ import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import GlobeVisualization from '@/components/hero/GlobeVisualization';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const quickActions = [
   {
@@ -105,6 +106,21 @@ export default function MobileHomeScreen() {
   const { user, login } = useAppAuth();
   const [refreshKey, setRefreshKey] = useState(0);
   const [showTopup, setShowTopup] = useState(false);
+  const [dismissedNotifBanner, setDismissedNotifBanner] = useState(() => localStorage.getItem('notif_banner_dismissed') === '1');
+  const { permissionStatus, isSupported, requestPermission } = usePushNotifications();
+
+  const handleEnableNotifications = async () => {
+    await requestPermission();
+    setDismissedNotifBanner(true);
+    localStorage.setItem('notif_banner_dismissed', '1');
+  };
+
+  const handleDismissBanner = () => {
+    setDismissedNotifBanner(true);
+    localStorage.setItem('notif_banner_dismissed', '1');
+  };
+
+  const showNotifBanner = user && isSupported && permissionStatus === 'default' && !dismissedNotifBanner;
 
   useEffect(() => {
     // Refresh user data when page becomes visible
@@ -164,6 +180,27 @@ export default function MobileHomeScreen() {
           </Link>
         </div>
       </div>
+
+      {/* Push Notification Banner */}
+      {showNotifBanner && (
+        <div className="mx-5 mb-4 bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-center gap-3">
+          <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <Bell className="w-4 h-4 text-blue-600" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-slate-800 text-sm font-semibold">Stay up to date</p>
+            <p className="text-slate-500 text-xs mt-0.5">Enable notifications for transfer alerts</p>
+          </div>
+          <div className="flex gap-2 flex-shrink-0">
+            <button onClick={handleDismissBanner} className="text-slate-400 text-xs px-2 py-1 rounded-lg hover:bg-slate-100">
+              Later
+            </button>
+            <button onClick={handleEnableNotifications} className="text-white text-xs px-3 py-1 rounded-lg font-semibold" style={{ backgroundColor: '#3D7BB7' }}>
+              Allow
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Balance Card */}
       <div className="mx-5 mb-6">

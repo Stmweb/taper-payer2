@@ -13,7 +13,7 @@ const FIREBASE_CONFIG = {
 
 // Your VAPID key from Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
 // ⚠️ Replace with your actual VAPID key
-const VAPID_KEY = "YOUR_VAPID_KEY";
+const VAPID_KEY = "BE4euAW-XoTB_vU_Z4Sn1T-tsZXDn9PolGazPwdgM9pPlnW0XFw_QYL8zCVmGQRsr1Ve05-Y0NlfzUONrCut4ik";
 
 let firebaseApp = null;
 let messaging = null;

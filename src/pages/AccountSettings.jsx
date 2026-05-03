@@ -11,6 +11,7 @@ import MobileHeader from '@/components/mobile/MobileHeader';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import { toast } from 'sonner';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -96,6 +97,17 @@ export default function AccountSettings() {
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteStatus, setDeleteStatus] = useState(null);
+  const { permissionStatus, isSupported, requestPermission } = usePushNotifications();
+
+  const handleEnableNotifications = async () => {
+    if (permissionStatus === 'granted') return;
+    const token = await requestPermission();
+    if (token) {
+      toast.success('Notifications enabled!');
+    } else {
+      toast.error('Could not enable notifications. Please check your browser settings.');
+    }
+  };
 
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
@@ -243,13 +255,27 @@ export default function AccountSettings() {
                 <div className="flex items-center gap-4">
                   <Bell className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   <div>
-                    <p className="font-semibold dark:text-white">Notifications</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Manage your notification preferences</p>
+                    <p className="font-semibold dark:text-white">Push Notifications</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {!isSupported ? 'Not supported on this device' :
+                       permissionStatus === 'granted' ? '✅ Enabled — you\'ll receive alerts' :
+                       permissionStatus === 'denied' ? '🚫 Blocked — enable in browser settings' :
+                       'Get transfer alerts and updates'}
+                    </p>
                   </div>
                 </div>
-                <Button variant="ghost" size="sm" className="dark:text-gray-300" style={{ userSelect: 'none' }}>
-                  Manage
-                </Button>
+                {isSupported && permissionStatus !== 'denied' && (
+                  <Button
+                    variant={permissionStatus === 'granted' ? 'outline' : 'default'}
+                    size="sm"
+                    onClick={handleEnableNotifications}
+                    disabled={permissionStatus === 'granted'}
+                    style={{ userSelect: 'none', ...(permissionStatus !== 'granted' ? { backgroundColor: '#3D7BB7' } : {}) }}
+                    className="text-white"
+                  >
+                    {permissionStatus === 'granted' ? 'Enabled' : 'Enable'}
+                  </Button>
+                )}
               </div>
             </div>
           </Card>

@@ -46,6 +46,10 @@
       "type": "string",
       "description": "Expiry timestamp for the reset OTP"
     },
+    "fcm_token": {
+      "type": "string",
+      "description": "Firebase Cloud Messaging token for push notifications"
+    },
     "description": {
       "type": "string",
       "maxLength": 1000,

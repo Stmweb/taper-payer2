@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { base44 } from '@/api/base44Client';
 
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCGOA3TkrDXDiOxvJbdbnzay6dBeGgwUKE",
@@ -75,6 +76,15 @@ export function usePushNotifications() {
       if (token) {
         setFcmToken(token);
         localStorage.setItem('fcm_token', token);
+        // Save token to user's AppUser record so admin can send targeted notifications
+        try {
+          const userId = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user'))?.id : null;
+          if (userId) {
+            await base44.asServiceRole.entities.AppUser.update(userId, { fcm_token: token });
+          }
+        } catch (e) {
+          // silently ignore
+        }
         return token;
       }
     } catch (err) {

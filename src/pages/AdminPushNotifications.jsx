@@ -31,7 +31,7 @@ export default function AdminPushNotifications() {
   const usersWithTokens = users.filter(u => u.fcm_token);
   const totalTokens = mode === 'all'
     ? usersWithTokens.map(u => u.fcm_token)
-    : selectedTokens;
+    : users.filter(u => u.fcm_token && selectedTokens.includes(u.fcm_token)).map(u => u.fcm_token);
 
   const toggleUser = (token) => {
     setSelectedTokens(prev =>
@@ -140,7 +140,7 @@ export default function AdminPushNotifications() {
                   className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${mode === 'all' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'}`}
                 >
                   <Users className="w-4 h-4 inline mr-1" />
-                  All Users ({usersWithTokens.length})
+                  All Users ({users.length})
                 </button>
                 <button
                   onClick={() => setMode('specific')}
@@ -162,11 +162,14 @@ export default function AdminPushNotifications() {
 
             <Button
               onClick={handleSend}
-              disabled={sending || !title || !body || totalTokens.length === 0}
+              disabled={sending || !title || !body}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white gap-2"
             >
               {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              {sending ? 'Sending...' : `Send to ${totalTokens.length} device${totalTokens.length !== 1 ? 's' : ''}`}
+              {sending ? 'Sending...' : mode === 'all'
+                ? `Send to All Users (${usersWithTokens.length} push-enabled)`
+                : `Send to ${totalTokens.length} selected device${totalTokens.length !== 1 ? 's' : ''}`
+              }
             </Button>
           </Card>
 

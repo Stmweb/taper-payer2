@@ -58,9 +58,8 @@ Deno.serve(async (req) => {
     const { token, tokens, title, body, data, type } = await req.json();
 
     const serviceAccountRaw = Deno.env.get('FIREBASE_SERVER_KEY');
-    const projectId = Deno.env.get('FIREBASE_PROJECT_ID');
 
-    if (!serviceAccountRaw || !projectId) {
+    if (!serviceAccountRaw) {
       return Response.json({ error: 'Firebase credentials not configured' }, { status: 500 });
     }
 
@@ -70,6 +69,9 @@ Deno.serve(async (req) => {
     } catch {
       return Response.json({ error: 'FIREBASE_SERVER_KEY must be a JSON service account key' }, { status: 500 });
     }
+
+    // Always use project_id from the service account JSON itself
+    const projectId = serviceAccount.project_id?.trim();
 
     const targetTokens = tokens || (token ? [token] : []);
     if (targetTokens.length === 0) {

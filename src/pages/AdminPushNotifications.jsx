@@ -14,8 +14,9 @@ export default function AdminPushNotifications() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [type, setType] = useState('general');
-  const [mode, setMode] = useState('all'); // 'all' | 'specific'
+  const [mode, setMode] = useState('all'); // 'all' | 'specific' | 'manual'
   const [selectedTokens, setSelectedTokens] = useState([]);
+  const [manualToken, setManualToken] = useState('');
 
   useEffect(() => {
     fetchUsers();
@@ -31,6 +32,8 @@ export default function AdminPushNotifications() {
   const usersWithTokens = users.filter(u => u.fcm_token);
   const totalTokens = mode === 'all'
     ? usersWithTokens.map(u => u.fcm_token)
+    : mode === 'manual'
+    ? (manualToken.trim() ? [manualToken.trim()] : [])
     : users.filter(u => u.fcm_token && selectedTokens.includes(u.fcm_token)).map(u => u.fcm_token);
 
   const toggleUser = (token) => {
@@ -86,6 +89,14 @@ export default function AdminPushNotifications() {
             <RefreshCw className={`w-4 h-4 ${loadingUsers ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
+        </div>
+
+        {/* Info Banner */}
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex gap-3 text-sm text-amber-800">
+          <span className="text-lg flex-shrink-0">ℹ️</span>
+          <div>
+            <strong>How push tokens work:</strong> A user gets counted as "push-enabled" only after they open the app, are logged in, and click <em>Allow</em> on the browser/device notification permission prompt. Until then, no token is stored. Tokens are saved automatically once users grant permission.
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
@@ -149,7 +160,24 @@ export default function AdminPushNotifications() {
                   <User className="w-4 h-4 inline mr-1" />
                   Specific Users
                 </button>
+                <button
+                  onClick={() => setMode('manual')}
+                  className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${mode === 'manual' ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'}`}
+                >
+                  🔑 Manual Token
+                </button>
               </div>
+              {mode === 'manual' && (
+                <div className="mt-2">
+                  <Input
+                    placeholder="Paste FCM token here..."
+                    value={manualToken}
+                    onChange={e => setManualToken(e.target.value)}
+                    className="text-xs"
+                  />
+                  <p className="text-xs text-slate-400 mt-1">Find your token in browser DevTools → Application → Service Workers, or from the app's localStorage under <code>fcm_token</code>.</p>
+                </div>
+              )}
             </div>
 
             {/* Result */}
@@ -167,8 +195,10 @@ export default function AdminPushNotifications() {
             >
               {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               {sending ? 'Sending...' : mode === 'all'
-                ? `Send to All Users (${usersWithTokens.length} push-enabled)`
-                : `Send to ${totalTokens.length} selected device${totalTokens.length !== 1 ? 's' : ''}`
+                ? `Send to All (${usersWithTokens.length} push-enabled)`
+                : mode === 'manual'
+                ? `Send to Manual Token`
+                : `Send to ${totalTokens.length} selected`
               }
             </Button>
           </Card>

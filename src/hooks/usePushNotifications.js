@@ -2,18 +2,17 @@ import { useState, useEffect, useCallback } from 'react';
 import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
-// ⚠️ Replace these with your actual Firebase web app config values
-// from Firebase Console → Project Settings → Your apps → Web app
 const FIREBASE_CONFIG = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_FIREBASE_APP_ID",
+  apiKey: "AIzaSyCGOA3TkrDXDiOxvJbdbnzay6dBeGgwUKE",
+  authDomain: "taper-payer.firebaseapp.com",
+  projectId: "taper-payer",
+  storageBucket: "taper-payer.firebasestorage.app",
+  messagingSenderId: "1094034931601",
+  appId: "1:1094034931601:web:7cd4cd7491995bf7eda430",
 };
 
 // Your VAPID key from Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+// ⚠️ Replace with your actual VAPID key
 const VAPID_KEY = "YOUR_VAPID_KEY";
 
 let firebaseApp = null;

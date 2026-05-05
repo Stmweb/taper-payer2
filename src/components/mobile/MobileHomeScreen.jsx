@@ -188,7 +188,7 @@ export default function MobileHomeScreen() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.04 }}
-              onClick={() => { setSelectedCountry(dest.name); setShowTransfer(true); }}
+              onClick={() => setShowComingSoon(true)}
               className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 shadow-sm border border-slate-100 active:bg-slate-50"
               style={{ userSelect: 'none' }}
             >

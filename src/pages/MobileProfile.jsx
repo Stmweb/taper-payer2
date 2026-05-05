@@ -101,7 +101,7 @@ export default function MobileProfile() {
           alt="Taper Payer"
           className="h-14 w-auto mix-blend-multiply"
         />
-        <p>Taper Payer © 2025</p>
+        <p>Taper Payer © 2026</p>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import SendAGNVModal from '@/components/transfer/SendAGNVModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
+import RecentTransactions from '@/components/mobile/RecentTransactions';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
@@ -199,25 +200,8 @@ export default function MobileHomeScreen() {
         </div>
       </div>
 
-      {/* ── Why Taper Payer ── */}
-      <div className="px-4 mb-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 divide-y divide-slate-100">
-          {[
-            { emoji: '⚡', title: "Lightning Fast", desc: "Instant to next-day delivery" },
-            { emoji: '🔒', title: "Bank-Grade Security", desc: "Your money is always protected" },
-            { emoji: '💸', title: "No Hidden Fees", desc: "Competitive rates, transparent pricing" },
-          ].map(({ emoji, title, desc }) => (
-            <div key={title} className="flex items-center gap-3 px-4 py-3.5">
-              <span className="text-2xl w-8 text-center flex-shrink-0">{emoji}</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-slate-800 font-semibold text-sm">{title}</p>
-                <p className="text-slate-400 text-xs">{desc}</p>
-              </div>
-              <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* ── Recent Transactions ── */}
+      <RecentTransactions user={user} />
 
       {/* ── Modals ── */}
       {showTopup && createPortal(

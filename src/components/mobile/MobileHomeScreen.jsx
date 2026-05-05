@@ -80,12 +80,6 @@ export default function MobileHomeScreen() {
 
   const firstName = user?.full_name ? user.full_name.split(' ')[0] : null;
 
-  // Redirect to login if not authenticated
-  if (!user) {
-    window.location.href = '/TaperPayerLogin';
-    return null;
-  }
-
   return (
     <div className="min-h-screen bg-[#f1f5f9] pb-28">
 

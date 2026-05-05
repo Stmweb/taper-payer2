@@ -44,6 +44,7 @@ import OrderForm from './pages/OrderForm';
 import AdminOrderForms from './pages/AdminOrderForms';
 import BackendAPIDocs from './pages/BackendAPIDocs';
 import AdminPushNotifications from './pages/AdminPushNotifications';
+import AppAuthGuard from '@/components/AppAuthGuard';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -227,7 +228,9 @@ function App() {
         <QueryClientProvider client={queryClientInstance}>
           <Router>
             <NavigationTracker />
-            <AuthenticatedApp />
+            <AppAuthGuard>
+              <AuthenticatedApp />
+            </AppAuthGuard>
           </Router>
           <Toaster />
         </QueryClientProvider>

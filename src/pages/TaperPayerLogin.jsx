@@ -377,14 +377,7 @@ export default function TaperPayerLogin() {
               </Link>
             </div>
 
-            <div className="text-center">
-              <Link
-                to={createPageUrl('TaperPayerHome')}
-                className="text-sm text-slate-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
-              >
-                Back To Home
-              </Link>
-            </div>
+
           </form>
 
           {/* Security Badges */}

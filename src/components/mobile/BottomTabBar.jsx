@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Home, PhoneCall, HelpCircle, UserCircle } from 'lucide-react';
+import { Home, TrendingUp, HelpCircle, UserCircle } from 'lucide-react';
 
 const tabs = [
   { name: 'Home',         icon: Home,        path: createPageUrl('TaperPayerHome') },
-  { name: 'Top-Up',       icon: PhoneCall,   path: createPageUrl('TaperPayerTopUp') },
+  { name: 'Rates',        icon: TrendingUp,  path: createPageUrl('TaperPayerRates') },
   { name: 'How It Works', icon: HelpCircle,  path: createPageUrl('TaperPayerHowItWorks') },
   { name: 'Profile',      icon: UserCircle,  path: '/MobileProfile' },
 ];

@@ -4,8 +4,8 @@ import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import {
-  Send, Smartphone, Globe, ChevronRight, Bell, Settings,
-  TrendingUp, ArrowUpRight, Zap, Shield, PhoneCall, HandCoins, PhoneOutgoing, DollarSign, Users
+  Send, Smartphone, Bell, Settings, ChevronRight,
+  PhoneCall, HandCoins, PhoneOutgoing, DollarSign, Users, Plus, Scan
 } from 'lucide-react';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
@@ -15,131 +15,58 @@ import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
 import { useAppAuth } from '@/lib/AppAuthContext';
-import GlobeVisualization from '@/components/hero/GlobeVisualization';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const quickActions = [
+  { id: 'send',        label: 'Send',       icon: Send,         color: '#fff', bg: 'rgba(255,255,255,0.18)' },
+  { id: 'topup',       label: 'Top-Up',     icon: PhoneCall,    color: '#fff', bg: 'rgba(255,255,255,0.18)' },
+  { id: 'request',     label: 'Request',    icon: HandCoins,    color: '#fff', bg: 'rgba(255,255,255,0.18)' },
+  { id: 'requesttopup',label: 'Req. Top-Up',icon: PhoneOutgoing,color: '#fff', bg: 'rgba(255,255,255,0.18)' },
+];
+
+const serviceCards = [
   {
     id: 'send',
     label: 'Send Money',
+    desc: 'Transfer to 150+ countries',
     icon: Send,
-    color: '#3D7BB7',
-    bg: '#e3f2fd',
-    description: 'Transfer globally',
+    gradient: 'linear-gradient(135deg, #3D7BB7, #2563eb)',
   },
   {
     id: 'topup',
     label: 'Mobile Top-Up',
+    desc: 'Recharge any number instantly',
     icon: PhoneCall,
-    color: '#F88F2B',
-    bg: '#fff3e0',
-    description: 'Recharge instantly',
+    gradient: 'linear-gradient(135deg, #F88F2B, #f97316)',
   },
   {
     id: 'request',
     label: 'Request Money',
+    desc: 'Ask contacts to pay you',
     icon: HandCoins,
-    color: '#61AF39',
-    bg: '#e8f5e9',
-    description: 'Ask to get paid',
-  },
-  {
-    id: 'requesttopup',
-    label: 'Request Top-Up',
-    icon: PhoneOutgoing,
-    color: '#e91e8c',
-    bg: '#fce4ec',
-    description: 'Ask someone to top up',
+    gradient: 'linear-gradient(135deg, #61AF39, #16a34a)',
   },
   {
     id: 'sendagnv',
     label: 'Send AGNV',
+    desc: 'Transfer AGNV tokens',
     logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg',
-    color: '#003DA5',
-    bg: '#e8f2ff',
-    description: 'Send via AGNV',
-  },
-  {
-    id: 'splitbills',
-    label: 'Split Bills',
-    icon: DollarSign,
-    color: '#FF6B6B',
-    bg: '#ffe0e0',
-    description: 'Divide expenses',
-  },
-  {
-    id: 'favorites',
-    label: 'Favorites',
-    icon: Users,
-    color: '#4ECDC4',
-    bg: '#e0f7f6',
-    description: 'Quick contacts',
-  },
-  {
-    id: 'groupwallet',
-    label: 'Group Wallet',
-    icon: Users,
-    color: '#95E1D3',
-    bg: '#e8f9f7',
-    description: 'Shared account',
+    gradient: 'linear-gradient(135deg, #003DA5, #1e40af)',
   },
 ];
 
 const destinations = [
-  { name: 'Haiti', flag: '🇭🇹', code: 'HTG' },
-  { name: 'Angola', flag: '🇦🇴', code: 'AOA' },
-  { name: 'Ghana', flag: '🇬🇭', code: 'GHS' },
-  { name: 'Kenya', flag: '🇰🇪', code: 'KES' },
-  { name: 'Senegal', flag: '🇸🇳', code: 'XOF' },
-  { name: 'Dominican Republic', flag: '🇩🇴', code: 'DOP' },
-  { name: 'Mexico', flag: '🇲🇽', code: 'MXN' },
-  { name: 'USA', flag: '🇺🇸', code: 'USD' },
-];
-
-const features = [
-  { icon: Shield, label: 'Safe & Secure' },
-  { icon: Zap, label: 'Instant transfers' },
-  { icon: Globe, label: 'No Hidden Fees' },
+  { name: 'Haiti',    flag: '🇭🇹' },
+  { name: 'Ghana',    flag: '🇬🇭' },
+  { name: 'Kenya',    flag: '🇰🇪' },
+  { name: 'Senegal',  flag: '🇸🇳' },
+  { name: 'Dom. Rep.',flag: '🇩🇴' },
+  { name: 'Mexico',   flag: '🇲🇽' },
 ];
 
 export default function MobileHomeScreen() {
   const { user, login } = useAppAuth();
-  const [refreshKey, setRefreshKey] = useState(0);
   const [showTopup, setShowTopup] = useState(false);
-  const [dismissedNotifBanner, setDismissedNotifBanner] = useState(() => localStorage.getItem('notif_banner_dismissed') === '1');
-  const { permissionStatus, isSupported, requestPermission } = usePushNotifications();
-
-  const handleEnableNotifications = async () => {
-    await requestPermission();
-    setDismissedNotifBanner(true);
-    localStorage.setItem('notif_banner_dismissed', '1');
-  };
-
-  const handleDismissBanner = () => {
-    setDismissedNotifBanner(true);
-    localStorage.setItem('notif_banner_dismissed', '1');
-  };
-
-  const showNotifBanner = user && isSupported && permissionStatus === 'default' && !dismissedNotifBanner;
-
-  useEffect(() => {
-    // Refresh user data when page becomes visible
-    const handleVisibilityChange = async () => {
-      if (!document.hidden) {
-        try {
-          const freshUser = await base44.auth.me();
-          if (freshUser) {
-            login(freshUser, null, freshUser.cybrid_customer_id);
-            setRefreshKey(k => k + 1);
-          }
-        } catch (e) {
-          console.error('Failed to refresh user:', e);
-        }
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [login]);
   const [showHaiti, setShowHaiti] = useState(false);
   const [showTransfer, setShowTransfer] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
@@ -147,7 +74,25 @@ export default function MobileHomeScreen() {
   const [showRequestTopUp, setShowRequestTopUp] = useState(false);
   const [showSendAGNV, setShowSendAGNV] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [dismissedNotifBanner, setDismissedNotifBanner] = useState(
+    () => localStorage.getItem('notif_banner_dismissed') === '1'
+  );
+  const { permissionStatus, isSupported, requestPermission } = usePushNotifications();
 
+  const showNotifBanner = user && isSupported && permissionStatus === 'default' && !dismissedNotifBanner;
+
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      if (!document.hidden) {
+        try {
+          const freshUser = await base44.auth.me();
+          if (freshUser) login(freshUser, null, freshUser.cybrid_customer_id);
+        } catch (e) {}
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [login]);
 
   const handleAction = (id) => {
     if (id === 'topup') setShowTopup(true);
@@ -157,213 +102,205 @@ export default function MobileHomeScreen() {
     else setShowComingSoon(true);
   };
 
-  const handleCountryTap = (country) => {
-    setSelectedCountry(country.name);
-    setShowTransfer(true);
-  };
+  const firstName = user?.full_name ? user.full_name.split(' ')[0] : null;
 
   return (
-    <div className="min-h-screen pb-24 bg-gray-50">
+    <div className="min-h-screen bg-[#f1f5f9] pb-28">
 
-      {/* Header */}
-      <div className="px-5 pt-12 pb-6 flex items-center justify-between">
-        <div>
-          <p className="text-slate-500 text-sm font-medium">Welcome back 👋</p>
-           <h1 className="text-2xl font-bold mt-0.5">
-             <span style={{ color: user?.full_name ? '#000' : '#3D7BB7' }}>{user?.full_name ? user.full_name.split(' ')[0] : 'Taper'}</span>
-             {!user?.full_name && <span style={{ color: '#61AF39' }}> Payer</span>}
-           </h1>
+      {/* ── Hero / Header Card ── */}
+      <div
+        className="relative overflow-hidden px-5 pt-14 pb-8"
+        style={{ background: 'linear-gradient(160deg, #1a3a5c 0%, #2479C2 55%, #3fa847 100%)' }}
+      >
+        {/* Decorative circles */}
+        <div className="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-white/10 pointer-events-none" />
+        <div className="absolute top-4 -right-6 w-28 h-28 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-white/5 pointer-events-none" />
+
+        {/* Top bar */}
+        <div className="relative z-10 flex items-center justify-between mb-7">
+          <div>
+            <p className="text-white/70 text-sm">
+              {firstName ? `Welcome back 👋` : 'Welcome to'}
+            </p>
+            <h1 className="text-white text-2xl font-bold mt-0.5 tracking-tight">
+              {firstName ?? 'Taper Payer'}
+            </h1>
+          </div>
+          <div className="flex gap-2">
+            {showNotifBanner && (
+              <button
+                onClick={async () => {
+                  await requestPermission();
+                  setDismissedNotifBanner(true);
+                  localStorage.setItem('notif_banner_dismissed', '1');
+                }}
+                className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center relative"
+              >
+                <Bell className="w-5 h-5 text-white" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-400 rounded-full" />
+              </button>
+            )}
+            <Link
+              to="/AccountSettings"
+              className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center"
+              style={{ userSelect: 'none' }}
+            >
+              {user?.full_name ? (
+                <span className="text-white font-bold text-sm">
+                  {user.full_name[0].toUpperCase()}
+                </span>
+              ) : (
+                <Settings className="w-5 h-5 text-white" />
+              )}
+            </Link>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <Link to="/AccountSettings" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center" style={{ userSelect: 'none' }}>
-            <Settings className="w-5 h-5 text-slate-600" />
-          </Link>
+
+        {/* Balance area */}
+        <div className="relative z-10 mb-7">
+          <p className="text-white/60 text-xs font-medium uppercase tracking-widest mb-1">Send Money To</p>
+          <p className="text-white text-4xl font-extrabold leading-none mb-1">Loved Ones</p>
+          <p className="text-white/70 text-sm">Fast · Secure · Low Fees</p>
         </div>
-      </div>
 
-      {/* Push Notification Banner */}
-      {showNotifBanner && (
-        <div className="mx-5 mb-4 bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-center gap-3">
-          <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <Bell className="w-4 h-4 text-blue-600" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-slate-800 text-sm font-semibold">Stay up to date</p>
-            <p className="text-slate-500 text-xs mt-0.5">Enable notifications for transfer alerts</p>
-          </div>
-          <div className="flex gap-2 flex-shrink-0">
-            <button onClick={handleDismissBanner} className="text-slate-400 text-xs px-2 py-1 rounded-lg hover:bg-slate-100">
-              Later
-            </button>
-            <button onClick={handleEnableNotifications} className="text-white text-xs px-3 py-1 rounded-lg font-semibold" style={{ backgroundColor: '#3D7BB7' }}>
-              Allow
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Balance Card */}
-      <div className="mx-5 mb-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="rounded-3xl p-6 relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #61AF39, #5FAE2E)' }}
-        >
-          <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/10" />
-          <div className="absolute -bottom-10 -left-6 w-32 h-32 rounded-full bg-white/10" />
-          <p className="text-white text-sm font-medium mb-1 relative z-10">Send Money To Your</p>
-          <p className="text-white text-3xl font-bold relative z-10">Loved Ones</p>
-          <p className="text-white text-sm mt-2 relative z-10">Fast · Secure · Low Fees</p>
-          <div className="flex gap-2 mt-4 relative z-10">
-            {features.map(({ icon: Icon, label, color }) => (
-              <div key={label} className="flex items-center gap-1 bg-white/20 rounded-full px-3 py-1">
-                <Icon className="w-3 h-3 text-white" />
-                <span className="text-white text-xs font-medium">{label}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Globe Visualization */}
-      <div className="mx-5 mb-4 rounded-3xl overflow-hidden">
-        <GlobeVisualization />
-      </div>
-
-      {/* Quick Actions */}
-      <div className="px-5 mb-6">
-        <h2 className="text-slate-800 font-semibold text-base mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-4 gap-2">
-          {quickActions.map((action, i) => {
+        {/* Quick action pills inside hero */}
+        <div className="relative z-10 grid grid-cols-4 gap-2">
+          {quickActions.map((action) => {
             const Icon = action.icon;
-            if (action.link) {
-              return (
-                <Link key={action.id} to={action.link}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.08 }}
-                    className="flex flex-col items-center gap-2"
-                  >
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={action.logo ? {} : { backgroundColor: action.bg }}>
-                      {action.logo ? <img src={action.logo} alt={action.label} className="w-12 h-12 object-cover rounded-2xl" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
-                    </div>
-                    <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
-                  </motion.div>
-                </Link>
-              );
-            }
             return (
               <motion.button
                 key={action.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
+                whileTap={{ scale: 0.93 }}
                 onClick={() => handleAction(action.id)}
                 className="flex flex-col items-center gap-2"
+                style={{ userSelect: 'none' }}
               >
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg text-lg" style={action.logo ? {} : { backgroundColor: action.bg }}>
-                  {action.logo ? <img src={action.logo} alt={action.label} className="w-12 h-12 object-cover rounded-2xl" /> : action.emoji ? action.emoji : <Icon className="w-5 h-5" style={{ color: action.color }} />}
+                <div
+                  className="w-13 h-13 rounded-2xl flex items-center justify-center"
+                  style={{ width: 52, height: 52, backgroundColor: action.bg, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)' }}
+                >
+                  <Icon className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-slate-700 text-xs font-medium text-center leading-tight">{action.label}</span>
+                <span className="text-white/90 text-xs font-medium leading-tight text-center">{action.label}</span>
               </motion.button>
             );
           })}
         </div>
       </div>
 
-      {/* Send To Section */}
-      <div className="px-5 mb-6">
+      {/* ── Promo / CTA strip ── */}
+      <div className="px-4 -mt-3 mb-5">
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => setShowTopup(true)}
+          className="w-full rounded-2xl px-5 py-4 flex items-center justify-between shadow-lg"
+          style={{ background: 'linear-gradient(135deg, #F88F2B, #ef6c00)', userSelect: 'none' }}
+        >
+          <div>
+            <p className="text-white font-bold text-base">📱 Mobile Top-Up</p>
+            <p className="text-white/80 text-xs mt-0.5">Recharge any number instantly</p>
+          </div>
+          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+            <ChevronRight className="w-5 h-5 text-white" />
+          </div>
+        </motion.button>
+      </div>
+
+      {/* ── Send To ── */}
+      <div className="px-4 mb-5">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-slate-800 font-semibold text-base">Send To</h2>
-          <Link to="/TaperPayerRates" className="text-blue-400 text-xs font-medium flex items-center gap-1">
-            View all <ChevronRight className="w-3 h-3" />
+          <h2 className="text-slate-800 font-bold text-base">Send To</h2>
+          <Link to="/TaperPayerRates" className="text-[#3D7BB7] text-xs font-semibold flex items-center gap-0.5">
+            All rates <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1" style={{ scrollbarWidth: 'none' }}>
           {destinations.map((dest, i) => (
             <motion.button
               key={dest.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 + i * 0.05 }}
-              onClick={() => handleCountryTap(dest)}
-              className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 active:bg-slate-100 transition-colors shadow-sm border border-slate-100"
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.05 }}
+              onClick={() => { setSelectedCountry(dest.name); setShowTransfer(true); }}
+              className="flex-shrink-0 flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-4 shadow-sm border border-slate-100 active:bg-slate-50"
+              style={{ minWidth: 72, userSelect: 'none' }}
             >
-              <span className="text-2xl">{dest.flag}</span>
-              <span className="text-slate-700 text-xs font-medium text-center leading-tight">{dest.name}</span>
+              <span className="text-3xl leading-none">{dest.flag}</span>
+              <span className="text-slate-700 text-xs font-semibold text-center leading-tight">{dest.name}</span>
             </motion.button>
           ))}
         </div>
       </div>
 
-      {/* Why Us */}
-      <div className="px-5 mb-6">
-        <h2 className="text-slate-800 font-semibold text-base mb-3">Why Taper Payer?</h2>
-        <div className="space-y-3">
+      {/* ── Services Grid ── */}
+      <div className="px-4 mb-5">
+        <h2 className="text-slate-800 font-bold text-base mb-3">Services</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {serviceCards.map((card, i) => {
+            const Icon = card.icon;
+            return (
+              <motion.button
+                key={card.id}
+                whileTap={{ scale: 0.97 }}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.07 }}
+                onClick={() => handleAction(card.id)}
+                className="rounded-2xl p-4 flex flex-col items-start gap-2 shadow-md relative overflow-hidden"
+                style={{ background: card.gradient, userSelect: 'none' }}
+              >
+                <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-white/10 pointer-events-none" />
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                  {card.logo
+                    ? <img src={card.logo} alt={card.label} className="w-8 h-8 object-cover rounded-lg" />
+                    : <Icon className="w-5 h-5 text-white" />
+                  }
+                </div>
+                <div className="text-left">
+                  <p className="text-white font-bold text-sm leading-tight">{card.label}</p>
+                  <p className="text-white/70 text-xs mt-0.5 leading-tight">{card.desc}</p>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Why Taper Payer ── */}
+      <div className="px-4 mb-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 divide-y divide-slate-100">
           {[
-            { icon: Zap, title: "We're Fast", desc: "From instant to next-day delivery", color: '#F88F2B', bg: '#fff3e0' },
-            { icon: Shield, title: "We're Safe", desc: "Bank-grade encryption & compliance", color: '#61AF39', bg: '#e8f5e9' },
-            { icon: TrendingUp, title: "Low Cost", desc: "Competitive rates, no hidden fees", color: '#3D7BB7', bg: '#e3f2fd' },
-          ].map(({ icon: Icon, title, desc, color, bg }, i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 + i * 0.1 }}
-              className="flex items-center gap-4 bg-white rounded-2xl p-4 shadow-sm border border-slate-100"
-            >
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: bg }}>
-                <Icon className="w-6 h-6" style={{ color }} />
-              </div>
-              <div>
+            { emoji: '⚡', title: "Lightning Fast", desc: "Instant to next-day delivery" },
+            { emoji: '🔒', title: "Bank-Grade Security", desc: "Your money is always protected" },
+            { emoji: '💸', title: "No Hidden Fees", desc: "Competitive rates, transparent pricing" },
+          ].map(({ emoji, title, desc }) => (
+            <div key={title} className="flex items-center gap-3 px-4 py-3.5">
+              <span className="text-2xl w-8 text-center flex-shrink-0">{emoji}</span>
+              <div className="flex-1 min-w-0">
                 <p className="text-slate-800 font-semibold text-sm">{title}</p>
-                <p className="text-slate-500 text-xs mt-0.5">{desc}</p>
+                <p className="text-slate-400 text-xs">{desc}</p>
               </div>
-              <ArrowUpRight className="w-4 h-4 text-slate-300 ml-auto" />
-            </motion.div>
+              <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0" />
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Taper Mobile CTA */}
-      <div className="px-5 mb-6">
-        <motion.button
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          onClick={() => setShowTopup(true)}
-          className="w-full rounded-3xl p-5 flex items-center justify-between"
-          style={{ background: 'linear-gradient(135deg, #3D7BB7, #2e5f8f)' }}
-        >
-          <div>
-            <p className="text-white font-bold text-lg">Mobile Top-Up</p>
-            <p className="text-white/80 text-sm mt-0.5">Recharge any mobile number instantly</p>
-          </div>
-          <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
-            <Smartphone className="w-8 h-8 text-white" />
-          </div>
-        </motion.button>
-      </div>
-
-      {/* Modals */}
+      {/* ── Modals ── */}
       {showTopup && createPortal(
         <div className="fixed inset-0 z-50 flex items-end justify-center">
           <div className="absolute inset-0 bg-black/60" onClick={() => setShowTopup(false)} />
           <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="relative bg-white rounded-t-3xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ y: '100%' }} animate={{ y: 0 }} transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className="relative bg-white rounded-t-3xl w-full max-h-[92vh] overflow-y-auto"
           >
             <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2" />
-            <button onClick={() => setShowTopup(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10">✕</button>
-            <div className="p-6 pt-4">
-              <TaperConnectFormWrapper />
-            </div>
+            <button onClick={() => setShowTopup(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">✕</button>
+            <div className="p-6 pt-4"><TaperConnectFormWrapper /></div>
           </motion.div>
         </div>,
         document.body
@@ -373,13 +310,11 @@ export default function MobileHomeScreen() {
         <div className="fixed inset-0 z-50 flex items-end justify-center">
           <div className="absolute inset-0 bg-black/60" onClick={() => setShowHaiti(false)} />
           <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="relative bg-white rounded-t-3xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ y: '100%' }} animate={{ y: 0 }} transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className="relative bg-white rounded-t-3xl w-full max-h-[92vh] overflow-y-auto"
           >
             <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2" />
-            <button onClick={() => setShowHaiti(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10">✕</button>
+            <button onClick={() => setShowHaiti(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">✕</button>
             <HaitiTransferModal amount="100" onClose={() => setShowHaiti(false)} />
           </motion.div>
         </div>,
@@ -390,13 +325,11 @@ export default function MobileHomeScreen() {
         <div className="fixed inset-0 z-50 flex items-end justify-center">
           <div className="absolute inset-0 bg-black/60" onClick={() => setShowTransfer(false)} />
           <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="relative bg-white rounded-t-3xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ y: '100%' }} animate={{ y: 0 }} transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className="relative bg-white rounded-t-3xl w-full max-h-[92vh] overflow-y-auto"
           >
             <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2" />
-            <button onClick={() => setShowTransfer(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10">✕</button>
+            <button onClick={() => setShowTransfer(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">✕</button>
             <CybridTransferModal amount="100" country={selectedCountry} onClose={() => setShowTransfer(false)} />
           </motion.div>
         </div>,
@@ -411,7 +344,6 @@ export default function MobileHomeScreen() {
       <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
       <RequestMoneyModal isOpen={showRequestMoney} onClose={() => setShowRequestMoney(false)} />
       <RequestTopUpModal isOpen={showRequestTopUp} onClose={() => setShowRequestTopUp(false)} />
-
     </div>
   );
 }

@@ -18,14 +18,14 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const quickActions = [
-  { id: 'send',        label: 'Send Money',    icon: Send,         bg: 'rgba(255,255,255,0.18)' },
-  { id: 'topup',       label: 'Mobile Top-Up', icon: PhoneCall,    bg: 'rgba(255,255,255,0.18)' },
-  { id: 'request',     label: 'Request Money', icon: HandCoins,    bg: 'rgba(255,255,255,0.18)' },
-  { id: 'requesttopup',label: 'Req. Top-Up',   icon: PhoneOutgoing,bg: 'rgba(255,255,255,0.18)' },
-  { id: 'sendagnv',    label: 'Send AGNV',      logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg', bg: 'rgba(255,255,255,0.18)' },
-  { id: 'splitbills',  label: 'Split Bills',   icon: DollarSign,   bg: 'rgba(255,255,255,0.18)' },
-  { id: 'favorites',   label: 'Favorites',     icon: Users,        bg: 'rgba(255,255,255,0.18)' },
-  { id: 'groupwallet', label: 'Group Wallet',  icon: Users,        bg: 'rgba(255,255,255,0.18)' },
+  { id: 'send',        label: 'Send Money',    icon: Send,         iconBg: '#dbeafe', iconColor: '#3D7BB7' },
+  { id: 'topup',       label: 'Mobile Top-Up', icon: PhoneCall,    iconBg: '#fff3e0', iconColor: '#F88F2B' },
+  { id: 'request',     label: 'Request Money', icon: HandCoins,    iconBg: '#dcfce7', iconColor: '#61AF39' },
+  { id: 'requesttopup',label: 'Req. Top-Up',   icon: PhoneOutgoing,iconBg: '#fce7f3', iconColor: '#e91e8c' },
+  { id: 'sendagnv',    label: 'Send AGNV',      logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg' },
+  { id: 'splitbills',  label: 'Split Bills',   icon: DollarSign,   iconBg: '#ffe4e6', iconColor: '#ef4444' },
+  { id: 'favorites',   label: 'Favorites',     icon: Users,        iconBg: '#ccfbf1', iconColor: '#0d9488' },
+  { id: 'groupwallet', label: 'Group Wallet',  icon: Users,        iconBg: '#e0f2fe', iconColor: '#0284c7' },
 ];
 
 
@@ -79,6 +79,12 @@ export default function MobileHomeScreen() {
   };
 
   const firstName = user?.full_name ? user.full_name.split(' ')[0] : null;
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    window.location.href = '/TaperPayerLogin';
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-[#f1f5f9] pb-28">
@@ -159,10 +165,13 @@ export default function MobileHomeScreen() {
                 className="flex flex-col items-center gap-2"
                 style={{ userSelect: 'none' }}
               >
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 bg-white">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm"
+                  style={{ backgroundColor: action.iconBg || '#f1f5f9' }}
+                >
                   {action.logo
-                    ? <img src={action.logo} alt={action.label} className="w-9 h-9 object-cover rounded-xl" />
-                    : <Icon className="w-6 h-6" style={{ color: '#3D7BB7' }} />
+                    ? <img src={action.logo} alt={action.label} className="w-10 h-10 object-cover rounded-xl" />
+                    : <Icon className="w-6 h-6" style={{ color: action.iconColor || '#3D7BB7' }} />
                   }
                 </div>
                 <span className="text-slate-600 text-[11px] font-medium leading-tight text-center">{action.label}</span>

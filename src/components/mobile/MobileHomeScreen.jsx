@@ -4,8 +4,8 @@ import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import {
-  Send, Smartphone, Bell, Settings, ChevronRight,
-  PhoneCall, HandCoins, PhoneOutgoing, DollarSign, Users, Plus, Scan
+  Send, Bell, Settings, ChevronRight,
+  PhoneCall, HandCoins, PhoneOutgoing, DollarSign, Users
 } from 'lucide-react';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
@@ -18,50 +18,26 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const quickActions = [
-  { id: 'send',        label: 'Send',       icon: Send,         color: '#fff', bg: 'rgba(255,255,255,0.18)' },
-  { id: 'topup',       label: 'Top-Up',     icon: PhoneCall,    color: '#fff', bg: 'rgba(255,255,255,0.18)' },
-  { id: 'request',     label: 'Request',    icon: HandCoins,    color: '#fff', bg: 'rgba(255,255,255,0.18)' },
-  { id: 'requesttopup',label: 'Req. Top-Up',icon: PhoneOutgoing,color: '#fff', bg: 'rgba(255,255,255,0.18)' },
+  { id: 'send',        label: 'Send Money',    icon: Send,         bg: 'rgba(255,255,255,0.18)' },
+  { id: 'topup',       label: 'Mobile Top-Up', icon: PhoneCall,    bg: 'rgba(255,255,255,0.18)' },
+  { id: 'request',     label: 'Request Money', icon: HandCoins,    bg: 'rgba(255,255,255,0.18)' },
+  { id: 'requesttopup',label: 'Req. Top-Up',   icon: PhoneOutgoing,bg: 'rgba(255,255,255,0.18)' },
+  { id: 'sendagnv',    label: 'Send AGNV',      logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg', bg: 'rgba(255,255,255,0.18)' },
+  { id: 'splitbills',  label: 'Split Bills',   icon: DollarSign,   bg: 'rgba(255,255,255,0.18)' },
+  { id: 'favorites',   label: 'Favorites',     icon: Users,        bg: 'rgba(255,255,255,0.18)' },
+  { id: 'groupwallet', label: 'Group Wallet',  icon: Users,        bg: 'rgba(255,255,255,0.18)' },
 ];
 
-const serviceCards = [
-  {
-    id: 'send',
-    label: 'Send Money',
-    desc: 'Transfer to 150+ countries',
-    icon: Send,
-    gradient: 'linear-gradient(135deg, #3D7BB7, #2563eb)',
-  },
-  {
-    id: 'topup',
-    label: 'Mobile Top-Up',
-    desc: 'Recharge any number instantly',
-    icon: PhoneCall,
-    gradient: 'linear-gradient(135deg, #F88F2B, #f97316)',
-  },
-  {
-    id: 'request',
-    label: 'Request Money',
-    desc: 'Ask contacts to pay you',
-    icon: HandCoins,
-    gradient: 'linear-gradient(135deg, #61AF39, #16a34a)',
-  },
-  {
-    id: 'sendagnv',
-    label: 'Send AGNV',
-    desc: 'Transfer AGNV tokens',
-    logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg',
-    gradient: 'linear-gradient(135deg, #003DA5, #1e40af)',
-  },
-];
 
 const destinations = [
-  { name: 'Haiti',    flag: '🇭🇹' },
-  { name: 'Ghana',    flag: '🇬🇭' },
-  { name: 'Kenya',    flag: '🇰🇪' },
-  { name: 'Senegal',  flag: '🇸🇳' },
-  { name: 'Dom. Rep.',flag: '🇩🇴' },
-  { name: 'Mexico',   flag: '🇲🇽' },
+  { name: 'Haiti',             flag: '🇭🇹' },
+  { name: 'USA',               flag: '🇺🇸' },
+  { name: 'Ghana',             flag: '🇬🇭' },
+  { name: 'Kenya',             flag: '🇰🇪' },
+  { name: 'Senegal',           flag: '🇸🇳' },
+  { name: 'Dominican Republic',flag: '🇩🇴' },
+  { name: 'Mexico',            flag: '🇲🇽' },
+  { name: 'Angola',            flag: '🇦🇴' },
 ];
 
 export default function MobileHomeScreen() {
@@ -164,49 +140,36 @@ export default function MobileHomeScreen() {
           <p className="text-white/70 text-sm">Fast · Secure · Low Fees</p>
         </div>
 
-        {/* Quick action pills inside hero */}
-        <div className="relative z-10 grid grid-cols-4 gap-2">
-          {quickActions.map((action) => {
+      </div>
+
+      {/* ── Quick Actions ── */}
+      <div className="px-4 py-5">
+        <h2 className="text-slate-800 font-bold text-base mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-4 gap-3">
+          {quickActions.map((action, i) => {
             const Icon = action.icon;
             return (
               <motion.button
                 key={action.id}
                 whileTap={{ scale: 0.93 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04 }}
                 onClick={() => handleAction(action.id)}
                 className="flex flex-col items-center gap-2"
                 style={{ userSelect: 'none' }}
               >
-                <div
-                  className="w-13 h-13 rounded-2xl flex items-center justify-center"
-                  style={{ width: 52, height: 52, backgroundColor: action.bg, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)' }}
-                >
-                  <Icon className="w-5 h-5 text-white" />
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 bg-white">
+                  {action.logo
+                    ? <img src={action.logo} alt={action.label} className="w-9 h-9 object-cover rounded-xl" />
+                    : <Icon className="w-6 h-6" style={{ color: '#3D7BB7' }} />
+                  }
                 </div>
-                <span className="text-white/90 text-xs font-medium leading-tight text-center">{action.label}</span>
+                <span className="text-slate-600 text-[11px] font-medium leading-tight text-center">{action.label}</span>
               </motion.button>
             );
           })}
         </div>
-      </div>
-
-      {/* ── Promo / CTA strip ── */}
-      <div className="px-4 -mt-3 mb-5">
-        <motion.button
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setShowTopup(true)}
-          className="w-full rounded-2xl px-5 py-4 flex items-center justify-between shadow-lg"
-          style={{ background: 'linear-gradient(135deg, #F88F2B, #ef6c00)', userSelect: 'none' }}
-        >
-          <div>
-            <p className="text-white font-bold text-base">📱 Mobile Top-Up</p>
-            <p className="text-white/80 text-xs mt-0.5">Recharge any number instantly</p>
-          </div>
-          <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-            <ChevronRight className="w-5 h-5 text-white" />
-          </div>
-        </motion.button>
       </div>
 
       {/* ── Send To ── */}
@@ -217,56 +180,22 @@ export default function MobileHomeScreen() {
             All rates <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
-        <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1" style={{ scrollbarWidth: 'none' }}>
+        <div className="grid grid-cols-4 gap-3">
           {destinations.map((dest, i) => (
             <motion.button
               key={dest.name}
               whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.04 }}
               onClick={() => { setSelectedCountry(dest.name); setShowTransfer(true); }}
-              className="flex-shrink-0 flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-4 shadow-sm border border-slate-100 active:bg-slate-50"
-              style={{ minWidth: 72, userSelect: 'none' }}
+              className="flex flex-col items-center gap-1.5 bg-white rounded-2xl py-3 px-2 shadow-sm border border-slate-100 active:bg-slate-50"
+              style={{ userSelect: 'none' }}
             >
-              <span className="text-3xl leading-none">{dest.flag}</span>
-              <span className="text-slate-700 text-xs font-semibold text-center leading-tight">{dest.name}</span>
+              <span className="text-2xl leading-none">{dest.flag}</span>
+              <span className="text-slate-700 text-[11px] font-semibold text-center leading-tight">{dest.name}</span>
             </motion.button>
           ))}
-        </div>
-      </div>
-
-      {/* ── Services Grid ── */}
-      <div className="px-4 mb-5">
-        <h2 className="text-slate-800 font-bold text-base mb-3">Services</h2>
-        <div className="grid grid-cols-2 gap-3">
-          {serviceCards.map((card, i) => {
-            const Icon = card.icon;
-            return (
-              <motion.button
-                key={card.id}
-                whileTap={{ scale: 0.97 }}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.07 }}
-                onClick={() => handleAction(card.id)}
-                className="rounded-2xl p-4 flex flex-col items-start gap-2 shadow-md relative overflow-hidden"
-                style={{ background: card.gradient, userSelect: 'none' }}
-              >
-                <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-white/10 pointer-events-none" />
-                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                  {card.logo
-                    ? <img src={card.logo} alt={card.label} className="w-8 h-8 object-cover rounded-lg" />
-                    : <Icon className="w-5 h-5 text-white" />
-                  }
-                </div>
-                <div className="text-left">
-                  <p className="text-white font-bold text-sm leading-tight">{card.label}</p>
-                  <p className="text-white/70 text-xs mt-0.5 leading-tight">{card.desc}</p>
-                </div>
-              </motion.button>
-            );
-          })}
         </div>
       </div>
 

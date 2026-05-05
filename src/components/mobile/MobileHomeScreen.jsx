@@ -21,7 +21,7 @@ const quickActions = [
   { id: 'send',        label: 'Send Money',    icon: Send,         iconBg: '#dbeafe', iconColor: '#3D7BB7' },
   { id: 'topup',       label: 'Mobile Top-Up', icon: PhoneCall,    iconBg: '#fff3e0', iconColor: '#F88F2B' },
   { id: 'request',     label: 'Request Money', icon: HandCoins,    iconBg: '#dcfce7', iconColor: '#61AF39' },
-  { id: 'requesttopup',label: 'Req. Top-Up',   icon: PhoneOutgoing,iconBg: '#fce7f3', iconColor: '#e91e8c' },
+  { id: 'requesttopup',label: 'Request Top-Up',   icon: PhoneOutgoing,iconBg: '#fce7f3', iconColor: '#e91e8c' },
 
 ];
 

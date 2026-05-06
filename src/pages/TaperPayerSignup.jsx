@@ -337,7 +337,7 @@ export default function TaperPayerSignup() {
               <img 
                 src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
                 alt="Taper Payer"
-                className="h-24 md:h-36 w-auto mx-auto mb-4 mix-blend-multiply dark:mix-blend-normal"
+                className="h-36 md:h-48 w-auto mx-auto mb-4 mix-blend-multiply dark:mix-blend-normal"
               />
             </Link>
             <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">

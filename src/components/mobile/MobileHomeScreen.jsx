@@ -69,7 +69,7 @@ export default function MobileHomeScreen() {
   }, [login]);
 
   const handleAction = (id) => {
-    if (id === 'topup') setShowTopup(true);
+    if (id === 'topup') setShowComingSoon(true);
     else if (id === 'request') setShowRequestMoney(true);
     else if (id === 'requesttopup') setShowRequestTopUp(true);
     else if (id === 'sendagnv') setShowSendAGNV(true);

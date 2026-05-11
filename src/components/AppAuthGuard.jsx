@@ -38,11 +38,5 @@ export default function AppAuthGuard({ children }) {
     );
   }
 
-  // If not logged in and not a public page, redirect to login
-  if (!user && !isPublic) {
-    window.location.replace('/TaperPayerLogin');
-    return null;
-  }
-
   return <>{children}</>;
 }

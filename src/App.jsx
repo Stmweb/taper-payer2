@@ -144,15 +144,8 @@ const AuthenticatedApp = () => {
   if (authError) {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Only redirect to login for protected admin pages
-      const adminPaths = ['/AdminPageManager', '/AdminEmailMarketing', '/AdminStripeDashboard'];
-      if (adminPaths.includes(location.pathname)) {
-        navigateToLogin();
-        return null;
-      }
-      // Public pages render normally even without auth
     }
+    // auth_required and other errors: just render normally, no redirect
   }
 
   // Render the main app

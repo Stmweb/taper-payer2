@@ -20,8 +20,8 @@ export default function BraintreePaymentForm({ amount, phoneNumber, countryCode,
   const loadBraintree = async () => {
     try {
       // Load Braintree client & hosted-fields scripts
-      await loadScript('https://js.braintreegateway.com/web/3.99.0/js/client.min.js');
-      await loadScript('https://js.braintreegateway.com/web/3.99.0/js/hosted-fields.min.js');
+      await loadScript('https://js.braintreegateway.com/web/3.141.0/js/client.min.js');
+      await loadScript('https://js.braintreegateway.com/web/3.141.0/js/hosted-fields.min.js');
 
       // Get client token from backend
       const res = await base44.functions.invoke('getBraintreeToken', {});

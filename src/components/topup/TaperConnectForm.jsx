@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, CheckCircle, AlertCircle, Wifi, Lock, Search, X } from 'lucide-react';
+import { Loader2, CheckCircle, AlertCircle, Wifi, Search, X } from 'lucide-react';
 import MoncashPaymentForm from './MoncashPaymentForm';
+import BraintreePaymentForm from './BraintreePaymentForm';
 
 // Square config is fetched from backend to use the correct env variables
 
@@ -94,8 +95,6 @@ export default function TaperConnectForm({ initialCountry }) {
   const [customAmount, setCustomAmount] = useState('');
   const [exchangeRate, setExchangeRate] = useState(130);
   const detectTimeout = useRef(null);
-  const squareCardRef = useRef(null);
-  const squarePaymentsRef = useRef(null);
 
   React.useEffect(() => {
     if (initialCountry && step === 2) {
@@ -103,70 +102,7 @@ export default function TaperConnectForm({ initialCountry }) {
     }
   }, []);
 
-  const [squareReady, setSquareReady] = useState(false);
-  const [squareError, setSquareError] = useState('');
 
-  // Load Square Web Payments SDK and init card element
-  useEffect(() => {
-    if (paymentMethod !== 'card' || step !== 2) return;
-
-    let cancelled = false;
-    setSquareReady(false);
-    setSquareError('');
-
-    const initSquare = async () => {
-      // Fetch Square config from backend
-      const configRes = await base44.functions.invoke('getSquareConfig', {});
-      const { applicationId, locationId } = configRes.data;
-
-      if (!applicationId || !locationId) {
-        throw new Error('Square configuration missing.');
-      }
-
-      // Load script if not already present
-      if (!window.Square) {
-        await new Promise((resolve, reject) => {
-          if (document.querySelector('script[src*="squarecdn"]')) {
-            const poll = setInterval(() => {
-              if (window.Square) { clearInterval(poll); resolve(); }
-            }, 100);
-            setTimeout(() => { clearInterval(poll); reject(new Error('Square SDK timeout')); }, 10000);
-            return;
-          }
-          const script = document.createElement('script');
-          script.src = 'https://web.squarecdn.com/v1/square.js';
-          script.onload = resolve;
-          script.onerror = () => reject(new Error('Failed to load Square SDK'));
-          document.head.appendChild(script);
-        });
-      }
-
-      if (cancelled) return;
-
-      const payments = window.Square.payments(applicationId, locationId);
-      squarePaymentsRef.current = payments;
-      const card = await payments.card();
-
-      if (cancelled) { card.destroy().catch(() => {}); return; }
-
-      await card.attach('#square-card-container');
-      squareCardRef.current = card;
-      setSquareReady(true);
-    };
-
-    initSquare().catch((err) => {
-      if (!cancelled) setSquareError(err.message || 'Card payment unavailable. Please try again.');
-    });
-
-    return () => {
-      cancelled = true;
-      if (squareCardRef.current) {
-        squareCardRef.current.destroy().catch(() => {});
-        squareCardRef.current = null;
-      }
-      setSquareReady(false);
-    };
-  }, [paymentMethod, step]);
 
   const handlePhoneChange = (value) => {
     setPhoneNumber(value);
@@ -241,58 +177,7 @@ export default function TaperConnectForm({ initialCountry }) {
     }
   };
 
-  const handleCardPayment = async () => {
-    if (!phoneNumber || !selectedProduct) {
-      setError('Please enter a phone number and select a plan.');
-      return;
-    }
-    if (!squareCardRef.current || !squareReady) {
-      setError('Card input is still loading. Please wait a moment and try again.');
-      return;
-    }
 
-    setLoading(true);
-    setError('');
-    setCardError('');
-
-    try {
-      const result = await squareCardRef.current.tokenize();
-      if (result.status !== 'OK') {
-        setCardError(result.errors?.[0]?.message || 'Card details are invalid.');
-        setLoading(false);
-        return;
-      }
-
-      const sourceToken = result.token;
-      const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
-      const fullPhone = selectedCountry.dial + localDigits;
-      const retailAmount = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
-
-      const paymentRes = await base44.functions.invoke('processSquareTopUp', {
-        amount: parseFloat(retailAmount), // backend adds $1 service fee on top
-        phoneNumber: fullPhone,
-        countryCode: selectedCountry.iso,
-        operatorId: detectedOperator?.id || selectedProduct?.operator?.id,
-        sourceToken,
-      });
-
-      if (paymentRes.data?.success) {
-        base44.functions.invoke('sendNotification', {
-          type: 'topup_confirmation',
-          recipient: fullPhone,
-          amount: String(retailAmount),
-          currency: 'USD',
-        }).catch(() => {});
-        setSuccess(true);
-      } else {
-        setError(paymentRes.data?.error || 'Transaction failed. Please try again.');
-      }
-    } catch (e) {
-      setError("We couldn't complete this top-up. Please try again or use another payment method.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const reset = () => {
     setStep(1);
@@ -305,10 +190,6 @@ export default function TaperConnectForm({ initialCountry }) {
     setCardError('');
     setPaymentMethod('card');
     setDetectedOperator(null);
-    if (squareCardRef.current) {
-      squareCardRef.current.destroy().catch(() => {});
-      squareCardRef.current = null;
-    }
   };
 
   if (success) {
@@ -508,51 +389,24 @@ export default function TaperConnectForm({ initialCountry }) {
             </div>
           </div>
 
-          {/* Card Payment */}
-          {paymentMethod === 'card' && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Card Details</label>
-                {squareError ? (
-                  <div className="p-3 border border-red-200 rounded-lg bg-red-50 text-red-600 text-sm">{squareError}</div>
-                ) : (
-                  <div className="relative">
-                    {!squareReady && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-white z-10 rounded-lg border border-slate-200">
-                        <Loader2 className="w-4 h-4 animate-spin text-cyan-500 mr-2" />
-                        <span className="text-sm text-slate-500">Loading card input...</span>
-                      </div>
-                    )}
-                    <div id="square-card-container" className="border border-slate-200 rounded-lg bg-white min-h-[56px]"></div>
-                  </div>
-                )}
-                {cardError && <p className="text-red-600 text-sm mt-2">{cardError}</p>}
-              </div>
-              {selectedProduct && (() => {
-                    const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
-                    const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : null;
-                    return (
-                      <div className="bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-600 space-y-1">
-                        <div className="flex justify-between"><span>Top-up amount</span><span>${parseFloat(topupAmt).toFixed(2)}</span></div>
-                        <div className="flex justify-between"><span>Service fee</span><span>$1.00</span></div>
-                        <div className="flex justify-between font-bold text-slate-800 border-t border-slate-200 pt-1 mt-1"><span>Total charged</span><span>${total}</span></div>
-                      </div>
-                    );
-                  })()}
-              <Button
-                onClick={handleCardPayment}
-                disabled={loading || !phoneNumber || !selectedProduct || !squareReady}
-                className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
-              >
-                {loading ? (
-                  <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Processing...</>
-                ) : (() => {
-                  const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
-                  const total = topupAmt != null ? (parseFloat(topupAmt) + 1).toFixed(2) : '—';
-                  return <><Lock className="w-4 h-4 mr-2" /> Pay ${total} & Send Airtime</>;
-                })()}
-              </Button>
-            </>
+          {/* Card Payment via Braintree */}
+          {paymentMethod === 'card' && selectedProduct && (() => {
+            const topupAmt = selectedProduct?.prices?.retail?.amount ?? selectedProduct?.suggested_amounts?.[0] ?? selectedProduct?.face_value;
+            const localDigits = phoneNumber.replace(/^0/, '').replace(/\D/g, '');
+            const fullPhone = selectedCountry.dial + localDigits;
+            return (
+              <BraintreePaymentForm
+                amount={topupAmt}
+                phoneNumber={fullPhone}
+                countryCode={selectedCountry.iso}
+                operatorId={detectedOperator?.id || selectedProduct?.operator?.id}
+                onSuccess={() => setSuccess(true)}
+                onError={(msg) => setError(msg || 'Payment failed. Please try again.')}
+              />
+            );
+          })()}
+          {paymentMethod === 'card' && !selectedProduct && (
+            <p className="text-sm text-slate-500 text-center py-2">Please select an amount above to proceed to payment.</p>
           )}
 
           {/* MonCash (Haiti only) */}

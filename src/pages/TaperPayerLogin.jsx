@@ -10,6 +10,7 @@ import TaperPayerLogo from '@/components/taperpayer/TaperPayerLogo';
 import MobileHeader from '@/components/mobile/MobileHeader';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
+import MobileLoginScreen from '@/components/mobile/MobileLoginScreen';
 
 export default function TaperPayerLogin() {
   const [email, setEmail] = useState('');
@@ -40,6 +41,11 @@ export default function TaperPayerLogin() {
       setIsSubmitting(false);
     }
   };
+
+  // Mobile: render the new mobile-only design
+  if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    return <MobileLoginScreen />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row dark:bg-slate-900">

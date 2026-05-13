@@ -105,7 +105,7 @@ export default function MobileSignupScreen() {
           <img
             src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
             alt="Taper Payer"
-            className="h-20 w-auto mb-6 mix-blend-multiply"
+            className="h-40 w-auto mb-6 mix-blend-multiply"
           />
 
           <h1 className="text-2xl font-bold text-gray-900 mb-1">Create Account 🎉</h1>

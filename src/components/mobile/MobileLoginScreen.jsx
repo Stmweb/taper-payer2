@@ -41,7 +41,7 @@ export default function MobileLoginScreen() {
         <img 
           src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
           alt="Taper Payer"
-          className="h-24 w-auto"
+          className="h-40 w-auto"
         />
       </div>
 

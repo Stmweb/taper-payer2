@@ -84,7 +84,7 @@ export default function MobileHomeScreen() {
       {/* ── Hero / Header Card ── */}
       <div
         className="relative overflow-hidden px-5 pt-14 pb-8"
-        style={{ background: 'linear-gradient(160deg, #1a3a5c 0%, #2479C2 55%, #3fa847 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #1565C0 0%, #1976D2 40%, #00ACC1 75%, #26C6A0 100%)' }}
       >
         {/* Decorative circles */}
         <div className="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-white/10 pointer-events-none" />

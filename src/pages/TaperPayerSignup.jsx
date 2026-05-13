@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import MobileSignupScreen from '@/components/mobile/MobileSignupScreen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -85,6 +86,10 @@ export default function TaperPayerSignup() {
       setIsSubmitting(false);
     }
   };
+
+  if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    return <MobileSignupScreen />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row dark:bg-slate-900">

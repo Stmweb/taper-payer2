@@ -41,9 +41,9 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div 
+      className="min-h-screen flex flex-col"
       style={{
         paddingTop: 'env(safe-area-inset-top, 0px)',
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
       <style>{`
@@ -61,8 +61,14 @@ export default function Layout({ children, currentPageName }) {
           pointer-events: none;
         }
       `}</style>
-      {children}
-      {showBottomTabBar && <BottomTabBar />}
+      <div className="flex-1 overflow-y-auto">
+        {children}
+      </div>
+      {showBottomTabBar && (
+        <div style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+          <BottomTabBar />
+        </div>
+      )}
     </div>
   );
 }

@@ -132,10 +132,37 @@ export default function MobileHomeScreen() {
         </div>
 
         {/* Balance area */}
-        <div className="relative z-10 mb-7">
-          <p className="text-white/60 text-xs font-medium uppercase tracking-widest mb-1">Send Money To</p>
+        <div className="relative z-10 mb-5">
+          <p className="text-white/70 text-sm mb-1">Send Money To Your</p>
           <p className="text-white text-4xl font-extrabold leading-none mb-1">Loved Ones</p>
-          <p className="text-white/70 text-sm">Fast · Secure · Low Fees</p>
+          <p className="text-white/70 text-sm mb-4">Fast · Secure · Low Fees</p>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap gap-2 mb-5">
+            <span className="flex items-center gap-1 bg-white/20 text-white text-xs font-medium px-3 py-1.5 rounded-full">
+              🔒 Safe & Secure
+            </span>
+            <span className="flex items-center gap-1 bg-white/20 text-white text-xs font-medium px-3 py-1.5 rounded-full">
+              ⚡ Instant transfers
+            </span>
+            <span className="flex items-center gap-1 bg-white/20 text-white text-xs font-medium px-3 py-1.5 rounded-full">
+              0 Hidden Fees
+            </span>
+          </div>
+
+          {/* Stats row */}
+          <div className="flex gap-8">
+            <div>
+              <p className="text-white/60 text-[10px] uppercase tracking-widest font-medium mb-0.5">Live Transfers</p>
+              <p className="text-white text-2xl font-extrabold leading-none">$2.4M</p>
+              <p className="text-white/60 text-[10px] mt-0.5">in last 60s</p>
+            </div>
+            <div>
+              <p className="text-white/60 text-[10px] uppercase tracking-widest font-medium mb-0.5">Active Routes</p>
+              <p className="text-white text-2xl font-extrabold leading-none">12</p>
+              <p className="text-white/60 text-[10px] mt-0.5">global corridors</p>
+            </div>
+          </div>
         </div>
 
       </div>

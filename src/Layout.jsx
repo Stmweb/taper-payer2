@@ -41,19 +41,13 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div 
-      className="flex flex-col"
+      className="min-h-screen flex flex-col"
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
         paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
       <style>{`
         html, body {
-          overflow: hidden;
           overscroll-behavior: none;
           -webkit-overflow-scrolling: touch;
         }
@@ -67,10 +61,7 @@ export default function Layout({ children, currentPageName }) {
           pointer-events: none;
         }
       `}</style>
-      <div
-        className="flex-1 overflow-y-auto"
-        style={{ paddingBottom: showBottomTabBar ? 'calc(4rem + env(safe-area-inset-bottom, 0px))' : 0 }}
-      >
+      <div className={`flex-1${showBottomTabBar ? ' pb-20' : ''}`}>
         {children}
       </div>
       {showBottomTabBar && <BottomTabBar />}

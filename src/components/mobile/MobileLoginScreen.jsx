@@ -36,37 +36,26 @@ export default function MobileLoginScreen() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col overflow-y-auto">
-      {/* Status bar area */}
-      <div className="bg-gray-100 px-4 pt-3 pb-1">
-        <p className="text-sm font-medium text-gray-800">Log In</p>
+      {/* Gradient Header Card */}
+      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-teal-500 mx-3 mt-4 rounded-3xl shadow-lg overflow-hidden">
+        <div className="px-6 pt-8 pb-6">
+          <p className="text-blue-100 text-sm font-medium mb-2">Welcome back 👋</p>
+          <h1 className="text-white text-3xl font-bold mb-6">Taper Payer</h1>
+          
+          <p className="text-blue-100 text-xs uppercase tracking-widest font-medium mb-2">Send Money To</p>
+          <h2 className="text-white text-2xl font-bold mb-2">Loved Ones</h2>
+          <p className="text-blue-100 text-sm">Fast · Secure · Low Fees</p>
+        </div>
       </div>
 
       {/* Main card */}
-      <div className="flex-1 bg-white mx-3 rounded-2xl shadow-sm flex flex-col items-center px-6 pt-10 pb-8 overflow-y-auto">
+      <div className="flex-1 bg-white mx-3 mt-6 rounded-2xl shadow-sm flex flex-col items-center px-6 pt-8 pb-8 overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="w-full flex flex-col items-center"
         >
-          {/* Logo */}
-          <div className="flex flex-col items-center mb-8">
-            <img
-              src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
-              alt="Taper Payer"
-              className="h-28 w-auto mix-blend-multiply drop-shadow-md"
-            />
-            <p className="text-xs text-gray-400 tracking-widest uppercase mt-1 font-medium">A Smarter Way to Send Money</p>
-          </div>
-
-          {/* Heading */}
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">
-            Welcome back 👋
-          </h1>
-          <p className="text-sm text-gray-500 mb-8">
-            Log in to send money home
-          </p>
-
           {/* Form */}
           <form onSubmit={handleSubmit} className="w-full space-y-4">
             {/* Phone or Email */}

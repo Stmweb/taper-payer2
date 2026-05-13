@@ -50,11 +50,14 @@ export default function MobileLoginScreen() {
           className="w-full flex flex-col items-center"
         >
           {/* Logo */}
-          <img
-            src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
-            alt="Taper Payer"
-            className="h-20 w-auto mb-8 mix-blend-multiply"
-          />
+          <div className="flex flex-col items-center mb-8">
+            <img
+              src="https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/1bfa6df02_TaperPayerVeryGood.png"
+              alt="Taper Payer"
+              className="h-28 w-auto mix-blend-multiply drop-shadow-md"
+            />
+            <p className="text-xs text-gray-400 tracking-widest uppercase mt-1 font-medium">A Smarter Way to Send Money</p>
+          </div>
 
           {/* Heading */}
           <h1 className="text-2xl font-bold text-gray-900 mb-1">

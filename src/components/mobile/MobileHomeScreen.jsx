@@ -19,14 +19,9 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const quickActions = [
-  { id: 'send',        label: 'Send Money',     icon: Send,       iconBg: '#dbeafe', iconColor: '#3D7BB7' },
   { id: 'topup',       label: 'Mobile Top-Up',  icon: Smartphone, iconBg: '#fff3e0', iconColor: '#F88F2B' },
   { id: 'request',     label: 'Request Money',  icon: Download,   iconBg: '#dcfce7', iconColor: '#61AF39' },
   { id: 'requesttopup',label: 'Request Top-Up', icon: Zap,        iconBg: '#fce7f3', iconColor: '#e91e8c' },
-  { id: 'sendagnv',    label: 'Send AGNV',       icon: CreditCard, iconBg: '#d1fae5', iconColor: '#059669' },
-  { id: 'splitbills',  label: 'Split Bills',     icon: Receipt,    iconBg: '#fef3c7', iconColor: '#d97706' },
-  { id: 'favorites',   label: 'Favorites',       icon: Star,       iconBg: '#fef9c3', iconColor: '#ca8a04' },
-  { id: 'groupwallet', label: 'Group Wallet',    icon: Users2,     iconBg: '#ede9fe', iconColor: '#7c3aed' },
 ];
 
 

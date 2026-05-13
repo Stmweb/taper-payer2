@@ -22,7 +22,7 @@ function formatDate(dateStr) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-export default function RecentTransactions({ user }) {
+export default function RecentTransactions({ user, filter = 'all' }) {
   const [topups, setTopups] = useState([]);
   const [agnv, setAgnv] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ export default function RecentTransactions({ user }) {
   }, [user]);
 
   // Merge and sort by date, take last 5
-  const combined = [
+  let combined = [
     ...topups.map(t => ({
       id: t.id,
       type: 'topup',
@@ -50,6 +50,7 @@ export default function RecentTransactions({ user }) {
       amount: `-$${t.amount?.toFixed(2)}`,
       status: t.status,
       date: t.created_date,
+      txType: 'sent',
     })),
     ...agnv.map(a => ({
       id: a.id,
@@ -61,20 +62,23 @@ export default function RecentTransactions({ user }) {
       amount: `-$${a.amount_usd?.toFixed(2)}`,
       status: a.status,
       date: a.created_date,
+      txType: 'sent',
     })),
   ]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 5);
 
+  // Apply filter
+  if (filter === 'sent') {
+    combined = combined.filter(tx => tx.txType === 'sent');
+  } else if (filter === 'pending') {
+    combined = combined.filter(tx => tx.status === 'pending');
+  }
+
   if (!user) return null;
 
   return (
-    <div className="px-4 mb-6">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-slate-800 font-bold text-base">Recent Transactions</h2>
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-8">
             <div className="w-5 h-5 border-2 border-slate-200 border-t-slate-500 rounded-full animate-spin" />
@@ -114,7 +118,6 @@ export default function RecentTransactions({ user }) {
             ))}
           </div>
         )}
-      </div>
     </div>
   );
 }

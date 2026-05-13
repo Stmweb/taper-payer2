@@ -54,6 +54,7 @@ export default function MobileHomeScreen() {
   const [dismissedNotifBanner, setDismissedNotifBanner] = useState(
     () => localStorage.getItem('notif_banner_dismissed') === '1'
   );
+  const [transactionFilter, setTransactionFilter] = useState('all');
   const { permissionStatus, isSupported, requestPermission } = usePushNotifications();
 
   const showNotifBanner = user && isSupported && permissionStatus === 'default' && !dismissedNotifBanner;
@@ -230,7 +231,30 @@ export default function MobileHomeScreen() {
       </div>
 
       {/* ── Recent Transactions ── */}
-      <RecentTransactions user={user} />
+      <div className="px-4 mb-5">
+        <h2 className="text-slate-800 font-bold text-base mb-3">Recent Transactions</h2>
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
+          {[
+            { id: 'all', label: 'All' },
+            { id: 'sent', label: 'Sent' },
+            { id: 'received', label: 'Received' },
+            { id: 'pending', label: 'Pending' }
+          ].map((filter) => (
+            <button
+              key={filter.id}
+              onClick={() => setTransactionFilter(filter.id)}
+              className={`px-5 py-2 rounded-full font-medium text-sm whitespace-nowrap transition-colors ${
+                transactionFilter === filter.id
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+        <RecentTransactions user={user} filter={transactionFilter} />
+      </div>
 
       {/* ── Modals ── */}
       {showTopup && createPortal(

@@ -61,14 +61,10 @@ export default function Layout({ children, currentPageName }) {
           pointer-events: none;
         }
       `}</style>
-      <div className="flex-1 overflow-y-auto">
+      <div className={`flex-1 overflow-y-auto${showBottomTabBar ? ' pb-20' : ''}`}>
         {children}
       </div>
-      {showBottomTabBar && (
-        <div style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-          <BottomTabBar />
-        </div>
-      )}
+      {showBottomTabBar && <BottomTabBar />}
     </div>
   );
 }

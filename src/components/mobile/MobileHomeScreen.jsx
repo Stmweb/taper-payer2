@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import {
   Send, Bell, Settings, ChevronRight,
-  PhoneCall, HandCoins, PhoneOutgoing, DollarSign, Users
+  Smartphone, Download, Zap, CreditCard, Star, Users2, Receipt, Wallet
 } from 'lucide-react';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
@@ -19,11 +19,14 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const quickActions = [
-  { id: 'send',        label: 'Send Money',    icon: Send,         iconBg: '#dbeafe', iconColor: '#3D7BB7' },
-  { id: 'topup',       label: 'Mobile Top-Up', icon: PhoneCall,    iconBg: '#fff3e0', iconColor: '#F88F2B' },
-  { id: 'request',     label: 'Request Money', icon: HandCoins,    iconBg: '#dcfce7', iconColor: '#61AF39' },
-  { id: 'requesttopup',label: 'Request Top-Up',   icon: PhoneOutgoing,iconBg: '#fce7f3', iconColor: '#e91e8c' },
-
+  { id: 'send',        label: 'Send Money',     icon: Send,       iconBg: '#dbeafe', iconColor: '#3D7BB7' },
+  { id: 'topup',       label: 'Mobile Top-Up',  icon: Smartphone, iconBg: '#fff3e0', iconColor: '#F88F2B' },
+  { id: 'request',     label: 'Request Money',  icon: Download,   iconBg: '#dcfce7', iconColor: '#61AF39' },
+  { id: 'requesttopup',label: 'Request Top-Up', icon: Zap,        iconBg: '#fce7f3', iconColor: '#e91e8c' },
+  { id: 'sendagnv',    label: 'Send AGNV',       icon: CreditCard, iconBg: '#d1fae5', iconColor: '#059669' },
+  { id: 'splitbills',  label: 'Split Bills',     icon: Receipt,    iconBg: '#fef3c7', iconColor: '#d97706' },
+  { id: 'favorites',   label: 'Favorites',       icon: Star,       iconBg: '#fef9c3', iconColor: '#ca8a04' },
+  { id: 'groupwallet', label: 'Group Wallet',    icon: Users2,     iconBg: '#ede9fe', iconColor: '#7c3aed' },
 ];
 
 
@@ -170,33 +173,32 @@ export default function MobileHomeScreen() {
       {/* ── Quick Actions ── */}
       <div className="px-4 py-5">
         <h2 className="text-slate-800 font-bold text-base mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-4 gap-3">
-          {quickActions.map((action, i) => {
-            const Icon = action.icon;
-            return (
-              <motion.button
-                key={action.id}
-                whileTap={{ scale: 0.93 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}
-                onClick={() => handleAction(action.id)}
-                className="flex flex-col items-center gap-2"
-                style={{ userSelect: 'none' }}
-              >
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm"
-                  style={{ backgroundColor: action.iconBg || '#f1f5f9' }}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+          <div className="grid grid-cols-4 gap-y-5">
+            {quickActions.map((action, i) => {
+              const Icon = action.icon;
+              return (
+                <motion.button
+                  key={action.id}
+                  whileTap={{ scale: 0.93 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  onClick={() => handleAction(action.id)}
+                  className="flex flex-col items-center gap-2"
+                  style={{ userSelect: 'none' }}
                 >
-                  {action.logo
-                    ? <img src={action.logo} alt={action.label} className="w-10 h-10 object-cover rounded-xl" />
-                    : <Icon className="w-6 h-6" style={{ color: action.iconColor || '#3D7BB7' }} />
-                  }
-                </div>
-                <span className="text-slate-600 text-[11px] font-medium leading-tight text-center">{action.label}</span>
-              </motion.button>
-            );
-          })}
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: action.iconBg || '#f1f5f9' }}
+                  >
+                    <Icon className="w-6 h-6" style={{ color: action.iconColor || '#3D7BB7' }} />
+                  </div>
+                  <span className="text-slate-600 text-[11px] font-medium leading-tight text-center">{action.label}</span>
+                </motion.button>
+              );
+            })}
+          </div>
         </div>
       </div>
 

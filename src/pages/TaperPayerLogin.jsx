@@ -33,7 +33,8 @@ export default function TaperPayerLogin() {
       localStorage.setItem('cybrid_customer_id', cybrid_customer_id);
       login(user, jwt, cybrid_customer_id);
       setSubmitStatus('success');
-      window.location.href = '/TaperPayerHome';
+      const returnTo = new URLSearchParams(window.location.search).get('from') || '/TaperPayerHome';
+      window.location.href = returnTo;
     } catch (err) {
       setErrorMsg(err.response?.data?.error || 'Login failed. Please check your email and password.');
       setIsSubmitting(false);

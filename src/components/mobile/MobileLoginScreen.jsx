@@ -35,14 +35,14 @@ export default function MobileLoginScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-gray-100 flex flex-col overflow-y-auto">
       {/* Status bar area */}
       <div className="bg-gray-100 px-4 pt-3 pb-1">
         <p className="text-sm font-medium text-gray-800">Log In</p>
       </div>
 
       {/* Main card */}
-      <div className="flex-1 bg-white mx-3 rounded-2xl shadow-sm flex flex-col items-center px-6 pt-10 pb-8">
+      <div className="flex-1 bg-white mx-3 rounded-2xl shadow-sm flex flex-col items-center px-6 pt-10 pb-8 overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

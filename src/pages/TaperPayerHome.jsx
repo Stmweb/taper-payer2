@@ -404,14 +404,10 @@ export default function TaperPayerHome() {
         <h2 className="text-2xl font-bold text-slate-800 mb-6 text-center">Quick Actions</h2>
         <div className="grid grid-cols-4 gap-4 max-w-5xl mx-auto">
           {[
-            { id: 'send', label: 'Send Money', icon: Send, color: '#3D7BB7', bg: '#e3f2fd', desc: 'Transfer globally' },
-            { id: 'topup', label: 'Mobile Top-Up', icon: PhoneCall, color: '#F88F2B', bg: '#fff3e0', desc: 'Recharge instantly' },
-            { id: 'request', label: 'Request Money', icon: HandCoins, color: '#61AF39', bg: '#e8f5e9', desc: 'Ask to get paid' },
-            { id: 'requesttopup', label: 'Request Top-Up', icon: PhoneOutgoing, color: '#e91e8c', bg: '#fce4ec', desc: 'Ask someone to top up' },
-            { id: 'splitbills', label: 'Split Bills', icon: DollarSign, color: '#FF6B6B', bg: '#ffe0e0', desc: 'Divide expenses' },
-            { id: 'favorites', label: 'Favorites', icon: Users, color: '#4ECDC4', bg: '#e0f7f6', desc: 'Quick contacts' },
-            { id: 'groupwallet', label: 'Group Wallet', icon: Users, color: '#95E1D3', bg: '#e8f9f7', desc: 'Shared account' },
-            { id: 'sendagnv', label: 'Send AGNV', icon: null, color: '#003DA5', bg: '#e8f2ff', desc: 'Send via AGNV', logo: 'https://media.base44.com/images/public/695c31d62d68bbb4ef8cc5b3/2049da728_AGNVNEWLogo.jpeg' },
+           { id: 'send', label: 'Send Money', icon: Send, color: '#3D7BB7', bg: '#e3f2fd', desc: 'Transfer globally' },
+           { id: 'topup', label: 'Mobile Top-Up', icon: PhoneCall, color: '#F88F2B', bg: '#fff3e0', desc: 'Recharge instantly' },
+           { id: 'request', label: 'Request Money', icon: HandCoins, color: '#61AF39', bg: '#e8f5e9', desc: 'Ask to get paid' },
+           { id: 'requesttopup', label: 'Request Top-Up', icon: PhoneOutgoing, color: '#e91e8c', bg: '#fce4ec', desc: 'Ask someone to top up' },
           ].map((action) => {
             const Icon = action.icon;
             return (

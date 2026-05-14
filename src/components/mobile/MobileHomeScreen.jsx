@@ -139,7 +139,7 @@ export default function MobileHomeScreen() {
           <p className="text-white/70 text-sm mb-4">Fast · Secure · Low Fees</p>
 
           {/* Trust badges */}
-          <div className="flex flex-wrap gap-2 mb-5">
+          <div className="flex flex-wrap gap-2 mb-3">
             <span className="flex items-center gap-1 bg-white/20 text-white text-xs font-medium px-3 py-1.5 rounded-full">
               🔒 Safe & Secure
             </span>
@@ -151,19 +151,7 @@ export default function MobileHomeScreen() {
             </span>
           </div>
 
-          {/* Stats row */}
-          <div className="flex gap-8">
-            <div>
-              <p className="text-white/60 text-[10px] uppercase tracking-widest font-medium mb-0.5">Live Transfers</p>
-              <p className="text-white text-2xl font-extrabold leading-none">$2.4M</p>
-              <p className="text-white/60 text-[10px] mt-0.5">in last 60s</p>
-            </div>
-            <div>
-              <p className="text-white/60 text-[10px] uppercase tracking-widest font-medium mb-0.5">Active Routes</p>
-              <p className="text-white text-2xl font-extrabold leading-none">12</p>
-              <p className="text-white/60 text-[10px] mt-0.5">global corridors</p>
-            </div>
-          </div>
+
         </div>
 
       </div>

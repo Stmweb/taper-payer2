@@ -50,6 +50,7 @@ export default function Layout({ children, currentPageName }) {
         html, body {
           overscroll-behavior: none;
           -webkit-overflow-scrolling: touch;
+          position: relative;
         }
         button, a, nav, [role="button"] {
           user-select: none;
@@ -61,7 +62,7 @@ export default function Layout({ children, currentPageName }) {
           pointer-events: none;
         }
       `}</style>
-      <div className={`flex-1${showBottomTabBar ? ' pb-20' : ''}`}>
+      <div className={`flex-1 overflow-y-auto${showBottomTabBar ? ' pb-24' : ''}`} style={{ maxHeight: showBottomTabBar ? 'calc(100vh - 5rem)' : 'auto' }}>
         {children}
       </div>
       {showBottomTabBar && <BottomTabBar />}

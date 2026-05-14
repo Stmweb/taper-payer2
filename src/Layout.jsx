@@ -3,24 +3,11 @@ import BottomTabBar from '@/components/mobile/BottomTabBar';
 
 export default function Layout({ children, currentPageName }) {
   useEffect(() => {
-    // Set favicon
-    let faviconLink = document.querySelector("link[rel='icon']");
-    if (!faviconLink) {
-      faviconLink = document.createElement('link');
-      faviconLink.rel = 'icon';
-      document.head.appendChild(faviconLink);
-    }
-    faviconLink.type = 'image/png';
-    faviconLink.href = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/d7d75e226_ChatGPTImageDec29202501_48_52PM.png';
-
-    // Set Apple touch icon for iOS
-    let appleTouchLink = document.querySelector("link[rel='apple-touch-icon']");
-    if (!appleTouchLink) {
-      appleTouchLink = document.createElement('link');
-      appleTouchLink.rel = 'apple-touch-icon';
-      document.head.appendChild(appleTouchLink);
-    }
-    appleTouchLink.href = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/d7d75e226_ChatGPTImageDec29202501_48_52PM.png';
+    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/png';
+    link.rel = 'icon';
+    link.href = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6939bfcca75c45675d6c793f/d7d75e226_ChatGPTImageDec29202501_48_52PM.png';
+    document.head.appendChild(link);
 
     document.title = 'Taper Payer - Global Money Transfer';
 

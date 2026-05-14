@@ -50,6 +50,16 @@ export default function Layout({ children, currentPageName }) {
         html, body {
           overscroll-behavior: none;
           -webkit-overflow-scrolling: touch;
+          position: fixed;
+          width: 100%;
+          height: 100vh;
+          overflow: hidden;
+        }
+        #root {
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+          overflow: hidden;
         }
         button, a, nav, [role="button"] {
           user-select: none;
@@ -61,7 +71,7 @@ export default function Layout({ children, currentPageName }) {
           pointer-events: none;
         }
       `}</style>
-      <div className={`flex-1${showBottomTabBar ? ' pb-20' : ''}`}>
+      <div className={`flex-1 overflow-y-auto${showBottomTabBar ? ' pb-24' : ''}`}>
         {children}
       </div>
       {showBottomTabBar && <BottomTabBar />}

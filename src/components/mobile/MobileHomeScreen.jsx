@@ -19,6 +19,7 @@ import { useAppAuth } from '@/lib/AppAuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const quickActions = [
+  { id: 'send',        label: 'Send Money',     icon: Send,       iconBg: '#dbeafe', iconColor: '#3D7BB7' },
   { id: 'topup',       label: 'Mobile Top-Up',  icon: Smartphone, iconBg: '#fff3e0', iconColor: '#F88F2B' },
   { id: 'request',     label: 'Request Money',  icon: Download,   iconBg: '#dcfce7', iconColor: '#61AF39' },
   { id: 'requesttopup',label: 'Request Top-Up', icon: Zap,        iconBg: '#fce7f3', iconColor: '#e91e8c' },
@@ -68,7 +69,8 @@ export default function MobileHomeScreen() {
   }, [login]);
 
   const handleAction = (id) => {
-    if (id === 'topup') setShowComingSoon(true);
+    if (id === 'send') setShowComingSoon(true);
+    else if (id === 'topup') setShowComingSoon(true);
     else if (id === 'request') setShowRequestMoney(true);
     else if (id === 'requesttopup') setShowRequestTopUp(true);
     else if (id === 'sendagnv') setShowSendAGNV(true);

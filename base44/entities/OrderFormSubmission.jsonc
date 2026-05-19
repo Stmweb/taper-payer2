@@ -62,6 +62,11 @@
         "rejected"
       ],
       "default": "new"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional description or notes for this order form submission"
     }
   },
   "required": [

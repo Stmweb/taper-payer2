@@ -67,6 +67,11 @@
     "manual_emails": {
       "type": "string",
       "description": "Manually entered emails (one per line, optionally with name: email, Name)"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Optional description or notes for this campaign"
     }
   },
   "required": [

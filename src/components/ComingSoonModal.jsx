@@ -15,7 +15,7 @@ export default function ComingSoonModal({ isOpen, onClose }) {
     if (!isOpen) return;
 
     const calculateTimeLeft = () => {
-      const launchDate = new Date('2026-05-18').getTime();
+      const launchDate = new Date('2026-06-08').getTime();
       const now = new Date().getTime();
       const difference = launchDate - now;
 
@@ -89,7 +89,7 @@ export default function ComingSoonModal({ isOpen, onClose }) {
             {/* Countdown */}
             <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-slate-100">
               <p className="text-xs uppercase tracking-widest text-slate-500 mb-2 sm:mb-3 font-bold">Official Launch</p>
-              <p className="text-2xl sm:text-3xl font-bold text-[#3D7BB7] mb-4 sm:mb-6">May 18, 2026</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#3D7BB7] mb-4 sm:mb-6">June 8, 2026</p>
 
               <div className="grid grid-cols-4 gap-2">
                 {[

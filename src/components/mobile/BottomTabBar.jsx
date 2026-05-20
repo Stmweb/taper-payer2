@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { createPageUrl } from '@/utils';
 import { Home, TrendingUp, HelpCircle, UserCircle } from 'lucide-react';
 
 const tabs = [
-  { name: 'Home',         icon: Home,        path: createPageUrl('TaperPayerHome') },
-  { name: 'Rates',        icon: TrendingUp,  path: createPageUrl('TaperPayerRates') },
-  { name: 'How It Works', icon: HelpCircle,  path: createPageUrl('TaperPayerHowItWorks') },
+  { name: 'Home',         icon: Home,        path: '/' },
+  { name: 'Rates',        icon: TrendingUp,  path: '/TaperPayerRates' },
+  { name: 'How It Works', icon: HelpCircle,  path: '/TaperPayerHowItWorks' },
   { name: 'Profile',      icon: UserCircle,  path: '/MobileProfile' },
 ];
 
@@ -14,7 +13,9 @@ export default function BottomTabBar() {
   const location = useLocation();
 
   const isActive = (path) =>
-    location.pathname === path || location.pathname === path + '.html';
+    path === '/'
+      ? location.pathname === '/' || location.pathname === '/TaperPayerHome'
+      : location.pathname === path || location.pathname === path + '.html';
 
   return (
     <nav

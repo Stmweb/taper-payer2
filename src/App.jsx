@@ -12,6 +12,7 @@ import { AppAuthProvider } from '@/lib/AppAuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { AnimatePresence, motion } from 'framer-motion';
 import TaperPayerFAQ from './pages/TaperPayerFAQ';
+import MobileHomeScreen from './components/mobile/MobileHomeScreen';
 import OperatingAgreement from './pages/OperatingAgreement';
 import TaperPayerTerms from './pages/TaperPayerTerms';
 import TaperPayerPrivacy from './pages/TaperPayerPrivacy';
@@ -168,6 +169,7 @@ const AuthenticatedApp = () => {
             }
           />
         ))}
+        <Route path="/TaperPayerHome" element={<LayoutWrapper currentPageName="TaperPayerHome"><MobileHomeScreen /></LayoutWrapper>} />
         <Route path="/TaperPayerFAQ" element={<LayoutWrapper currentPageName="TaperPayerFAQ"><TaperPayerFAQ /></LayoutWrapper>} />
         <Route path="/TaperPayerTerms" element={<LayoutWrapper currentPageName="TaperPayerTerms"><TaperPayerTerms /></LayoutWrapper>} />
         <Route path="/TaperPayerPrivacy" element={<LayoutWrapper currentPageName="TaperPayerPrivacy"><TaperPayerPrivacy /></LayoutWrapper>} />

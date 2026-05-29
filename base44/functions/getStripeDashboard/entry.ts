@@ -16,27 +16,36 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
     }
 
-    const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY'));
+    const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
 
-    // Fetch all data in parallel
-    const [paymentIntents, subscriptions, charges, moncashTopups] = await Promise.all([
-      stripe.paymentIntents.list({ limit: 50 }),
-      stripe.subscriptions.list({ limit: 10, status: 'all' }),
-      stripe.charges.list({ limit: 100 }),
-      base44.asServiceRole.entities.PendingTopup.list('-created_date', 200),
-    ]);
+    const moncashTopups = await base44.asServiceRole.entities.PendingTopup.list('-created_date', 200);
 
-    // Calculate total volume (succeeded charges)
-    const succeededCharges = charges.data.filter(c => c.status === 'succeeded');
-    const totalVolume = succeededCharges.reduce((sum, c) => sum + c.amount, 0);
+    let transactions = [];
+    let subscriptions = [];
+    let stats = {
+      total_volume: 0,
+      monthly_volume: 0,
+      total_transactions: 0,
+      successful_charges: 0,
+      active_subscriptions: 0,
+      total_subscriptions: 0,
+    };
 
-    // Monthly volume (last 30 days)
-    const thirtyDaysAgo = Math.floor(Date.now() / 1000) - (30 * 24 * 60 * 60);
-    const monthlyCharges = succeededCharges.filter(c => c.created >= thirtyDaysAgo);
-    const monthlyVolume = monthlyCharges.reduce((sum, c) => sum + c.amount, 0);
+    if (stripeKey) {
+      const stripe = new Stripe(stripeKey);
+      const [paymentIntents, stripeSubs, charges] = await Promise.all([
+        stripe.paymentIntents.list({ limit: 50 }),
+        stripe.subscriptions.list({ limit: 10, status: 'all' }),
+        stripe.charges.list({ limit: 100 }),
+      ]);
 
-    return Response.json({
-      transactions: paymentIntents.data.map(pi => ({
+      const succeededCharges = charges.data.filter(c => c.status === 'succeeded');
+      const totalVolume = succeededCharges.reduce((sum, c) => sum + c.amount, 0);
+      const thirtyDaysAgo = Math.floor(Date.now() / 1000) - (30 * 24 * 60 * 60);
+      const monthlyCharges = succeededCharges.filter(c => c.created >= thirtyDaysAgo);
+      const monthlyVolume = monthlyCharges.reduce((sum, c) => sum + c.amount, 0);
+
+      transactions = paymentIntents.data.map(pi => ({
         id: pi.id,
         amount: pi.amount,
         currency: pi.currency,
@@ -44,9 +53,9 @@ Deno.serve(async (req) => {
         created: pi.created,
         description: pi.description,
         customer: pi.customer,
-      })),
-      moncash_topups: moncashTopups,
-      subscriptions: subscriptions.data.map(sub => ({
+      }));
+
+      subscriptions = stripeSubs.data.map(sub => ({
         id: sub.id,
         status: sub.status,
         current_period_end: sub.current_period_end,
@@ -55,15 +64,24 @@ Deno.serve(async (req) => {
         amount: sub.items?.data[0]?.price?.unit_amount,
         currency: sub.items?.data[0]?.price?.currency,
         customer: sub.customer,
-      })),
-      stats: {
+      }));
+
+      stats = {
         total_volume: totalVolume,
         monthly_volume: monthlyVolume,
         total_transactions: paymentIntents.data.length,
         successful_charges: succeededCharges.length,
-        active_subscriptions: subscriptions.data.filter(s => s.status === 'active').length,
-        total_subscriptions: subscriptions.data.length,
-      }
+        active_subscriptions: stripeSubs.data.filter(s => s.status === 'active').length,
+        total_subscriptions: stripeSubs.data.length,
+      };
+    }
+
+    return Response.json({
+      transactions,
+      moncash_topups: moncashTopups,
+      subscriptions,
+      stats,
+      stripe_configured: !!stripeKey,
     });
 
   } catch (error) {

@@ -73,7 +73,7 @@ export default function AdminStripeDashboard() {
     </div>
   );
 
-  const { stats, transactions, subscriptions, moncash_topups = [] } = data;
+  const { stats, transactions, subscriptions, moncash_topups = [], stripe_configured } = data;
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
@@ -82,13 +82,21 @@ export default function AdminStripeDashboard() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Stripe Dashboard</h1>
-            <p className="text-slate-500 mt-1">Payment activity and subscription overview</p>
+            <h1 className="text-3xl font-bold text-slate-900">Payments Dashboard</h1>
+            <p className="text-slate-500 mt-1">Payment activity and top-up overview</p>
           </div>
           <Button variant="outline" onClick={fetchData} className="gap-2">
             <RefreshCw className="w-4 h-4" /> Refresh
           </Button>
         </div>
+
+        {/* Stripe not configured notice */}
+        {!stripe_configured && (
+          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
+            <p className="text-yellow-800 text-sm">Stripe is not configured — showing Moncash top-ups only. Add a <strong>STRIPE_SECRET_KEY</strong> secret to enable Stripe data.</p>
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

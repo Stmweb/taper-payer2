@@ -1,5 +1,9 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.25';
 
+const BLINDPAY_API_KEY = 'UUsDt8oFBahfbCPp16wmMm';
+const BLINDPAY_INSTANCE_ID = 'in_xM273RfKTSId';
+const BLINDPAY_BASE = `https://api.blindpay.com/v1/instances/${BLINDPAY_INSTANCE_ID}`;
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -8,12 +12,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const apiKey = Deno.env.get('BLINDPAY_API_KEY');
-
-    // List instances to find the instance ID
-    const res = await fetch('https://api.blindpay.com/v1/instances', {
+    // Test: list receivers
+    const res = await fetch(`${BLINDPAY_BASE}/receivers`, {
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${BLINDPAY_API_KEY}`,
         'Content-Type': 'application/json',
       }
     });

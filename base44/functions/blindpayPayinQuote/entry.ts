@@ -16,9 +16,10 @@ Deno.serve(async (req) => {
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await req.json();
-    // body: { receiver_id, blockchain_wallet_id OR wallet_id, request_amount (int cents), request_currency, payment_method }
-    // payment_method: "ach" | "wire" | "pix" etc.
-    // request_amount: integer in cents e.g. 10000 = $100.00
+    // Required: receiver_id, blockchain_wallet_id OR wallet_id, request_amount (int), request_currency,
+    //           payment_method ("ach"|"wire"|"pix"|"clabe"|"transfers"|"pse"),
+    //           currency_type ("sender"|"receiver"), token ("USDC"|"USDT"|"USDB"),
+    //           network ("base"|"base_sepolia"|"arbitrum"|"polygon"|"ethereum"|"stellar"|"solana" etc.)
 
     const res = await bp('/payin-quotes', {
       method: 'POST',

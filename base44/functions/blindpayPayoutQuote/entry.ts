@@ -16,8 +16,10 @@ Deno.serve(async (req) => {
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await req.json();
-    // body: { bank_account_id, request_amount (int cents), request_currency, cover_fees? }
-    // request_amount: integer e.g. 100000 = $1000.00 in cents
+    // Required: bank_account_id, request_amount (int), request_currency,
+    //           currency_type ("sender"|"receiver"), token ("USDC"|"USDT"|"USDB"),
+    //           network ("base"|"base_sepolia"|"arbitrum"|"polygon"|"ethereum"|"stellar"|"solana" etc.)
+    // Optional: cover_fees (bool)
 
     const res = await bp('/quotes', {
       method: 'POST',

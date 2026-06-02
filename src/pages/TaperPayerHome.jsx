@@ -22,6 +22,7 @@ import StructuredData from '@/components/StructuredData';
 import TpayReloadFormWrapper from '@/components/topup/TpayReloadFormWrapper';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
+import HaitiUnifiedTransferModal from '@/components/transfer/HaitiUnifiedTransferModal';
 import SendAGNVModal from '@/components/transfer/SendAGNVModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
 import PINModal from '@/components/PINModal';
@@ -683,7 +684,7 @@ export default function TaperPayerHome() {
         {/* Footer */}
       <SiteFooter />
 
-      {/* Cybrid Transfer Modal */}
+      {/* Transfer Modal — Haiti uses unified Cybrid+Blindpay, others use Cybrid */}
       {showTransferModal && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/50" onClick={() => setShowTransferModal(false)} />
@@ -694,11 +695,11 @@ export default function TaperPayerHome() {
             className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto"
           >
             <button onClick={() => setShowTransferModal(false)} aria-label="Close" className="absolute top-4 right-4 p-2 min-w-[44px] min-h-[44px] hover:bg-gray-100 rounded-full z-10 flex items-center justify-center">✕</button>
-            <CybridTransferModal
-              amount={amount}
-              country={sendTo}
-              onClose={() => setShowTransferModal(false)}
-            />
+            {sendTo === 'Haiti' ? (
+              <HaitiUnifiedTransferModal amount={amount} onClose={() => setShowTransferModal(false)} />
+            ) : (
+              <CybridTransferModal amount={amount} country={sendTo} onClose={() => setShowTransferModal(false)} />
+            )}
           </motion.div>
         </div>,
         document.body

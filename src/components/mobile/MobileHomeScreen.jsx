@@ -8,7 +8,7 @@ import {
   Smartphone, Download, Zap, CreditCard, Star, Users2, Receipt, Wallet
 } from 'lucide-react';
 import TaperConnectFormWrapper from '@/components/topup/TaperConnectFormWrapper';
-import HaitiTransferModal from '@/components/transfer/HaitiTransferModal';
+import HaitiUnifiedTransferModal from '@/components/transfer/HaitiUnifiedTransferModal';
 import CybridTransferModal from '@/components/transfer/CybridTransferModal';
 import SendAGNVModal from '@/components/transfer/SendAGNVModal';
 import ComingSoonModal from '@/components/ComingSoonModal';
@@ -266,7 +266,7 @@ export default function MobileHomeScreen() {
           >
             <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-2" />
             <button onClick={() => setShowHaiti(false)} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full z-10 text-slate-500">✕</button>
-            <HaitiTransferModal amount="100" onClose={() => setShowHaiti(false)} />
+            <HaitiUnifiedTransferModal amount="100" onClose={() => setShowHaiti(false)} />
           </motion.div>
         </div>,
         document.body

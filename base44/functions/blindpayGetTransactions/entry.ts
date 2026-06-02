@@ -15,23 +15,27 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (user?.role !== 'admin') return Response.json({ error: 'Forbidden' }, { status: 403 });
 
-    const RECEIVER_ID = 're_pAbq0snMKOfL';
+    const APPROVED_RECEIVER_ID = 're_PZE6uBzpN3Vl'; // Stanley Jn Gilles (approved)
 
     const [payinsRes, payoutsRes, receiversRes, walletsRes, bankAccountsRes] = await Promise.all([
       bp('/payins'),
       bp('/payouts'),
       bp('/receivers'),
-      bp(`/receivers/${RECEIVER_ID}/blockchain-wallets`),
-      bp(`/receivers/${RECEIVER_ID}/bank-accounts`),
+      bp(`/receivers/${APPROVED_RECEIVER_ID}/blockchain-wallets`),
+      bp(`/receivers/${APPROVED_RECEIVER_ID}/bank-accounts`),
     ]);
 
-    const [payins, payouts, receivers, wallets, bankAccounts] = await Promise.all([
+    const [payins, payouts, allReceivers, wallets, bankAccounts] = await Promise.all([
       payinsRes.json(),
       payoutsRes.json(),
       receiversRes.json(),
       walletsRes.json(),
       bankAccountsRes.json(),
     ]);
+
+    // Only show approved receivers
+    const receiversList = allReceivers.data || allReceivers || [];
+    const receivers = receiversList.filter(r => r.kyc_status === 'approved');
 
     return Response.json({ payins, payouts, receivers, wallets, bankAccounts });
   } catch (error) {

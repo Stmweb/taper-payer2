@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { format } from 'date-fns';
-import { RefreshCw, CheckCircle, XCircle, Clock, AlertCircle, ArrowDownLeft, ArrowUpRight, Users } from 'lucide-react';
+import { RefreshCw, XCircle, ArrowDownLeft, ArrowUpRight, Users, Wallet, Building2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 const statusColor = (status) => {
@@ -66,12 +65,14 @@ export default function AdminBlindpayDashboard() {
     </div>
   );
 
-  const { payins = [], payouts = [], receivers = [] } = data || {};
+  const { payins = [], payouts = [], receivers = [], wallets = [], bankAccounts = [] } = data || {};
 
   const tabs = [
     { key: 'payins', label: `Payins (${payins.length})`, icon: ArrowDownLeft },
     { key: 'payouts', label: `Payouts (${payouts.length})`, icon: ArrowUpRight },
     { key: 'receivers', label: `Receivers (${receivers.length})`, icon: Users },
+    { key: 'wallets', label: `Wallets (${wallets.length})`, icon: Wallet },
+    { key: 'bankAccounts', label: `Bank Accounts (${bankAccounts.length})`, icon: Building2 },
   ];
 
   return (
@@ -90,7 +91,7 @@ export default function AdminBlindpayDashboard() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-5 gap-4 mb-8">
           <Card className="p-6 text-center">
             <ArrowDownLeft className="w-6 h-6 text-indigo-500 mx-auto mb-2" />
             <p className="text-2xl font-bold text-slate-900">{payins.length}</p>
@@ -105,6 +106,16 @@ export default function AdminBlindpayDashboard() {
             <Users className="w-6 h-6 text-orange-500 mx-auto mb-2" />
             <p className="text-2xl font-bold text-slate-900">{receivers.length}</p>
             <p className="text-sm text-slate-500">Receivers</p>
+          </Card>
+          <Card className="p-6 text-center">
+            <Wallet className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-slate-900">{wallets.length}</p>
+            <p className="text-sm text-slate-500">Wallets</p>
+          </Card>
+          <Card className="p-6 text-center">
+            <Building2 className="w-6 h-6 text-teal-500 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-slate-900">{bankAccounts.length}</p>
+            <p className="text-sm text-slate-500">Bank Accounts</p>
           </Card>
         </div>
 
@@ -209,6 +220,68 @@ export default function AdminBlindpayDashboard() {
                       <td className="px-6 py-4 text-sm text-slate-600 capitalize">{r.type || '—'}</td>
                       <td className="px-6 py-4 text-sm text-slate-600">{r.country || '—'}</td>
                       <td className="px-6 py-4"><StatusBadge status={r.kyc_status} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
+
+        {/* Wallets Table */}
+        {tab === 'wallets' && (
+          <Card className="overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-slate-50 border-b">
+                  <tr>
+                    {['ID', 'Name', 'Network', 'Address', 'Receiver'].map(h => (
+                      <th key={h} className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {wallets.length === 0 ? (
+                    <tr><td colSpan={5} className="text-center py-12 text-slate-400">No wallets yet</td></tr>
+                  ) : wallets.map(w => (
+                    <tr key={w.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 font-mono text-xs text-slate-500">{w.id}</td>
+                      <td className="px-6 py-4 font-medium text-slate-900">{w.name || '—'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600 capitalize">{w.network || '—'}</td>
+                      <td className="px-6 py-4 font-mono text-xs text-slate-500 max-w-xs truncate">{w.address || '—'}</td>
+                      <td className="px-6 py-4 font-mono text-xs text-slate-500">{w.receiver_id || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
+
+        {/* Bank Accounts Table */}
+        {tab === 'bankAccounts' && (
+          <Card className="overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-slate-50 border-b">
+                  <tr>
+                    {['ID', 'Name', 'Type', 'Beneficiary', 'Routing', 'Account', 'Country'].map(h => (
+                      <th key={h} className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {bankAccounts.length === 0 ? (
+                    <tr><td colSpan={7} className="text-center py-12 text-slate-400">No bank accounts yet</td></tr>
+                  ) : bankAccounts.map(b => (
+                    <tr key={b.id} className="hover:bg-slate-50">
+                      <td className="px-6 py-4 font-mono text-xs text-slate-500">{b.id}</td>
+                      <td className="px-6 py-4 font-medium text-slate-900">{b.name || '—'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600 uppercase">{b.type || '—'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{b.beneficiary_name || '—'}</td>
+                      <td className="px-6 py-4 font-mono text-xs text-slate-500">{b.routing_number || '—'}</td>
+                      <td className="px-6 py-4 font-mono text-xs text-slate-500">{b.account_number || '—'}</td>
+                      <td className="px-6 py-4 text-sm text-slate-600">{b.country || '—'}</td>
                     </tr>
                   ))}
                 </tbody>

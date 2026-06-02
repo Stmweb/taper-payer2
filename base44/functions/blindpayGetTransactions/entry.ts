@@ -15,19 +15,25 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
     if (user?.role !== 'admin') return Response.json({ error: 'Forbidden' }, { status: 403 });
 
-    const [payinsRes, payoutsRes, receiversRes] = await Promise.all([
+    const RECEIVER_ID = 're_pAbq0snMKOfL';
+
+    const [payinsRes, payoutsRes, receiversRes, walletsRes, bankAccountsRes] = await Promise.all([
       bp('/payins'),
       bp('/payouts'),
       bp('/receivers'),
+      bp(`/receivers/${RECEIVER_ID}/blockchain-wallets`),
+      bp(`/receivers/${RECEIVER_ID}/bank-accounts`),
     ]);
 
-    const [payins, payouts, receivers] = await Promise.all([
+    const [payins, payouts, receivers, wallets, bankAccounts] = await Promise.all([
       payinsRes.json(),
       payoutsRes.json(),
       receiversRes.json(),
+      walletsRes.json(),
+      bankAccountsRes.json(),
     ]);
 
-    return Response.json({ payins, payouts, receivers });
+    return Response.json({ payins, payouts, receivers, wallets, bankAccounts });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

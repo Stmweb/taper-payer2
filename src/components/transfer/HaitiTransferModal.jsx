@@ -4,15 +4,14 @@ import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import {
-  Loader2, CheckCircle, AlertCircle, ArrowRight, Phone,
-  DollarSign, RefreshCw
+  Loader2, CheckCircle, AlertCircle, ArrowRight,
+  DollarSign, Users
 } from 'lucide-react';
 
 const STEPS = [
-  { id: 'deposit', label: 'Deposit USD' },
-  { id: 'convert', label: 'Get USDC' },
-  { id: 'recipient', label: 'Add Recipient' },
-  { id: 'payout', label: 'Send to MonCash' },
+  { id: 'recipient', label: 'Recipient' },
+  { id: 'quote', label: 'Get Quote' },
+  { id: 'payout', label: 'Send' },
   { id: 'done', label: 'Complete' },
 ];
 
@@ -41,120 +40,94 @@ function StepIndicator({ currentStep }) {
 }
 
 export default function HaitiTransferModal({ amount, onClose }) {
-  const { user: appUser, jwt } = useAppAuth();
-  const [step, setStep] = useState('deposit');
+  const { user: appUser } = useAppAuth();
+  const [step, setStep] = useState('recipient');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Recipient info
-  const [recipientPhone, setRecipientPhone] = useState('');
-  const [recipientName, setRecipientName] = useState('');
+  // Receivers list from Blindpay
+  const [receivers, setReceivers] = useState([]);
+  const [loadingReceivers, setLoadingReceivers] = useState(true);
+  const [selectedBankAccountId, setSelectedBankAccountId] = useState('');
+  const [selectedReceiverName, setSelectedReceiverName] = useState('');
 
-  // Exchange rate
-  const [exchangeRate, setExchangeRate] = useState(null);
-  const [haitianAmount, setHaitianAmount] = useState('');
+  // Quote
+  const [quote, setQuote] = useState(null);
 
-  // Results
-  const [transactionId, setTransactionId] = useState(null);
+  // Sender wallet (for payout execution)
+  const [senderWallet, setSenderWallet] = useState('');
+
+  // Payout result
   const [payoutResult, setPayoutResult] = useState(null);
 
   const invoke = async (action, p = {}) => {
-    try {
-      const res = await base44.functions.invoke('haitiTransfer', { action, _jwt: jwt || '', ...p });
-      if (res.data?.error) throw new Error(res.data.error);
-      return res;
-    } catch (e) {
-      const msg = e?.response?.data?.error || e?.message || 'Request failed';
-      throw new Error(msg);
-    }
+    const res = await base44.functions.invoke('haitiTransfer', { action, ...p });
+    if (res.data?.error) throw new Error(res.data.error);
+    return res.data;
   };
 
-  // Step 1: Deposit → Transak
-  const handleDeposit = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await invoke('initiateTransak', { amountUSD: amount });
-      setTransactionId(res.data?.transakTransactionId);
-      
-      // Fetch exchange rate while user completes deposit
-      const rateRes = await invoke('getExchangeRate', { amountUSD: amount });
-      setExchangeRate(rateRes.data?.rate);
-      setHaitianAmount(rateRes.data?.haitianAmount);
-
-      setStep('convert');
-    } catch (e) {
-      setError(e.message || 'Deposit initiation failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Step 2: Convert to USDC (auto after deposit verified)
-  const handleConvert = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await invoke('convertToUSDC', { 
-        transakTransactionId: transactionId,
-        amountUSD: amount 
-      });
-      if (!res.data?.success) throw new Error('Conversion failed');
-      setStep('recipient');
-    } catch (e) {
-      setError(e.message || 'Conversion failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Step 3: Add recipient
-  const handleAddRecipient = async () => {
-    if (!recipientPhone || !recipientName) {
-      setError('Please enter recipient phone and name.');
-      return;
-    }
-    // Phone should be international format +509XXXXXXXXX
-    if (!/^\+509\d{8}$/.test(recipientPhone)) {
-      setError('Phone must be in format +509XXXXXXXX (Haiti)');
-      return;
-    }
-    setLoading(true);
-    setError('');
-    try {
-      // Detect operator and validate with DTone
-      const res = await invoke('validateRecipient', { 
-        phone: recipientPhone,
-        name: recipientName 
-      });
-      if (!res.data?.valid) throw new Error('Receiver validation failed');
-      
-      // Check if receiver has MonCash support
-      const operator = res.data?.operator || '';
-      if (!operator.toLowerCase().includes('moncash') && !res.data?.supportsMoneytransfer) {
-        throw new Error(`This receiver's operator (${operator}) does not support MonCash transfers. Please check the phone number.`);
+  // Load Haiti receivers from Blindpay on mount
+  useEffect(() => {
+    (async () => {
+      setLoadingReceivers(true);
+      try {
+        const data = await invoke('getReceivers');
+        // receivers have bank_accounts nested
+        const allBankAccounts = [];
+        (data.receivers || []).forEach(r => {
+          const name = r.legal_name || `${r.first_name || ''} ${r.last_name || ''}`.trim();
+          (r.bank_accounts || []).forEach(ba => {
+            allBankAccounts.push({ id: ba.id, label: `${name} — ${ba.account_number || ba.id}`, receiverName: name });
+          });
+        });
+        setReceivers(allBankAccounts);
+      } catch (e) {
+        setError('Could not load receivers: ' + e.message);
+      } finally {
+        setLoadingReceivers(false);
       }
-      
-      setStep('payout');
+    })();
+  }, []);
+
+  // Step 1: Select receiver → get quote
+  const handleGetQuote = async () => {
+    if (!selectedBankAccountId) {
+      setError('Please select a receiver.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const data = await invoke('createPayoutQuote', {
+        bank_account_id: selectedBankAccountId,
+        amountUSD: amount,
+        token: 'USDC',
+        network: 'base',
+      });
+      setQuote(data.quote);
+      setStep('quote');
     } catch (e) {
-      setError(e.message || 'Receiver validation failed.');
+      setError(e.message || 'Failed to get quote.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Step 4: Execute payout via DTone
-  const handlePayout = async () => {
+  // Step 2: Confirm quote → execute payout
+  const handleExecutePayout = async () => {
+    if (!senderWallet) {
+      setError('Please enter your USDC wallet address.');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
-      const res = await invoke('executeMonCashPayout', {
-        transakTransactionId: transactionId,
-        amountUSD: amount,
-        recipientPhone: recipientPhone,
-        recipientName: recipientName
+      const data = await invoke('executePayout', {
+        quote_id: quote.id,
+        sender_wallet_address: senderWallet,
+        network: 'base',
       });
-      setPayoutResult(res.data?.payoutResult);
+      setPayoutResult(data.payout);
       setStep('done');
     } catch (e) {
       setError(e.message || 'Payout failed.');
@@ -175,7 +148,7 @@ export default function HaitiTransferModal({ amount, onClose }) {
         <div>
           <h3 className="text-lg font-bold text-slate-900">Send to Haiti</h3>
           <p className="text-sm text-slate-500">
-            <strong>{fmtAmt(amount)} USD</strong> via MonCash
+            <strong>{fmtAmt(amount)} USD</strong> via Blindpay
           </p>
         </div>
       </div>
@@ -189,112 +162,85 @@ export default function HaitiTransferModal({ amount, onClose }) {
         </div>
       )}
 
-      {/* Step: Deposit */}
-      {step === 'deposit' && (
-        <div className="space-y-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2 text-sm">
-            <p className="font-semibold text-slate-800">💳 Deposit USD</p>
-            <p className="text-slate-600">
-              Securely deposit {fmtAmt(amount)} USD to get started with your transfer.
-            </p>
-          </div>
-          <Button
-            onClick={handleDeposit}
-            disabled={loading}
-            className="w-full"
-            style={{ backgroundColor: '#3D7BB7' }}
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            Start Deposit <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-        </div>
-      )}
-
-      {/* Step: Convert */}
-      {step === 'convert' && (
-        <div className="space-y-4">
-          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 space-y-2 text-sm">
-            <p className="font-semibold text-slate-800">💱 Ready to Send</p>
-            <p className="text-slate-600">
-              {fmtAmt(amount)} USD is ready to be sent to Haiti.
-            </p>
-            {exchangeRate && haitianAmount && (
-              <div className="bg-white rounded px-2 py-1 border border-purple-100 text-xs">
-                <p className="text-slate-700">
-                  Exchange: 1 USD = {exchangeRate.toFixed(2)} HTG
-                </p>
-                <p className="text-slate-600">
-                  Recipient will receive: {parseFloat(haitianAmount).toFixed(2)} HTG
-                </p>
-              </div>
-            )}
-          </div>
-          <Button
-            onClick={handleConvert}
-            disabled={loading}
-            className="w-full"
-            style={{ backgroundColor: '#7C3AED' }}
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            Continue <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-        </div>
-      )}
-
       {/* Step: Recipient */}
       {step === 'recipient' && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <p className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-            <Phone className="w-4 h-4" /> Recipient Details
+            <Users className="w-4 h-4" /> Select Recipient
           </p>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Full Name</label>
-            <Input 
-              placeholder="Jean Duval" 
-              value={recipientName} 
-              onChange={e => setRecipientName(e.target.value)} 
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Phone Number</label>
-            <div className="flex items-center border rounded-md overflow-hidden">
-              <span className="bg-slate-100 px-3 py-2 text-sm font-medium text-slate-600">+509</span>
-              <Input 
-                placeholder="12345678" 
-                value={recipientPhone.replace('+509', '')}
-                onChange={e => setRecipientPhone(`+509${e.target.value}`)}
-                className="border-0 rounded-none focus:ring-0"
-              />
+
+          {loadingReceivers ? (
+            <div className="flex items-center gap-2 text-slate-500 text-sm py-4 justify-center">
+              <Loader2 className="w-4 h-4 animate-spin" /> Loading receivers…
             </div>
-          </div>
+          ) : receivers.length === 0 ? (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
+              No Haiti receivers found. Please add a receiver in the Blindpay dashboard first.
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {receivers.map(r => (
+                <button
+                  key={r.id}
+                  onClick={() => { setSelectedBankAccountId(r.id); setSelectedReceiverName(r.receiverName); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-colors ${
+                    selectedBankAccountId === r.id
+                      ? 'border-blue-500 bg-blue-50 text-blue-900 font-medium'
+                      : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                  }`}
+                >
+                  {r.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           <Button
-            onClick={handleAddRecipient}
-            disabled={loading}
+            onClick={handleGetQuote}
+            disabled={loading || !selectedBankAccountId}
             className="w-full"
             style={{ backgroundColor: '#3D7BB7' }}
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            Verify Receiver <ArrowRight className="ml-2 w-4 h-4" />
+            Get Quote <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </div>
       )}
 
-      {/* Step: Payout */}
-      {step === 'payout' && (
+      {/* Step: Quote */}
+      {step === 'quote' && quote && (
         <div className="space-y-4">
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-2 text-sm">
-            <p className="font-semibold text-slate-800">🚀 Send to MonCash</p>
-            <p className="text-slate-600">
-              Sending {haitianAmount ? parseFloat(haitianAmount).toFixed(2) : 'loading...'} HTG to {recipientName}
-            </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2 text-sm">
+            <p className="font-semibold text-slate-800">📋 Payout Quote</p>
+            <div className="space-y-1 text-slate-700">
+              <p>Sending: <strong>{fmtAmt(amount)} USD</strong></p>
+              {quote.receive_amount && (
+                <p>Recipient receives: <strong>{quote.receive_amount} {quote.receive_currency || 'HTG'}</strong></p>
+              )}
+              {quote.exchange_rate && (
+                <p>Rate: <strong>1 USD = {quote.exchange_rate} {quote.receive_currency || 'HTG'}</strong></p>
+              )}
+              <p>To: <strong>{selectedReceiverName}</strong></p>
+            </div>
           </div>
+
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Your USDC Wallet Address (Base network)</label>
+            <Input
+              placeholder="0x..."
+              value={senderWallet}
+              onChange={e => setSenderWallet(e.target.value)}
+            />
+            <p className="text-xs text-slate-400 mt-1">This is the wallet that will send the USDC to complete the transfer.</p>
+          </div>
+
           <Button
-            onClick={handlePayout}
-            disabled={loading}
+            onClick={handleExecutePayout}
+            disabled={loading || !senderWallet}
             className="w-full bg-green-600 hover:bg-green-700"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-            Send via MonCash <ArrowRight className="ml-2 w-4 h-4" />
+            Confirm &amp; Send <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </div>
       )}
@@ -308,16 +254,16 @@ export default function HaitiTransferModal({ amount, onClose }) {
               <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
           </div>
-          <h4 className="text-xl font-bold text-slate-900">Transfer Complete! 🎉</h4>
+          <h4 className="text-xl font-bold text-slate-900">Transfer Initiated! 🎉</h4>
           <p className="text-slate-600 text-sm">
-            <strong>{haitianAmount ? parseFloat(haitianAmount).toFixed(2) : ''} HTG</strong> is on its way to <strong>{recipientName}</strong> via MonCash.
+            Your transfer to <strong>{selectedReceiverName}</strong> is being processed via Blindpay.
           </p>
 
           {payoutResult && (
             <div className="w-full space-y-2 text-xs text-left">
               <div className="bg-slate-50 border rounded-lg px-3 py-2 space-y-1">
                 <p className="text-slate-500 font-semibold uppercase tracking-wide text-xs">Transaction Details</p>
-                <p className="text-slate-600 font-mono">ID: {payoutResult.transakId || 'N/A'}</p>
+                <p className="text-slate-600 font-mono">ID: {payoutResult.id || 'N/A'}</p>
                 <p className="text-slate-600">Status: <span className="font-semibold text-green-700">{payoutResult.status || 'pending'}</span></p>
               </div>
             </div>

@@ -61,11 +61,23 @@ Deno.serve(async (req) => {
       });
     }
 
-    // ── List receivers (Haiti bank accounts) ────────────────────────────────
+    // ── List receivers with their bank accounts ──────────────────────────────
     if (action === 'getReceivers') {
       const res = await bp('/receivers');
       const data = await res.json();
-      return Response.json({ receivers: data.data || data || [] });
+      const receivers = data.data || data || [];
+
+      // Fetch bank accounts for each approved receiver in parallel
+      const enriched = await Promise.all(
+        receivers
+          .filter(r => r.kyc_status === 'approved')
+          .map(async r => {
+            const baRes = await bp(`/receivers/${r.id}/bank-accounts`);
+            const baData = await baRes.json();
+            return { ...r, bank_accounts: baData.data || baData || [] };
+          })
+      );
+      return Response.json({ receivers: enriched });
     }
 
     // ── Create a Blindpay payout quote ──────────────────────────────────────

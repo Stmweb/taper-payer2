@@ -164,7 +164,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
       return;
     }
     // Validate routing number based on country
-    const intlCountries = ['Ghana', 'Kenya', 'Senegal', 'Dominican Republic', 'Haiti'];
+    const intlCountries = ['Ghana', 'Kenya', 'Senegal', 'Dominican Republic'];
     if (country === 'Canada') {
       if (!/^\d{8,9}$/.test(recipientRouting)) {
         setError('Routing number must be 8-9 digits (Canadian CPA format).');
@@ -487,7 +487,7 @@ export default function CybridTransferModal({ amount, country, onClose }) {
           <p className="text-xs font-semibold text-slate-600 pt-1">Recipient's Bank Account ({country})</p>
           <div>
             {(() => {
-              const intlCountries = ['Ghana', 'Kenya', 'Senegal', 'Dominican Republic', 'Haiti'];
+              const intlCountries = ['Ghana', 'Kenya', 'Senegal', 'Dominican Republic'];
               const isIntl = intlCountries.includes(country);
               const isCanada = country === 'Canada';
               return (

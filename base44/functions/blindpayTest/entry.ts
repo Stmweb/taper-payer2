@@ -21,9 +21,12 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const { endpoint = '/receivers' } = await req.json();
+    const { endpoint = '/receivers', method = 'GET', body = null } = await req.json();
 
-    const res = await bpFetch(endpoint);
+    const fetchOpts = { method };
+    if (body && method !== 'GET') fetchOpts.body = JSON.stringify(body);
+
+    const res = await bpFetch(endpoint, fetchOpts);
     const text = await res.text();
     let data;
     try { data = JSON.parse(text); } catch { data = text; }

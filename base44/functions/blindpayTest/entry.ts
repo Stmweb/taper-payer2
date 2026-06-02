@@ -4,6 +4,15 @@ const BLINDPAY_API_KEY = 'UUsDt8oFBahfbCPp16wmMm';
 const BLINDPAY_INSTANCE_ID = 'in_xM273RfKTSId';
 const BLINDPAY_BASE = `https://api.blindpay.com/v1/instances/${BLINDPAY_INSTANCE_ID}`;
 
+const bpFetch = (path, options = {}) => fetch(`${BLINDPAY_BASE}${path}`, {
+  ...options,
+  headers: {
+    'Authorization': `Bearer ${BLINDPAY_API_KEY}`,
+    'Content-Type': 'application/json',
+    ...(options.headers || {}),
+  }
+});
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -12,16 +21,13 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Test: list receivers
-    const res = await fetch(`${BLINDPAY_BASE}/receivers`, {
-      headers: {
-        'Authorization': `Bearer ${BLINDPAY_API_KEY}`,
-        'Content-Type': 'application/json',
-      }
-    });
+    const { endpoint = '/receivers' } = await req.json();
 
-    const data = await res.json();
-    return Response.json({ status: res.status, data });
+    const res = await bpFetch(endpoint);
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = text; }
+    return Response.json({ status: res.status, endpoint, data });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

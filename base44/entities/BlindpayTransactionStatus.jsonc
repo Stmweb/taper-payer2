@@ -1,0 +1,27 @@
+{
+  "name": "BlindpayTransactionStatus",
+  "type": "object",
+  "properties": {
+    "transaction_id": {
+      "type": "string",
+      "description": "Blindpay transaction ID (payin or payout)"
+    },
+    "transaction_type": {
+      "type": "string",
+      "enum": [
+        "payin",
+        "payout"
+      ],
+      "description": "Type of transaction"
+    },
+    "last_status": {
+      "type": "string",
+      "description": "Last known status for change detection"
+    }
+  },
+  "required": [
+    "transaction_id",
+    "transaction_type",
+    "last_status"
+  ]
+}

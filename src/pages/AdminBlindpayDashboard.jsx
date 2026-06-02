@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { format } from 'date-fns';
-import { RefreshCw, XCircle, ArrowDownLeft, ArrowUpRight, Users, Wallet, Building2 } from 'lucide-react';
+import { RefreshCw, XCircle, ArrowDownLeft, ArrowUpRight, Users, Wallet, Building2, Bell, CheckCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -30,6 +30,8 @@ export default function AdminBlindpayDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tab, setTab] = useState('payins');
+  const [alertSending, setAlertSending] = useState(false);
+  const [alertResult, setAlertResult] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -44,6 +46,18 @@ export default function AdminBlindpayDashboard() {
   };
 
   useEffect(() => { load(); }, []);
+
+  const sendTestAlert = async () => {
+    setAlertSending(true);
+    setAlertResult(null);
+    const res = await base44.functions.invoke('blindpayStatusAlert', {});
+    if (res.data?.success) {
+      setAlertResult({ ok: true, msg: `Alert sent — ${res.data.changed_payins} payin(s), ${res.data.changed_payouts} payout(s) with status changes.` });
+    } else {
+      setAlertResult({ ok: false, msg: res.data?.error || 'Unknown error' });
+    }
+    setAlertSending(false);
+  };
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -85,9 +99,19 @@ export default function AdminBlindpayDashboard() {
             <h1 className="text-3xl font-bold text-slate-900">Blindpay Dashboard</h1>
             <p className="text-slate-500 mt-1">Stablecoin payins &amp; fiat payouts via Blindpay</p>
           </div>
-          <Button variant="outline" onClick={load} className="gap-2">
-            <RefreshCw className="w-4 h-4" /> Refresh
-          </Button>
+          <div className="flex items-center gap-3">
+            {alertResult && (
+              <span className={`text-sm flex items-center gap-1 ${alertResult.ok ? 'text-green-600' : 'text-red-600'}`}>
+                <CheckCircle className="w-4 h-4" /> {alertResult.msg}
+              </span>
+            )}
+            <Button variant="outline" onClick={sendTestAlert} disabled={alertSending} className="gap-2">
+              <Bell className="w-4 h-4" /> {alertSending ? 'Checking…' : 'Run Alert Check'}
+            </Button>
+            <Button variant="outline" onClick={load} className="gap-2">
+              <RefreshCw className="w-4 h-4" /> Refresh
+            </Button>
+          </div>
         </div>
 
         {/* Stats */}

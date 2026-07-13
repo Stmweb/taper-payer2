@@ -13,11 +13,16 @@ Deno.serve(async (req) => {
     if (keyOrAddress && !keyOrAddress.startsWith('0x')) keyOrAddress = '0x' + keyOrAddress;
 
     const rpcUrl = Deno.env.get('THIRDWEB_RPC_ENDPOINT') || 'https://bsc-dataseed.binance.org/';
+    const thirdwebSecretKey = Deno.env.get('THIRDWEB_SECRET_KEY');
     const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
     const usdcContract = Deno.env.get('USDC_CONTRACT_ADDRESS');
     const usdtContract = '0x55d398326f99059fF775485246999027B3197955'; // BEP-20 USDT on BSC
 
-    const provider = new ethers.JsonRpcProvider(rpcUrl);
+    const fetchRequest = new ethers.FetchRequest(rpcUrl);
+    if (thirdwebSecretKey) {
+      fetchRequest.setHeader('x-secret-key', thirdwebSecretKey);
+    }
+    const provider = new ethers.JsonRpcProvider(fetchRequest);
 
     let address;
     // 42 chars = wallet address, 66 chars = private key

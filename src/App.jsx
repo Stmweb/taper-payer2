@@ -46,6 +46,7 @@ import AdminOrderForms from './pages/AdminOrderForms';
 import BackendAPIDocs from './pages/BackendAPIDocs';
 import AdminPushNotifications from './pages/AdminPushNotifications';
 import AdminBlindpayDashboard from './pages/AdminBlindpayDashboard';
+import AdminMasterWallet from './pages/AdminMasterWallet';
 import AppAuthGuard from '@/components/AppAuthGuard';
 
 const { Pages, Layout, mainPage } = pagesConfig;
@@ -205,6 +206,7 @@ const AuthenticatedApp = () => {
         <Route path="/BackendAPIDocs" element={<BackendAPIDocs />} />
         <Route path="/AdminPushNotifications" element={<AdminPushNotifications />} />
         <Route path="/AdminBlindpayDashboard" element={<AdminBlindpayDashboard />} />
+        <Route path="/AdminMasterWallet" element={<AdminMasterWallet />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AnimatedRoutes>

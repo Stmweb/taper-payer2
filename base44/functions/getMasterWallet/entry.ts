@@ -9,7 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Admin only' }, { status: 403 });
     }
 
-    const privateKey = Deno.env.get('BNB_WALLET_PRIVATE_KEY');
+    let privateKey = Deno.env.get('BNB_WALLET_PRIVATE_KEY');
+    if (privateKey && !privateKey.startsWith('0x')) privateKey = '0x' + privateKey;
     const rpcUrl = Deno.env.get('BNB_RPC_URL');
     const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
     const usdcContract = Deno.env.get('USDC_CONTRACT_ADDRESS');

@@ -64,10 +64,11 @@ export default function AdminMasterWallet() {
             </div>
 
             {/* Balances */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <BalanceCard label="BNB" value={parseFloat(wallet.bnb).toFixed(4)} color="text-yellow-600" bg="bg-yellow-50" />
               <BalanceCard label="AGNV" value={parseFloat(wallet.agnv).toFixed(2)} color="text-purple-600" bg="bg-purple-50" />
               <BalanceCard label="USDC" value={parseFloat(wallet.usdc).toFixed(2)} color="text-green-600" bg="bg-green-50" />
+              <BalanceCard label="USDT" value={parseFloat(wallet.usdt || 0).toFixed(2)} color="text-teal-600" bg="bg-teal-50" />
             </div>
 
             <p className="text-xs text-gray-400 text-center pt-2">Live balances from BNB Smart Chain</p>

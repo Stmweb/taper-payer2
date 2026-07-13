@@ -15,6 +15,7 @@ Deno.serve(async (req) => {
     const rpcUrl = 'https://bsc-dataseed.binance.org/';
     const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
     const usdcContract = Deno.env.get('USDC_CONTRACT_ADDRESS');
+    const usdtContract = '0x55d398326f99059fF775485246999027B3197955'; // BEP-20 USDT on BSC
 
     const provider = new ethers.JsonRpcProvider(rpcUrl);
 
@@ -34,7 +35,7 @@ Deno.serve(async (req) => {
 
     const erc20Abi = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
 
-    let agnvBalance = '0', usdcBalance = '0';
+    let agnvBalance = '0', usdcBalance = '0', usdtBalance = '0';
 
     if (agnvContract) {
       const agnv = new ethers.Contract(agnvContract, erc20Abi, provider);
@@ -48,11 +49,16 @@ Deno.serve(async (req) => {
       usdcBalance = ethers.formatUnits(bal, dec);
     }
 
+    const usdt = new ethers.Contract(usdtContract, erc20Abi, provider);
+    const [usdtBal, usdtDec] = await Promise.all([usdt.balanceOf(address), usdt.decimals()]);
+    usdtBalance = ethers.formatUnits(usdtBal, usdtDec);
+
     return Response.json({
       address,
       bnb: ethers.formatEther(bnbBalance),
       agnv: agnvBalance,
       usdc: usdcBalance,
+      usdt: usdtBalance,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

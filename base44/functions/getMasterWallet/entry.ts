@@ -9,20 +9,29 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Admin only' }, { status: 403 });
     }
 
-    let privateKey = Deno.env.get('BNB_WALLET_PRIVATE_KEY');
-    if (privateKey && !privateKey.startsWith('0x')) privateKey = '0x' + privateKey;
+    let keyOrAddress = (Deno.env.get('BNB_WALLET_PRIVATE_KEY') || '').trim().replace(/^['"]|['"]$/g, '');
+    if (keyOrAddress && !keyOrAddress.startsWith('0x')) keyOrAddress = '0x' + keyOrAddress;
+
     const rpcUrl = Deno.env.get('BNB_RPC_URL');
     const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
     const usdcContract = Deno.env.get('USDC_CONTRACT_ADDRESS');
 
     const provider = new ethers.JsonRpcProvider(rpcUrl);
-    const wallet = new ethers.Wallet(privateKey, provider);
-    const address = wallet.address;
+
+    let address;
+    // 42 chars = wallet address, 66 chars = private key
+    if (/^0x[0-9a-fA-F]{40}$/.test(keyOrAddress)) {
+      address = keyOrAddress;
+    } else if (/^0x[0-9a-fA-F]{64}$/.test(keyOrAddress)) {
+      const wallet = new ethers.Wallet(keyOrAddress, provider);
+      address = wallet.address;
+    } else {
+      return Response.json({ error: 'BNB_WALLET_PRIVATE_KEY is not a valid private key or address' }, { status: 500 });
+    }
 
     // Get BNB balance
     const bnbBalance = await provider.getBalance(address);
 
-    // ERC20 balanceOf ABI
     const erc20Abi = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
 
     let agnvBalance = '0', usdcBalance = '0';

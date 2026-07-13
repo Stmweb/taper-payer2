@@ -3,7 +3,6 @@ import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import { Wallet, Copy, RefreshCw, ExternalLink, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 
 const BalanceCard = ({ label, value, symbol, color }) => (
   <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col gap-1">
@@ -17,7 +16,6 @@ export default function MyWallet() {
   const { user } = useAppAuth();
   const [wallet, setWallet] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState(null);
 
@@ -26,25 +24,17 @@ export default function MyWallet() {
     setError(null);
     try {
       const res = await base44.functions.invoke('getUserWallet', {});
-      if (res.data?.address) setWallet(res.data);
-      else setWallet(null);
+      if (res.data?.address) {
+        setWallet(res.data);
+      } else {
+        // Auto-create wallet if none exists
+        const createRes = await base44.functions.invoke('createUserWallet', {});
+        if (createRes.data?.address) setWallet(createRes.data);
+      }
     } catch (e) {
       setError('Could not load wallet.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const createWallet = async () => {
-    setCreating(true);
-    setError(null);
-    try {
-      const res = await base44.functions.invoke('createUserWallet', {});
-      if (res.data?.address) setWallet(res.data);
-    } catch (e) {
-      setError('Wallet creation failed. Please try again.');
-    } finally {
-      setCreating(false);
     }
   };
 
@@ -102,23 +92,9 @@ export default function MyWallet() {
         ) : error ? (
           <div className="bg-red-50 border border-red-100 rounded-2xl p-4 text-red-600 text-sm text-center">{error}</div>
         ) : !wallet ? (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 text-center"
-          >
-            <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
-              <Wallet className="w-8 h-8 text-blue-500" />
-            </div>
-            <h2 className="text-slate-800 font-bold text-lg mb-2">Create Your Wallet</h2>
-            <p className="text-slate-500 text-sm mb-5">Get a free BNB Smart Chain wallet to send and receive AGNV tokens.</p>
-            <button
-              onClick={createWallet}
-              disabled={creating}
-              className="w-full py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm disabled:opacity-60"
-            >
-              {creating ? 'Creating...' : 'Create Wallet'}
-            </button>
-          </motion.div>
+          <div className="flex justify-center py-12">
+            <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+          </div>
         ) : (
           <>
             {/* Full address */}

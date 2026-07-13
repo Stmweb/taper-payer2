@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
     let keyOrAddress = (Deno.env.get('BNB_WALLET_PRIVATE_KEY') || '').trim().replace(/^['"]|['"]$/g, '');
     if (keyOrAddress && !keyOrAddress.startsWith('0x')) keyOrAddress = '0x' + keyOrAddress;
 
-    const rpcUrl = 'https://bsc-dataseed.binance.org/';
+    const rpcUrl = Deno.env.get('THIRDWEB_RPC_ENDPOINT') || 'https://bsc-dataseed.binance.org/';
     const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
     const usdcContract = Deno.env.get('USDC_CONTRACT_ADDRESS');
     const usdtContract = '0x55d398326f99059fF775485246999027B3197955'; // BEP-20 USDT on BSC

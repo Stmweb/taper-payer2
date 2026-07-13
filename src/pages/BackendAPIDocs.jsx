@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Download, ArrowLeft, Pencil, Check, X, Plus, Trash2 } from 'lucide-react';
+import { Download, ArrowLeft, Pencil, Check, X, Plus, Trash2, Copy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import jsPDF from 'jspdf';
 
@@ -280,6 +280,11 @@ export default function BackendAPIDocs() {
         </div>
       )}
 
+      {/* Partner Credentials Card */}
+      <div className="max-w-5xl mx-auto px-4 pt-8">
+        <CredentialCard />
+      </div>
+
       {/* Content */}
       <div ref={contentRef} className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         {data.map((section, si) => (
@@ -394,6 +399,51 @@ export default function BackendAPIDocs() {
         </div>
       </div>
     </div>
+  );
+}
+
+function CredentialCard() {
+  const [copied, setCopied] = useState({});
+  const BASE_URL = 'https://base44.com/api/apps/6939bfcca75c45675d6c793f/functions';
+  const WALLET = '0xD6edD9f2a5e6D3eabae3020F5fD284F765D61f84';
+
+  const copy = (key, value) => {
+    navigator.clipboard.writeText(value);
+    setCopied(prev => ({ ...prev, [key]: true }));
+    setTimeout(() => setCopied(prev => ({ ...prev, [key]: false })), 2000);
+  };
+
+  const rows = [
+    { label: 'API Endpoint Base URL', value: BASE_URL, key: 'endpoint' },
+    { label: 'Header Key', value: 'X-API-Key', key: 'header' },
+    { label: 'API Token', value: '••••••••••••••••  (set in Secrets as TAPER_PAYER_API_KEY)', key: null },
+    { label: 'Auth Test Endpoint', value: `${BASE_URL}/partnerAuth`, key: 'authurl' },
+    { label: 'Master Wallet Address (BNB Smart Chain)', value: WALLET, key: 'wallet' },
+  ];
+
+  return (
+    <Card className="overflow-hidden shadow-sm border-blue-200">
+      <div className="px-6 py-3 font-bold text-base text-white" style={{ backgroundColor: '#1e3a5f' }}>
+        🔑 Partner API Credentials
+      </div>
+      <div className="divide-y divide-slate-100">
+        {rows.map(({ label, value, key }) => (
+          <div key={label} className="flex items-center justify-between px-6 py-3 hover:bg-slate-50">
+            <span className="text-xs font-semibold text-slate-500 w-64 shrink-0">{label}</span>
+            <span className="font-mono text-xs text-slate-800 flex-1 break-all">{value}</span>
+            {key && (
+              <button onClick={() => copy(key, key === 'header' ? 'X-API-Key' : key === 'wallet' ? WALLET : BASE_URL + (key === 'authurl' ? '/partnerAuth' : ''))}
+                className="ml-3 text-slate-400 hover:text-blue-600 shrink-0 min-h-0 min-w-0 p-1">
+                {copied[key] ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="px-6 py-3 bg-amber-50 border-t border-amber-100 text-xs text-amber-700">
+        ⚠️ Share the API token value only with trusted partners. Rotate it anytime via Dashboard → Settings → Secrets.
+      </div>
+    </Card>
   );
 }
 

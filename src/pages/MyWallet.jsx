@@ -29,7 +29,11 @@ export default function MyWallet() {
       } else {
         // Auto-create wallet if none exists
         const createRes = await base44.functions.invoke('createUserWallet', {});
-        if (createRes.data?.address) setWallet(createRes.data);
+        if (createRes.data?.address) {
+          // Fetch again to get balances after creation
+          const refetch = await base44.functions.invoke('getUserWallet', {});
+          setWallet(refetch.data?.address ? refetch.data : { address: createRes.data.address, bnb: '0', agnv: '0', usdt: '0', usdc: '0' });
+        }
       }
     } catch (e) {
       setError('Could not load wallet.');

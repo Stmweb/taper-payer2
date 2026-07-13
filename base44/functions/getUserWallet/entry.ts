@@ -10,8 +10,8 @@ Deno.serve(async (req) => {
     const secretKey = Deno.env.get('THIRDWEB_SECRET_KEY');
     if (!secretKey) return Response.json({ error: 'THIRDWEB_SECRET_KEY not configured' }, { status: 500 });
 
-    // Fetch the server wallet for this user (same identifier used at creation)
-    const response = await fetch('https://api.thirdweb.com/v1/wallets/server', {
+    // Fetch the in-app user wallet by email
+    const response = await fetch(`https://api.thirdweb.com/v1/wallets/user?email=${encodeURIComponent(user.email)}`, {
       method: 'GET',
       headers: { 'x-secret-key': secretKey },
     });
@@ -19,21 +19,16 @@ Deno.serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
-      return Response.json({ error: data?.message || 'Failed to fetch wallets' }, { status: response.status });
+      return Response.json({ error: data?.message || 'Failed to fetch wallet' }, { status: response.status });
     }
 
-    // Find the wallet whose identifier matches this user's ID
+    // Response returns a list of wallets matching the email
     const wallets = data?.result?.wallets || [];
-    const match = wallets.find((w) =>
-      w.profiles?.some((p) => p.identifier === user.id)
-    );
+    const walletAddress = wallets[0]?.address || null;
 
-    if (!match) {
-      return Response.json({ exists: false, walletAddress: null, balances: null });
+    if (!walletAddress) {
+      return Response.json({ exists: false, address: null });
     }
-
-    const walletAddress = match.address;
-    let bnbBalance = '0', agnvBalance = '0', usdtBalance = '0';
 
     // Get on-chain balances
     const rpcUrls = [
@@ -52,28 +47,33 @@ Deno.serve(async (req) => {
       } catch (_) { continue; }
     }
 
+    let bnb = '0', agnv = '0', usdt = '0';
+
     if (provider) {
       const erc20Abi = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
       const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
       const usdtContract = '0x55d398326f99059fF775485246999027B3197955';
 
-      bnbBalance = ethers.formatEther(await provider.getBalance(walletAddress));
+      bnb = ethers.formatEther(await provider.getBalance(walletAddress));
 
       if (agnvContract) {
-        const agnv = new ethers.Contract(agnvContract, erc20Abi, provider);
-        const [bal, dec] = await Promise.all([agnv.balanceOf(walletAddress), agnv.decimals()]);
-        agnvBalance = ethers.formatUnits(bal, dec);
+        const agnvToken = new ethers.Contract(agnvContract, erc20Abi, provider);
+        const [bal, dec] = await Promise.all([agnvToken.balanceOf(walletAddress), agnvToken.decimals()]);
+        agnv = ethers.formatUnits(bal, dec);
       }
 
-      const usdt = new ethers.Contract(usdtContract, erc20Abi, provider);
-      const [uBal, uDec] = await Promise.all([usdt.balanceOf(walletAddress), usdt.decimals()]);
-      usdtBalance = ethers.formatUnits(uBal, uDec);
+      const usdtToken = new ethers.Contract(usdtContract, erc20Abi, provider);
+      const [uBal, uDec] = await Promise.all([usdtToken.balanceOf(walletAddress), usdtToken.decimals()]);
+      usdt = ethers.formatUnits(uBal, uDec);
     }
 
     return Response.json({
       exists: true,
-      walletAddress,
-      balances: { bnb: bnbBalance, agnv: agnvBalance, usdt: usdtBalance },
+      address: walletAddress,
+      bnb,
+      agnv,
+      usdt,
+      usdc: '0',
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

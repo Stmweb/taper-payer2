@@ -9,14 +9,21 @@ Deno.serve(async (req) => {
     const secretKey = Deno.env.get('THIRDWEB_SECRET_KEY');
     if (!secretKey) return Response.json({ error: 'THIRDWEB_SECRET_KEY not configured' }, { status: 500 });
 
-    // Create or retrieve a server wallet using the user's unique ID as identifier
-    const response = await fetch('https://api.thirdweb.com/v1/wallets/server', {
+    // Create an in-app user wallet linked to the user's email
+    const response = await fetch('https://api.thirdweb.com/v1/wallets/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-secret-key': secretKey,
       },
-      body: JSON.stringify({ identifier: user.id }),
+      body: JSON.stringify({
+        type: 'email',
+        email: user.email,
+        metadata: {
+          userId: user.id,
+          name: user.full_name || '',
+        },
+      }),
     });
 
     const data = await response.json();
@@ -25,7 +32,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: data?.message || 'Failed to create wallet', details: data }, { status: response.status });
     }
 
-    const walletAddress = data?.result?.address;
+    const walletAddress = data?.result?.address || data?.address;
 
     // Store wallet address on the AppUser record
     if (walletAddress) {
@@ -37,9 +44,9 @@ Deno.serve(async (req) => {
 
     return Response.json({
       success: true,
-      walletAddress,
-      userId: data?.result?.userId,
-      createdAt: data?.result?.createdAt,
+      address: walletAddress,
+      userId: data?.result?.userId || data?.userId,
+      createdAt: data?.result?.createdAt || data?.createdAt,
     });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

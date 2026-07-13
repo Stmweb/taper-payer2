@@ -30,6 +30,10 @@
       "type": "string",
       "description": "Cybrid customer ID"
     },
+    "wallet_address": {
+      "type": "string",
+      "description": "ThirdWeb in-app wallet address on BNB Smart Chain"
+    },
     "status": {
       "type": "string",
       "enum": [

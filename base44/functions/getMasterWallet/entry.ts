@@ -12,17 +12,29 @@ Deno.serve(async (req) => {
     let keyOrAddress = (Deno.env.get('BNB_WALLET_PRIVATE_KEY') || '').trim().replace(/^['"]|['"]$/g, '');
     if (keyOrAddress && !keyOrAddress.startsWith('0x')) keyOrAddress = '0x' + keyOrAddress;
 
-    const rpcUrl = Deno.env.get('THIRDWEB_RPC_ENDPOINT') || 'https://bsc-dataseed.binance.org/';
-    const thirdwebSecretKey = Deno.env.get('THIRDWEB_SECRET_KEY');
     const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
     const usdcContract = Deno.env.get('USDC_CONTRACT_ADDRESS');
     const usdtContract = '0x55d398326f99059fF775485246999027B3197955'; // BEP-20 USDT on BSC
 
-    const fetchRequest = new ethers.FetchRequest(rpcUrl);
-    if (thirdwebSecretKey) {
-      fetchRequest.setHeader('x-secret-key', thirdwebSecretKey);
+    // Use reliable public BSC nodes with fallback
+    const rpcUrls = [
+      'https://bsc-dataseed1.binance.org/',
+      'https://bsc-dataseed2.binance.org/',
+      'https://bsc-dataseed3.binance.org/',
+    ];
+
+    let provider = null;
+    for (const url of rpcUrls) {
+      try {
+        const p = new ethers.JsonRpcProvider(url);
+        await p.getBlockNumber();
+        provider = p;
+        break;
+      } catch (_) {
+        continue;
+      }
     }
-    const provider = new ethers.JsonRpcProvider(fetchRequest);
+    if (!provider) throw new Error('All BSC RPC nodes are unreachable');
 
     let address;
     // 42 chars = wallet address, 66 chars = private key

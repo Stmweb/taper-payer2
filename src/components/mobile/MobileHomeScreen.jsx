@@ -15,6 +15,7 @@ import ComingSoonModal from '@/components/ComingSoonModal';
 import RequestMoneyModal from '@/components/mobile/RequestMoneyModal';
 import RequestTopUpModal from '@/components/mobile/RequestTopUpModal';
 import RecentTransactions from '@/components/mobile/RecentTransactions';
+import WalletCard from '@/components/mobile/WalletCard';
 import { useAppAuth } from '@/lib/AppAuthContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
@@ -155,6 +156,9 @@ export default function MobileHomeScreen() {
         </div>
 
       </div>
+
+      {/* ── Wallet Card ── */}
+      <WalletCard user={user} />
 
       {/* ── Quick Actions ── */}
       <div className="px-4 py-5">

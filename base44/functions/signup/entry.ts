@@ -78,6 +78,27 @@ Deno.serve(async (req) => {
       cybrid_customer_id,
     });
 
+    // Create ThirdWeb wallet for the new user (fire and forget — don't block signup)
+    try {
+      const twSecret = Deno.env.get('THIRDWEB_SECRET_KEY');
+      if (twSecret) {
+        const walletRes = await fetch('https://engine.thirdweb.com/v1/wallets/server', {
+          method: 'POST',
+          headers: { 'x-secret-key': twSecret, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ label: user.id }),
+        });
+        if (walletRes.ok) {
+          const walletData = await walletRes.json();
+          const walletAddress = walletData?.result?.address;
+          if (walletAddress) {
+            await base44.asServiceRole.entities.AppUser.update(user.id, { wallet_address: walletAddress });
+          }
+        }
+      }
+    } catch (walletErr) {
+      console.warn('Wallet creation on signup failed:', walletErr.message);
+    }
+
     // Generate JWT
     const jwtHeader = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
     const jwtPayload = btoa(JSON.stringify({

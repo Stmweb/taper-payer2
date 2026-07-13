@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
     let keyOrAddress = (Deno.env.get('BNB_WALLET_PRIVATE_KEY') || '').trim().replace(/^['"]|['"]$/g, '');
     if (keyOrAddress && !keyOrAddress.startsWith('0x')) keyOrAddress = '0x' + keyOrAddress;
 
-    const rpcUrl = Deno.env.get('BNB_RPC_URL');
+    const rpcUrl = 'https://bsc-dataseed.binance.org/';
     const agnvContract = Deno.env.get('AGNV_CONTRACT_ADDRESS');
     const usdcContract = Deno.env.get('USDC_CONTRACT_ADDRESS');
 

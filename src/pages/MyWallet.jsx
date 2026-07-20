@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useAppAuth } from '@/lib/AppAuthContext';
-import { Wallet, Copy, RefreshCw, ExternalLink, ChevronLeft } from 'lucide-react';
+import { Wallet, Copy, RefreshCw, ExternalLink, ChevronLeft, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SendAGNVModal from '@/components/transfer/SendAGNVModal';
 
 const BalanceCard = ({ label, value, symbol, color }) => (
   <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex flex-col gap-1">
@@ -18,6 +19,7 @@ export default function MyWallet() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState(null);
+  const [showSend, setShowSend] = useState(false);
 
   const fetchWallet = async () => {
     setLoading(true);
@@ -128,6 +130,14 @@ export default function MyWallet() {
               </p>
             </div>
 
+            {/* Send CTA */}
+            <button
+              onClick={() => setShowSend(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold mb-4"
+            >
+              <Send className="w-4 h-4" /> Send AGNV
+            </button>
+
             {/* Balances */}
             <h2 className="text-slate-800 font-bold text-base mb-3">Balances</h2>
             <div className="grid grid-cols-2 gap-3 mb-5">
@@ -141,6 +151,8 @@ export default function MyWallet() {
           </>
         )}
       </div>
+
+      <SendAGNVModal isOpen={showSend} onClose={() => setShowSend(false)} />
     </div>
   );
 }

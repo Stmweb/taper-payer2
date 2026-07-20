@@ -18,7 +18,6 @@ export default function MyWallet() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState(null);
-  const [buyCurrency, setBuyCurrency] = useState('BNB');
 
   const fetchWallet = async () => {
     setLoading(true);
@@ -132,58 +131,7 @@ export default function MyWallet() {
               <BalanceCard label="USDC" value={parseFloat(wallet.usdc || 0).toFixed(2)} symbol="USD Coin" color="#2775CA" />
             </div>
 
-            {/* Fund CTA */}
-            <div className="bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl p-5 text-white">
-              <h3 className="font-bold text-base mb-1">Fund Your Wallet</h3>
-              <p className="text-white/80 text-sm mb-4">Add funds to start sending money with AGNV tokens.</p>
 
-              <div className="mb-3">
-                <label className="text-white/70 text-xs font-medium block mb-1.5">Choose currency</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['BNB', 'USDC', 'USDT'].map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => setBuyCurrency(c)}
-                      className={`py-2 rounded-lg text-sm font-semibold transition ${
-                        buyCurrency === c ? 'bg-white text-blue-600' : 'bg-white/15 text-white'
-                      }`}
-                    >
-                      {c}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={async () => {
-                  try {
-                    setError(null);
-                    const res = await base44.functions.invoke('getMoonpayBuyUrl', { walletAddress: wallet.address, currencyCode: buyCurrency });
-                    if (res.data?.url) window.open(res.data.url, '_blank');
-                  } catch (e) {
-                    setError('Could not open MoonPay.');
-                  }
-                }}
-                className="w-full py-3 rounded-xl bg-white text-blue-600 font-semibold text-sm mb-3"
-              >
-                Buy {buyCurrency}
-              </button>
-
-              <button
-                onClick={async () => {
-                  try {
-                    setError(null);
-                    const res = await base44.functions.invoke('getMoonpaySellUrl', { walletAddress: wallet.address, currencyCode: buyCurrency });
-                    if (res.data?.url) window.open(res.data.url, '_blank');
-                  } catch (e) {
-                    setError('Could not open MoonPay Sell.');
-                  }
-                }}
-                className="w-full py-3 rounded-xl bg-white/15 text-white font-semibold text-sm border border-white/30"
-              >
-                Sell {buyCurrency} (Cash Out)
-              </button>
-            </div>
           </>
         )}
       </div>

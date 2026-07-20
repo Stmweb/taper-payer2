@@ -136,10 +136,17 @@ export default function MyWallet() {
               <h3 className="font-bold text-base mb-1">Fund Your Wallet</h3>
               <p className="text-white/80 text-sm mb-4">Add funds to start sending money with AGNV tokens.</p>
               <button
-                onClick={() => window.open(`https://transak.com/?walletAddress=${wallet.address}&cryptoCurrencyCode=BNB`, '_blank')}
+                onClick={async () => {
+                  try {
+                    const res = await base44.functions.invoke('getMoonpayBuyUrl', { walletAddress: wallet.address });
+                    if (res.data?.url) window.open(res.data.url, '_blank');
+                  } catch (e) {
+                    setError('Could not open MoonPay.');
+                  }
+                }}
                 className="w-full py-3 rounded-xl bg-white text-blue-600 font-semibold text-sm"
               >
-                Buy Crypto
+                Buy Crypto with MoonPay
               </button>
             </div>
           </>

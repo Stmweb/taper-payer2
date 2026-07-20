@@ -166,7 +166,7 @@ export default function MyWallet() {
                 }}
                 className="w-full py-3 rounded-xl bg-white text-blue-600 font-semibold text-sm mb-3"
               >
-                Buy {buyCurrency} with MoonPay
+                Buy {buyCurrency}
               </button>
 
               <button

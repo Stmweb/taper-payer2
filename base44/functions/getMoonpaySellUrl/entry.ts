@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'MoonPay not configured' }, { status: 500 });
     }
 
-    const url = `https://buy.moonpay.com/?apiKey=${encodeURIComponent(publishableKey)}&defaultCurrencyCode=${code}&walletAddress=${encodeURIComponent(walletAddress)}`;
+    const url = `https://sell.moonpay.com/?apiKey=${encodeURIComponent(publishableKey)}&defaultCurrencyCode=${code}&payoutWalletAddress=${encodeURIComponent(walletAddress)}`;
 
     return Response.json({ url });
   } catch (error) {

@@ -284,7 +284,7 @@ function TeamSlide() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 flex-1 items-start">
         {[
           { initials: 'KL', name: 'Katy Lucas', role: 'Founder & CEO', desc: 'Visionary leader driving Taper Payer\'s mission to make global money transfer fast, affordable, and accessible.' },
-          { initials: 'SG', name: 'Stanley J. Gilles', role: 'Chief Technology Officer', desc: 'Haitian-American technologist with deep expertise in fintech infrastructure, blockchain rails, and diaspora financial services.' },
+          { initials: 'IV', name: 'Isabella Vanse', role: 'Chief Technology Officer', desc: 'Haitian-American technologist with deep expertise in fintech infrastructure, blockchain rails, and diaspora financial services.' },
           { initials: 'DJ', name: 'David Jeanty', role: 'BSA/AML Officer', desc: 'Regulatory and compliance expert specializing in MSB licensing, AML programs, and KYC operations.' },
         ].map((m, i) => (
           <div key={i} className="bg-slate-800 border border-slate-700 rounded-2xl p-6">

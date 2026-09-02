@@ -156,7 +156,7 @@ function ProductSlide() {
 function MarketSlide() {
   const stats = [
     { label: 'Global Remittance Market', value: '$860B', sub: 'annual flows (World Bank 2023)', color: 'bg-blue-600' },
-    { label: 'Haiti Corridor (US→HT)', value: '$4.1B', sub: 'sent annually, 23% of GDP', color: 'bg-indigo-600' },
+    { label: 'Caribbean Corridor (US→CAR)', value: '$4.1B', sub: 'sent annually, 23% of GDP', color: 'bg-indigo-600' },
     { label: 'African Diaspora (US)', value: '$50B+', sub: 'annual remittances to Africa', color: 'bg-purple-600' },
     { label: 'Serviceable Market', value: '$12B', sub: 'US-based diaspora corridors', color: 'bg-cyan-600' },
   ];

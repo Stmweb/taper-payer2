@@ -253,7 +253,6 @@ function TechnologySlide() {
     { layer: 'Top-Up', tech: 'DTone · Reloadly · Ding · PrepayNation', color: 'bg-green-100 text-green-800' },
     { layer: 'Compliance', tech: 'KYC via Persona · AML screening', color: 'bg-orange-100 text-orange-800' },
     { layer: 'Comms', tech: 'Twilio SMS & WhatsApp · Mailgun', color: 'bg-rose-100 text-rose-800' },
-    { layer: 'Infrastructure', tech: 'Base44 · Deno edge functions · Supabase', color: 'bg-slate-100 text-slate-800' },
   ];
   return (
     <div className="flex flex-col h-full px-8 py-10 bg-white">

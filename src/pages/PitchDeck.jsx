@@ -61,7 +61,7 @@ function CoverSlide() {
         Fast, affordable, and transparent remittances powered by blockchain rails — connecting diaspora communities with their families worldwide.
       </p>
       <div className="mt-10 flex gap-4 flex-wrap justify-center">
-        <div className="bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-white text-sm font-semibold">🌍 10+ Countries</div>
+        <div className="bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-white text-sm font-semibold">🌍 110+ Countries</div>
         <div className="bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-white text-sm font-semibold">⚡ Instant Transfers</div>
         <div className="bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-white text-sm font-semibold">💰 Low Fees</div>
       </div>
@@ -127,7 +127,7 @@ function ProductSlide() {
   const features = [
     '💳 Card payments via Stripe & Square',
     '🏦 ACH bank transfers via Plaid / Cybrid',
-    '📱 Mobile top-ups (airtime reloads) for 10+ countries',
+    '📱 Mobile top-ups (airtime reloads) for 110+ countries',
     '🪙 USD → USDC conversion via Solana rails',
     '🔗 Payment request links (send a link, get paid)',
     '✅ KYC / Identity verification (Cybrid + Persona)',
@@ -221,7 +221,7 @@ function TractionSlide() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
         {[
           { label: 'Payment Integrations', value: '6+', sub: 'Square, Stripe, Moncash, Cybrid, DTone, Reloadly' },
-          { label: 'Countries Supported', value: '10+', sub: 'Haiti, Nigeria, Ghana, Kenya, Senegal & more' },
+          { label: 'Countries Supported', value: '110+', sub: 'Haiti, Nigeria, Ghana, Kenya, Senegal & 105 more' },
           { label: 'Platform Status', value: 'Live', sub: 'iOS/Android ready, KYC integrated, ACH enabled' },
         ].map((s, i) => (
           <div key={i} className="bg-white/10 border border-white/20 rounded-2xl p-6 text-center text-white">
@@ -236,7 +236,7 @@ function TractionSlide() {
         <ul className="text-green-200 text-sm space-y-1">
           <li>• Full KYC/AML pipeline via Cybrid + Persona — live</li>
           <li>• ACH funding + USDC/Solana remittance flow — built and tested</li>
-          <li>• Mobile top-up to Haiti, Nigeria, Ghana — operational</li>
+          <li>• Mobile top-up to 110+ countries — operational globally</li>
           <li>• B2B white-label and marketing pages — launched</li>
         </ul>
       </div>
